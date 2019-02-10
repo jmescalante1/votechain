@@ -136,6 +136,7 @@ contract Votechain {
         candidateList[candidateKey].keyIndex = candidateKeyList.push(candidateKey) - 1;
 
         positionList[positionKey].candidateKeyIndexList[candidateKey] = positionList[positionKey].candidateKeyList.push(candidateKey) - 1;
+       
         return candidateKey;
     }
 
@@ -149,6 +150,20 @@ contract Votechain {
         return voterKey;
     }
 
+    function addAdmin(address adminKey, string memory name) public returns(address) {
+        adminList[adminKey].name = name;
+        adminList[adminKey].keyIndex = adminKeyList.push(adminKey) - 1;
+
+        return adminKey;
+    }
+
+    function addOfficial(address officialKey, string memory name) public returns(address) {
+        officialList[officialKey].name = name;
+        officialList[officialKey].keyIndex = officialKeyList.push(officialKey) - 1;
+
+        return officialKey;
+    }
+
     function addAbstain(uint256 positionKey) public returns(uint256) {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
@@ -157,6 +172,16 @@ contract Votechain {
         positionList[positionKey].abstainKey = abstainKey;
 
         return abstainKey; // a value of 0 means it does not exist
+    }
+
+    function isAdmin(address adminKey) public view returns(bool) {
+        if(adminKeyList.length == 0) return false;
+        return adminKeyList[adminList[adminKey].keyIndex] == adminKey;
+    }
+
+    function isOfficial(address officialKey) public view returns(bool) {
+        if(officialKeyList.length == 0) return false;
+        return officialKeyList[officialList[officialKey].keyIndex] == officialKey;
     }
 
     function isElection(uint256 electionKey) public view returns(bool) {
