@@ -159,52 +159,6 @@ contract Votechain {
         return abstainKey;
     }
 
-    /* For Testing */
-
-    function getPositionKeyIndexAt(uint256 electionKey, uint256 positionKey) public view returns (uint256){
-        return electionList[electionKey].positionKeyIndexList[positionKey];
-    }
-
-    function getPositionKeyListLengthOf(uint256 electionKey) public view returns (uint256) {
-        return electionList[electionKey].positionKeyList.length;
-    }
-
-    function getPositionKeyAt(uint256 electionKey, uint256 positionKeyIndex) public view returns (uint256) {
-        return electionList[electionKey].positionKeyList[positionKeyIndex];
-    }
-
-    function getCandidateKeyIndexAt(uint256 positionKey, uint256 candidateKey) public view returns (uint256) {
-        return positionList[positionKey].candidateKeyIndexList[candidateKey];
-    }
-
-    function getCandidateKeyListLengthOf(uint256 positionKey) public view returns (uint256) {
-        return positionList[positionKey].candidateKeyList.length;
-    }
-
-    function getCandidateKeyAt(uint256 positionKey, uint256 candidateKeyIndex) public view returns (uint256) {
-        return positionList[positionKey].candidateKeyList[candidateKeyIndex];
-    }
-
-    // function getVoterKeyIndexAt(uint256 electionKey, uint256 voterKey) public view returns (uint256) {
-    //     return electionList[electionKey].voterKeyIndexList[voterKey];
-    // }
-
-    // function getVoterKeyListLengthOf(uint256 electionKey) public view returns (uint256) {
-    //     return electionList[electionKey].voterKeyList.length;
-    // }
-
-    // function getVoterKeyAt(uint256 voterKey, uint256 candidateKeyIndex) public view returns (uint256) {
-    //     return positionList[positionKey].candidateKeyList[candidateKeyIndex];
-    // }
-
-    
-
-    
-
-    
-
-
-
     function isElection(uint256 electionKey) public view returns(bool) {
         if(electionKeyList.length == 0) return false;
         return electionKeyList[electionList[electionKey].keyIndex] == electionKey;
@@ -272,6 +226,4 @@ contract Votechain {
     function genAbstainKey() private returns(uint256) {
         return abstainKeyCounter = abstainKeyCounter.add(1);
     }
-
-    
 }

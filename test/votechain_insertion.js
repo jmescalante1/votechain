@@ -124,8 +124,5 @@ contract("Votechain - data insertion", async(accounts) => {
     // verify if the voter has been successfully added to the voter's list of the election where it belongs to
     let isVoterInElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
     expect(isVoterInElection, "The added voter should exist as a voter in the election where it belongs to").to.be.true;
- }); 
-
-
-
+  }); 
 })
