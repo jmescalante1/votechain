@@ -74,21 +74,6 @@ contract("Votechain - data insertion", async(accounts) => {
     expect(candidate["name"], "JM should be the name of the added candidate").to.be.deep.equal("JM");
     expect(candidate["positionKey"].toString(), "1 should be the position key of the added candidate").to.be.deep.equal(expectedPositionKey.toString());
     expect(candidate["keyIndex"].toString(), "0 should be the key index of the added candidate").to.be.deep.equal(expectedCandidateKeyIndex.toString());
-    
-    // the added candidate should have a correct candidateKeyIndex inside the position (positionKey = 1) where it belongs to
-    let expectedCandidateKeyIndexInsidePosition = new BigNumber(0);
-    let actualCandidateKeyIndexInsidePosition = await votechainInstance.getCandidateKeyIndexAt(expectedPositionKey, expectedCandidateKey);
-    expect(actualCandidateKeyIndexInsidePosition.toString(), "0 should be the candidate key index of the added candidate inside the position where it belongs to.").to.be.deep.equal(expectedCandidateKeyIndexInsidePosition.toString());
-
-    // the length of the candidateKeyList of the position where the added candidate belongs to should be 1
-    let expectedCandidateKeyListLength = new BigNumber(1);
-    let actualCandidateKeyListLength = await votechainInstance.getCandidateKeyListLengthOf(expectedPositionKey);
-    expect(actualCandidateKeyListLength.toString(), "1 should be the length of the candidate key list of position where the added candidate belongs to.").to.be.deep.equal(expectedCandidateKeyListLength.toString());
-    
-    // the candidate key of the added candidate should also be added in the candidate key list of the position where the added candidate belongs to
-    let actualCandidateKeyInsidePosition = await votechainInstance.getCandidateKeyAt(expectedPositionKey, expectedCandidateKeyIndexInsidePosition);
-    let expectedCandidateKeyInsidePosition = new BigNumber(1);
-    expect(actualCandidateKeyInsidePosition.toString(), "1 should be the candidate key of the added candidate inside the position where it belongs to.").to.be.deep.equal(expectedCandidateKeyInsidePosition.toString());
 
     // the added candidate should also exist as a candidate in the position where it belongs to
     let isCandidateInPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
@@ -125,4 +110,37 @@ contract("Votechain - data insertion", async(accounts) => {
     let isVoterInElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
     expect(isVoterInElection, "The added voter should exist as a voter in the election where it belongs to").to.be.true;
   }); 
+
+  it("should add an abstain option in an election position", async() => {
+    // add first an election
+    await votechainInstance.addElection.sendTransaction("CAS");
+  
+    // then add position
+    let expectedElectionKey = new BigNumber(1);
+    let positionName = "President";
+    let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    await votechainInstance.addPosition.sendTransaction(expectedElectionKey, positionName, maxNoOfCandidatesThatCanBeSelected);
+
+    // add an abstain option in the added election position
+    let expectedPositionKey = new BigNumber(1);
+    await votechainInstance.addAbstain.sendTransaction(expectedPositionKey);
+
+    // verify if the abstain option was added in the list of all abstain
+    // and the fields are correct
+    let expectedAbstainKey = new BigNumber(1);
+    let abstain = await votechainInstance.abstainList.call(expectedAbstainKey);
+    
+    let actualAbstainPositionKey = abstain["positionKey"];
+    let actualAbstainKeyIndex = abstain["keyIndex"];
+
+    let expectedAbstainPositionKey = expectedPositionKey;
+    let expectedAbstainKeyIndex = new BigNumber(0);
+
+    expect(actualAbstainPositionKey.toString(), expectedAbstainPositionKey + " should be the position key of the added abstain.").to.be.deep.equal(expectedAbstainPositionKey.toString());
+    expect(actualAbstainKeyIndex.toString(), expectedAbstainKeyIndex + " should be the key index of the added abstain.").to.be.deep.equal(expectedAbstainKeyIndex.toString());
+
+    // verify if the abstain option was also added in the position where it belongs to
+    let isAbstainInPosition = await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey);
+    expect(isAbstainInPosition, "The added abstain should also exist as an abstain in the position where it belongs to.").to.be.true;
+  });
 })

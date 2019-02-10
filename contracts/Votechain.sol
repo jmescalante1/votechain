@@ -25,7 +25,7 @@ contract Votechain {
     uint256[] public voteKeyList;
 
     uint256 private abstainKeyCounter = 0;
-    mapping(uint256 => Abstain) abstainList;
+    mapping(uint256 => Abstain) public abstainList;
     uint256[] public abstainKeyList;
 
     mapping(address => Admin) public adminList;
@@ -156,7 +156,7 @@ contract Votechain {
         
         positionList[positionKey].abstainKey = abstainKey;
 
-        return abstainKey;
+        return abstainKey; // a value of 0 means it does not exist
     }
 
     function isElection(uint256 electionKey) public view returns(bool) {
@@ -205,6 +205,12 @@ contract Votechain {
     function isAbstain(uint256 abstainKey) public view returns(bool) {
         if(abstainKeyList.length == 0) return false;
         return abstainKeyList[abstainList[abstainKey].keyIndex] == abstainKey;
+    }
+
+    function isAbstainAt(uint256 positionKey, uint256 abstainKey) public view returns(bool) {
+        Position storage position = positionList[positionKey];
+        if(position.abstainKey == 0) return false;
+        return position.abstainKey == abstainKey;
     }
 
     function genElectionKey() private returns(uint256) {
