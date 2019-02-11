@@ -86,6 +86,8 @@ contract Votechain {
         string studentNo;
 
         uint256 electionKey;
+        // uint256[] electionKeyList;
+        // mapping(uint256 => uint256) electionKeyIndexList; // electionKey to index in electionKeyList
 
         Vote[] voteKeyList;
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
@@ -174,6 +176,46 @@ contract Votechain {
         return abstainKey; // a value of 0 means it does not exist
     }
 
+    // function deleteElection(uint256 electionKey) public returns (uint256) {
+    //     uint256 indexToDelete = electionList[electionKey].keyIndex;
+    //     uint256 keyToMove = electionKeyList[electionKeyList.length - 1];
+    //     electionKeyList[indexToDelete] = keyToMove;
+    //     electionList[keyToMove].keyIndex = indexToDelete;
+    //     electionKeyList.length --;
+
+    //     return indexToDelete; 
+    // }
+
+    function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
+        uint256 indexToDelete = adminList[adminKey].keyIndex;
+        address keyToMove = adminKeyList[adminKeyList.length - 1];
+        adminKeyList[indexToDelete] = keyToMove;
+        adminList[keyToMove].keyIndex = indexToDelete;
+        adminKeyList.length --;
+
+        return indexToDelete; 
+    }
+
+    function deleteOfficial(address officialKey) public officialKeyExists(officialKey) returns(uint256) {
+        uint256 indexToDelete = officialList[officialKey].keyIndex;
+        address keyToMove = officialKeyList[officialKeyList.length - 1];
+        officialKeyList[indexToDelete] = keyToMove;
+        officialList[keyToMove].keyIndex = indexToDelete;
+        officialKeyList.length --;
+
+        return indexToDelete;
+    }
+
+    modifier adminKeyExists(address adminKey){
+        require(isAdmin(adminKey), "The admin key provided does not exist.");
+        _;
+    }
+
+    modifier officialKeyExists(address officialKey){
+        require(isOfficial(officialKey), "The official key provided does not exist.");
+        _;
+    }
+
     function isAdmin(address adminKey) public view returns(bool) {
         if(adminKeyList.length == 0) return false;
         return adminKeyList[adminList[adminKey].keyIndex] == adminKey;
@@ -257,4 +299,5 @@ contract Votechain {
     function genAbstainKey() private returns(uint256) {
         return abstainKeyCounter = abstainKeyCounter.add(1);
     }
+
 }

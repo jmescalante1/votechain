@@ -12,6 +12,7 @@ let votechainInstance;
 
 contract("Votechain - data insertion", async(accounts) => {
   beforeEach(async () => {
+    // let adminKey = "0x2504A6681F1EB33E96c643c6B66c4dDD3399Ce45"
     votechainInstance = await Votechain.new();
   });
 
