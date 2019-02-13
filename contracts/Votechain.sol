@@ -76,8 +76,8 @@ contract Votechain {
 
         uint256 positionKey;
 
-        address[] voterKeyList; // voters who vote for this candidate
-        mapping(address => uint256) voterKeyIndexList; // voter key to index in voterKeyIndexList
+        uint256[] voteKeyList; // votes received
+        mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
     }
 
     struct Voter {
@@ -85,9 +85,8 @@ contract Votechain {
         string name;
         string studentNo;
 
-        uint256 electionKey;
-        // uint256[] electionKeyList;
-        // mapping(uint256 => uint256) electionKeyIndexList; // electionKey to index in electionKeyList
+        uint256[] electionKeyList;
+        mapping(uint256 => uint256) electionKeyIndexList; // electionKey to index in electionKeyList
 
         Vote[] voteKeyList;
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
@@ -119,7 +118,7 @@ contract Votechain {
         return newKey;
     }
 
-    function addPosition(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public returns(uint256) {
+    function addPositionAtElection(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public returns(uint256) {
         uint256 positionKey = genPositionKey();
         positionList[positionKey].name = name;
         positionList[positionKey].electionKey = electionKey;
@@ -131,7 +130,7 @@ contract Votechain {
         return positionKey;
     }
 
-    function addCandidate(uint256 positionKey, string memory name) public returns(uint256) {
+    function addCandidateAtPosition(uint256 positionKey, string memory name) public returns(uint256) {
         uint256 candidateKey = genCandidateKey();
         candidateList[candidateKey].name = name;
         candidateList[candidateKey].positionKey = positionKey;
@@ -142,14 +141,26 @@ contract Votechain {
         return candidateKey;
     }
 
-    function addVoter(address voterKey, uint256 electionKey, string memory studentNo, string memory name) public returns(address){
-        voterList[voterKey].electionKey = electionKey;
-        voterList[voterKey].studentNo = studentNo;
-        voterList[voterKey].name = name;
-        voterList[voterKey].keyIndex = voterKeyList.push(voterKey) - 1;
+    function addVoterAtElection(uint256 electionKey, address voterKey, string memory studentNo, string memory name) public electionKeyExists(electionKey) notVoterAt(electionKey, voterKey) returns(address){
+        if(isVoter(voterKey)){ // the voter is already registered
+            voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
+        } else {
+            voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
+            voterList[voterKey].studentNo = studentNo;
+            voterList[voterKey].name = name;
+            voterList[voterKey].keyIndex = voterKeyList.push(voterKey).sub(1);
+        }
 
-        electionList[electionKey].voterKeyIndexList[voterKey] = electionList[electionKey].voterKeyList.push(voterKey) - 1;
+        Election storage election = electionList[electionKey];
+
+        election.voterKeyIndexList[voterKey] = election.voterKeyList.push(voterKey).sub(1);
         return voterKey;
+    }
+
+
+    modifier notVoterAt(uint256 electionKey, address voterKey) {
+        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
+        _;
     }
 
     function addAdmin(address adminKey, string memory name) public returns(address) {
@@ -234,7 +245,7 @@ contract Votechain {
         positionList[keyToMove].keyIndex = indexToDelete;
         positionKeyList.length = positionKeyList.length.sub(1);
 
-        // delete the position inside the election where it belongs to
+        // delete the position key in the position list of the election where it is referred to
         Election storage election = electionList[electionKey];
         indexToDelete = election.positionKeyIndexList[positionKey];
         keyToMove = election.positionKeyList[election.positionKeyList.length.sub(1)];
@@ -254,6 +265,43 @@ contract Votechain {
         }
     }
 
+    function removeVoterAt(uint256 electionKey, address voterKey) public electionKeyExists(electionKey) onlyVoterAt(electionKey, voterKey) returns(uint256) {
+        // remove the voter key from the specified election
+        Election storage election = electionList[electionKey];
+        uint256 indexToDelete = election.voterKeyIndexList[voterKey];
+        address keyToMove = election.voterKeyList[election.voterKeyList.length.sub(1)];
+        election.voterKeyList[indexToDelete] = keyToMove;
+        election.voterKeyIndexList[keyToMove] = indexToDelete;
+        election.voterKeyList.length = election.voterKeyList.length.sub(1);
+
+        // remove the election key from the specified voter
+        Voter storage voter = voterList[voterKey];
+        indexToDelete = voter.electionKeyIndexList[electionKey];
+        uint256 electionKeyToMove = voter.electionKeyList[voter.electionKeyList.length.sub(1)];
+        voter.electionKeyList[indexToDelete] = electionKeyToMove;
+        voter.electionKeyIndexList[electionKeyToMove] = indexToDelete;
+        voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
+
+        // TODO: delete the voter in the global list if the voter is not involved in any election
+        if(voter.electionKeyList.length == 0){
+            indexToDelete = voterList[voterKey].keyIndex;
+            keyToMove = voterKeyList[voterKeyList.length.sub(1)];
+            voterKeyList[indexToDelete] = keyToMove;
+            voterList[keyToMove].keyIndex = indexToDelete;
+            voterKeyList.length = voterKeyList.length.sub(1); 
+        }
+    }
+
+    function getVoterElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
+        return voterList[voterKey].electionKeyList[electionKeyIndex];
+    }
+
+    modifier onlyVoterAt(uint256 electionKey, address voterKey) {
+        require(isVoterAt(electionKey, voterKey), "The voter key provided does not exist in the specified election.");
+        _;
+    }
+
+
     modifier candidateKeyExists(uint256 candidateKey) {
         require(isCandidate(candidateKey), "The candidate key provided does not exist.");
         _;
@@ -266,6 +314,11 @@ contract Votechain {
 
     modifier officialKeyExists(address officialKey){
         require(isOfficial(officialKey), "The official key provided does not exist.");
+        _;
+    }
+
+    modifier electionKeyExists(uint256 electionKey){
+        require(isElection(electionKey), "The election key provided does not exist.");
         _;
     }
 

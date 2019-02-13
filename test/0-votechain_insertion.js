@@ -155,8 +155,9 @@
 
 //     // verify if it has correct fields
 //     let voter = await votechainInstance.voterList.call(expectedVoterKey);
-    
-//     let actualElectionKey = voter["electionKey"];
+//     let expectedElectionKeyIndexInVoter = new BigNumber(0);
+
+//     let actualElectionKey = await votechainInstance.getVoterElectionKeyAt(expectedVoterKey, expectedElectionKeyIndexInVoter);
 //     let actualStudentNo = voter["studentNo"];
 //     let actualName = voter["name"];
 //     let actualKeyIndex = voter["keyIndex"];
