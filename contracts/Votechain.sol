@@ -206,6 +206,59 @@ contract Votechain {
         return indexToDelete;
     }
 
+    function deleteCandidate(uint256 candidateKey) public candidateKeyExists(candidateKey) returns(uint256) {
+        uint256 indexToDelete = candidateList[candidateKey].keyIndex;
+        uint256 positionKey = candidateList[candidateKey].positionKey;
+        uint256 keyToMove = candidateKeyList[candidateKeyList.length - 1];
+        candidateKeyList[indexToDelete] = keyToMove;
+        candidateList[keyToMove].keyIndex = indexToDelete;
+        candidateKeyList.length --;
+
+        Position storage position = positionList[positionKey];
+        uint256 indexToDeleteInPosition = position.candidateKeyIndexList[candidateKey];
+        uint256 keyToMoveInPosition = position.candidateKeyList[position.candidateKeyList.length - 1];
+        position.candidateKeyList[indexToDeleteInPosition] = keyToMoveInPosition;
+        position.candidateKeyIndexList[keyToMoveInPosition] = indexToDeleteInPosition;
+        position.candidateKeyList.length --;
+
+        return 1;
+    }
+
+    function deletePosition(uint256 positionKey) public positionKeyExists(positionKey) returns(uint256) {
+        uint256 electionKey = positionList[positionKey].electionKey;
+
+        // delete the position 
+        uint256 indexToDelete = positionList[positionKey].keyIndex;
+        uint256 keyToMove = positionKeyList[positionKeyList.length.sub(1)];
+        positionKeyList[indexToDelete] = keyToMove;
+        positionList[keyToMove].keyIndex = indexToDelete;
+        positionKeyList.length = positionKeyList.length.sub(1);
+
+        // delete the position inside the election where it belongs to
+        Election storage election = electionList[electionKey];
+        indexToDelete = election.positionKeyIndexList[positionKey];
+        keyToMove = election.positionKeyList[election.positionKeyList.length.sub(1)];
+        election.positionKeyList[indexToDelete] = keyToMove;
+        election.positionKeyIndexList[keyToMove] = indexToDelete;
+        election.positionKeyList.length = election.positionKeyList.length.sub(1);
+
+        // delete all the candidates in this position
+        uint256[] memory candidateKeyListInPosition = positionList[positionKey].candidateKeyList;
+        for(uint256 i = 0; i < candidateKeyListInPosition.length; i++){
+            uint256 candidateKey = candidateKeyListInPosition[i];
+            indexToDelete = candidateList[candidateKey].keyIndex;
+            keyToMove = candidateKeyList[candidateKeyList.length.sub(1)];
+            candidateKeyList[indexToDelete] = keyToMove;
+            candidateList[keyToMove].keyIndex = indexToDelete;
+            candidateKeyList.length = candidateKeyList.length.sub(1);
+        }
+    }
+
+    modifier candidateKeyExists(uint256 candidateKey) {
+        require(isCandidate(candidateKey), "The candidate key provided does not exist.");
+        _;
+    }
+
     modifier adminKeyExists(address adminKey){
         require(isAdmin(adminKey), "The admin key provided does not exist.");
         _;
@@ -213,6 +266,11 @@ contract Votechain {
 
     modifier officialKeyExists(address officialKey){
         require(isOfficial(officialKey), "The official key provided does not exist.");
+        _;
+    }
+
+    modifier positionKeyExists(uint256 positionKey){
+        require(isPosition(positionKey), "The position key provided does not exits.");
         _;
     }
 
