@@ -157,12 +157,6 @@ contract Votechain {
         return voterKey;
     }
 
-
-    modifier notVoterAt(uint256 electionKey, address voterKey) {
-        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
-        _;
-    }
-
     function addAdmin(address adminKey, string memory name) public returns(address) {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey) - 1;
@@ -187,15 +181,6 @@ contract Votechain {
         return abstainKey; // a value of 0 means it does not exist
     }
 
-    // function deleteElection(uint256 electionKey) public returns (uint256) {
-    //     uint256 indexToDelete = electionList[electionKey].keyIndex;
-    //     uint256 keyToMove = electionKeyList[electionKeyList.length - 1];
-    //     electionKeyList[indexToDelete] = keyToMove;
-    //     electionList[keyToMove].keyIndex = indexToDelete;
-    //     electionKeyList.length --;
-
-    //     return indexToDelete; 
-    // }
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
@@ -214,6 +199,51 @@ contract Votechain {
         officialList[keyToMove].keyIndex = indexToDelete;
         officialKeyList.length --;
 
+        return indexToDelete;
+    }
+
+    function deleteElection(uint256 electionKey) public electionKeyExists(electionKey) returns(uint256) {
+        uint256 indexToDelete = electionList[electionKey].keyIndex;
+        uint256 keyToMove = electionKeyList[electionKeyList.length.sub(1)];
+        electionKeyList[indexToDelete] = keyToMove;
+        electionList[keyToMove].keyIndex = indexToDelete;
+        electionKeyList.length = electionKeyList.length.sub(1);
+
+        // delete the election key from the list of election keys of all of its voters
+        Election storage election = electionList[electionKey];
+        for(uint256 i = 0; i < election.voterKeyList.length; i++){
+            address voterKey = election.voterKeyList[i];
+            Voter storage voter = voterList[voterKey];
+            indexToDelete = voter.electionKeyIndexList[electionKey];
+            keyToMove = voter.electionKeyList[voter.electionKeyList.length.sub(1)];
+            voter.electionKeyList[indexToDelete] = keyToMove;
+            voter.electionKeyIndexList[keyToMove] = indexToDelete;
+            voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
+        }
+
+        // delete all the positions under this election
+        for(uint256 i = 0; i < election.positionKeyList.length; i++){
+            uint256 positionKey = election.positionKeyList[i];
+
+            // delete this position
+            indexToDelete = positionList[positionKey].keyIndex;
+            keyToMove = positionKeyList[positionKeyList.length.sub(1)];
+            positionKeyList[indexToDelete] = keyToMove;
+            positionList[keyToMove].keyIndex = indexToDelete;
+            positionKeyList.length = positionKeyList.length.sub(1);
+
+            // delete all the candidates under this position
+            Position storage position = positionList[positionKey];
+            for(uint256 j = 0; j < position.candidateKeyList.length; j++){
+                uint256 candidateKey = position.candidateKeyList[j];
+                indexToDelete = candidateList[candidateKey].keyIndex;
+                keyToMove = candidateKeyList[candidateKeyList.length.sub(1)];
+                candidateKeyList[indexToDelete] = keyToMove;
+                candidateList[keyToMove].keyIndex = indexToDelete;
+                candidateKeyList.length = candidateKeyList.length.sub(1);
+            }          
+            
+        }
         return indexToDelete;
     }
 
@@ -253,7 +283,7 @@ contract Votechain {
         election.positionKeyIndexList[keyToMove] = indexToDelete;
         election.positionKeyList.length = election.positionKeyList.length.sub(1);
 
-        // delete all the candidates in this position
+        // delete all the candidates under this position
         uint256[] memory candidateKeyListInPosition = positionList[positionKey].candidateKeyList;
         for(uint256 i = 0; i < candidateKeyListInPosition.length; i++){
             uint256 candidateKey = candidateKeyListInPosition[i];
@@ -282,18 +312,15 @@ contract Votechain {
         voter.electionKeyIndexList[electionKeyToMove] = indexToDelete;
         voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
 
-        // TODO: delete the voter in the global list if the voter is not involved in any election
-        if(voter.electionKeyList.length == 0){
-            indexToDelete = voterList[voterKey].keyIndex;
-            keyToMove = voterKeyList[voterKeyList.length.sub(1)];
-            voterKeyList[indexToDelete] = keyToMove;
-            voterList[keyToMove].keyIndex = indexToDelete;
-            voterKeyList.length = voterKeyList.length.sub(1); 
-        }
     }
 
     function getVoterElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
         return voterList[voterKey].electionKeyList[electionKeyIndex];
+    }
+
+    modifier notVoterAt(uint256 electionKey, address voterKey) {
+        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
+        _;
     }
 
     modifier onlyVoterAt(uint256 electionKey, address voterKey) {
@@ -367,6 +394,12 @@ contract Votechain {
     function isVoter(address voterKey) public view returns(bool) {
         if(voterKeyList.length == 0) return false;
         return voterKeyList[voterList[voterKey].keyIndex] == voterKey;
+    }
+
+    function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
+        Voter storage voter = voterList[voterKey];
+        if(voter.electionKeyList.length == 0) return false;
+        return voter.electionKeyList[voter.electionKeyIndexList[electionKey]] == electionKey;
     }
 
     function isVoterAt(uint256 electionKey, address voterKey) public view returns(bool) {
