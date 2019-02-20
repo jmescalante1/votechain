@@ -29,7 +29,6 @@ contract("Votechain - data deletion", async(accounts) => {
     await votechainInstance.deleteAdmin.sendTransaction(expectedAdminKey);
     let isDeletedAdmin = !(await votechainInstance.isAdmin.call(expectedAdminKey));
     expect(isDeletedAdmin, "The new admin should be deleted.").to.be.true;    
-
   });
 
   it("should delete an official.", async () => {
@@ -60,7 +59,7 @@ contract("Votechain - data deletion", async(accounts) => {
     // add a position
     let expectedPositionName = "President";
     let maxNoOfCandidatesThatCanBeSelected = 2;
-    await votechainInstance.addPositionAtElection(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected)
+    await votechainInstance.addPositionAt(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected)
     
     // verify if the position was indeed recorded
     let expectedPositionKey = new BigNumber(1);
@@ -69,7 +68,7 @@ contract("Votechain - data deletion", async(accounts) => {
 
     // add a candidate 
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAtPosition.sendTransaction(expectedPositionKey, expectedCandidateName);
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
 
     // verify if the candidate was indeed recorded
     let expectedCandidateKey = new BigNumber(1);
@@ -81,18 +80,20 @@ contract("Votechain - data deletion", async(accounts) => {
     let expectedStudentNo = "2015-08795";
     let expectedVoterName = "JM";
 
-    await votechainInstance.addVoterAtElection(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedVoterName);
+    await votechainInstance.addVoterAt(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedVoterName);
 
     // verify if the voter was indeed added to the election
     let isVoterAtElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
     expect(isVoterAtElection, "The voter should be added first to the election.").to.be.true;
 
-    // verify if the election key was indeed added to the list of election keys of the its voter
+    // verify if the election key was indeed added to the list of election keys of its voter
     let isElectionAtVoter = await votechainInstance.isElectionAt.call(expectedVoterKey, expectedElectionKey);
     expect(isElectionAtVoter, "The election key should also be added to the list of the election keys of the added voter.").to.be.true;
 
     // delete the added election
     await votechainInstance.deleteElection.sendTransaction(expectedElectionKey);
+    
+    // verify if the election was successfully deleted.
     let isDeletedElection = !(await votechainInstance.isElection.call(expectedElectionKey));
     expect(isDeletedElection, "The election should be deleted.").to.be.true;
 
@@ -110,31 +111,29 @@ contract("Votechain - data deletion", async(accounts) => {
   });
 
   it("should delete a candidate", async () => {
-    let accountToUse = "0x281a1316FC1e113C8Dc8542D4E281412a28490be"
-
     // add first an election
     let expectedElectionName = "CAS";
     await votechainInstance.addElection.sendTransaction(expectedElectionName);
 
-    // then add a position
+    // add a position at the election
     let expectedElectionKey = new BigNumber(1);
     let expectedPositionName = "President";
     let maxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
-    await votechainInstance.addPositionAtElection.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
 
-    // finally, add a candidate 
+    // finally, add a candidate at the position
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAtPosition.sendTransaction(expectedPositionKey, expectedCandidateName);
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
 
-    // verify if the candidate was indeed recorded.
+    // verify if the candidate was indeed recorded
     let expectedCandidateKey = new BigNumber(1);
     let isCandidate = await votechainInstance.isCandidate.call(expectedCandidateKey);
     expect(isCandidate, "The candidate should be added first.").to.be.true;
 
-    // verify if the candidate was also added in the position where it belongs to
-    let isCandidateInPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
-    expect(isCandidateInPosition, "The candidate should also be added in the position with key " + expectedPositionKey.toString()).to.be.true;
+    // verify if the candidate was also added in the position it belongs to
+    let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
+    expect(isCandidateAtPosition, "The candidate should also be added in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
 
     // delete the candidate
     await votechainInstance.deleteCandidate.sendTransaction(expectedCandidateKey, {from: accountToUse});
@@ -142,8 +141,8 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isDeletedCandidate, "The candidate should be deleted.").to.be.true;
 
     // verify if the candidate was also deleted in the position where it belongs to
-    let isDeletedCandidateInPosition = !(await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey));
-    expect(isDeletedCandidateInPosition, "The candidate should also be deleted in the position with key " + expectedPositionKey.toString()).to.be.true;
+    let isDeletedCandidateAtPosition = !(await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey));
+    expect(isDeletedCandidateAtPosition, "The candidate should also be deleted in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
 
   });
 
@@ -156,16 +155,16 @@ contract("Votechain - data deletion", async(accounts) => {
     let expectedElectionKey = new BigNumber(1);
     let expectedPositionName = "President";
     let maxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
-    await votechainInstance.addPositionAtElection.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
 
-    // add a candidate 
+    // finally, add a candidate 
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAtPosition.sendTransaction(expectedPositionKey, expectedCandidateName);
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
 
-    // and anotther candidate
+    // and another candidate
     let expectedCandidateName2 = "Alley";
-    await votechainInstance.addCandidateAtPosition.sendTransaction(expectedPositionKey, expectedCandidateName2);
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName2);
 
     // verify if the position was indeed recorded
     let isPosition = await votechainInstance.isPosition.call(expectedPositionKey);
@@ -177,8 +176,8 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isDeletedPosition, "The added position should be deleted.").to.be.true;
 
     // the position should also be deleted inside the election where it belongs to
-    let isDeletedPositionInElection = !(await votechainInstance.isPositionAt.call(expectedElectionKey, expectedPositionKey));
-    expect(isDeletedPositionInElection, "The added position should be deleted in the election where it belongs to.").to.be.true;
+    let isDeletedPositionAtElection = !(await votechainInstance.isPositionAt.call(expectedElectionKey, expectedPositionKey));
+    expect(isDeletedPositionAtElection, "The added position should be deleted in the election where it belongs to.").to.be.true;
 
     // all the candidates inside the position should also be deleted
     let expectedCandidateKey = new BigNumber(1);
@@ -201,22 +200,18 @@ contract("Votechain - data deletion", async(accounts) => {
     let expectedStudentNo = "2015-08795";
     let expectedVoterName = "JM";
 
-    await votechainInstance.addVoterAtElection(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedVoterName);
+    await votechainInstance.addVoterAt(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedVoterName);
 
     // verify if the voter is successfully recorded
     let isVoter = await votechainInstance.isVoter(expectedVoterKey);
     expect(isVoter, "A voter should be added first.").to.be.true;
 
     // delete the added voter at the specified election
-    await votechainInstance.removeVoterAt(expectedElectionKey, expectedVoterKey);
+    await votechainInstance.deleteVoterAt(expectedElectionKey, expectedVoterKey);
     
     // verify if the voter was successfully deleted at the specified election
-    let isDeletedVoterInElection = !(await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey));
-    expect(isDeletedVoterInElection, "The voter should be deleted at the election with key " + expectedElectionKey).to.be.true;
+    let isDeletedVoterAtElection = !(await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey));
+    expect(isDeletedVoterAtElection, "The voter should be deleted at the election with key " + expectedElectionKey).to.be.true;
 
-  });
-
-
-
-  
+  });  
 });
