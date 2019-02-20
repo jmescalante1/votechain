@@ -68,6 +68,7 @@ contract Votechain {
         mapping(uint256 => uint256) candidateKeyIndexList; // candidate key to index in candidateKeyList
 
         uint256 abstainKey;
+        bool isAbstainActive;
     }
 
     struct Candidate {
@@ -105,16 +106,30 @@ contract Votechain {
         uint256 keyIndex;
         uint256 positionKey;
 
-        address[] voterKeyList; // voters who voted for this particular abstain
-        mapping(address => uint256) voterKeyIndexList; // voter key to index in the voterKeyList
+        uint256[] voteKeyList; // voters who voted for this particular abstain
+        mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
+    }
+
+    function addAdmin(address adminKey, string memory name) public returns(address) {
+        adminList[adminKey].name = name;
+        adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
+
+        return adminKey;
+    }
+
+    function addOfficial(address officialKey, string memory name) public returns(address) {
+        officialList[officialKey].name = name;
+        officialList[officialKey].keyIndex = officialKeyList.push(officialKey).sub(1);
+
+        return officialKey;
     }
 
     function addElection(string memory name) public returns(uint256) {
-        uint256 newKey = genElectionKey();
-        electionList[newKey].name = name;
-        electionList[newKey].keyIndex = electionKeyList.push(newKey) - 1;
+        uint256 electionKey = genElectionKey();
+        electionList[electionKey].name = name;
+        electionList[electionKey].keyIndex = electionKeyList.push(electionKey).sub(1);
         
-        return newKey;
+        return electionKey;
     }
 
     function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public returns(uint256) {
@@ -122,9 +137,9 @@ contract Votechain {
         positionList[positionKey].name = name;
         positionList[positionKey].electionKey = electionKey;
         positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
-        positionList[positionKey].keyIndex = positionKeyList.push(positionKey) - 1;
+        positionList[positionKey].keyIndex = positionKeyList.push(positionKey).sub(1);
 
-        electionList[electionKey].positionKeyIndexList[positionKey] = electionList[electionKey].positionKeyList.push(positionKey) - 1;
+        electionList[electionKey].positionKeyIndexList[positionKey] = electionList[electionKey].positionKeyList.push(positionKey).sub(1);
 
         return positionKey;
     }
@@ -133,9 +148,9 @@ contract Votechain {
         uint256 candidateKey = genCandidateKey();
         candidateList[candidateKey].name = name;
         candidateList[candidateKey].positionKey = positionKey;
-        candidateList[candidateKey].keyIndex = candidateKeyList.push(candidateKey) - 1;
+        candidateList[candidateKey].keyIndex = candidateKeyList.push(candidateKey).sub(1);
 
-        positionList[positionKey].candidateKeyIndexList[candidateKey] = positionList[positionKey].candidateKeyList.push(candidateKey) - 1;
+        positionList[positionKey].candidateKeyIndexList[candidateKey] = positionList[positionKey].candidateKeyList.push(candidateKey).sub(1);
        
         return candidateKey;
     }
@@ -156,61 +171,16 @@ contract Votechain {
         return voterKey;
     }
 
-    function addAdmin(address adminKey, string memory name) public returns(address) {
-        adminList[adminKey].name = name;
-        adminList[adminKey].keyIndex = adminKeyList.push(adminKey) - 1;
-
-        return adminKey;
-    }
-
-    function addOfficial(address officialKey, string memory name) public returns(address) {
-        officialList[officialKey].name = name;
-        officialList[officialKey].keyIndex = officialKeyList.push(officialKey) - 1;
-
-        return officialKey;
-    }
-
     function addAbstainAt(uint256 positionKey) public returns(uint256) {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
         abstainList[abstainKey].keyIndex = abstainKeyList.push(abstainKey) - 1;
         
         positionList[positionKey].abstainKey = abstainKey;
+        positionList[positionKey].isAbstainActive = true;
 
         return abstainKey; // a value of 0 means it does not exist
     }
-
-    // function updateElection(uint256 electionKey, string memory newName) public onlyAdminAndOfficial electionKeyExists(electionKey) returns(bool) {
-    //     electionList[electionKey].name = newName;
-    //     return true;
-    // }
-
-    // function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
-    //     positionList[positionKey].name = name;
-    //     positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
-    //     return true;
-    // }
-
-    // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
-    //     candidateList[candidateKey].name = name;
-    //     return true;
-    // }
-
-    // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
-    //     adminList[adminKey].name = name;
-    //     return true;
-    // }
-
-    // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
-    //     officialList[officialKey].name = name;
-    //     return true;
-    // }
-
-    // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
-    //     voterList[voterKey].name = name;
-    //     voterList[voterKey].studentNo = studentNo;
-    //     return true;
-    // }
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
@@ -325,7 +295,7 @@ contract Votechain {
         }
     }
 
-    function deleteVoterAt(uint256 electionKey, address voterKey) public electionKeyExists(electionKey) onlyVoterAt(electionKey, voterKey) returns(uint256) {
+    function deleteVoterAt(uint256 electionKey, address voterKey) public electionKeyExists(electionKey) voterKeyExistsAt(electionKey, voterKey) returns(uint256) {
         // remove the voter key from the specified election
         Election storage election = electionList[electionKey];
         uint256 indexToDelete = election.voterKeyIndexList[voterKey];
@@ -344,64 +314,18 @@ contract Votechain {
 
     }
 
-    function getElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
-        return voterList[voterKey].electionKeyList[electionKeyIndex];
-    }
+    function deleteAbstain(uint256 abstainKey) public returns(uint256) {
+        uint256 indexToDelete = abstainList[abstainKey].keyIndex;
+        uint256 keyToMove = abstainKeyList[abstainKeyList.length.sub(1)];
+        abstainKeyList[indexToDelete] = keyToMove;
+        abstainList[keyToMove].keyIndex = indexToDelete;
+        abstainKeyList.length = abstainKeyList.length.sub(1);
 
-    modifier notVoterAt(uint256 electionKey, address voterKey) {
-        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
-        _;
-    }
+        // it should also be deleted in the position it belongs to
+        uint256 positionKey = abstainList[abstainKey].positionKey;
+        positionList[positionKey].isAbstainActive = false;
 
-    modifier onlyVoterAt(uint256 electionKey, address voterKey) {
-        require(isVoterAt(electionKey, voterKey), "The voter key provided does not exist in the specified election.");
-        _;
-    }
-
-    modifier onlyAdminAndOfficial() {
-        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
-        _;
-    }
-
-    modifier onlyAdmin() {
-        require(isAdmin(msg.sender), "Only admins can invoke this method.");
-        _;
-    }
-
-    modifier onlyOfficial() {
-        require(isOfficial(msg.sender), "Only the voting officials can invoke this method.");
-        _;
-    }
-
-
-    modifier onlySelf(address key) {
-        require(msg.sender == key, "Only the owner of the account can change their profile.");
-        _;
-    }
-
-    modifier candidateKeyExists(uint256 candidateKey) {
-        require(isCandidate(candidateKey), "The candidate key provided does not exist.");
-        _;
-    }
-
-    modifier adminKeyExists(address adminKey){
-        require(isAdmin(adminKey), "The admin key provided does not exist.");
-        _;
-    }
-
-    modifier officialKeyExists(address officialKey){
-        require(isOfficial(officialKey), "The official key provided does not exist.");
-        _;
-    }
-
-    modifier electionKeyExists(uint256 electionKey){
-        require(isElection(electionKey), "The election key provided does not exist.");
-        _;
-    }
-
-    modifier positionKeyExists(uint256 positionKey){
-        require(isPosition(positionKey), "The position key provided does not exits.");
-        _;
+        return indexToDelete;
     }
 
     function isAdmin(address adminKey) public view returns(bool) {
@@ -417,6 +341,12 @@ contract Votechain {
     function isElection(uint256 electionKey) public view returns(bool) {
         if(electionKeyList.length == 0) return false;
         return electionKeyList[electionList[electionKey].keyIndex] == electionKey;
+    }
+
+    function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
+        Voter storage voter = voterList[voterKey];
+        if(voter.electionKeyList.length == 0) return false;
+        return voter.electionKeyList[voter.electionKeyIndexList[electionKey]] == electionKey;
     }
 
     function isPosition(uint256 positionKey) public view returns(bool) {
@@ -446,12 +376,6 @@ contract Votechain {
         return voterKeyList[voterList[voterKey].keyIndex] == voterKey;
     }
 
-    function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
-        Voter storage voter = voterList[voterKey];
-        if(voter.electionKeyList.length == 0) return false;
-        return voter.electionKeyList[voter.electionKeyIndexList[electionKey]] == electionKey;
-    }
-
     function isVoterAt(uint256 electionKey, address voterKey) public view returns(bool) {
         Election storage election = electionList[electionKey];
         if(election.voterKeyList.length == 0) return false;
@@ -470,8 +394,8 @@ contract Votechain {
 
     function isAbstainAt(uint256 positionKey, uint256 abstainKey) public view returns(bool) {
         Position storage position = positionList[positionKey];
-        if(position.abstainKey == 0) return false;
-        return position.abstainKey == abstainKey;
+        if(position.isAbstainActive && position.abstainKey == abstainKey) return true;
+        return false;
     }
 
     function genElectionKey() private returns(uint256) {
@@ -493,5 +417,102 @@ contract Votechain {
     function genAbstainKey() private returns(uint256) {
         return abstainKeyCounter = abstainKeyCounter.add(1);
     }
+
+    function getElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
+        return voterList[voterKey].electionKeyList[electionKeyIndex];
+    }
+
+    modifier onlyAdminAndOfficial() {
+        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(isAdmin(msg.sender), "Only admins can invoke this method.");
+        _;
+    }
+
+    modifier onlyOfficial() {
+        require(isOfficial(msg.sender), "Only the voting officials can invoke this method.");
+        _;
+    }
+
+    modifier onlySelf(address accountKey) {
+        require(msg.sender == accountKey, "Only the owner of the account can change their profile.");
+        _;
+    }
+
+    modifier adminKeyExists(address adminKey){
+        require(isAdmin(adminKey), "The admin key provided does not exist.");
+        _;
+    }
+
+    modifier officialKeyExists(address officialKey){
+        require(isOfficial(officialKey), "The official key provided does not exist.");
+        _;
+    }
+
+    modifier electionKeyExists(uint256 electionKey){
+        require(isElection(electionKey), "The election key provided does not exist.");
+        _;
+    }
+
+    modifier positionKeyExists(uint256 positionKey){
+        require(isPosition(positionKey), "The position key provided does not exits.");
+        _;
+    }
+
+    modifier candidateKeyExists(uint256 candidateKey) {
+        require(isCandidate(candidateKey), "The candidate key provided does not exist.");
+        _;
+    }
+
+    modifier voterKeyExistsAt(uint256 electionKey, address voterKey) {
+        require(isVoterAt(electionKey, voterKey), "The voter key provided does not exist in the specified election.");
+        _;
+    }
+
+    modifier abstainKeyExists(uint256 abstainKey){
+        require(isAbstain(abstainKey), "The abstain key provided does not exist.");
+        _;
+    }
+
+    modifier notVoterAt(uint256 electionKey, address voterKey) {
+        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
+        _;
+    }
+
+    
+    // function updateElection(uint256 electionKey, string memory newName) public onlyAdminAndOfficial electionKeyExists(electionKey) returns(bool) {
+    //     electionList[electionKey].name = newName;
+    //     return true;
+    // }
+
+    // function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
+    //     positionList[positionKey].name = name;
+    //     positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
+    //     return true;
+    // }
+
+    // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
+    //     candidateList[candidateKey].name = name;
+    //     return true;
+    // }
+
+    // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
+    //     adminList[adminKey].name = name;
+    //     return true;
+    // }
+
+    // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
+    //     officialList[officialKey].name = name;
+    //     return true;
+    // }
+
+    // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
+    //     voterList[voterKey].name = name;
+    //     voterList[voterKey].studentNo = studentNo;
+    //     return true;
+    // }
 
 }

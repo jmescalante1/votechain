@@ -136,7 +136,7 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isCandidateAtPosition, "The candidate should also be added in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
 
     // delete the candidate
-    await votechainInstance.deleteCandidate.sendTransaction(expectedCandidateKey, {from: accountToUse});
+    await votechainInstance.deleteCandidate.sendTransaction(expectedCandidateKey);
     let isDeletedCandidate = !(await votechainInstance.isCandidate.call(expectedCandidateKey));
     expect(isDeletedCandidate, "The candidate should be deleted.").to.be.true;
 
@@ -214,4 +214,36 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isDeletedVoterAtElection, "The voter should be deleted at the election with key " + expectedElectionKey).to.be.true;
 
   });  
+
+  it("should delete an abstain", async () => {
+    // add first an election
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName);
+
+    // add a position
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPositionName = "President";
+    let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
+
+    // add an abstain option
+    let expectedPositionKey = new BigNumber(1);
+    await votechainInstance.addAbstainAt(expectedPositionKey);
+
+    // verify if the abstain option is successfully added in the position it belongs to.
+    let expectedAbstainKey = new BigNumber(1);
+    let isAbstainAtPosition = await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey);
+    expect(isAbstainAtPosition, "The abstain key should be added in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
+
+    // delete the abstain option
+    await votechainInstance.deleteAbstain.sendTransaction(expectedAbstainKey);
+
+    // verify if the abstain option is successfully deleted globally
+    let isDeletedAbstain = !(await votechainInstance.isAbstain.call(expectedAbstainKey));
+    expect(isDeletedAbstain, "The abstain option should be deleted.").to.be.true;
+
+    // verify if the abstain option is deleted in the position it belongs to
+    let isDeletedAbstainAtPosition = !(await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey));
+    expect(isDeletedAbstainAtPosition, "The abstain position should be deleted at the position with key " + expectedPositionKey.toString() + ".").to.be.true;
+  });
 });
