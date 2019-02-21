@@ -110,6 +110,10 @@ contract Votechain {
         mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
     }
 
+    constructor(address adminKey, string memory name) public {
+        addAdmin(adminKey, name);
+    }
+
     function addAdmin(address adminKey, string memory name) public returns(address) {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
@@ -181,6 +185,38 @@ contract Votechain {
 
         return abstainKey; 
     }
+
+    function updateElection(uint256 electionKey, string memory newName) public onlyAdminAndOfficial electionKeyExists(electionKey) returns(bool) {
+        electionList[electionKey].name = newName;
+        return true;
+    }
+
+    // function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
+    //     positionList[positionKey].name = name;
+    //     positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
+    //     return true;
+    // }
+
+    // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
+    //     candidateList[candidateKey].name = name;
+    //     return true;
+    // }
+
+    // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
+    //     adminList[adminKey].name = name;
+    //     return true;
+    // }
+
+    // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
+    //     officialList[officialKey].name = name;
+    //     return true;
+    // }
+
+    // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
+    //     voterList[voterKey].name = name;
+    //     voterList[voterKey].studentNo = studentNo;
+    //     return true;
+    // }
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
@@ -495,36 +531,5 @@ contract Votechain {
     }
 
     
-    // function updateElection(uint256 electionKey, string memory newName) public onlyAdminAndOfficial electionKeyExists(electionKey) returns(bool) {
-    //     electionList[electionKey].name = newName;
-    //     return true;
-    // }
-
-    // function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
-    //     positionList[positionKey].name = name;
-    //     positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
-    //     return true;
-    // }
-
-    // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
-    //     candidateList[candidateKey].name = name;
-    //     return true;
-    // }
-
-    // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
-    //     adminList[adminKey].name = name;
-    //     return true;
-    // }
-
-    // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
-    //     officialList[officialKey].name = name;
-    //     return true;
-    // }
-
-    // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
-    //     voterList[voterKey].name = name;
-    //     voterList[voterKey].studentNo = studentNo;
-    //     return true;
-    // }
-
+    
 }
