@@ -191,11 +191,11 @@ contract Votechain {
         return true;
     }
 
-    // function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
-    //     positionList[positionKey].name = name;
-    //     positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
-    //     return true;
-    // }
+    function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
+        positionList[positionKey].name = name;
+        positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
+        return true;
+    }
 
     // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
     //     candidateList[candidateKey].name = name;
