@@ -19,9 +19,9 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add a new admin.", async () => {
     // add an admin
-    let expectedAdminKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+    let expectedAdminKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
     let expectedAdminName = "JM";
-    await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName);
+    await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName, {from: adminAccount});
 
     // verify if the new admin was successfully recorded
     let isAdmin = await votechainInstance.isAdmin.call(expectedAdminKey);
@@ -41,7 +41,7 @@ contract("Votechain - data insertion", async(accounts) => {
     // add an official
     let expectedOfficialKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
     let expectedOfficialName = "Eric";
-    await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName);
+    await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName, {from: adminAccount});
 
     // verify if the new official was successfully recorded
     let isOfficial = await votechainInstance.isOfficial.call(expectedOfficialKey);
@@ -59,7 +59,7 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add a new election.", async () => {
     let expectedElectionName = "CAS";
-    await votechainInstance.addElection.sendTransaction(expectedElectionName);
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
     
     // verify if the new election was successfully recorded
     let expectedElectionKey = new BigNumber(1);
@@ -78,14 +78,15 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add a new position.", async() => {
     // add an election
-    await votechainInstance.addElection.sendTransaction("CASSC");
+    let expectedElectionName = "CASSC";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
     
     // add a position 
     let expectedElectionKey = new BigNumber(1); 
     let expectedPositionName = "President";
     let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
 
-    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
 
     // verify if the position was successfully recorded
     let expectedPositionKey = new BigNumber(1);
@@ -115,19 +116,20 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add a new candidate.", async () => {
     // add an election
-    await votechainInstance.addElection.sendTransaction("CAS");
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
 
     let expectedElectionKey = new BigNumber(1);
     let expectedPositionName = "President";
     let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
 
     // add a position
-    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
 
     // add a candidate
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
 
     // verify if the new candidate was successfully recorded     
     let expectedCandidateKey = new BigNumber(1);
@@ -153,14 +155,15 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add a new voter.", async() => {
     // add first an election 
-    await votechainInstance.addElection.sendTransaction("CAS");
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
     
     // add a new voter for the added election
     let expectedElectionKey = new BigNumber(1);
     let expectedVoterKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
     let expectedStudentNo = "2015-08795";
     let expectedName = "JM";
-    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedName);
+    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedName, {from: adminAccount});
 
     // verify if the new voter was successfully recorded
     let isVoter = await votechainInstance.isVoter.call(expectedVoterKey);
@@ -189,17 +192,18 @@ contract("Votechain - data insertion", async(accounts) => {
 
   it("should add an abstain option in a position.", async() => {
     // add first an election
-    await votechainInstance.addElection.sendTransaction("CAS");
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
   
     // then add a position
     let expectedElectionKey = new BigNumber(1);
     let expectedPositionName = "President";
     let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
-    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
 
     // then add an abstain option in the added election position
     let expectedPositionKey = new BigNumber(1);
-    await votechainInstance.addAbstainAt.sendTransaction(expectedPositionKey);
+    await votechainInstance.addAbstainAt.sendTransaction(expectedPositionKey, {from: adminAccount});
 
     // verify if the new abstain was successfully recorded
     let expectedAbstainKey = new BigNumber(1);

@@ -111,24 +111,25 @@ contract Votechain {
     }
 
     constructor(address adminKey, string memory name) public {
-        addAdmin(adminKey, name);
+        adminList[adminKey].name = name;
+        adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
     }
 
-    function addAdmin(address adminKey, string memory name) public returns(address) {
+    function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey) returns(address) {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
         
         return adminKey;
     }
 
-    function addOfficial(address officialKey, string memory name) public returns(address) {
+    function addOfficial(address officialKey, string memory name) public onlyAdmin notOfficial(officialKey) returns(address) {
         officialList[officialKey].name = name;
         officialList[officialKey].keyIndex = officialKeyList.push(officialKey).sub(1);
 
         return officialKey;
     }
 
-    function addElection(string memory name) public returns(uint256) {
+    function addElection(string memory name) public onlyAdminOrOfficial returns(uint256) {
         uint256 electionKey = genElectionKey();
         electionList[electionKey].name = name;
         electionList[electionKey].keyIndex = electionKeyList.push(electionKey).sub(1);
@@ -136,7 +137,7 @@ contract Votechain {
         return electionKey;
     }
 
-    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public returns(uint256) {
+    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(uint256) {
         uint256 positionKey = genPositionKey();
         positionList[positionKey].name = name;
         positionList[positionKey].electionKey = electionKey;
@@ -148,7 +149,7 @@ contract Votechain {
         return positionKey;
     }
 
-    function addCandidateAt(uint256 positionKey, string memory name) public returns(uint256) {
+    function addCandidateAt(uint256 positionKey, string memory name) public onlyAdminOrOfficial positionKeyExists(positionKey) returns(uint256) {
         uint256 candidateKey = genCandidateKey();
         candidateList[candidateKey].name = name;
         candidateList[candidateKey].positionKey = positionKey;
@@ -159,7 +160,7 @@ contract Votechain {
         return candidateKey;
     }
 
-    function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) public electionKeyExists(electionKey) notVoterAt(electionKey, voterKey) returns(address){
+    function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) public onlyAdminOrOfficial electionKeyExists(electionKey) notVoterAt(electionKey, voterKey) returns(address){
         if(isVoter(voterKey)){ // the voter is already registered
             voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
         } else {
@@ -175,7 +176,7 @@ contract Votechain {
         return voterKey;
     }
 
-    function addAbstainAt(uint256 positionKey) public atMostOneAbstain(positionKey) returns(uint256) {
+    function addAbstainAt(uint256 positionKey) public onlyAdminOrOfficial positionKeyExists(positionKey) atMostOneAbstain(positionKey) returns(uint256) {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
         abstainList[abstainKey].keyIndex = abstainKeyList.push(abstainKey).sub(1);
@@ -186,39 +187,39 @@ contract Votechain {
         return abstainKey; 
     }
 
-    function updateElection(uint256 electionKey, string memory newName) public onlyAdminAndOfficial electionKeyExists(electionKey) returns(bool) {
+    function updateElection(uint256 electionKey, string memory newName) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(bool) {
         electionList[electionKey].name = newName;
         return true;
     }
 
-    function updatePosition(uint256 positionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected ) public positionKeyExists(positionKey) onlyAdminAndOfficial returns(bool) {
-        positionList[positionKey].name = name;
-        positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = maxNoOfCandidatesThatCanBeSelected;
+    function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected ) public onlyAdminOrOfficial positionKeyExists(positionKey) onlyAdminOrOfficial returns(bool) {
+        positionList[positionKey].name = newName;
+        positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = newMaxNoOfCandidatesThatCanBeSelected;
         return true;
     }
 
-    function updateCandidate(uint256 candidateKey, string memory name) public candidateKeyExists(candidateKey) onlyAdminAndOfficial returns(bool) {
-        candidateList[candidateKey].name = name;
+    function updateCandidate(uint256 candidateKey, string memory newName) public onlyAdminOrOfficial candidateKeyExists(candidateKey) onlyAdminOrOfficial returns(bool) {
+        candidateList[candidateKey].name = newName;
         return true;
     }
 
-    function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
-        adminList[adminKey].name = name;
+    function updateAdmin(address adminKey, string memory newName) public onlySelf(adminKey) adminKeyExists(adminKey) returns(bool) {
+        adminList[adminKey].name = newName;
         return true;
     }
 
-    function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
-        officialList[officialKey].name = name;
+    function updateOfficial(address officialKey, string memory newName) public onlySelf(officialKey) officialKeyExists(officialKey) returns(bool) {
+        officialList[officialKey].name = newName;
         return true;
     }
 
-    function updateVoter(address voterKey, string memory studentNo, string memory name) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
-        voterList[voterKey].name = name;
-        voterList[voterKey].studentNo = studentNo;
+    function updateVoter(address voterKey, string memory newStudentNo, string memory newName) public onlySelf(voterKey) voterKeyExists(voterKey) returns(bool) {
+        voterList[voterKey].name = newName;
+        voterList[voterKey].studentNo = newStudentNo;
         return true;
     }
 
-    function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
+    function deleteAdmin(address adminKey) public onlyAdmin adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
         address keyToMove = adminKeyList[adminKeyList.length.sub(1)];
         adminKeyList[indexToDelete] = keyToMove;
@@ -228,7 +229,7 @@ contract Votechain {
         return indexToDelete; 
     }
 
-    function deleteOfficial(address officialKey) public officialKeyExists(officialKey) returns(uint256) {
+    function deleteOfficial(address officialKey) public onlyAdmin officialKeyExists(officialKey) returns(uint256) {
         uint256 indexToDelete = officialList[officialKey].keyIndex;
         address keyToMove = officialKeyList[officialKeyList.length.sub(1)];
         officialKeyList[indexToDelete] = keyToMove;
@@ -238,7 +239,7 @@ contract Votechain {
         return indexToDelete;
     }
 
-    function deleteElection(uint256 electionKey) public electionKeyExists(electionKey) returns(uint256) {
+    function deleteElection(uint256 electionKey) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(uint256) {
         uint256 indexToDelete = electionList[electionKey].keyIndex;
         uint256 keyToMove = electionKeyList[electionKeyList.length.sub(1)];
         electionKeyList[indexToDelete] = keyToMove;
@@ -283,7 +284,7 @@ contract Votechain {
         return indexToDelete;
     }
 
-    function deleteCandidate(uint256 candidateKey) public candidateKeyExists(candidateKey) returns(uint256) {
+    function deleteCandidate(uint256 candidateKey) public onlyAdminOrOfficial candidateKeyExists(candidateKey) returns(uint256) {
         uint256 indexToDelete = candidateList[candidateKey].keyIndex;
         uint256 positionKey = candidateList[candidateKey].positionKey;
         uint256 keyToMove = candidateKeyList[candidateKeyList.length - 1];
@@ -301,7 +302,7 @@ contract Votechain {
         return 1;
     }
 
-    function deletePosition(uint256 positionKey) public positionKeyExists(positionKey) returns(uint256) {
+    function deletePosition(uint256 positionKey) public onlyAdminOrOfficial positionKeyExists(positionKey) returns(uint256) {
         uint256 electionKey = positionList[positionKey].electionKey;
 
         // delete the position 
@@ -338,7 +339,7 @@ contract Votechain {
 
     }
 
-    function deleteVoterAt(uint256 electionKey, address voterKey) public electionKeyExists(electionKey) voterKeyExistsAt(electionKey, voterKey) returns(uint256) {
+    function deleteVoterAt(uint256 electionKey, address voterKey) public onlyAdminOrOfficial electionKeyExists(electionKey) voterKeyExistsAt(electionKey, voterKey) returns(uint256) {
         // remove the voter key from the specified election
         Election storage election = electionList[electionKey];
         uint256 indexToDelete = election.voterKeyIndexList[voterKey];
@@ -357,7 +358,7 @@ contract Votechain {
 
     }
 
-    function deleteAbstain(uint256 abstainKey) public returns(uint256) {
+    function deleteAbstain(uint256 abstainKey) public onlyAdminOrOfficial abstainKeyExists(abstainKey) returns(uint256) {
         uint256 indexToDelete = abstainList[abstainKey].keyIndex;
         uint256 keyToMove = abstainKeyList[abstainKeyList.length.sub(1)];
         abstainKeyList[indexToDelete] = keyToMove;
@@ -485,7 +486,7 @@ contract Votechain {
         return abstainKeyCounter = abstainKeyCounter.add(1);
     }
 
-    function indexOutOfRange(uint256 index, uint256 arrayLength) public pure returns(bool) {
+    function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
         return false;
     }
@@ -494,7 +495,7 @@ contract Votechain {
         return voterList[voterKey].electionKeyList[electionKeyIndex];
     }
 
-    modifier onlyAdminAndOfficial() {
+    modifier onlyAdminOrOfficial() {
         require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
         _;
     }
@@ -564,6 +565,14 @@ contract Votechain {
         _;
     }
 
-    
+    modifier notAdmin(address adminKey) {
+        require(!isAdmin(adminKey), "The admin key provided already exists.");
+        _;
+    }
+
+    modifier notOfficial(address officialKey){
+        require(!isOfficial(officialKey), "The official key provided already exists.");
+        _;
+    }
     
 }
