@@ -389,7 +389,7 @@ contract Votechain {
         uint256 keyIndex = electionList[electionKey].keyIndex;
 
         if(electionKeyList.length == 0 || indexOutOfRange(keyIndex, electionKeyList.length)) return false;
-        return election[keyIndex] == electionKey;
+        return electionKeyList[keyIndex] == electionKey;
     }
 
     function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
