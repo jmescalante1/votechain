@@ -197,10 +197,10 @@ contract Votechain {
         return true;
     }
 
-    // function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
-    //     candidateList[candidateKey].name = name;
-    //     return true;
-    // }
+    function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
+        candidateList[candidateKey].name = name;
+        return true;
+    }
 
     // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
     //     adminList[adminKey].name = name;

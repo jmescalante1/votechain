@@ -59,4 +59,35 @@ contract("Votechain - data update", async(accounts) => {
     expect(actualNewPositionName, "The position name should be updated.").to.be.deep.equal(expectedNewPositionName);
     expect(actualNewMaxNoOfCandidatesThatCanBeSelected.toString(), "The max no of candidates that can be selected should be updated.").to.be.deep.equal(expectedNewMaxNoOfCandidatesThatCanBeSelected.toString());
   });
+
+  it("should update a candidate.", async () => {
+    // add first an election
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a position 
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPositionName = "President";
+    let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
+
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
+
+    // add a candidate
+    let expectedPositionKey = new BigNumber(1);
+    let expectedCandidateName = "MJ";
+    
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+
+    // update the candidate
+    let expectedCandidateKey = new BigNumber(1);
+    let expectedNewCandidateName = "JM";
+
+    await votechainInstance.updateCandidate.sendTransaction(expectedCandidateKey, expectedNewCandidateName, {from: adminAccount});
+
+    // verify if the candidate was successfully updated
+    let candidate = await votechainInstance.candidateList.call(expectedCandidateKey);
+    let actualNewCandidateName = candidate["name"];
+
+    expect(actualNewCandidateName, "The candidate name should be updated.").to.be.deep.equal(expectedNewCandidateName, {from: adminAccount});
+  });
 });
