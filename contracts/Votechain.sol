@@ -37,7 +37,6 @@ contract Votechain {
     struct Admin {
         uint256 keyIndex;
         string name;
-        address _address;
     }
 
     struct Official {
@@ -118,7 +117,7 @@ contract Votechain {
     function addAdmin(address adminKey, string memory name) public returns(address) {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
-        adminList[adminKey]._address = adminKey;
+        
         return adminKey;
     }
 
@@ -390,7 +389,7 @@ contract Votechain {
         uint256 keyIndex = electionList[electionKey].keyIndex;
 
         if(electionKeyList.length == 0 || indexOutOfRange(keyIndex, electionKeyList.length)) return false;
-        return electionKeyList[keyIndex] == electionKey;
+        return election[keyIndex] == electionKey;
     }
 
     function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
