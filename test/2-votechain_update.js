@@ -125,4 +125,33 @@ contract("Votechain - data update", async(accounts) => {
     expect(actualNewOfficialName, "The official name should be updated.").to.be.deep.equal(expectedNewOfficialName);
 
   });
+
+  it("should update a voter.", async () => {
+    // add first an election 
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a voter
+    let expectedVoterKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedElectionKey = new BigNumber(1);
+    let expectedVoterName = "Yella";
+    let expectedVoterStudentNo = "2014-09899";
+
+    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});
+
+    // update the voter
+    let expectedNewVoterName = "Alley";
+    let expectedNewVoterStudentNo = "2015-09899";
+
+    await votechainInstance.updateVoter.sendTransaction(expectedVoterKey, expectedNewVoterStudentNo, expectedNewVoterName, {from: expectedVoterKey});
+
+    // verify if the voter was successfully updated
+    let voter = await votechainInstance.voterList.call(expectedVoterKey);
+    let actualNewVoterName = voter["name"];
+    let actualNewVoterStudentNo = voter["studentNo"];
+
+    expect(actualNewVoterStudentNo, "The voter's student number should be updated.").to.be.deep.equal(expectedNewVoterStudentNo);
+    expect(actualNewVoterName, "The voter name should be updated.").to.be.deep.equal(expectedNewVoterName);
+    
+  });
 });

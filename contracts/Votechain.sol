@@ -197,7 +197,7 @@ contract Votechain {
         return true;
     }
 
-    function updateCandidate(uint256 candidateKey, string memory name) public onlyAdminAndOfficial returns(bool) {
+    function updateCandidate(uint256 candidateKey, string memory name) public candidateKeyExists(candidateKey) onlyAdminAndOfficial returns(bool) {
         candidateList[candidateKey].name = name;
         return true;
     }
@@ -212,11 +212,11 @@ contract Votechain {
         return true;
     }
 
-    // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
-    //     voterList[voterKey].name = name;
-    //     voterList[voterKey].studentNo = studentNo;
-    //     return true;
-    // }
+    function updateVoter(address voterKey, string memory studentNo, string memory name) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
+        voterList[voterKey].name = name;
+        voterList[voterKey].studentNo = studentNo;
+        return true;
+    }
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
@@ -507,6 +507,11 @@ contract Votechain {
 
     modifier candidateKeyExists(uint256 candidateKey) {
         require(isCandidate(candidateKey), "The candidate key provided does not exist.");
+        _;
+    }
+
+    modifier voterKeyExists(address voterKey) {
+        require(isVoter(voterKey), "The voter key provided does not exist.");
         _;
     }
 
