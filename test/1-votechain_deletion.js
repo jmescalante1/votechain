@@ -169,9 +169,23 @@ contract("Votechain - data deletion", async(accounts) => {
     // verify if the position was indeed recorded
     let isPosition = await votechainInstance.isPosition.call(expectedPositionKey);
     expect(isPosition, "The position should be added first.").to.be.true;
+    
+    // add an abstain option
+    await votechainInstance.addAbstainAt.sendTransaction(expectedPositionKey);
 
+    // verify if the abstain option was successfully added globally
+    let expectedAbstainKey = new BigNumber(1);
+    let isAbstain = await votechainInstance.isAbstain.call(expectedAbstainKey);
+    expect(isAbstain, "The abstain option should be added.").to.be.true;
+
+    // verify if the abstain option was added to the position
+    let isAbstainAtPosition = await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey);
+    expect(isAbstainAtPosition, "The position should have an abstain option.").to.be.true;
+    
     // delete the position
     await votechainInstance.deletePosition.sendTransaction(expectedPositionKey);
+    
+    // verify if the position was successfully deleted
     let isDeletedPosition = !(await votechainInstance.isPosition.call(expectedPositionKey));
     expect(isDeletedPosition, "The added position should be deleted.").to.be.true;
 
@@ -187,6 +201,14 @@ contract("Votechain - data deletion", async(accounts) => {
     let expectedCandidateKey2 = new BigNumber(2);
     let isDeletedCandidate2 = !(await votechainInstance.isCandidate(expectedCandidateKey2));
     expect(isDeletedCandidate2, "The candidate 2 in this position should be deleted.").to.be.true;
+  
+    //verify if the abstain option was also deleted
+    let isDeletedAbstain = !(await votechainInstance.isAbstain.call(expectedAbstainKey));
+    expect(isDeletedAbstain, "The abstain option should be deleted.").to.be.true;
+
+    // verify if the abstain option in the position it belongs to was also deleted
+    let isDeletedAbstainAtPosition = !(await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey));
+    expect(isDeletedAbstainAtPosition, "The abstain option should be deleted in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
   });
 
   it("should delete a voter in a specified election", async () => {

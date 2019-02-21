@@ -171,15 +171,15 @@ contract Votechain {
         return voterKey;
     }
 
-    function addAbstainAt(uint256 positionKey) public returns(uint256) {
+    function addAbstainAt(uint256 positionKey) public atMostOneAbstain(positionKey) returns(uint256) {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
-        abstainList[abstainKey].keyIndex = abstainKeyList.push(abstainKey) - 1;
+        abstainList[abstainKey].keyIndex = abstainKeyList.push(abstainKey).sub(1);
         
         positionList[positionKey].abstainKey = abstainKey;
         positionList[positionKey].isAbstainActive = true;
 
-        return abstainKey; // a value of 0 means it does not exist
+        return abstainKey; 
     }
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
@@ -293,6 +293,13 @@ contract Votechain {
             candidateList[keyToMove].keyIndex = indexToDelete;
             candidateKeyList.length = candidateKeyList.length.sub(1);
         }
+
+        // delete its abstain option if it exists
+        uint256 abstainKey = positionList[positionKey].abstainKey;
+        if(isAbstain(abstainKey)) {
+            deleteAbstain(abstainKey);
+        }
+
     }
 
     function deleteVoterAt(uint256 electionKey, address voterKey) public electionKeyExists(electionKey) voterKeyExistsAt(electionKey, voterKey) returns(uint256) {
@@ -442,28 +449,33 @@ contract Votechain {
         _;
     }
 
-    modifier adminKeyExists(address adminKey){
+    modifier adminKeyExists(address adminKey) {
         require(isAdmin(adminKey), "The admin key provided does not exist.");
         _;
     }
 
-    modifier officialKeyExists(address officialKey){
+    modifier officialKeyExists(address officialKey) {
         require(isOfficial(officialKey), "The official key provided does not exist.");
         _;
     }
 
-    modifier electionKeyExists(uint256 electionKey){
+    modifier electionKeyExists(uint256 electionKey) {
         require(isElection(electionKey), "The election key provided does not exist.");
         _;
     }
 
-    modifier positionKeyExists(uint256 positionKey){
+    modifier positionKeyExists(uint256 positionKey) {
         require(isPosition(positionKey), "The position key provided does not exits.");
         _;
     }
 
     modifier candidateKeyExists(uint256 candidateKey) {
         require(isCandidate(candidateKey), "The candidate key provided does not exist.");
+        _;
+    }
+
+    modifier atMostOneAbstain(uint256 positionKey) {
+        require(!positionList[positionKey].isAbstainActive, "The position already has an abstain option.");
         _;
     }
 
