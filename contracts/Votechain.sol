@@ -202,10 +202,10 @@ contract Votechain {
         return true;
     }
 
-    // function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
-    //     adminList[adminKey].name = name;
-    //     return true;
-    // }
+    function updateAdmin(address adminKey, string memory name) public adminKeyExists(adminKey) onlySelf(adminKey) returns(bool) {
+        adminList[adminKey].name = name;
+        return true;
+    }
 
     // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
     //     officialList[officialKey].name = name;
@@ -481,7 +481,7 @@ contract Votechain {
     }
 
     modifier onlySelf(address accountKey) {
-        require(msg.sender == accountKey, "Only the owner of the account can change their profile.");
+        require(msg.sender == accountKey, "Only the owner of the account can change his profile.");
         _;
     }
 

@@ -90,4 +90,23 @@ contract("Votechain - data update", async(accounts) => {
 
     expect(actualNewCandidateName, "The candidate name should be updated.").to.be.deep.equal(expectedNewCandidateName, {from: adminAccount});
   });
+
+  it("should update an admin.", async () => {
+    // add first an admin
+    let expectedAdminKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedAdminName = "MJ";
+    await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName, {from: adminAccount});
+
+    // update the added admin
+    let expectedNewAdminName = "JM";
+    await votechainInstance.updateAdmin.sendTransaction(expectedAdminKey, expectedNewAdminName, {from: expectedAdminKey});
+  
+    // verify if the admin was successfully updated
+    let admin = await votechainInstance.adminList.call(expectedAdminKey);
+    let actualNewAdminName = admin["name"];
+
+    expect(actualNewAdminName, "The admin name should be updated.").to.be.deep.equal(expectedNewAdminName);
+  });
+
+  
 });
