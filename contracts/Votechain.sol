@@ -207,10 +207,10 @@ contract Votechain {
         return true;
     }
 
-    // function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
-    //     officialList[officialKey].name = name;
-    //     return true;
-    // }
+    function updateOfficial(address officialKey, string memory name) public officialKeyExists(officialKey) onlySelf(officialKey) returns(bool) {
+        officialList[officialKey].name = name;
+        return true;
+    }
 
     // function updateVoter(address voterKey, string memory name, string memory studentNo) public voterKeyExists(voterKey) onlySelf(voterKey) returns(bool) {
     //     voterList[voterKey].name = name;

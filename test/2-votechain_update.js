@@ -17,7 +17,6 @@ contract("Votechain - data update", async(accounts) => {
     votechainInstance = await Votechain.new(adminAccount, adminName);
   });
 
-
   it("should update an election.", async () => {
     // add first an election 
     let expectedElectionName = "CAS";
@@ -88,7 +87,7 @@ contract("Votechain - data update", async(accounts) => {
     let candidate = await votechainInstance.candidateList.call(expectedCandidateKey);
     let actualNewCandidateName = candidate["name"];
 
-    expect(actualNewCandidateName, "The candidate name should be updated.").to.be.deep.equal(expectedNewCandidateName, {from: adminAccount});
+    expect(actualNewCandidateName, "The candidate name should be updated.").to.be.deep.equal(expectedNewCandidateName);
   });
 
   it("should update an admin.", async () => {
@@ -108,5 +107,22 @@ contract("Votechain - data update", async(accounts) => {
     expect(actualNewAdminName, "The admin name should be updated.").to.be.deep.equal(expectedNewAdminName);
   });
 
-  
+  it("should update an official.", async () => {
+    // add first an official
+    let expectedOfficialKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedOfficialName = "MJ";
+
+    await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName, {from: adminAccount});
+
+    // update the added official
+    let expectedNewOfficialName = "JM";
+    await votechainInstance.updateOfficial.sendTransaction(expectedOfficialKey, expectedNewOfficialName, {from: expectedOfficialKey});
+
+    // verify if the official was successfully updated
+    let official = await votechainInstance.officialList.call(expectedOfficialKey);
+    let actualNewOfficialName = official["name"];
+    
+    expect(actualNewOfficialName, "The official name should be updated.").to.be.deep.equal(expectedNewOfficialName);
+
+  });
 });
