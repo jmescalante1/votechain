@@ -37,6 +37,7 @@ contract Votechain {
     struct Admin {
         uint256 keyIndex;
         string name;
+        address _address;
     }
 
     struct Official {
@@ -117,7 +118,7 @@ contract Votechain {
     function addAdmin(address adminKey, string memory name) public returns(address) {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
-
+        adminList[adminKey]._address = adminKey;
         return adminKey;
     }
 
@@ -220,20 +221,20 @@ contract Votechain {
 
     function deleteAdmin(address adminKey) public adminKeyExists(adminKey) returns(uint256) {
         uint256 indexToDelete = adminList[adminKey].keyIndex;
-        address keyToMove = adminKeyList[adminKeyList.length - 1];
+        address keyToMove = adminKeyList[adminKeyList.length.sub(1)];
         adminKeyList[indexToDelete] = keyToMove;
         adminList[keyToMove].keyIndex = indexToDelete;
-        adminKeyList.length --;
+        adminKeyList.length = adminKeyList.length.sub(1);
 
         return indexToDelete; 
     }
 
     function deleteOfficial(address officialKey) public officialKeyExists(officialKey) returns(uint256) {
         uint256 indexToDelete = officialList[officialKey].keyIndex;
-        address keyToMove = officialKeyList[officialKeyList.length - 1];
+        address keyToMove = officialKeyList[officialKeyList.length.sub(1)];
         officialKeyList[indexToDelete] = keyToMove;
         officialList[keyToMove].keyIndex = indexToDelete;
-        officialKeyList.length --;
+        officialKeyList.length = officialKeyList.length.sub(1);
 
         return indexToDelete;
     }
@@ -372,67 +373,91 @@ contract Votechain {
     }
 
     function isAdmin(address adminKey) public view returns(bool) {
-        if(adminKeyList.length == 0) return false;
-        return adminKeyList[adminList[adminKey].keyIndex] == adminKey;
+        uint256 keyIndex = adminList[adminKey].keyIndex;
+        
+        if(adminKeyList.length == 0 || indexOutOfRange(keyIndex, adminKeyList.length)) return false;
+        return adminKeyList[keyIndex] == adminKey;
     }
 
     function isOfficial(address officialKey) public view returns(bool) {
-        if(officialKeyList.length == 0) return false;
-        return officialKeyList[officialList[officialKey].keyIndex] == officialKey;
+        uint256 keyIndex = officialList[officialKey].keyIndex;
+        
+        if(officialKeyList.length == 0 || indexOutOfRange(keyIndex, officialKeyList.length)) return false;
+        return officialKeyList[keyIndex] == officialKey;
     }
 
     function isElection(uint256 electionKey) public view returns(bool) {
-        if(electionKeyList.length == 0) return false;
-        return electionKeyList[electionList[electionKey].keyIndex] == electionKey;
+        uint256 keyIndex = electionList[electionKey].keyIndex;
+
+        if(electionKeyList.length == 0 || indexOutOfRange(keyIndex, electionKeyList.length)) return false;
+        return electionKeyList[keyIndex] == electionKey;
     }
 
     function isElectionAt(address voterKey, uint256 electionKey) public view returns(bool) {
         Voter storage voter = voterList[voterKey];
-        if(voter.electionKeyList.length == 0) return false;
-        return voter.electionKeyList[voter.electionKeyIndexList[electionKey]] == electionKey;
+        uint256 keyIndex = voter.electionKeyIndexList[electionKey];
+        
+        if(voter.electionKeyList.length == 0 || indexOutOfRange(keyIndex, voter.electionKeyList.length)) return false;
+        return voter.electionKeyList[keyIndex] == electionKey;
     }
 
     function isPosition(uint256 positionKey) public view returns(bool) {
-        if(positionKeyList.length == 0) return false;
-        return positionKeyList[positionList[positionKey].keyIndex] == positionKey;
+        uint256 keyIndex = positionList[positionKey].keyIndex;
+        
+        if(positionKeyList.length == 0 || indexOutOfRange(keyIndex, positionKeyList.length)) return false;
+        return positionKeyList[keyIndex] == positionKey;
     }
 
     function isPositionAt(uint256 electionKey, uint256 positionKey) public view returns(bool) {
         Election storage election = electionList[electionKey];
-        if(election.positionKeyList.length == 0) return false;
-        return election.positionKeyList[election.positionKeyIndexList[positionKey]] == positionKey;
+        uint256 keyIndex = election.positionKeyIndexList[positionKey];
+        
+        if(election.positionKeyList.length == 0 || indexOutOfRange(keyIndex, election.positionKeyList.length)) return false;
+        return election.positionKeyList[keyIndex] == positionKey;
     }
 
     function isCandidate(uint256 candidateKey) public view returns(bool) {
-        if(candidateKeyList.length == 0) return false;
-        return candidateKeyList[candidateList[candidateKey].keyIndex] == candidateKey;
+        uint256 keyIndex = candidateList[candidateKey].keyIndex;
+        
+        if(candidateKeyList.length == 0 || indexOutOfRange(keyIndex, candidateKeyList.length)) return false;
+        return candidateKeyList[keyIndex] == candidateKey;
     }
 
     function isCandidateAt(uint256 positionKey, uint256 candidateKey) public view returns(bool) {
         Position storage position = positionList[positionKey];
-        if(position.candidateKeyList.length == 0) return false;
-        return position.candidateKeyList[position.candidateKeyIndexList[candidateKey]] == candidateKey;
+        uint256 keyIndex = position.candidateKeyIndexList[candidateKey];
+        
+        if(position.candidateKeyList.length == 0 || indexOutOfRange(keyIndex, position.candidateKeyList.length)) return false;
+        return position.candidateKeyList[keyIndex] == candidateKey;
     }
 
     function isVoter(address voterKey) public view returns(bool) {
-        if(voterKeyList.length == 0) return false;
-        return voterKeyList[voterList[voterKey].keyIndex] == voterKey;
+        uint256 keyIndex = voterList[voterKey].keyIndex;
+        
+        if(voterKeyList.length == 0 || indexOutOfRange(keyIndex, voterKeyList.length)) return false;
+        return voterKeyList[keyIndex] == voterKey;
     }
 
     function isVoterAt(uint256 electionKey, address voterKey) public view returns(bool) {
         Election storage election = electionList[electionKey];
-        if(election.voterKeyList.length == 0) return false;
-        return election.voterKeyList[election.voterKeyIndexList[voterKey]] == voterKey;
+        uint256 keyIndex = election.voterKeyIndexList[voterKey];
+
+        if(election.voterKeyList.length == 0 || indexOutOfRange(keyIndex, election.voterKeyList.length)) return false;
+        return election.voterKeyList[keyIndex] == voterKey;
     }
 
     function isVote(uint256 voteKey) public view returns(bool) {
-        if(voteKeyList.length == 0) return false;
-        return voteKeyList[voteList[voteKey].keyIndex] == voteKey;
+        uint256 keyIndex = voteList[voteKey].keyIndex;
+        
+        if(voteKeyList.length == 0 || indexOutOfRange(keyIndex, voteKeyList.length)) return false;
+        return voteKeyList[keyIndex] == voteKey;
     }
 
     function isAbstain(uint256 abstainKey) public view returns(bool) {
-        if(abstainKeyList.length == 0) return false;
-        return abstainKeyList[abstainList[abstainKey].keyIndex] == abstainKey;
+        uint256 keyIndex = abstainList[abstainKey].keyIndex;
+        
+        if(abstainKeyList.length == 0 || indexOutOfRange(keyIndex, abstainKeyList.length)) return false;
+        return abstainKeyList[keyIndex] == abstainKey;
     }
 
     function isAbstainAt(uint256 positionKey, uint256 abstainKey) public view returns(bool) {
@@ -459,6 +484,11 @@ contract Votechain {
 
     function genAbstainKey() private returns(uint256) {
         return abstainKeyCounter = abstainKeyCounter.add(1);
+    }
+
+    function indexOutOfRange(uint256 index, uint256 arrayLength) public pure returns(bool) {
+        if(index >= arrayLength) return true;
+        return false;
     }
 
     function getElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {

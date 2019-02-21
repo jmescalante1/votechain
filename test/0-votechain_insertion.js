@@ -1,223 +1,225 @@
-// const Votechain = artifacts.require("../contracts/Votechain.sol");
+const Votechain = artifacts.require("../contracts/Votechain.sol");
 
-// const BigNumber = web3.utils.BN;
+const BigNumber = web3.utils.BN;
 
-// const chai = require("chai")
-//   .use(require("chai-as-promised"))
-//   .use(require("chai-bignumber")(BigNumber));
+const chai = require("chai")
+  .use(require("chai-as-promised"))
+  .use(require("chai-bignumber")(BigNumber));
   
-// const expect = chai.expect;
+const expect = chai.expect;
 
-// let votechainInstance;
+contract("Votechain - data insertion", async(accounts) => {
+  let votechainInstance;
+  const adminAccount = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+  const adminName = "JM";
 
-// contract("Votechain - data insertion", async(accounts) => {
-//   beforeEach(async () => {
-//     votechainInstance = await Votechain.new();
-//   });
+  beforeEach(async () => {
+    votechainInstance = await Votechain.new(adminAccount, adminName);
+  });
 
-//   it("should add a new admin.", async () => {
-//     // add an admin
-//     let expectedAdminKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
-//     let expectedAdminName = "JM";
-//     await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName);
+  it("should add a new admin.", async () => {
+    // add an admin
+    let expectedAdminKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+    let expectedAdminName = "JM";
+    await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName);
 
-//     // verify if the new admin was successfully recorded
-//     let isAdmin = await votechainInstance.isAdmin.call(expectedAdminKey);
-//     expect(isAdmin, "The new admin should be added").to.be.true;
+    // verify if the new admin was successfully recorded
+    let isAdmin = await votechainInstance.isAdmin.call(expectedAdminKey);
+    expect(isAdmin, "The new admin should be added").to.be.true;
 
-//     // verify if the fields are correct
-//     let admin = await votechainInstance.adminList.call(expectedAdminKey);
-//     let actualAdminName = admin["name"];
-//     let actualAdminKeyIndex = admin["keyIndex"];
-//     let expectedAdminKeyIndex = new BigNumber(0);
+    // verify if the fields are correct
+    let admin = await votechainInstance.adminList.call(expectedAdminKey);
+    let actualAdminName = admin["name"];
+    let actualAdminKeyIndex = admin["keyIndex"];
+    let expectedAdminKeyIndex = new BigNumber(1);
 
-//     expect(actualAdminKeyIndex.toString(), expectedAdminKeyIndex.toString() + " should be the key index of the added admin.").to.be.deep.equal(expectedAdminKeyIndex.toString());
-//     expect(actualAdminName, expectedAdminName + " should be the name of the added admin.").to.be.deep.equal(expectedAdminName);
-//   });
+    expect(actualAdminKeyIndex.toString(), expectedAdminKeyIndex.toString() + " should be the key index of the added admin.").to.be.deep.equal(expectedAdminKeyIndex.toString());
+    expect(actualAdminName, expectedAdminName + " should be the name of the added admin.").to.be.deep.equal(expectedAdminName);
+  });
 
-//   it("should add a new official.", async () => {
-//     // add an official
-//     let expectedOfficialKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
-//     let expectedOfficialName = "Eric";
-//     await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName);
+  it("should add a new official.", async () => {
+    // add an official
+    let expectedOfficialKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+    let expectedOfficialName = "Eric";
+    await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName);
 
-//     // verify if the new official was successfully recorded
-//     let isOfficial = await votechainInstance.isOfficial.call(expectedOfficialKey);
-//     expect(isOfficial, "The new official should be added").to.be.true;
+    // verify if the new official was successfully recorded
+    let isOfficial = await votechainInstance.isOfficial.call(expectedOfficialKey);
+    expect(isOfficial, "The new official should be added").to.be.true;
 
-//     // verify if the fields are correct
-//     let official = await votechainInstance.officialList.call(expectedOfficialKey);
-//     let actualOfficialName = official["name"];
-//     let actualOfficialKeyIndex = official["keyIndex"];
-//     let expectedOfficialKeyIndex = new BigNumber(0);
+    // verify if the fields are correct
+    let official = await votechainInstance.officialList.call(expectedOfficialKey);
+    let actualOfficialName = official["name"];
+    let actualOfficialKeyIndex = official["keyIndex"];
+    let expectedOfficialKeyIndex = new BigNumber(0);
 
-//     expect(actualOfficialKeyIndex.toString(), expectedOfficialKeyIndex.toString() + " should be the key index of the added admin.").to.be.deep.equal(expectedOfficialKeyIndex.toString());
-//     expect(actualOfficialName, expectedOfficialName + " should be the name of the added admin.").to.be.deep.equal("Eric");
-//   });
+    expect(actualOfficialKeyIndex.toString(), expectedOfficialKeyIndex.toString() + " should be the key index of the added admin.").to.be.deep.equal(expectedOfficialKeyIndex.toString());
+    expect(actualOfficialName, expectedOfficialName + " should be the name of the added admin.").to.be.deep.equal("Eric");
+  });
 
-//   it("should add a new election.", async () => {
-//     let expectedElectionName = "CAS";
-//     await votechainInstance.addElection.sendTransaction(expectedElectionName);
+  it("should add a new election.", async () => {
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName);
     
-//     // verify if the new election was successfully recorded
-//     let expectedElectionKey = new BigNumber(1);
-//     let isElection = await votechainInstance.isElection.call(expectedElectionKey);
-//     expect(isElection, "The new election should be added.").to.be.true;
+    // verify if the new election was successfully recorded
+    let expectedElectionKey = new BigNumber(1);
+    let isElection = await votechainInstance.isElection.call(expectedElectionKey);
+    expect(isElection, "The new election should be added.").to.be.true;
 
-//     // verify if it has correct fields
-//     let election = await votechainInstance.electionList.call(expectedElectionKey);
-//     let actualElectionName = election["name"];
-//     let actualElectionKeyIndex = election["keyIndex"];
-//     let expectedElectionKeyIndex = new BigNumber(0);
+    // verify if it has correct fields
+    let election = await votechainInstance.electionList.call(expectedElectionKey);
+    let actualElectionName = election["name"];
+    let actualElectionKeyIndex = election["keyIndex"];
+    let expectedElectionKeyIndex = new BigNumber(0);
 
-//     expect(actualElectionName, expectedElectionName + " should be the name of the added election.").to.be.deep.equal(expectedElectionName);
-//     expect(actualElectionKeyIndex.toString(), expectedElectionKeyIndex + " should be the key index of the added election.").to.be.deep.equal(expectedElectionKeyIndex.toString());
-//   });
+    expect(actualElectionName, expectedElectionName + " should be the name of the added election.").to.be.deep.equal(expectedElectionName);
+    expect(actualElectionKeyIndex.toString(), expectedElectionKeyIndex + " should be the key index of the added election.").to.be.deep.equal(expectedElectionKeyIndex.toString());
+  });
 
-//   it("should add a new position.", async() => {
-//     // add an election
-//     await votechainInstance.addElection.sendTransaction("CASSC");
+  it("should add a new position.", async() => {
+    // add an election
+    await votechainInstance.addElection.sendTransaction("CASSC");
     
-//     // add a position 
-//     let expectedElectionKey = new BigNumber(1); 
-//     let expectedPositionName = "President";
-//     let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    // add a position 
+    let expectedElectionKey = new BigNumber(1); 
+    let expectedPositionName = "President";
+    let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
 
-//     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
 
-//     // verify if the position was successfully recorded
-//     let expectedPositionKey = new BigNumber(1);
-//     let isPosition = await votechainInstance.isPosition.call(expectedPositionKey);
-//     expect(isPosition, "The new position should be added").to.be.true;
+    // verify if the position was successfully recorded
+    let expectedPositionKey = new BigNumber(1);
+    let isPosition = await votechainInstance.isPosition.call(expectedPositionKey);
+    expect(isPosition, "The new position should be added").to.be.true;
 
-//     // verify if it has correct fields
-//     let position = await votechainInstance.positionList.call(expectedPositionKey);
+    // verify if it has correct fields
+    let position = await votechainInstance.positionList.call(expectedPositionKey);
 
-//     let actualPositionName = position["name"];
-//     let actualPositionElectionKey = position["electionKey"];
-//     let actualPositionKeyIndex = position["keyIndex"];
-//     let actualMaxNoOfCandidatesThatCanBeSelected = position["maxNoOfCandidatesThatCanBeSelected"];
+    let actualPositionName = position["name"];
+    let actualPositionElectionKey = position["electionKey"];
+    let actualPositionKeyIndex = position["keyIndex"];
+    let actualMaxNoOfCandidatesThatCanBeSelected = position["maxNoOfCandidatesThatCanBeSelected"];
 
-//     let expectedPositionElectionKey = new BigNumber(1);
-//     let expectedPositionKeyIndex = new BigNumber(0);
+    let expectedPositionElectionKey = new BigNumber(1);
+    let expectedPositionKeyIndex = new BigNumber(0);
 
-//     expect(actualPositionName, expectedPositionName + " should be the name of the added position").to.be.deep.equal("President");
-//     expect(actualPositionElectionKey.toString(), expectedPositionElectionKey.toString() + " should be the election key of the added position").to.be.deep.equal(expectedPositionElectionKey.toString());
-//     expect(actualPositionKeyIndex.toString(), expectedPositionKeyIndex.toString() + " should be the key index of the added position").to.be.deep.equal(expectedPositionKeyIndex.toString());
-//     expect(actualMaxNoOfCandidatesThatCanBeSelected.toString(), expectedMaxNoOfCandidatesThatCanBeSelected.toString() + " should be the max no of candidates that can be selected").to.be.deep.equal(expectedMaxNoOfCandidatesThatCanBeSelected.toString());
+    expect(actualPositionName, expectedPositionName + " should be the name of the added position").to.be.deep.equal("President");
+    expect(actualPositionElectionKey.toString(), expectedPositionElectionKey.toString() + " should be the election key of the added position").to.be.deep.equal(expectedPositionElectionKey.toString());
+    expect(actualPositionKeyIndex.toString(), expectedPositionKeyIndex.toString() + " should be the key index of the added position").to.be.deep.equal(expectedPositionKeyIndex.toString());
+    expect(actualMaxNoOfCandidatesThatCanBeSelected.toString(), expectedMaxNoOfCandidatesThatCanBeSelected.toString() + " should be the max no of candidates that can be selected").to.be.deep.equal(expectedMaxNoOfCandidatesThatCanBeSelected.toString());
     
-//     // the added position should be added in the election it is referred to
-//     let isPositionAtElection = await votechainInstance.isPositionAt.call(expectedElectionKey, expectedPositionKey);
-//     expect(isPositionAtElection, "The added position should be in the election with key " + expectedElectionKey + ".").to.be.true;
-//   });
+    // the added position should be added in the election it is referred to
+    let isPositionAtElection = await votechainInstance.isPositionAt.call(expectedElectionKey, expectedPositionKey);
+    expect(isPositionAtElection, "The added position should be in the election with key " + expectedElectionKey + ".").to.be.true;
+  });
 
-//   it("should add a new candidate.", async () => {
-//     // add an election
-//     await votechainInstance.addElection.sendTransaction("CAS");
+  it("should add a new candidate.", async () => {
+    // add an election
+    await votechainInstance.addElection.sendTransaction("CAS");
 
-//     let expectedElectionKey = new BigNumber(1);
-//     let expectedPositionName = "President";
-//     let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPositionName = "President";
+    let expectedMaxNoOfCandidatesThatCanBeSelected = new BigNumber(1);
 
-//     // add a position
-//     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
+    // add a position
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected);
 
-//     // add a candidate
-//     let expectedPositionKey = new BigNumber(1);
-//     let expectedCandidateName = "JM";
-//     await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
+    // add a candidate
+    let expectedPositionKey = new BigNumber(1);
+    let expectedCandidateName = "JM";
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName);
 
-//     // verify if the new candidate was successfully recorded     
-//     let expectedCandidateKey = new BigNumber(1);
-//     let isCandidate = await votechainInstance.isCandidate.call(expectedCandidateKey);
-//     expect(isCandidate, "The new candidate should be added.").to.be.true;
+    // verify if the new candidate was successfully recorded     
+    let expectedCandidateKey = new BigNumber(1);
+    let isCandidate = await votechainInstance.isCandidate.call(expectedCandidateKey);
+    expect(isCandidate, "The new candidate should be added.").to.be.true;
 
-//     // verify if it has correct fields
-//     let candidate = await votechainInstance.candidateList.call(expectedCandidateKey);
-//     let expectedCandidateKeyIndex = new BigNumber(0);
+    // verify if it has correct fields
+    let candidate = await votechainInstance.candidateList.call(expectedCandidateKey);
+    let expectedCandidateKeyIndex = new BigNumber(0);
 
-//     let actualCandidateName = candidate["name"];
-//     let actualPositionKey = candidate["positionKey"];
-//     let actualKeyIndex = candidate["keyIndex"];
+    let actualCandidateName = candidate["name"];
+    let actualPositionKey = candidate["positionKey"];
+    let actualKeyIndex = candidate["keyIndex"];
 
-//     expect(actualCandidateName, expectedCandidateName + " should be the name of the added candidate.").to.be.deep.equal(expectedCandidateName);
-//     expect(actualPositionKey.toString(), expectedPositionKey.toString() + " should be the position key of the added candidate.").to.be.deep.equal(expectedPositionKey.toString());
-//     expect(actualKeyIndex.toString(), expectedCandidateKeyIndex.toString() + " should be the key index of the added candidate.").to.be.deep.equal(expectedCandidateKeyIndex.toString());
+    expect(actualCandidateName, expectedCandidateName + " should be the name of the added candidate.").to.be.deep.equal(expectedCandidateName);
+    expect(actualPositionKey.toString(), expectedPositionKey.toString() + " should be the position key of the added candidate.").to.be.deep.equal(expectedPositionKey.toString());
+    expect(actualKeyIndex.toString(), expectedCandidateKeyIndex.toString() + " should be the key index of the added candidate.").to.be.deep.equal(expectedCandidateKeyIndex.toString());
 
-//     // the added candidate should be added in the position it is referred to
-//     let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
-//     expect(isCandidateAtPosition, "The added candidate should be added in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
-//   });
+    // the added candidate should be added in the position it is referred to
+    let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
+    expect(isCandidateAtPosition, "The added candidate should be added in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
+  });
 
-//   it("should add a new voter.", async() => {
-//     // add first an election 
-//     await votechainInstance.addElection.sendTransaction("CAS");
+  it("should add a new voter.", async() => {
+    // add first an election 
+    await votechainInstance.addElection.sendTransaction("CAS");
     
-//     // add a new voter for the added election
-//     let expectedElectionKey = new BigNumber(1);
-//     let expectedVoterKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
-//     let expectedStudentNo = "2015-08795";
-//     let expectedName = "JM";
-//     await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedName);
+    // add a new voter for the added election
+    let expectedElectionKey = new BigNumber(1);
+    let expectedVoterKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+    let expectedStudentNo = "2015-08795";
+    let expectedName = "JM";
+    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedStudentNo, expectedName);
 
-//     // verify if the new voter was successfully recorded
-//     let isVoter = await votechainInstance.isVoter.call(expectedVoterKey);
-//     expect(isVoter, "The new voter should be added.").to.be.true;
+    // verify if the new voter was successfully recorded
+    let isVoter = await votechainInstance.isVoter.call(expectedVoterKey);
+    expect(isVoter, "The new voter should be added.").to.be.true;
 
-//     // verify if it has correct fields
-//     let voter = await votechainInstance.voterList.call(expectedVoterKey);
-//     let expectedElectionKeyIndexAtVoter = new BigNumber(0);
+    // verify if it has correct fields
+    let voter = await votechainInstance.voterList.call(expectedVoterKey);
+    let expectedElectionKeyIndexAtVoter = new BigNumber(0);
 
-//     let actualElectionKey = await votechainInstance.getElectionKeyAt(expectedVoterKey, expectedElectionKeyIndexAtVoter);
-//     let actualStudentNo = voter["studentNo"];
-//     let actualName = voter["name"];
-//     let actualKeyIndex = voter["keyIndex"];
+    let actualElectionKey = await votechainInstance.getElectionKeyAt(expectedVoterKey, expectedElectionKeyIndexAtVoter);
+    let actualStudentNo = voter["studentNo"];
+    let actualName = voter["name"];
+    let actualKeyIndex = voter["keyIndex"];
 
-//     let expectedKeyIndex = new BigNumber(0);
+    let expectedKeyIndex = new BigNumber(0);
 
-//     expect(actualElectionKey.toString(), expectedElectionKey.toString() + " should be the election key of the added voter.").to.be.deep.equal(expectedElectionKey.toString());
-//     expect(actualStudentNo, expectedStudentNo + "should be the studentNo of the added voter.").to.be.deep.equal(expectedStudentNo);
-//     expect(actualName, expectedName + " should be the name of the added voter.").to.be.deep.equal(expectedName);
-//     expect(actualKeyIndex.toString(), expectedKeyIndex.toString() + " should be the key index of the added voter.").to.be.deep.equal(expectedKeyIndex.toString());
+    expect(actualElectionKey.toString(), expectedElectionKey.toString() + " should be the election key of the added voter.").to.be.deep.equal(expectedElectionKey.toString());
+    expect(actualStudentNo, expectedStudentNo + "should be the studentNo of the added voter.").to.be.deep.equal(expectedStudentNo);
+    expect(actualName, expectedName + " should be the name of the added voter.").to.be.deep.equal(expectedName);
+    expect(actualKeyIndex.toString(), expectedKeyIndex.toString() + " should be the key index of the added voter.").to.be.deep.equal(expectedKeyIndex.toString());
 
-//     // verify if the voter has been successfully added to the voter's list of the election it belongs to
-//     let isVoterAtElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
-//     expect(isVoterAtElection, "The added voter should be added in the election with key " + expectedElectionKey.toString()).to.be.true;
-//   }); 
+    // verify if the voter has been successfully added to the voter's list of the election it belongs to
+    let isVoterAtElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
+    expect(isVoterAtElection, "The added voter should be added in the election with key " + expectedElectionKey.toString()).to.be.true;
+  }); 
 
-//   it("should add an abstain option in a position.", async() => {
-//     // add first an election
-//     await votechainInstance.addElection.sendTransaction("CAS");
+  it("should add an abstain option in a position.", async() => {
+    // add first an election
+    await votechainInstance.addElection.sendTransaction("CAS");
   
-//     // then add a position
-//     let expectedElectionKey = new BigNumber(1);
-//     let expectedPositionName = "President";
-//     let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
-//     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
+    // then add a position
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPositionName = "President";
+    let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected);
 
-//     // then add an abstain option in the added election position
-//     let expectedPositionKey = new BigNumber(1);
-//     await votechainInstance.addAbstainAt.sendTransaction(expectedPositionKey);
+    // then add an abstain option in the added election position
+    let expectedPositionKey = new BigNumber(1);
+    await votechainInstance.addAbstainAt.sendTransaction(expectedPositionKey);
 
-//     // verify if the new abstain was successfully recorded
-//     let expectedAbstainKey = new BigNumber(1);
-//     let isAbstain = await votechainInstance.isAbstain.call(expectedAbstainKey);
-//     expect(isAbstain, "The new abstain should be added.").to.be.true;
+    // verify if the new abstain was successfully recorded
+    let expectedAbstainKey = new BigNumber(1);
+    let isAbstain = await votechainInstance.isAbstain.call(expectedAbstainKey);
+    expect(isAbstain, "The new abstain should be added.").to.be.true;
 
-//     // verify if it has correct fields
-//     let abstain = await votechainInstance.abstainList.call(expectedAbstainKey);
+    // verify if it has correct fields
+    let abstain = await votechainInstance.abstainList.call(expectedAbstainKey);
     
-//     let actualAbstainPositionKey = abstain["positionKey"];
-//     let actualAbstainKeyIndex = abstain["keyIndex"];
+    let actualAbstainPositionKey = abstain["positionKey"];
+    let actualAbstainKeyIndex = abstain["keyIndex"];
 
-//     let expectedAbstainPositionKey = expectedPositionKey;
-//     let expectedAbstainKeyIndex = new BigNumber(0);
+    let expectedAbstainPositionKey = expectedPositionKey;
+    let expectedAbstainKeyIndex = new BigNumber(0);
 
-//     expect(actualAbstainPositionKey.toString(), expectedAbstainPositionKey + " should be the position key of the added abstain.").to.be.deep.equal(expectedAbstainPositionKey.toString());
-//     expect(actualAbstainKeyIndex.toString(), expectedAbstainKeyIndex + " should be the key index of the added abstain.").to.be.deep.equal(expectedAbstainKeyIndex.toString());
+    expect(actualAbstainPositionKey.toString(), expectedAbstainPositionKey + " should be the position key of the added abstain.").to.be.deep.equal(expectedAbstainPositionKey.toString());
+    expect(actualAbstainKeyIndex.toString(), expectedAbstainKeyIndex + " should be the key index of the added abstain.").to.be.deep.equal(expectedAbstainKeyIndex.toString());
 
-//     // verify if the abstain option was added in the position it belongs to
-//     let isAbstainAtPosition = await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey);
-//     expect(isAbstainAtPosition, "The added abstain should be added at the position with key " + expectedPositionKey.toString() + ".").to.be.true;
-//   });
-// });
+    // verify if the abstain option was added in the position it belongs to
+    let isAbstainAtPosition = await votechainInstance.isAbstainAt.call(expectedPositionKey, expectedAbstainKey);
+    expect(isAbstainAtPosition, "The added abstain should be added at the position with key " + expectedPositionKey.toString() + ".").to.be.true;
+  });
+});
