@@ -77,6 +77,8 @@ contract Votechain {
 
         uint256 positionKey;
 
+        mapping(address => bool) wasVotedBy;
+
         uint256[] voteKeyList; // votes received
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
     }
@@ -89,7 +91,7 @@ contract Votechain {
         uint256[] electionKeyList;
         mapping(uint256 => uint256) electionKeyIndexList; // electionKey to index in electionKeyList
 
-        Vote[] voteKeyList;
+        uint256[] voteKeyList;
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
     }
 
@@ -98,7 +100,6 @@ contract Votechain {
         uint256 electionKey;
         uint256 positionKey;
         uint256 candidateKey;
-        uint256 voteKey;
         address voterKey;
     }
 
@@ -113,6 +114,36 @@ contract Votechain {
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
+    }
+
+    function vote(uint256 candidateKey) 
+        public 
+        candidateKeyExists(candidateKey)
+        onlyVoterAt(positionList[candidateList[candidateKey].positionKey].electionKey) 
+        hasNotVotedFor(candidateKey)
+        canStillVoteAt(candidateList[candidateKey].positionKey) 
+        returns(bool) 
+    {
+        uint256 voteKey = genVoteKey();
+
+        Candidate storage candidate = candidateList[candidateKey];
+        Position storage position = positionList[candidate.positionKey];
+        Voter storage voter = voterList[msg.sender];
+
+        voteList[voteKey].electionKey = position.electionKey;
+        voteList[voteKey].positionKey = candidate.positionKey;
+        voteList[voteKey].candidateKey = candidateKey;
+        voteList[voteKey].voterKey = msg.sender;
+        voteList[voteKey].keyIndex = voteKeyList.push(voteKey).sub(1);
+
+        // insert the key of the casted vote to the voteKeyList of the candidate
+        candidate.voteKeyIndexList[voteKey] = candidate.voteKeyList.push(voteKey).sub(1);
+
+        // insert the key of the casted vote to the voteKeyList of the voter
+        voter.voteKeyIndexList[voteKey] = voter.voteKeyList.push(voteKey).sub(1);
+
+        candidateList[candidateKey].wasVotedBy[msg.sender] = true;
+        position.noOfVotesSubmittedBy[msg.sender] = position.noOfVotesSubmittedBy[msg.sender].add(1);
     }
 
     function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey) returns(address) {
@@ -496,6 +527,22 @@ contract Votechain {
         return voteKeyList[keyIndex] == voteKey;
     }
 
+    function isVoteAtCandidate(uint256 candidateKey, uint256 voteKey) public view returns(bool) {
+        Candidate storage candidate = candidateList[candidateKey];
+        uint256 keyIndex = candidate.voteKeyIndexList[voteKey];
+
+        if(candidate.voteKeyList.length == 0 || indexOutOfRange(keyIndex, candidate.voteKeyList.length)) return false;
+        return candidate.voteKeyList[keyIndex] == voteKey;
+    } 
+
+    function isVoteAtVoter(address voterKey, uint256 voteKey) public view returns(bool) {
+        Voter storage voter = voterList[voterKey];
+        uint256 keyIndex = voter.voteKeyIndexList[voteKey];
+
+        if(voter.voteKeyList.length == 0 || indexOutOfRange(keyIndex, voter.voteKeyList.length)) return false;
+        return voter.voteKeyList[keyIndex] == voteKey;
+    }    
+
     function isAbstain(uint256 abstainKey) public view returns(bool) {
         uint256 keyIndex = abstainList[abstainKey].keyIndex;
         
@@ -534,10 +581,6 @@ contract Votechain {
         return false;
     }
 
-    function getElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
-        return voterList[voterKey].electionKeyList[electionKeyIndex];
-    }
-
     modifier onlyAdminOrOfficial() {
         require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
         _;
@@ -550,6 +593,11 @@ contract Votechain {
 
     modifier onlyOfficial() {
         require(isOfficial(msg.sender), "Only the voting officials can invoke this method.");
+        _;
+    }
+
+    modifier onlyVoterAt(uint256 electionKey) {
+        require(isVoterAt(electionKey, msg.sender), "Only voters can invoke this method.");
         _;
     }
 
@@ -617,4 +665,23 @@ contract Votechain {
         require(!positionList[positionKey].isAbstainActive, "The position already has an abstain option.");
         _;
     }
+    
+    modifier hasNotVotedFor(uint256 candidateKey) {
+        require(!candidateList[candidateKey].wasVotedBy[msg.sender], "The voter has already voted this candidate.");
+        _;
+    }
+
+    modifier canStillVoteAt(uint256 positionKey) {
+        uint256 noOfVotesSubmittedInThePosition = positionList[positionKey].noOfVotesSubmittedBy[msg.sender];
+        uint256 maxNoOfCandidatesThatCanBeSelected = positionList[positionKey].maxNoOfCandidatesThatCanBeSelected;
+        
+        require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "The voter cannot vote for another candidate.");
+        _;
+    }
+
+    /* For Testing */
+    function getElectionKeyAt(address voterKey, uint256 electionKeyIndex) public view returns(uint256) {
+        return voterList[voterKey].electionKeyList[electionKeyIndex];
+    }
+    /* End Testing */
 }
