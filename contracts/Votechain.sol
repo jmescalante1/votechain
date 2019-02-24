@@ -5,8 +5,8 @@ import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Votechain {
     using SafeMath for uint256;
 
-    uint256 private electionKeyCounter = 0; // will also serve as the election's key
-    mapping(uint256 => Election) public electionList; // election id to election list
+    uint256 private electionKeyCounter = 0; 
+    mapping(uint256 => Election) public electionList;
     uint256[] public electionKeyList;
     
     uint256 private positionKeyCounter = 0;
@@ -137,7 +137,12 @@ contract Votechain {
         return electionKey;
     }
 
-    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(uint256) {
+    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) 
+        public 
+        onlyAdminOrOfficial 
+        electionKeyExists(electionKey) 
+        returns(uint256) 
+    {
         uint256 positionKey = genPositionKey();
         positionList[positionKey].name = name;
         positionList[positionKey].electionKey = electionKey;
@@ -160,7 +165,13 @@ contract Votechain {
         return candidateKey;
     }
 
-    function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) public onlyAdminOrOfficial electionKeyExists(electionKey) notVoterAt(electionKey, voterKey) returns(address){
+    function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) 
+        public 
+        onlyAdminOrOfficial 
+        electionKeyExists(electionKey) 
+        notVoterAt(electionKey, voterKey) 
+        returns(address)
+    {
         if(isVoter(voterKey)){ // the voter is already registered
             voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
         } else {
@@ -176,7 +187,13 @@ contract Votechain {
         return voterKey;
     }
 
-    function addAbstainAt(uint256 positionKey) public onlyAdminOrOfficial positionKeyExists(positionKey) atMostOneAbstain(positionKey) returns(uint256) {
+    function addAbstainAt(uint256 positionKey) 
+        public 
+        onlyAdminOrOfficial 
+        positionKeyExists(positionKey) 
+        atMostOneAbstain(positionKey) 
+        returns(uint256) 
+    {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
         abstainList[abstainKey].keyIndex = abstainKeyList.push(abstainKey).sub(1);
@@ -192,13 +209,23 @@ contract Votechain {
         return true;
     }
 
-    function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected ) public onlyAdminOrOfficial positionKeyExists(positionKey) onlyAdminOrOfficial returns(bool) {
+    function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected ) 
+        public 
+        onlyAdminOrOfficial 
+        positionKeyExists(positionKey) 
+        returns(bool) 
+    {
         positionList[positionKey].name = newName;
         positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = newMaxNoOfCandidatesThatCanBeSelected;
         return true;
     }
 
-    function updateCandidate(uint256 candidateKey, string memory newName) public onlyAdminOrOfficial candidateKeyExists(candidateKey) onlyAdminOrOfficial returns(bool) {
+    function updateCandidate(uint256 candidateKey, string memory newName) 
+        public 
+        onlyAdminOrOfficial 
+        candidateKeyExists(candidateKey) 
+        returns(bool) 
+    {
         candidateList[candidateKey].name = newName;
         return true;
     }
@@ -208,12 +235,22 @@ contract Votechain {
         return true;
     }
 
-    function updateOfficial(address officialKey, string memory newName) public onlySelf(officialKey) officialKeyExists(officialKey) returns(bool) {
+    function updateOfficial(address officialKey, string memory newName) 
+        public 
+        onlySelf(officialKey) 
+        officialKeyExists(officialKey) 
+        returns(bool) 
+    {
         officialList[officialKey].name = newName;
         return true;
     }
 
-    function updateVoter(address voterKey, string memory newStudentNo, string memory newName) public onlySelf(voterKey) voterKeyExists(voterKey) returns(bool) {
+    function updateVoter(address voterKey, string memory newStudentNo, string memory newName) 
+        public 
+        onlySelf(voterKey) 
+        voterKeyExists(voterKey) 
+        returns(bool) 
+    {
         voterList[voterKey].name = newName;
         voterList[voterKey].studentNo = newStudentNo;
         return true;
@@ -339,7 +376,13 @@ contract Votechain {
 
     }
 
-    function deleteVoterAt(uint256 electionKey, address voterKey) public onlyAdminOrOfficial electionKeyExists(electionKey) voterKeyExistsAt(electionKey, voterKey) returns(uint256) {
+    function deleteVoterAt(uint256 electionKey, address voterKey) 
+        public 
+        onlyAdminOrOfficial 
+        electionKeyExists(electionKey) 
+        voterKeyExistsAt(electionKey, voterKey) 
+        returns(uint256) 
+    {
         // remove the voter key from the specified election
         Election storage election = electionList[electionKey];
         uint256 indexToDelete = election.voterKeyIndexList[voterKey];
@@ -545,11 +588,6 @@ contract Votechain {
         _;
     }
 
-    modifier atMostOneAbstain(uint256 positionKey) {
-        require(!positionList[positionKey].isAbstainActive, "The position already has an abstain option.");
-        _;
-    }
-
     modifier voterKeyExistsAt(uint256 electionKey, address voterKey) {
         require(isVoterAt(electionKey, voterKey), "The voter key provided does not exist in the specified election.");
         _;
@@ -570,9 +608,13 @@ contract Votechain {
         _;
     }
 
-    modifier notOfficial(address officialKey){
+    modifier notOfficial(address officialKey) {
         require(!isOfficial(officialKey), "The official key provided already exists.");
         _;
     }
-    
+
+    modifier atMostOneAbstain(uint256 positionKey) {
+        require(!positionList[positionKey].isAbstainActive, "The position already has an abstain option.");
+        _;
+    }
 }
