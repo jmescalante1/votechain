@@ -5,6 +5,8 @@ import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Votechain {
     using SafeMath for uint256;
 
+    enum Stage { Setup, Started, Finished }
+
     uint256 private electionKeyCounter = 0; 
     mapping(uint256 => Election) public electionList;
     uint256[] public electionKeyList;
@@ -47,6 +49,8 @@ contract Votechain {
     struct Election {
         uint256 keyIndex;
         string name;
+
+        Stage stage;
 
         uint256[] positionKeyList;
         mapping(uint256 => uint256) positionKeyIndexList; // position key to index in positionKeyList
@@ -116,9 +120,20 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
     }
 
+    function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey) returns(bool success){
+        electionList[electionKey].stage = Stage.Started;
+        return true;
+    }
+
+    function stopElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) hasStarted(electionKey) returns (bool success) {
+        electionList[electionKey].stage = Stage.Finished;
+        return true;
+    }
+
     function vote(uint256 candidateKey) 
         public 
         candidateKeyExists(candidateKey)
+        hasStarted(positionList[candidateList[candidateKey].positionKey].electionKey)
         onlyVoterAt(positionList[candidateList[candidateKey].positionKey].electionKey) 
         hasNotVotedFor(candidateKey)
         canStillVoteAt(candidateList[candidateKey].positionKey) 
@@ -162,6 +177,7 @@ contract Votechain {
 
     function addElection(string memory name) public onlyAdminOrOfficial returns(uint256) {
         uint256 electionKey = genElectionKey();
+        electionList[electionKey].stage = Stage.Setup;
         electionList[electionKey].name = name;
         electionList[electionKey].keyIndex = electionKeyList.push(electionKey).sub(1);
         
@@ -171,7 +187,8 @@ contract Votechain {
     function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) 
         public 
         onlyAdminOrOfficial 
-        electionKeyExists(electionKey) 
+        electionKeyExists(electionKey)
+        inSetupStage(electionKey) 
         returns(uint256) 
     {
         uint256 positionKey = genPositionKey();
@@ -185,7 +202,13 @@ contract Votechain {
         return positionKey;
     }
 
-    function addCandidateAt(uint256 positionKey, string memory name) public onlyAdminOrOfficial positionKeyExists(positionKey) returns(uint256) {
+    function addCandidateAt(uint256 positionKey, string memory name) 
+        public 
+        onlyAdminOrOfficial
+        positionKeyExists(positionKey)
+        inSetupStage(positionList[positionKey].electionKey)  
+        returns(uint256) 
+    {
         uint256 candidateKey = genCandidateKey();
         candidateList[candidateKey].name = name;
         candidateList[candidateKey].positionKey = positionKey;
@@ -199,7 +222,8 @@ contract Votechain {
     function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) 
         public 
         onlyAdminOrOfficial 
-        electionKeyExists(electionKey) 
+        electionKeyExists(electionKey)
+        inSetupStage(electionKey) 
         notVoterAt(electionKey, voterKey) 
         returns(address)
     {
@@ -222,6 +246,7 @@ contract Votechain {
         public 
         onlyAdminOrOfficial 
         positionKeyExists(positionKey) 
+        inSetupStage(positionList[positionKey].electionKey)
         atMostOneAbstain(positionKey) 
         returns(uint256) 
     {
@@ -235,7 +260,13 @@ contract Votechain {
         return abstainKey; 
     }
 
-    function updateElection(uint256 electionKey, string memory newName) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(bool) {
+    function updateElection(uint256 electionKey, string memory newName) 
+        public 
+        onlyAdminOrOfficial 
+        electionKeyExists(electionKey) 
+        inSetupStage(electionKey)
+        returns(bool) 
+    {
         electionList[electionKey].name = newName;
         return true;
     }
@@ -243,7 +274,8 @@ contract Votechain {
     function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected ) 
         public 
         onlyAdminOrOfficial 
-        positionKeyExists(positionKey) 
+        positionKeyExists(positionKey)  
+        inSetupStage(positionList[positionKey].electionKey)
         returns(bool) 
     {
         positionList[positionKey].name = newName;
@@ -254,7 +286,8 @@ contract Votechain {
     function updateCandidate(uint256 candidateKey, string memory newName) 
         public 
         onlyAdminOrOfficial 
-        candidateKeyExists(candidateKey) 
+        candidateKeyExists(candidateKey)  
+        inSetupStage(positionList[candidateList[candidateKey].positionKey].electionKey)
         returns(bool) 
     {
         candidateList[candidateKey].name = newName;
@@ -352,7 +385,12 @@ contract Votechain {
         return indexToDelete;
     }
 
-    function deleteCandidate(uint256 candidateKey) public onlyAdminOrOfficial candidateKeyExists(candidateKey) returns(uint256) {
+    function deleteCandidate(uint256 candidateKey) public 
+        onlyAdminOrOfficial 
+        candidateKeyExists(candidateKey)
+        inSetupStage(positionList[candidateList[candidateKey].positionKey].electionKey) 
+        returns(uint256) 
+    {
         uint256 indexToDelete = candidateList[candidateKey].keyIndex;
         uint256 positionKey = candidateList[candidateKey].positionKey;
         uint256 keyToMove = candidateKeyList[candidateKeyList.length - 1];
@@ -370,7 +408,13 @@ contract Votechain {
         return 1;
     }
 
-    function deletePosition(uint256 positionKey) public onlyAdminOrOfficial positionKeyExists(positionKey) returns(uint256) {
+    function deletePosition(uint256 positionKey) 
+        public 
+        onlyAdminOrOfficial 
+        positionKeyExists(positionKey) 
+        inSetupStage(positionList[positionKey].electionKey)
+        returns(uint256) 
+    {
         uint256 electionKey = positionList[positionKey].electionKey;
 
         // delete the position 
@@ -411,7 +455,8 @@ contract Votechain {
         public 
         onlyAdminOrOfficial 
         electionKeyExists(electionKey) 
-        voterKeyExistsAt(electionKey, voterKey) 
+        voterKeyExistsAt(electionKey, voterKey)
+        inSetupStage(electionKey) 
         returns(uint256) 
     {
         // remove the voter key from the specified election
@@ -432,7 +477,13 @@ contract Votechain {
 
     }
 
-    function deleteAbstain(uint256 abstainKey) public onlyAdminOrOfficial abstainKeyExists(abstainKey) returns(uint256) {
+    function deleteAbstain(uint256 abstainKey) 
+        public 
+        onlyAdminOrOfficial 
+        abstainKeyExists(abstainKey) 
+        inSetupStage(positionList[abstainList[abstainKey].positionKey].electionKey)
+        returns(uint256) 
+    {
         uint256 indexToDelete = abstainList[abstainKey].keyIndex;
         uint256 keyToMove = abstainKeyList[abstainKeyList.length.sub(1)];
         abstainKeyList[indexToDelete] = keyToMove;
@@ -603,6 +654,21 @@ contract Votechain {
 
     modifier onlySelf(address accountKey) {
         require(msg.sender == accountKey, "Only the owner of the account can change his profile.");
+        _;
+    }
+
+    modifier inSetupStage(uint256 electionKey) {
+        require(electionList[electionKey].stage == Stage.Setup, "The election is not in setup stage.");
+        _;
+    }
+
+    modifier hasStarted(uint256 electionKey) {
+        require(electionList[electionKey].stage == Stage.Started, "The election has not started yet.");
+        _;
+    }
+
+    modifier isFinished(uint256 electionKey) {
+        require(electionList[electionKey].stage == Stage.Finished, "The election is not finished yet.");
         _;
     }
 

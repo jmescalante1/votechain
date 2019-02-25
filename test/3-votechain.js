@@ -48,6 +48,9 @@ contract("Votechain", async(accounts) => {
     let isVoterAtElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
     expect(isVoterAtElection, "The voter should be added in the election.").to.be.true;
 
+    // start the election
+    await votechainInstance.startElection.sendTransaction(expectedElectionKey, {from: adminAccount});
+
     // cast a vote
     await votechainInstance.vote.sendTransaction(expectedCandidateKey, {from: expectedVoterKey});
 
@@ -73,7 +76,7 @@ contract("Votechain", async(accounts) => {
     
     // verify if the key was also added in the list of vote keys of the candidate
     let isVoteAtCandidate = await votechainInstance.isVoteAtCandidate.call(expectedCandidateKey, expectedVoteKey);
-    // expect(isVoteAtCandidate, "The key of the casted vote should be added in the list of votekeys of the candidate.").to.be.true;
+    expect(isVoteAtCandidate, "The key of the casted vote should be added in the list of votekeys of the candidate.").to.be.true;
 
     // verify if the key was also added in the list of vote keys of the voter
     let isVoteAtVoter = await votechainInstance.isVoteAtVoter.call(expectedVoterKey, expectedVoteKey);

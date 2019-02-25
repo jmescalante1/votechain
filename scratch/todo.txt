@@ -1,0 +1,9 @@
+Votechain.sol 
+
+1. add stages to the election
+   startElection
+    - voter's list setup and vote casting can be done in this stage
+   endElection
+    - no one is allowed to delete or modify any details of the election.
+    - no one can register a voter and is allowed to vote
+2. should i allow modification of the voter's profile?
