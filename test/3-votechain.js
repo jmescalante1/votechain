@@ -17,7 +17,7 @@ contract("Votechain", async(accounts) => {
     votechainInstance = await Votechain.new(adminAccount, adminName);
   });
 
-  it("should cast a vote.", async () => {
+  it("should allow a voter to cast a vote.", async () => {
     // add first an election 
     let expectedElectionName = "CAS";
     await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
