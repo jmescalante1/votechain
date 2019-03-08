@@ -23,6 +23,10 @@ const styles = theme => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 55
+    },
+ 
   },
   drawerOpen: {
     alignItems: 'start',
@@ -33,6 +37,12 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: 50
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 55
+    },
   },
   drawerClose: {
     alignItems: 'start',
@@ -46,6 +56,9 @@ const styles = theme => ({
     width: theme.spacing.unit * 7 + 1,
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing.unit * 9 + 1,
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 55
     },
   },
 })
@@ -69,7 +82,7 @@ class SideBar extends React.Component {
         }}
         open={openDrawer}
       >
-        <Divider />
+
         <List>
           {mainOptions.map((props) => (
             <ListItem button key={props.label}>
@@ -81,7 +94,6 @@ class SideBar extends React.Component {
             </ListItem>
           ))}
         </List>
-        <Divider />
         <List>
           {secondaryOptions.map((props) => (
             <ListItem button key={props.label} >
