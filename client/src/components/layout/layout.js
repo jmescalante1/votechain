@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Divider from '@material-ui/core/Divider'
-import { withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { withStyles } from '@material-ui/core/styles'
 
 import Header from './header'
 import SideBar from './sidebar'
+import Content from './content'
 
 const styles = theme => ({
   root: {
@@ -18,9 +20,11 @@ class Layout extends React.Component {
 
     return(
       <div className={classes.root}>
+        <CssBaseline />
         <Header handleDrawerToggle={this.props.handleDrawerToggle}/>
         <Divider />
         <SideBar openDrawer={this.props.openDrawer} />
+        <Content />
       </div>
     )
   }

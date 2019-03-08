@@ -17,6 +17,11 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   drawer: {
+    borderRightStyle: 'solid',
+    borderLeftStyle: 'solid',
+    borderWidthStyle: 'solid',
+    borderWidth: 5,
+    borderColor: "#263238",
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -29,6 +34,11 @@ const styles = theme => ({
  
   },
   drawerOpen: {
+    borderRightStyle: 'solid',
+    borderLeftStyle: 'solid',
+    borderWidthStyle: 'solid',
+    borderWidth: 5,
+    borderColor: "#263238",
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -45,6 +55,11 @@ const styles = theme => ({
     },
   },
   drawerClose: {
+    borderRightStyle: 'solid',
+    borderLeftStyle: 'solid',
+    borderWidthStyle: 'solid',
+    borderWidth: 5,
+    borderColor: "#263238",
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -61,6 +76,14 @@ const styles = theme => ({
       marginTop: 55
     },
   },
+  divider: {
+    height: 10,
+    width: '100%',  
+    backgroundColor: '#263238'
+  },
+  listItem: {
+    width: '100%'
+  }
 })
 
 class SideBar extends React.Component {
@@ -82,8 +105,7 @@ class SideBar extends React.Component {
         }}
         open={openDrawer}
       >
-
-        <List>
+        <List className={classes.listItem}>
           {mainOptions.map((props) => (
             <ListItem button key={props.label}>
               <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
@@ -94,7 +116,8 @@ class SideBar extends React.Component {
             </ListItem>
           ))}
         </List>
-        <List>
+        <Divider className={classes.divider}/>
+        <List className={classes.listItem}>
           {secondaryOptions.map((props) => (
             <ListItem button key={props.label} >
               <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>

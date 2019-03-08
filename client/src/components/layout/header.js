@@ -24,30 +24,26 @@ const styles = theme => ({
 
 class Header extends React.Component {
   render() {
-
     const { classes } = this.props
 
     return(
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position='fixed'
-          className={classes.appBar}
-        >
-          <Toolbar disableGutters={true}>
-            <IconButton
-              color='inherit'
-              onClick={this.props.handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <MenuIcon />
-            </IconButton>
-          <Typography variant='h6' color='inherit' noWrap>
-            VoteChain
-          </Typography>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <AppBar
+        position='fixed'
+        className={classes.appBar}
+      >
+        <Toolbar disableGutters={true}>
+          <IconButton
+            color='inherit'
+            onClick={this.props.handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        <Typography variant='h6' color='inherit' noWrap>
+          VoteChain
+        </Typography>
+        </Toolbar>
+      </AppBar>
     )
   }
 }
