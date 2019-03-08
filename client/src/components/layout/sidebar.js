@@ -102,5 +102,4 @@ SideBar.propTypes = {
   openDrawer: PropTypes.bool.isRequired
 }
 
-
 export default withStyles(styles, { withTheme: true })(SideBar)
