@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 import Drawer from '@material-ui/core/Drawer'
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
@@ -21,7 +21,7 @@ const styles = theme => ({
     borderLeftStyle: 'solid',
     borderWidthStyle: 'solid',
     borderWidth: 5,
-    borderColor: "#263238",
+    borderColor: '#263238',
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -38,7 +38,7 @@ const styles = theme => ({
     borderLeftStyle: 'solid',
     borderWidthStyle: 'solid',
     borderWidth: 5,
-    borderColor: "#263238",
+    borderColor: '#263238',
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -59,7 +59,7 @@ const styles = theme => ({
     borderLeftStyle: 'solid',
     borderWidthStyle: 'solid',
     borderWidth: 5,
-    borderColor: "#263238",
+    borderColor: '#263238',
     alignItems: 'start',
     backgroundColor: '#37474f',
     marginTop: 64,
@@ -81,18 +81,34 @@ const styles = theme => ({
     width: '100%',  
     backgroundColor: '#263238'
   },
+  list: {
+    width: '100%',
+  },
   listItem: {
-    width: '100%'
+    '&:focus': {
+      backgroundColor: '#006064'
+    }
+  },
+  listItemSelected: {
+    backgroundColor: '#006064'
   }
 })
 
 class SideBar extends React.Component {
+  constructor(){
+    super()
+
+    this.state = {
+      selectedDrawerItem: ''
+    }
+  }
+
   render() {
-    const { classes, openDrawer } = this.props
+    const { classes, openDrawer, selectedDrawerItem } = this.props
 
     return(
       <Drawer
-        variant="permanent"
+        variant='permanent'
         className={classNames(classes.drawer, {
           [classes.drawerOpen]: openDrawer,
           [classes.drawerClose]: !openDrawer,
@@ -105,10 +121,18 @@ class SideBar extends React.Component {
         }}
         open={openDrawer}
       >
-        <List className={classes.listItem}>
+        <List className={classes.list}>
           {mainOptions.map((props) => (
-            <ListItem button key={props.label}>
+            <ListItem 
+              button 
+              key={props.label} 
+              onClick={() => this.props.handleSelectedDrawerItem(props.label)}
+              className={classNames(classes.listItem, {
+                [classes.listItemSelected]: props.label === selectedDrawerItem
+              })}
+            >
               <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+              
               <ListItemText 
                 disableTypography 
                 primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
@@ -116,11 +140,21 @@ class SideBar extends React.Component {
             </ListItem>
           ))}
         </List>
+
         <Divider className={classes.divider}/>
-        <List className={classes.listItem}>
+        
+        <List className={classes.list}>
           {secondaryOptions.map((props) => (
-            <ListItem button key={props.label} >
+            <ListItem 
+              button 
+              key={props.label}
+              onClick={() => this.props.handleSelectedDrawerItem(props.label)} 
+              className={classNames(classes.listItem, {
+                [classes.listItemSelected]: props.label === selectedDrawerItem
+              })} 
+            >
               <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+              
               <ListItemText 
                 disableTypography 
                 primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
@@ -134,7 +168,9 @@ class SideBar extends React.Component {
 }
 
 SideBar.propTypes = {
-  openDrawer: PropTypes.bool.isRequired
+  openDrawer: PropTypes.bool.isRequired,
+  handleSelectedDrawerItem: PropTypes.func.isRequired,
+  selectedDrawerItem: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles, { withTheme: true })(SideBar)

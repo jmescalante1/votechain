@@ -17,13 +17,17 @@ const styles = theme => ({
 class Layout extends React.Component {
   render() {
     const { classes }  = this.props
-
+  
     return(
       <div className={classes.root}>
         <CssBaseline />
         <Header handleDrawerToggle={this.props.handleDrawerToggle}/>
         <Divider />
-        <SideBar openDrawer={this.props.openDrawer} />
+        <SideBar 
+          openDrawer={this.props.openDrawer} 
+          handleSelectedDrawerItem={this.props.handleSelectedDrawerItem}
+          selectedDrawerItem={this.props.selectedDrawerItem}
+        />
         <Content />
       </div>
     )
@@ -34,6 +38,8 @@ class Layout extends React.Component {
 Layout.propTypes = {
   handleDrawerToggle: PropTypes.func.isRequired,
   openDrawer: PropTypes.bool.isRequired,
+  handleSelectedDrawerItem: PropTypes.func.isRequired,
+  selectedDrawerItem: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles, { withTheme: true })(Layout);
