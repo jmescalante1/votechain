@@ -81,7 +81,5 @@ contract("Votechain", async(accounts) => {
     // verify if the key was also added in the list of vote keys of the voter
     let isVoteAtVoter = await votechainInstance.isVoteAtVoter.call(expectedVoterKey, expectedVoteKey);
     expect(isVoteAtVoter, "The key of the casted vote should be added in the list of votekeys of the voter.").to.be.true;
-    
   }); 
-
 });

@@ -1,9 +1,24 @@
 import React from 'react'
+import { ThemeProvider } from 'styled-components'
+import { createMuiTheme } from '@material-ui/core/styles'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
+
+import Main from './components/main/main'
+
+library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
+
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  }
+})
 
 const App = () => (
-  <div>
-    Test
-  </div>
+  <ThemeProvider theme={theme}>
+    <Main />
+  </ThemeProvider>
 )
 
 export default App
