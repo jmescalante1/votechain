@@ -10,27 +10,27 @@ class LayoutContainer extends React.Component {
 
     this.state = {
       openDrawer: false,
-      selectedDrawerItem: "",
+      selectedMenu: "",
     }
 
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this)
-    this.handleSelectedDrawerItem = this.handleSelectedDrawerItem.bind(this)
+    this.handleSelectedMenu = this.handleSelectedMenu.bind(this)
   }
 
   handleDrawerToggle() {
     this.setState({openDrawer: !this.state.openDrawer})
   }
 
-  handleSelectedDrawerItem(selectedDrawerItem) {
-    this.setState({selectedDrawerItem: selectedDrawerItem})
+  handleSelectedMenu(selectedMenu) {
+    this.setState({selectedMenu: selectedMenu})
   }
 
   render() {
     return(
       <Layout 
         handleDrawerToggle={this.handleDrawerToggle}
-        handleSelectedDrawerItem={this.handleSelectedDrawerItem}
-        selectedDrawerItem={this.state.selectedDrawerItem}
+        handleSelectedMenu={this.handleSelectedMenu}
+        selectedMenu={this.state.selectedMenu}
         openDrawer={this.state.openDrawer}
         headerTabs={headerTabs}
         sidebarMainOptions={sidebarMainOptions}

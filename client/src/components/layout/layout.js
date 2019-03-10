@@ -24,14 +24,16 @@ class Layout extends React.Component {
         <Header 
           handleDrawerToggle={this.props.handleDrawerToggle}
           headerTabs={this.props.headerTabs}
+          handleSelectedMenu={this.props.handleSelectedMenu}
+          selectedMenu={this.props.selectedMenu}
         />
         <Divider />
         <SideBar 
           openDrawer={this.props.openDrawer} 
           sidebarMainOptions={this.props.sidebarMainOptions}
           sidebarSecondaryOptions={this.props.sidebarSecondaryOptions}
-          handleSelectedDrawerItem={this.props.handleSelectedDrawerItem}
-          selectedDrawerItem={this.props.selectedDrawerItem}
+          handleSelectedMenu={this.props.handleSelectedMenu}
+          selectedMenu={this.props.selectedMenu}
         />
         <ContentContainer />
       </div>
@@ -43,8 +45,8 @@ class Layout extends React.Component {
 Layout.propTypes = {
   handleDrawerToggle: PropTypes.func.isRequired,
   openDrawer: PropTypes.bool.isRequired,
-  handleSelectedDrawerItem: PropTypes.func.isRequired,
-  selectedDrawerItem: PropTypes.string.isRequired,
+  handleSelectedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.string.isRequired,
   headerTabs: PropTypes.arrayOf(PropTypes.object),
   sidebarMainOptions: PropTypes.arrayOf(PropTypes.object),
   sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)

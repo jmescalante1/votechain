@@ -90,20 +90,15 @@ const styles = theme => ({
   },
   listItemSelected: {
     backgroundColor: '#006064'
+  },
+  noTextDecoration: {
+    textDecoration: 'none'
   }
 })
 
 class SideBar extends React.Component {
-  constructor(){
-    super()
-
-    this.state = {
-      selectedDrawerItem: ''
-    }
-  }
-
   render() {
-    const { classes, openDrawer, selectedDrawerItem } = this.props
+    const { classes, openDrawer, selectedMenu } = this.props
 
     return(
       <Drawer
@@ -125,12 +120,13 @@ class SideBar extends React.Component {
             <Link
               key={props.label}
               to={props.path}
+              className={classes.noTextDecoration}
             >
               <MenuItem 
                 button  
-                onClick={() => this.props.handleSelectedDrawerItem(props.label)}
+                onClick={() => this.props.handleSelectedMenu(props.label)}
                 className={classNames(classes.listItem, {
-                  [classes.listItemSelected]: props.label === selectedDrawerItem
+                  [classes.listItemSelected]: props.label === selectedMenu
                 })}
               >
                 <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
@@ -151,12 +147,13 @@ class SideBar extends React.Component {
             <Link 
               key={props.label}
               to={props.path}
+              className={classes.noTextDecoration}
             >
               <MenuItem 
                 button 
-                onClick={() => this.props.handleSelectedDrawerItem(props.label)} 
+                onClick={() => this.props.handleSelectedMenu(props.label)} 
                 className={classNames(classes.listItem, {
-                  [classes.listItemSelected]: props.label === selectedDrawerItem
+                  [classes.listItemSelected]: props.label === selectedMenu
                 })} 
               >
                 <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
@@ -176,8 +173,8 @@ class SideBar extends React.Component {
 
 SideBar.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
-  handleSelectedDrawerItem: PropTypes.func.isRequired,
-  selectedDrawerItem: PropTypes.string.isRequired,
+  handleSelectedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.string.isRequired,
   sidebarMainOptions: PropTypes.arrayOf(PropTypes.object),
   sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)
 }

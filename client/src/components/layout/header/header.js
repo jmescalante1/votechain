@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Switch, Route, Link } from 'react-router-dom'
+import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -21,11 +22,19 @@ const styles = theme => ({
   tabs: {
     marginLeft: 'auto',
   },
+  tab: {
+    '&:focus': {
+      backgroundColor: '#006064'
+    }
+  },
+  tabSelected: {
+    backgroundColor: '#006064'
+  },
 })
 
 class Header extends React.Component {
   render() {
-    const { classes } = this.props
+    const { classes, selectedMenu } = this.props
 
     return(
       <AppBar
@@ -51,7 +60,12 @@ class Header extends React.Component {
                 key={props.label} 
                 to={props.path}
               >
-                <IconButton>
+                <IconButton
+                  onClick={() => this.props.handleSelectedMenu(props.label)}
+                  className={classNames(classes.tab, {
+                    [classes.tabSelected]: props.label === selectedMenu
+                  })}
+                >
                   {props.icon}
                 </IconButton>
               </Link>
@@ -64,7 +78,9 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  handleDrawerToggle: PropTypes.func.isRequired
+  handleDrawerToggle: PropTypes.func.isRequired,
+  handleSelectedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.string.isRequired
 }
 
 export default withStyles(styles, { withTheme: true })(Header)
