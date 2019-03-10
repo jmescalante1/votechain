@@ -1,6 +1,8 @@
 import React from 'react'
 
 import Layout from './layout'
+import { headerTabs } from './header-tabs'
+import { sidebarMainOptions, sidebarSecondaryOptions } from './sidebar-options'
 
 class LayoutContainer extends React.Component {
   constructor() {
@@ -30,6 +32,9 @@ class LayoutContainer extends React.Component {
         handleSelectedDrawerItem={this.handleSelectedDrawerItem}
         selectedDrawerItem={this.state.selectedDrawerItem}
         openDrawer={this.state.openDrawer}
+        headerTabs={headerTabs}
+        sidebarMainOptions={sidebarMainOptions}
+        sidebarSecondaryOptions={sidebarSecondaryOptions}
       />
     )
   }

@@ -21,10 +21,15 @@ class Layout extends React.Component {
     return(
       <div className={classes.root}>
         <CssBaseline />
-        <Header handleDrawerToggle={this.props.handleDrawerToggle}/>
+        <Header 
+          handleDrawerToggle={this.props.handleDrawerToggle}
+          headerTabs={this.props.headerTabs}
+        />
         <Divider />
         <SideBar 
           openDrawer={this.props.openDrawer} 
+          sidebarMainOptions={this.props.sidebarMainOptions}
+          sidebarSecondaryOptions={this.props.sidebarSecondaryOptions}
           handleSelectedDrawerItem={this.props.handleSelectedDrawerItem}
           selectedDrawerItem={this.props.selectedDrawerItem}
         />
@@ -40,6 +45,9 @@ Layout.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
   handleSelectedDrawerItem: PropTypes.func.isRequired,
   selectedDrawerItem: PropTypes.string.isRequired,
+  headerTabs: PropTypes.arrayOf(PropTypes.object),
+  sidebarMainOptions: PropTypes.arrayOf(PropTypes.object),
+  sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default withStyles(styles, { withTheme: true })(Layout);

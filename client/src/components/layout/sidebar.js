@@ -6,12 +6,10 @@ import Drawer from '@material-ui/core/Drawer'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
-import ListItem from '@material-ui/core/ListItem'
+import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
-
-import { mainOptions, secondaryOptions } from './sidebar-options'
 
 const drawerWidth = 240;
 
@@ -122,8 +120,8 @@ class SideBar extends React.Component {
         open={openDrawer}
       >
         <List className={classes.list}>
-          {mainOptions.map((props) => (
-            <ListItem 
+          {this.props.sidebarMainOptions.map((props) => (
+            <MenuItem 
               button 
               key={props.label} 
               onClick={() => this.props.handleSelectedDrawerItem(props.label)}
@@ -137,15 +135,15 @@ class SideBar extends React.Component {
                 disableTypography 
                 primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
               />
-            </ListItem>
+            </MenuItem>
           ))}
         </List>
 
         <Divider className={classes.divider}/>
         
         <List className={classes.list}>
-          {secondaryOptions.map((props) => (
-            <ListItem 
+          {this.props.sidebarSecondaryOptions.map((props) => (
+            <MenuItem 
               button 
               key={props.label}
               onClick={() => this.props.handleSelectedDrawerItem(props.label)} 
@@ -159,7 +157,7 @@ class SideBar extends React.Component {
                 disableTypography 
                 primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
               />
-            </ListItem>
+            </MenuItem>
           ))}
         </List>
       </Drawer>
@@ -171,6 +169,8 @@ SideBar.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
   handleSelectedDrawerItem: PropTypes.func.isRequired,
   selectedDrawerItem: PropTypes.string.isRequired,
+  sidebarMainOptions: PropTypes.arrayOf(PropTypes.object),
+  sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default withStyles(styles, { withTheme: true })(SideBar)

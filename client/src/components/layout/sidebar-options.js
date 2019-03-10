@@ -9,7 +9,7 @@ const style = {
   fontSize: 24,
 }
 
-export const mainOptions = [
+export const sidebarMainOptions = [
   {
     label: 'Elections',
     icon: <ElectionIcon style={style}/>
@@ -36,7 +36,7 @@ export const mainOptions = [
   }
 ]
 
-export const secondaryOptions = [
+export const sidebarSecondaryOptions = [
   {
     label: 'Administrators',
     icon: <FontAwesomeIcon style={style} icon='user-tie' />,

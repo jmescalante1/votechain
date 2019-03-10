@@ -8,9 +8,6 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
 const styles = theme => ({
-  root: {
-    display: 'flex'
-  },
   appBar: {
     backgroundColor: '#263238',
     zIndex: theme.zIndex.drawer + 1,  
@@ -19,6 +16,10 @@ const styles = theme => ({
     marginLeft: 12,
     marginRight: 36,
   },
+  tabs: {
+    marginLeft: 'auto'
+  },
+ 
 })
 
 class Header extends React.Component {
@@ -30,7 +31,7 @@ class Header extends React.Component {
         position='fixed'
         className={classes.appBar}
       >
-        <Toolbar disableGutters={true}>
+        <Toolbar disableGutters={true} className={classes.toolbar} >
           <IconButton
             color='inherit'
             onClick={this.props.handleDrawerToggle}
@@ -38,9 +39,21 @@ class Header extends React.Component {
           >
             <MenuIcon />
           </IconButton>
+
         <Typography variant='h6' color='inherit' noWrap>
           VoteChain
         </Typography>
+          
+          <div className={classes.tabs}>
+            {this.props.headerTabs.map((props) => (
+              <IconButton 
+                key={props.label}
+                color='inherit'
+              >
+                {props.icon}
+              </IconButton>
+            ))}
+          </div>
         </Toolbar>
       </AppBar>
     )
