@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Switch, Route, Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -18,9 +19,8 @@ const styles = theme => ({
     marginRight: 36,
   },
   tabs: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
- 
 })
 
 class Header extends React.Component {
@@ -47,12 +47,14 @@ class Header extends React.Component {
           
           <div className={classes.tabs}>
             {this.props.headerTabs.map((props) => (
-              <IconButton 
-                key={props.label}
-                color='inherit'
+              <Link 
+                key={props.label} 
+                to={props.path}
               >
-                {props.icon}
-              </IconButton>
+                <IconButton>
+                  {props.icon}
+                </IconButton>
+              </Link>
             ))}
           </div>
         </Toolbar>

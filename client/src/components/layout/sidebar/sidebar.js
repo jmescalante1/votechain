@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import classNames from 'classnames'
+import { Link } from 'react-router-dom'
+
 import Drawer from '@material-ui/core/Drawer'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
@@ -121,21 +122,25 @@ class SideBar extends React.Component {
       >
         <List className={classes.list}>
           {this.props.sidebarMainOptions.map((props) => (
-            <MenuItem 
-              button 
-              key={props.label} 
-              onClick={() => this.props.handleSelectedDrawerItem(props.label)}
-              className={classNames(classes.listItem, {
-                [classes.listItemSelected]: props.label === selectedDrawerItem
-              })}
+            <Link
+              key={props.label}
+              to={props.path}
             >
-              <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
-              
-              <ListItemText 
-                disableTypography 
-                primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
-              />
-            </MenuItem>
+              <MenuItem 
+                button  
+                onClick={() => this.props.handleSelectedDrawerItem(props.label)}
+                className={classNames(classes.listItem, {
+                  [classes.listItemSelected]: props.label === selectedDrawerItem
+                })}
+              >
+                <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+                
+                <ListItemText 
+                  disableTypography 
+                  primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
+                />
+              </MenuItem>
+            </Link>
           ))}
         </List>
 
@@ -143,21 +148,25 @@ class SideBar extends React.Component {
         
         <List className={classes.list}>
           {this.props.sidebarSecondaryOptions.map((props) => (
-            <MenuItem 
-              button 
+            <Link 
               key={props.label}
-              onClick={() => this.props.handleSelectedDrawerItem(props.label)} 
-              className={classNames(classes.listItem, {
-                [classes.listItemSelected]: props.label === selectedDrawerItem
-              })} 
+              to={props.path}
             >
-              <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
-              
-              <ListItemText 
-                disableTypography 
-                primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
-              />
-            </MenuItem>
+              <MenuItem 
+                button 
+                onClick={() => this.props.handleSelectedDrawerItem(props.label)} 
+                className={classNames(classes.listItem, {
+                  [classes.listItemSelected]: props.label === selectedDrawerItem
+                })} 
+              >
+                <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+                
+                <ListItemText 
+                  disableTypography 
+                  primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
+                />
+              </MenuItem>
+            </Link>
           ))}
         </List>
       </Drawer>

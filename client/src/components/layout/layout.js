@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Header from './header/header'
 import SideBar from './sidebar/sidebar'
-import Content from '../content/content'
+import ContentContainer from '../content/content-container'
 
 const styles = theme => ({
   root: {
@@ -33,7 +33,7 @@ class Layout extends React.Component {
           handleSelectedDrawerItem={this.props.handleSelectedDrawerItem}
           selectedDrawerItem={this.props.selectedDrawerItem}
         />
-        <Content />
+        <ContentContainer />
       </div>
     )
   }
