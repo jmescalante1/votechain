@@ -4,9 +4,9 @@ import Divider from '@material-ui/core/Divider'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 
-import Header from './header'
-import SideBar from './sidebar'
-import Content from './content'
+import Header from './header/header'
+import SideBar from './sidebar/sidebar'
+import Content from '../content/content'
 
 const styles = theme => ({
   root: {

@@ -1,8 +1,8 @@
 import React from 'react'
 
 import Layout from './layout'
-import { headerTabs } from './header-tabs'
-import { sidebarMainOptions, sidebarSecondaryOptions } from './sidebar-options'
+import { headerTabs } from './header/header-tabs'
+import { sidebarMainOptions, sidebarSecondaryOptions } from './sidebar/sidebar-options'
 
 class LayoutContainer extends React.Component {
   constructor() {

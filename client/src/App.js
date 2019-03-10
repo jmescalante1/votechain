@@ -5,7 +5,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
 
-import Main from './components/main/main'
+import LayoutContainer from './components/layout/layout-container'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -17,7 +17,7 @@ const theme = createMuiTheme({
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    <Main />
+    <LayoutContainer />
   </ThemeProvider>
 )
 
