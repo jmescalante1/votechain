@@ -1,11 +1,11 @@
 import React from 'react'
 
-import ElectionTable from './election-table/election-table'
+import ElectionTableContainer from './election-table/election-table-container'
 
 class Election extends React.Component {
   render() {
     return(
-      <ElectionTable />
+      <ElectionTableContainer />
     )
   }
 }

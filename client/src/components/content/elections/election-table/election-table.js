@@ -19,7 +19,6 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import FilterListIcon from "@material-ui/icons/FilterList"
 import { lighten } from "@material-ui/core/styles/colorManipulator"
 
-import electionData from './election-data'
 import ElectionTableToolbar from './election-table-toolbar'
 import ElectionTableHeader from './election-table-header'
 
@@ -37,75 +36,9 @@ const styles = theme => ({
 })
 
 class ElectionTable extends React.Component {
-  constructor() {
-    super()
-
-    this.state = {
-      order: "asc",
-      orderBy: "name",
-      data: electionData,
-      page: 0,
-      rowsPerPage: 5
-    }
-
-    this.handleRequestSort = this.handleRequestSort.bind(this)
-    this.handleChangePage = this.handleChangePage.bind(this)
-    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this)
-    this.stableSort = this.stableSort.bind(this)
-    this.desc = this.desc.bind(this)
-    this.getSorting = this.getSorting.bind(this)
-  }
-
-  handleRequestSort(event, property) {
-    const orderBy = property
-    let order = "desc"
-
-    if (this.state.orderBy === property && this.state.order === "desc") {
-      order = "asc"
-    }
-
-    this.setState({ order, orderBy })
-  }
-
-  handleChangePage(event, page) {
-    this.setState({ page })
-  }
-
-  handleChangeRowsPerPage(event) {
-    this.setState({ rowsPerPage: event.target.value })
-  }
-
-  stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index])
-
-    stabilizedThis.sort((a, b) => {
-      const order = cmp(a[0], b[0])
-      if (order !== 0) return order
-      return a[1] - b[1]
-    })
-
-    return stabilizedThis.map(el => el[0])
-  }
-
-  getSorting(order, orderBy) {
-    return order === "desc"
-      ? (a, b) => this.desc(a, b, orderBy)
-      : (a, b) => -this.desc(a, b, orderBy)
-  }
-
-  desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1
-    }
-    return 0
-  }
-
   render() {
-    const { classes } = this.props
-    const { data, order, orderBy, rowsPerPage, page } = this.state
+    const { classes, data, order, orderBy, rowsPerPage, page } = this.props
+    const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
    
     return (
@@ -117,11 +50,11 @@ class ElectionTable extends React.Component {
             <ElectionTableHeader
               order={order}
               orderBy={orderBy}
-              onRequestSort={this.handleRequestSort}
+              onRequestSort={handleRequestSort}
             />
 
             <TableBody>
-              {this.stableSort(data, this.getSorting(order, orderBy))
+              {stableSort(data, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
@@ -151,8 +84,8 @@ class ElectionTable extends React.Component {
           rowsPerPage={rowsPerPage}
           page={page}
     
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
     )
@@ -161,7 +94,18 @@ class ElectionTable extends React.Component {
 
 
 ElectionTable.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
+  order: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+
+  handleRequestSort: PropTypes.func.isRequired,
+  handleChangePage: PropTypes.func.isRequired,
+  handleChangeRowsPerPage: PropTypes.func.isRequired,
+  stableSort: PropTypes.func.isRequired,
+  getSorting: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ElectionTable);
