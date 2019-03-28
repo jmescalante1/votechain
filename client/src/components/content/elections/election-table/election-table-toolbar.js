@@ -28,7 +28,6 @@ const toolbarStyles = theme => ({
   },
   actionIcon:{
     marginRight: theme.spacing.unit,
-    // color: theme.palette.text.main
     color: '#006064'
   },
   title: {
@@ -38,7 +37,6 @@ const toolbarStyles = theme => ({
   fab: {
     margin: theme.spacing.unit,
     backgroundColor: '#ffffff',
-    // color: theme.palette.text.main,
     color: '#006064'
   },
 })
