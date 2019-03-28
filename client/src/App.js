@@ -1,24 +1,30 @@
 import React from 'react'
-import { ThemeProvider } from 'styled-components'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
 
 import Main from './components/main/main'
+import 'typeface-roboto'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
 const theme = createMuiTheme({
+  palette: {
+    text: {
+      main: '#fafafa'
+    }
+  },
   typography: {
     useNextVariants: true,
-  }
+  },
+  
 })
 
 const App = () => (
-  <ThemeProvider theme={theme}>
+  <MuiThemeProvider theme={theme}>
     <Main />
-  </ThemeProvider>
+  </MuiThemeProvider>
 )
 
 export default App

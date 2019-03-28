@@ -129,11 +129,11 @@ class SideBar extends React.Component {
                   [classes.listItemSelected]: props.label === selectedMenu
                 })}
               >
-                <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+                <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
                 
                 <ListItemText 
                   disableTypography 
-                  primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
+                  primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
                 />
               </MenuItem>
             </Link>
@@ -156,11 +156,11 @@ class SideBar extends React.Component {
                   [classes.listItemSelected]: props.label === selectedMenu
                 })} 
               >
-                <ListItemIcon style={{color: '#e0e0e0'}}>{props.icon}</ListItemIcon>
+                <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
                 
                 <ListItemText 
                   disableTypography 
-                  primary={<Typography style={{color: '#e0e0e0'}}>{props.label}</Typography>} 
+                  primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
                 />
               </MenuItem>
             </Link>

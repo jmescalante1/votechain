@@ -30,6 +30,12 @@ const styles = theme => ({
   tabSelected: {
     backgroundColor: '#006064'
   },
+  title: {
+    fontWeight: 'bold'
+  },
+  menuIcon: {
+    fontSize: 36
+  }
 })
 
 class Header extends React.Component {
@@ -47,10 +53,10 @@ class Header extends React.Component {
             onClick={this.props.handleDrawerToggle}
             className={classes.menuButton}
           >
-            <MenuIcon />
+            <MenuIcon className={classes.menuIcon}/>
           </IconButton>
 
-        <Typography variant='h6' color='inherit' noWrap>
+        <Typography className={classes.title} variant='h6' color='inherit' noWrap>
           VoteChain
         </Typography>
           
