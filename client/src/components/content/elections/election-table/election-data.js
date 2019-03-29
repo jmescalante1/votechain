@@ -6,7 +6,7 @@ function createData(name, status, action) {
 }
 
 export default [
-  createData("CAS 2019", "Setup", "Edit, Delete"),
+  createData("CAS 2019", "Pending", "Edit, Delete"),
   createData("CAMP 2019", "Ongoing", "View"),
   createData("CN 2019", "Ongoing", "View"),
   createData("CM 2019", "Ongoing", "View"),

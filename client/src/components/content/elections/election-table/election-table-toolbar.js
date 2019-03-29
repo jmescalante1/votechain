@@ -1,12 +1,12 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
-import Toolbar from "@material-ui/core/Toolbar"
-import Typography from "@material-ui/core/Typography"
-import Fab from "@material-ui/core/Fab"
-import Tooltip from "@material-ui/core/Tooltip"
-import AddCircle from "@material-ui/icons/AddCircle"
-import { lighten } from "@material-ui/core/styles/colorManipulator"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Fab from '@material-ui/core/Fab'
+import Tooltip from '@material-ui/core/Tooltip'
+import AddCircle from '@material-ui/icons/AddCircle'
+import { lighten } from '@material-ui/core/styles/colorManipulator'
 
 const toolbarStyles = theme => ({
   root: {
@@ -14,7 +14,7 @@ const toolbarStyles = theme => ({
     backgroundColor: '#006064'
   },
   highlight:
-    theme.palette.type === "light"
+    theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
           backgroundColor: lighten(theme.palette.secondary.light, 0.85)
@@ -24,14 +24,14 @@ const toolbarStyles = theme => ({
           backgroundColor: theme.palette.secondary.dark
         },
   spacer: {
-    flex: "1 1 100%"
+    flex: '1 1 100%'
   },
   actionIcon:{
     marginRight: theme.spacing.unit,
     color: '#006064'
   },
   title: {
-    flex: "0 0 auto",
+    flex: '0 0 auto',
     color: theme.palette.text.main
   },
   fab: {
@@ -48,15 +48,15 @@ class ElectionTableToolbar extends React.Component {
     return (
       <Toolbar className= {classes.root}>
         <div className={classes.title}>
-          <Typography className={classes.title} variant="h6" id="tableTitle">
-            Elections
+          <Typography className={classes.title} variant='h6' id='tableTitle'>
+            Election List
           </Typography>
         </div>
 
         <div className={classes.spacer} />
 
-        <Tooltip title="Add new election">
-          <Fab size="large" variant="extended" className={classes.fab}>
+        <Tooltip title='Add new election'>
+          <Fab size='large' variant='extended' className={classes.fab}>
             <AddCircle className={classes.actionIcon} />
             Add Election
           </Fab>

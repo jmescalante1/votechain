@@ -8,8 +8,8 @@ class ElectionTableContainer extends React.Component {
     super()
 
     this.state = {
-      order: "asc",
-      orderBy: "name",
+      order: "desc",
+      orderBy: "id",
       data: electionData,
       page: 0,
       rowsPerPage: 5
