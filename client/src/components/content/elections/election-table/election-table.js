@@ -17,7 +17,7 @@ import Pageview from '@material-ui/icons/Pageview'
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
 import Stop from '@material-ui/icons/Stop'
 
-import ElectionTableToolbar from './election-table-toolbar'
+import ElectionTableToolbarContainer from './table-toolbar/election-table-toolbar-container'
 import ElectionTableHeader from './election-table-header'
 
 const styles = theme => ({
@@ -137,7 +137,7 @@ class ElectionTable extends React.Component {
    
     return (
       <Paper className={classes.root}>
-        <ElectionTableToolbar />
+        <ElectionTableToolbarContainer />
         
         <div className={classes.tableWrapper}>
           <Table className={classes.table} >

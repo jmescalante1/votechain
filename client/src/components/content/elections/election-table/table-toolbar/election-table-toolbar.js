@@ -43,7 +43,7 @@ const toolbarStyles = theme => ({
 
 class ElectionTableToolbar extends React.Component {
   render() {
-    const { classes } = this.props
+    const { classes, handleClickOpenDialog } = this.props
 
     return (
       <Toolbar className= {classes.root}>
@@ -56,7 +56,12 @@ class ElectionTableToolbar extends React.Component {
         <div className={classes.spacer} />
 
         <Tooltip title='Add new election'>
-          <Fab size='large' variant='extended' className={classes.fab}>
+          <Fab 
+            size='large' 
+            variant='extended' 
+            className={classes.fab}
+            onClick={handleClickOpenDialog}
+          >
             <AddCircle className={classes.actionIcon} />
             Add Election
           </Fab>
@@ -68,7 +73,8 @@ class ElectionTableToolbar extends React.Component {
 }
 
 ElectionTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  handleClickOpenDialog: PropTypes.func.isRequired
 }
 
 export default withStyles(toolbarStyles)(ElectionTableToolbar)

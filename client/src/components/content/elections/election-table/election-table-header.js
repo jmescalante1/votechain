@@ -1,11 +1,11 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
-import TableCell from "@material-ui/core/TableCell"
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
-import TableSortLabel from "@material-ui/core/TableSortLabel"
-import Tooltip from "@material-ui/core/Tooltip"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableSortLabel from '@material-ui/core/TableSortLabel'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const styles = theme => ({
   headerLabel: {
@@ -43,8 +43,8 @@ class ElectionTableHeader extends React.Component {
                 sortDirection={orderBy === header.id ? order : false}
               >
                 <Tooltip
-                  title="Sort"
-                  placement="bottom-start"
+                  title='Sort'
+                  placement='bottom-start'
                   enterDelay={300}
                 >
                   <TableSortLabel
