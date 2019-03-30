@@ -15,6 +15,13 @@ const theme = createMuiTheme({
       main: '#fafafa'
     }
   },
+  overrides: {
+    MuiTooltip: {
+      tooltip: {
+        fontSize: 12,
+      }
+    }
+  },
   typography: {
     useNextVariants: true,
   },

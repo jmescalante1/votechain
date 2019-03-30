@@ -60,7 +60,6 @@ class ElectionTable extends React.Component {
     super()
 
     this.getActionsAllowed = this.getActionsAllowed.bind(this)
-
   }
 
   getActionsAllowed(status) {
@@ -68,27 +67,32 @@ class ElectionTable extends React.Component {
   
     let view = {
       className: classes.viewButton,
-      icon: <Pageview />
+      icon: <Pageview />,
+      tooltipTitle: 'View election details'
     }
 
     let play = {
       className: classes.playButton,
-      icon: <PlayCircleFilled />
+      icon: <PlayCircleFilled />,
+      tooltipTitle: 'Start this election'
     }
 
     let edit = {
       className: classes.editButton,
-      icon: <Edit />
+      icon: <Edit />,
+      tooltipTitle: 'Edit election details'
     }
 
     let remove = {
       className: classes.deleteButton,
-      icon: <Delete />
+      icon: <Delete />,
+      tooltipTitle: 'Delete this election'
     }
 
     let stop = {
       className: classes.stopButton,
-      icon: <Stop />
+      icon: <Stop />,
+      tooltipTitle: 'Stop the election'
     }
 
     const actions = {
@@ -100,9 +104,15 @@ class ElectionTable extends React.Component {
     let actionsAllowed = actions[status].map((action, index) => {
       return(
         <Grid item key={index}>
-          <IconButton className={action.className}>
-            {action.icon}
-          </IconButton>
+          <Tooltip
+            title={action.tooltipTitle}
+            placement='bottom-start'
+            enterDelay={300}
+          >
+            <IconButton className={action.className}>
+              {action.icon}
+            </IconButton>
+          </Tooltip>
         </Grid>
       )      
     })
