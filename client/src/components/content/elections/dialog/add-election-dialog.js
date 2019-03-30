@@ -31,13 +31,19 @@ const styles = theme => ({
     marginTop: 20,
     width: 500,
   },
-  notchedOutline: {
-    borderWidth: 1, 
-    borderColor: '#006064 !important',
+ 
+  cssFocused: {},
+  notchedOutline: {},
+  cssOutlinedInput: {
+    '&$cssFocused $notchedOutline': {
+      borderColor: '#006064',
+    },
   },
-  textFieldLabel: {
-    color: 'green'
-  }
+  cssLabel: {
+    '&$cssFocused': {
+      color: '#006064',
+    },
+  },
 })
 
 class AddElectionDialog extends React.Component {
@@ -69,14 +75,18 @@ class AddElectionDialog extends React.Component {
               variant='outlined'
               InputProps={{
                 classes: {
-                    notchedOutline: classes.notchedOutline
+                  root: classes.cssOutlinedInput,
+                  focused: classes.cssFocused,
+                  notchedOutline: classes.notchedOutline
                 }
               }}
               InputLabelProps={{
                 classes:{
-                  focused: classes.textFieldLabel,
+                  root: classes.cssLabel,
+                  focused: classes.cssFocused
                 }
               }}
+
             />
           </DialogContent>
 
