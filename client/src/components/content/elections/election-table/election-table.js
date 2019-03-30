@@ -1,14 +1,15 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
-import Table from "@material-ui/core/Table"
-import TableBody from "@material-ui/core/TableBody"
-import TableCell from "@material-ui/core/TableCell"
-import TablePagination from "@material-ui/core/TablePagination"
-import TableRow from "@material-ui/core/TableRow"
-import Paper from "@material-ui/core/Paper"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TablePagination from '@material-ui/core/TablePagination'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import Edit from '@material-ui/icons/Edit'
 import Delete from '@material-ui/icons/Delete'
@@ -21,7 +22,7 @@ import ElectionTableHeader from './election-table-header'
 
 const styles = theme => ({
   root: {
-    width: "90%",
+    width: '90%',
     marginTop: theme.spacing.unit * 4,
     marginLeft: theme.spacing.unit * 4
   },
@@ -29,7 +30,7 @@ const styles = theme => ({
     minWidth: 1020
   },
   tableWrapper: {
-    overflowX: "auto"
+    overflowX: 'auto'
   },
   actionIcon: {
     margin: theme.spacing.unit * 2
@@ -48,7 +49,10 @@ const styles = theme => ({
   },
   stopButton: {
     color: 'blue'
-  }
+  },
+  action: {
+    width: 300
+  },
 })
 
 class ElectionTable extends React.Component {
@@ -61,84 +65,59 @@ class ElectionTable extends React.Component {
 
   getActionsAllowed(status) {
     const { classes } = this.props
-
-    let play = 
-      <Grid item>
-        <IconButton className={classes.playButton}>
-          <PlayCircleFilled />
-        </IconButton>
-      </Grid>
-    let view = 
-      <Grid item>
-        <IconButton className={classes.viewButton}>
-          <Pageview />
-        </IconButton>
-      </Grid>
-    let edit = 
-      <Grid item>
-        <IconButton className={classes.editButton}>
-          <Edit />
-        </IconButton>
-      </Grid>
-    let remove = 
-      <Grid item>
-        <IconButton className={classes.deleteButton}>
-          <Delete />
-        </IconButton>
-      </Grid>
-    let stop = 
-      <Grid item>
-        <IconButton className={classes.stopButton}>
-          <Stop />
-        </IconButton>
-      </Grid>
-
-    let spacing = 0
-
-    switch(status) {
-      case 'Pending':
-        return ( 
-          <Grid 
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-            spacing={spacing}
-          >
-            {view}
-            {play}
-            {edit}
-            {remove}
-          </Grid>
-        )
-      case 'Ongoing':
-        return (
-          <Grid 
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-            spacing={spacing}
-          >
-            {view}
-            {stop}
-          </Grid>
-        )
-      case 'Finished':
-        return (
-          <Grid 
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-            spacing={spacing}
-          >
-            {view}
-          </Grid>
-        )
-      default:
-        return <div></div>
+  
+    let view = {
+      className: classes.viewButton,
+      icon: <Pageview />
     }
+
+    let play = {
+      className: classes.playButton,
+      icon: <PlayCircleFilled />
+    }
+
+    let edit = {
+      className: classes.editButton,
+      icon: <Edit />
+    }
+
+    let remove = {
+      className: classes.deleteButton,
+      icon: <Delete />
+    }
+
+    let stop = {
+      className: classes.stopButton,
+      icon: <Stop />
+    }
+
+    const actions = {
+      Pending: [view, play, edit, remove],
+      Ongoing: [view, stop],
+      Finished: [view]
+    }
+
+    let actionsAllowed = actions[status].map((action, index) => {
+      return(
+        <Grid item key={index}>
+          <IconButton className={action.className}>
+            {action.icon}
+          </IconButton>
+        </Grid>
+      )      
+    })
+    
+    return (
+      <Grid 
+        container
+        direction='row'
+        justify='flex-start'
+        alignItems='center'
+        spacing={0}
+      >
+        {actionsAllowed}
+      </Grid>    
+    )
   }
 
   render() {
@@ -166,12 +145,12 @@ class ElectionTable extends React.Component {
                 .map(row => {
                   return (
                     <TableRow hover tabIndex={-1} key={row.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell component='th' scope='row'>
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align='left'>{row.name}</TableCell>
+                      <TableCell align='left'>{row.status}</TableCell>
+                      <TableCell align='left' className={classes.action}>
                         {this.getActionsAllowed(row.status)} 
                       </TableCell>
                     </TableRow>
@@ -188,7 +167,7 @@ class ElectionTable extends React.Component {
 
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
-          component="div"
+          component='div'
           count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
