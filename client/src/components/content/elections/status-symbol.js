@@ -1,6 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
+import Tooltip from '@material-ui/core/Tooltip'
 
 // add tooltip
 
@@ -31,16 +32,34 @@ const styles = theme => ({
 
 class StatusSymbol extends React.Component {
   
+  constructor(){
+    super()
+
+    this.capitalize = this.capitalize.bind(this)
+  }
+
+  capitalize(string) {
+    if((typeof string) == 'string' && string.length > 0){
+      return string.charAt(0).toUpperCase() + string.slice(1)
+    }
+    return ""
+  }
+
   render() {
     const { classes, variant } = this.props
-    
     return(
-      <div className={classNames(classes.default, {
-        [classes.pending]: variant === 'pending',
-        [classes.ongoing]: variant === 'ongoing',
-        [classes.finished]: variant === 'finished'
-      })}>
-      </div>
+      <Tooltip 
+        title={this.capitalize(variant)}
+        placement='bottom-start'
+        enterDelay={300}
+      >
+        <div className={classNames(classes.default, {
+          [classes.pending]: variant === 'pending',
+          [classes.ongoing]: variant === 'ongoing',
+          [classes.finished]: variant === 'finished'
+        })}>
+        </div>
+      </Tooltip>
     )
   }
 }
