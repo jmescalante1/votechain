@@ -35,6 +35,9 @@ const styles = theme => ({
   },
   placeholder: {
     fontSize: 18
+  },
+  label: {
+    fontSize: 18
   }
 })
 
@@ -79,17 +82,31 @@ class PositionToolbar extends React.Component {
         container
         direction='row'
         justify='flex-start'
-        alignItems='flex-start'
+        alignItems='center'
       >
         <Grid item xs={9}>
-          <Select 
-            options={options} 
-            placeholder={<Typography className={classes.placeholder}>Choose an election</Typography>}
-            styles={selectStyles}
-            isClearable={true}
-            components={{ DropdownIndicator }}
-            onChange={handleElectionSelectChange}
-          />
+          <Grid 
+            container
+            direction='row'
+            justify='flex-start'
+            alignItems='center'
+            spacing={16}
+          >
+            <Grid item>
+              <Typography className={classes.label}>List of Positions for</Typography>
+            </Grid>
+
+            <Grid item>
+              <Select 
+                options={options} 
+                placeholder={<Typography className={classes.placeholder}>Choose an election</Typography>}
+                styles={selectStyles}
+                isClearable={true}
+                components={{ DropdownIndicator }}
+                onChange={handleElectionSelectChange}
+              />
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item xs={3}>      

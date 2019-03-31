@@ -23,8 +23,8 @@ import ElectionTableHeader from './election-table-header'
 const styles = theme => ({
   root: {
     width: '90%',
+    margin: 'auto',
     marginTop: theme.spacing.unit * 4,
-    marginLeft: theme.spacing.unit * 4
   },
   table: {
     minWidth: 1020

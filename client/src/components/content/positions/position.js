@@ -16,6 +16,9 @@ const styles = theme => ({
     borderStyle: 'solid',
     borderWidth: 5,
     borderColor: '#006064',
+    width: '90%',
+    margin: 'auto',
+    marginTop: theme.spacing.unit * 4
   },
   divider: {
     height: 2,
@@ -23,21 +26,27 @@ const styles = theme => ({
     backgroundColor: '#006064'
   },
   content: {
-    margin: 40,
+    margin: 20,
   },
   positionName: {
     fontSize: 20,
     fontWeight: 'bold'
   },
   candidateHeader: {
-    marginLeft: 20,
-    fontSize: 16
+    fontSize: 18
   },
   editButton: {
     color: 'orange',
   },
   deleteButton: {
     color: 'red'
+  },
+  candidateContent: {
+    marginLeft: 20,
+    fontSize: 18
+  },
+  candidateList: {
+    marginLeft: 10
   }
 })
 
@@ -54,28 +63,43 @@ class Position extends React.Component {
           electionData={electionData}          
         />
 
-        {election && <Divider className={classes.divider}/>}
-                
         {election && electionData[election].positions.map((position, index) =>{
           return(
-            <div key={index} className={classes.content}>
-              <Grid 
-                container
-                direction='row'
-                justify='flex-start'
-                alignItems='flex-start'
-              >
-                <Grid item xs={10}>
-                  <Typography className={classes.positionName}>{position.name}</Typography>
-                </Grid>
+            <div>
+              <Divider className={classes.divider}/>
+              
+              <div key={index} className={classes.content}>
+                <Grid 
+                  container
+                  direction='row'
+                  justify='flex-start'
+                  alignItems='flex-start'
+                >
+                  <Grid item xs={10}>
+                    <Typography className={classes.positionName}>{position.name}</Typography>
+                  </Grid>
 
-                <Grid item xs={2}>
-                  <IconButton><Edit className={classes.editButton}/></IconButton>
-                  <IconButton><Delete className={classes.deleteButton}/></IconButton>
+                  <Grid item xs={2}>
+                    <IconButton><Edit className={classes.editButton}/></IconButton>
+                    <IconButton><Delete className={classes.deleteButton}/></IconButton>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Typography className={classes.candidateHeader}>Candidates: </Typography> 
-            </div>           
+                
+                <div className={classes.candidateContent}>
+                  <Typography className={classes.candidateHeader}>Candidates: </Typography> 
+                  
+                  <div className={classes.candidateList}>
+                    {position.candidates.map((value, index) => {
+                      return (
+                        <Typography key={index}>
+                          {value}
+                        </Typography>
+                      )
+                    })}
+                  </div>
+                </div>    
+              </div>  
+            </div>         
           )
         })}
         
