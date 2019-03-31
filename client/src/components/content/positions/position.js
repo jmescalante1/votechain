@@ -8,17 +8,19 @@ import PositionToolbar from './position-toolbar'
 const styles = theme => ({
   paper: {
     padding: 20
-  }
+  },
 })
 
 class Position extends React.Component {
   render() {
-    const { classes, electionList, electionData } = this.props
+    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
 
     return(
       <Paper className={classes.paper}>
         <PositionToolbar 
           className={classes.positionToolbar}
+          election={election}
+          handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
           electionData={electionData}          
         />
@@ -28,8 +30,11 @@ class Position extends React.Component {
 }
 
 Position.propTypes = {
+  classes: PropTypes.object.isRequired,
+  election: PropTypes.string.isRequired,
+  handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
-  electionData: PropTypes.object.isRequired
+  electionData: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(Position)

@@ -4,7 +4,7 @@ export const electionList = [
 
 export const electionData = {
   CAS: {
-    status: 'Finished',
+    status: 'finished',
     positions: [
       {
         name: 'President',
@@ -39,7 +39,7 @@ export const electionData = {
     ]
   },
   CAMP: {
-    status: 'Ongoing',
+    status: 'ongoing',
     positions: [
       {
         name: 'President',
@@ -74,7 +74,7 @@ export const electionData = {
     ]
   },
   CN: {
-    status: 'Pending',
+    status: 'pending',
     positions: [
       {
         name: 'President',

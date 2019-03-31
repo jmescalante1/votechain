@@ -47,7 +47,6 @@ const styles = theme => ({
 })
 
 class AddElectionDialog extends React.Component {
-
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
 
