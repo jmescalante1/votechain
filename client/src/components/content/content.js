@@ -1,7 +1,5 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-// import Typography from '@material-ui/core/Typography'
-// import CssBaseline from '@material-ui/core/CssBaseline'
 import { Switch, Route } from 'react-router-dom'
 
 import { headerTabs } from '../layout/header/header-tabs'
