@@ -1,11 +1,11 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
 import Select, { components } from 'react-select'
 import PropTypes from 'prop-types'
-import Grid from '@material-ui/core/Grid'
 
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
+import { withStyles } from '@material-ui/core/styles'
 
 import StatusSymbol from '../elections/status-symbol'
 
@@ -13,19 +13,29 @@ const selectStyles = {
   control: styles => ({
     ...styles, 
     backgroundColor: '#fafafa',
-    width: 600
+    width: 600,
+    fontSize: 20,
   }),
   placeholder: styles => ({
     ...styles,
   }),
   menu: styles => ({
     ...styles,
-    width: 600
+    width: 600,
+    fontSize: 18
   }),
 }
 
 const styles = theme => ({
- 
+  root: {
+    margin: 40
+  },
+  statusName: {
+    fontSize: 18,
+  },
+  placeholder: {
+    fontSize: 18
+  }
 })
 
 const DropdownIndicator = props => {
@@ -54,7 +64,7 @@ class PositionToolbar extends React.Component {
   }
 
   render(){
-    const { election, handleElectionSelectChange, electionList, electionData } = this.props
+    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
     
     const options = electionList.map((election) => {
       return {
@@ -65,16 +75,16 @@ class PositionToolbar extends React.Component {
 
     return(
       <Grid 
+        className={classes.root}
         container
-        direction='column'
+        direction='row'
         justify='flex-start'
         alignItems='flex-start'
-        spacing={16}
       >
-        <Grid item>
+        <Grid item xs={9}>
           <Select 
             options={options} 
-            placeholder={<Typography>Choose an election</Typography>}
+            placeholder={<Typography className={classes.placeholder}>Choose an election</Typography>}
             styles={selectStyles}
             isClearable={true}
             components={{ DropdownIndicator }}
@@ -82,7 +92,7 @@ class PositionToolbar extends React.Component {
           />
         </Grid>
 
-        <Grid item>      
+        <Grid item xs={3}>      
           <Grid 
             container
             direction='row'
@@ -91,7 +101,7 @@ class PositionToolbar extends React.Component {
             spacing={8}
           >
             <Grid item>
-              <Typography>Status: </Typography>
+              <Typography className={classes.statusName}>Status: </Typography>
             </Grid>
 
             <Grid item >

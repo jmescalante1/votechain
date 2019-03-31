@@ -3,8 +3,6 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 
-// add tooltip
-
 const styles = theme => ({
   default: {
 

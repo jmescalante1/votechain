@@ -42,25 +42,25 @@ export const electionData = {
     status: 'ongoing',
     positions: [
       {
-        name: 'President',
+        name: 'Chairman',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Vanessa', 'Deborah', 'Angelika']
       },
       {
-        name: 'Vice President',
+        name: 'Vice Chairman',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Ice', 'Nice',]
       },
       {
-        name: 'Secretary',
+        name: 'Public Relation',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Monica', 'Christian', 'Scarlet']
       },
       {
-        name: 'Treasurer',
+        name: 'Representatives',
         noOfCandidatesToBeElected: 1,
         hasAbstain: false,
         candidates: ['Karen', 'Chloe']
@@ -77,31 +77,31 @@ export const electionData = {
     status: 'pending',
     positions: [
       {
-        name: 'President',
+        name: 'CEO',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Anthony', 'Antonio', 'Carl']
       },
       {
-        name: 'Vice President',
+        name: 'Vice Executive Officer',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Angel', 'Cheska', 'Guen']
       },
       {
-        name: 'Secretary',
+        name: 'Line Manager',
         noOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Mary Joy', 'Alliah']
       },
       {
-        name: 'Treasurer',
+        name: 'Scrum Master',
         noOfCandidatesToBeElected: 1,
         hasAbstain: false,
         candidates: ['Ally', 'Allyssa']
       },
       {
-        name: 'Councilors',
+        name: 'Team Leaders',
         noOfCandidatesToBeElected: 7,
         hasAbstain: true,
         candidates: ['Jake', 'Amy', 'Terry', 'Gina', 'Rosa', 'Boyle', 'Ray']
