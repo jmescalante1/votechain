@@ -1,15 +1,10 @@
 import React from 'react'
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
-import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
 import { withStyles } from '@material-ui/core/styles'
 
-import Edit from '@material-ui/icons/Edit'
-import Delete from '@material-ui/icons/Delete'
 import PositionToolbar from './position-toolbar'
+import PositionContent from './position-content'
 
 const styles = theme => ({
   root: {
@@ -63,46 +58,10 @@ class Position extends React.Component {
           electionData={electionData}          
         />
 
-        {election && electionData[election].positions.map((position, index) =>{
-          return(
-            <div>
-              <Divider className={classes.divider}/>
-              
-              <div key={index} className={classes.content}>
-                <Grid 
-                  container
-                  direction='row'
-                  justify='flex-start'
-                  alignItems='flex-start'
-                >
-                  <Grid item xs={10}>
-                    <Typography className={classes.positionName}>{position.name}</Typography>
-                  </Grid>
-
-                  <Grid item xs={2}>
-                    <IconButton><Edit className={classes.editButton}/></IconButton>
-                    <IconButton><Delete className={classes.deleteButton}/></IconButton>
-                  </Grid>
-                </Grid>
-                
-                <div className={classes.candidateContent}>
-                  <Typography className={classes.candidateHeader}>Candidates: </Typography> 
-                  
-                  <div className={classes.candidateList}>
-                    {position.candidates.map((value, index) => {
-                      return (
-                        <Typography key={index}>
-                          {value}
-                        </Typography>
-                      )
-                    })}
-                  </div>
-                </div>    
-              </div>  
-            </div>         
-          )
-        })}
-        
+        <PositionContent 
+          election={election}
+          electionData={electionData}
+        />
       </Paper>
     )
   }

@@ -63,7 +63,7 @@ contract Votechain {
         uint256 keyIndex;
         string name;
         
-        uint256 maxNoOfCandidatesThatCanBeSelected; // the total number of candidates a voter can vote simultaneously in this position.
+        uint256 maxNoOfCandidatesThatCanBeSelected; // the total number of candidates a voter can vote in this position.
         mapping(address => uint256) noOfVotesSubmittedBy; // voter id to no of votes that has been casted by this voter in this position.
 
         uint256 electionKey;

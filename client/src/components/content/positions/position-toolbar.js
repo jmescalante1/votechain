@@ -93,7 +93,7 @@ class PositionToolbar extends React.Component {
             spacing={16}
           >
             <Grid item>
-              <Typography className={classes.label}>List of Positions for</Typography>
+              <Typography className={classes.label}>Position List of </Typography>
             </Grid>
 
             <Grid item>
