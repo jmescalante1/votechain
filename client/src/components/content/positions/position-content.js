@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -8,6 +10,8 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Edit from '@material-ui/icons/Edit'
 import Delete from '@material-ui/icons/Delete'
+
+import editPageRoute from './position-edit-page/edit-page-route'
 
 const styles = theme => ({
   divider: {
@@ -66,8 +70,17 @@ class Position extends React.Component {
                   </Grid>
 
                   <Grid item xs={2}>
-                    <IconButton><Edit className={classes.editButton}/></IconButton>
-                    <IconButton><Delete className={classes.deleteButton}/></IconButton>
+                    <Link
+                      to={editPageRoute.path}
+                    >
+                      <IconButton>
+                        <Edit className={classes.editButton}/>
+                      </IconButton>
+                    </Link>
+
+                    <IconButton>
+                      <Delete className={classes.deleteButton}/>
+                    </IconButton>
                   </Grid>
                 </Grid>
                 
@@ -106,6 +119,7 @@ class Position extends React.Component {
 
 Position.propTypes = {
   classes: PropTypes.object.isRequired,
+  
   election: PropTypes.string.isRequired,
   electionData: PropTypes.object.isRequired,
 }

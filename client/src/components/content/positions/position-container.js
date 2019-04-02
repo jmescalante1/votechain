@@ -9,7 +9,8 @@ class PositionContainer extends React.Component {
     super()
 
     this.state = {
-      election: ""
+      election: "",
+      openEditDialog: false
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)

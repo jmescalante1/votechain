@@ -48,7 +48,7 @@ const styles = theme => ({
 class Position extends React.Component {
   render() {
     const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
-
+    
     return(
       <Paper className={classes.root}>
         <PositionToolbar 
@@ -69,6 +69,7 @@ class Position extends React.Component {
 
 Position.propTypes = {
   classes: PropTypes.object.isRequired,
+  
   election: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
