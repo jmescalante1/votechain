@@ -13,7 +13,7 @@ const selectStyles = {
   control: styles => ({
     ...styles, 
     backgroundColor: '#fafafa',
-    width: 600,
+    width: '100%',
     fontSize: 20,
   }),
   placeholder: styles => ({
@@ -21,7 +21,7 @@ const selectStyles = {
   }),
   menu: styles => ({
     ...styles,
-    width: 600,
+    width: '100%',
     fontSize: 18
   }),
 }
@@ -96,7 +96,7 @@ class PositionToolbar extends React.Component {
               <Typography className={classes.label}>Position List of </Typography>
             </Grid>
 
-            <Grid item>
+            <Grid item style={{width: '60%'}}>
               <Select 
                 options={options} 
                 placeholder={<Typography className={classes.placeholder}>Choose an election</Typography>}
