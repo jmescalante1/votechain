@@ -71,7 +71,12 @@ class Position extends React.Component {
 
                   <Grid item xs={2}>
                     <Link
-                      to={editPageRoute.path}
+                      to={{
+                        pathname: editPageRoute.path,
+                        state: {
+                          position: position
+                        }
+                      }}
                     >
                       <IconButton>
                         <Edit className={classes.editButton}/>

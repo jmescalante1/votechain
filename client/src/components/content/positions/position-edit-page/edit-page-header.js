@@ -7,12 +7,9 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 
-import EditPageHeader from './edit-page-header'
-import EditPageContent from './edit-page-content'
-
 const styles = theme => ({
   root: {
-    margin: theme.spacing.unit * 4,
+    padding: theme.spacing.unit
   },
   title: {
     fontSize: 20,
@@ -41,29 +38,38 @@ const styles = theme => ({
   },
 })
 
-class EditPage extends React.Component {
+class EditPageHeader extends React.Component {
   render() {
-    const { classes, position, hasAbstain, handleAbstainCheckboxChange } = this.props
+    const { classes, position } = this.props
 
     return(
-      <Paper className={classes.root}>
-          <EditPageHeader position={position}/>
-          <EditPageContent 
-            position={position}
-            hasAbstain={hasAbstain}
-            handleAbstainCheckboxChange={handleAbstainCheckboxChange}
-          />
-      </Paper>
+      <Grid 
+        className={classes.root}
+        container
+        direction='row'
+        justify='space-between'
+        alignItems='center'
+      >
+        <Grid item>
+          <Typography className={classes.title}>
+            Edit Position:
+          </Typography>
+        </Grid>
+        
+        <Grid item>
+          <Typography className={classes.position}>
+            ID: {position.id}
+          </Typography>
+        </Grid>
+      </Grid>
     )
   }
 } 
 
-EditPage.propTypes = {
+EditPageHeader.propTypes = {
   classes: PropTypes.object.isRequired,
 
-  position: PropTypes.object.isRequired,
-  hasAbstain: PropTypes.bool.isRequired,
-  handleAbstainCheckboxChange: PropTypes.func.isRequired,
+  position: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(EditPage)
+export default withStyles(styles)(EditPageHeader)

@@ -1,14 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Fab from '@material-ui/core/Fab';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab'
+import TextField from '@material-ui/core/TextField'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Typography from '@material-ui/core/Typography'
 
 import Done from '@material-ui/icons/Done'
 import Cancel from '@material-ui/icons/Cancel'
@@ -112,7 +112,7 @@ class AddElectionDialog extends React.Component {
           </DialogActions>
         </Dialog>
       </Fragment>
-    );
+    )
   }
 }
 
