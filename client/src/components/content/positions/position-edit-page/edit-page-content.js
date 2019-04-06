@@ -2,15 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 
 const styles = theme => ({
@@ -25,8 +22,13 @@ const styles = theme => ({
     marginTop: 20,
     width: '50%',
   },
+    
   legend: {
-    color: 'black'
+    color: 'black',
+  },
+  legendFocused: {
+    // color: 'red',
+    // textColor: 'red'
   },
 
   cssFocused: {},
@@ -108,7 +110,9 @@ class EditPageContent extends React.Component {
         </Grid>
      
         <Grid item className={classes.form}>
-          <FormControl component="fieldset"> 
+          <FormControl
+            component="fieldset"
+          > 
             <Grid 
               container
               direction='row'
@@ -117,7 +121,16 @@ class EditPageContent extends React.Component {
               spacing={40}
             >
               <Grid item>
-                <FormLabel className={classes.legend} component="legend">Voters can abstain: </FormLabel>
+                <FormLabel 
+                  // className={classes.legend} 
+                  classes={{
+                    root: classes.legend,
+                    // focused: classes.legendFocused
+                  }}
+                  component="legend"
+                >
+                  Voters can abstain: 
+                </FormLabel>
               </Grid>
 
               <Grid item>

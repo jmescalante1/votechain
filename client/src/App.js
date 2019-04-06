@@ -13,6 +13,9 @@ const theme = createMuiTheme({
   palette: {
     text: {
       main: '#fafafa'
+    },
+    highlight: {
+      main: '#006064'
     }
   },
   overrides: {

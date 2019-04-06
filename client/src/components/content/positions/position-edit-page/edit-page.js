@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid'
 
 import EditPageHeader from './edit-page-header'
 import EditPageContent from './edit-page-content'
