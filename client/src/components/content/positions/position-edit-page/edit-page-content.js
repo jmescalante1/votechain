@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import Fab from '@material-ui/core/Fab'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
-import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -18,19 +17,16 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
 
+import CustomizedTextField from '../../../customized/forms/textfield'
+
 const styles = theme => ({
   root: {
     padding: theme.spacing.unit
   },
-  formControl: {
-    margin: theme.spacing.unit * 3,
-  },
-
-  form: {
+  formItem: {
     marginTop: 20,
     width: '100%',
   },
-  
   legend: {
     color: 'black',
   },
@@ -57,21 +53,13 @@ const styles = theme => ({
     }
   },
   deleteButton: {
-    color: 'red'
+    color: '#f44336',
   },
-
-  cssFocused: {},
-  notchedOutline: {},
-  cssOutlinedInput: {
-    '&$cssFocused $notchedOutline': {
-      borderColor: '#006064',
-    },
-  },
-  cssLabel: {
-    '&$cssFocused': {
-      color: '#006064',
-    },
-  },
+  deleteIcon: {
+    '&:hover': {
+      color: '#b71c1c'
+    }
+  }
 })
 
 class EditPageContent extends React.Component {
@@ -86,59 +74,31 @@ class EditPageContent extends React.Component {
         justify='flex-start'
         alignItems='center'
       >
-        <Grid item className={classes.form}>
-          <TextField
-            type='string'
-            autoFocus
-            required
-            id="name"
-            label="Position Name"
+        <Grid item className={classes.formItem}>
+          <CustomizedTextField 
             fullWidth
+            required
+            type='string'
+            id='position-name'
+            label='Position Name'
             variant='outlined'
             defaultValue={position.name}
-            InputProps={{
-              classes: {
-                root: classes.cssOutlinedInput,
-                focused: classes.cssFocused,
-                notchedOutline: classes.notchedOutline
-              }
-            }}
-            InputLabelProps={{
-              classes:{
-                root: classes.cssLabel,
-                focused: classes.cssFocused,
-              }
-            }}
           />
         </Grid>
         
-        <Grid item className={classes.form}>
-          <TextField
-            type='number'
-            autoFocus
-            required
-            id="name"
-            label="Max No. of Candidates to be Elected"
+        <Grid item className={classes.formItem}>
+          <CustomizedTextField 
             fullWidth
+            required
+            type='number'
+            id='max-no-of-candidates-to-be-elected'
+            label='Max No. of Candidates to be Elected'
             variant='outlined'
             defaultValue={position.maxNoOfCandidatesToBeElected}
-            InputProps={{
-              classes: {
-                root: classes.cssOutlinedInput,
-                focused: classes.cssFocused,
-                notchedOutline: classes.notchedOutline
-              }
-            }}
-            InputLabelProps={{
-              classes:{
-                root: classes.cssLabel,
-                focused: classes.cssFocused
-              }
-            }}
           />
         </Grid>
      
-        <Grid item className={classes.form}>
+        <Grid item className={classes.formItem}>
           <FormControl
             component="fieldset"
           > 
@@ -151,10 +111,8 @@ class EditPageContent extends React.Component {
             >
               <Grid item>
                 <FormLabel 
-                  // className={classes.legend} 
                   classes={{
                     root: classes.legend,
-                    // focused: classes.legendFocused
                   }}
                   component="legend"
                 >
@@ -190,7 +148,7 @@ class EditPageContent extends React.Component {
           </FormControl>
         </Grid>
         
-        <Grid item className={classNames(classes.form, classes.candidateForm)}>
+        <Grid item className={classNames(classes.formItem, classes.candidateForm)}>
           <Grid
             container
             direction='column'
@@ -244,8 +202,8 @@ class EditPageContent extends React.Component {
                         title='Remove candidate'
                         placement='right'
                       >
-                        <IconButton>
-                          <Delete className={classes.deleteButton}/>
+                        <IconButton className={classes.deleteButton}>
+                          <Delete className={classes.deleteIcon}/>
                         </IconButton>
                       </Tooltip>
                     </Grid>
@@ -257,7 +215,7 @@ class EditPageContent extends React.Component {
         </Grid>
 
         <Grid item>
-            test
+            
         </Grid>
       </Grid>
     )
