@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Fab from '@material-ui/core/Fab'
+import IconButton from '@material-ui/core/IconButton'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -9,6 +12,9 @@ import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+
+import Add from '@material-ui/icons/Add'
+import Delete from '@material-ui/icons/Delete'
 
 const styles = theme => ({
   root: {
@@ -22,13 +28,31 @@ const styles = theme => ({
     marginTop: 20,
     width: '50%',
   },
+  candidate: {
+    width: '50%',
     
+  },
   legend: {
     color: 'black',
   },
-  legendFocused: {
-    // color: 'red',
-    // textColor: 'red'
+  // legendFocused: {
+  //   // color: 'red',
+  //   // textColor: 'red'
+  // },
+  candidateListLabel: {
+    fontSize: 16,
+  },
+  addIcon: {
+    color: '#fafafa',
+  },
+  addButton: {
+    backgroundColor: '#4caf50',
+    '&:hover': {
+      backgroundColor: '#1b5e20'
+    }
+  },
+  deleteButton: {
+    color: 'red'
   },
 
   cssFocused: {},
@@ -160,6 +184,54 @@ class EditPageContent extends React.Component {
             </Grid>
           </FormControl>
         </Grid>
+
+        <Grid item className={classes.form}>
+          <Grid
+            container
+            direction='row'
+            alignItems='center'
+            justify='flex-start'
+            spacing={8}
+          >
+            <Grid item>
+              <Fab 
+                size='small' 
+                className={classes.addButton}
+              >
+                <Add className={classes.addIcon} />
+              </Fab>
+            </Grid>
+
+            <Grid item>
+              <Typography className={classes.candidateListLabel}>Candidates: </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {position.candidates.map((candidate, index) => {  
+          return (
+            <Grid item className={classes.candidate} key={index}>
+              <Grid
+                container
+                direction='row'
+                alignItems='center'
+                justify='space-around'
+              >
+                <Grid item xs={2}></Grid>
+
+                <Grid item xs={5}>
+                  <Typography>{candidate}</Typography>
+                </Grid>
+
+                <Grid item xs={5}>
+                  <IconButton>
+                    <Delete className={classes.deleteButton}/>
+                  </IconButton>
+                </Grid>
+              </Grid>  
+            </Grid>
+          )
+        })}
       </Grid>
     )
   }
