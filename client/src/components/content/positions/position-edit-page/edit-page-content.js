@@ -255,6 +255,10 @@ class EditPageContent extends React.Component {
             })}
           </Grid>
         </Grid>
+
+        <Grid item>
+            test
+        </Grid>
       </Grid>
     )
   }
