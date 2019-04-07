@@ -27,7 +27,7 @@ const styles = theme => ({
 
   form: {
     marginTop: 20,
-    width: '50%',
+    width: '100%',
   },
   
   legend: {

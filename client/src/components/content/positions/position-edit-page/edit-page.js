@@ -9,7 +9,10 @@ import EditPageContent from './edit-page-content'
 
 const styles = theme => ({
   root: {
-    margin: theme.spacing.unit * 4,
+    width: '50%',
+    padding: theme.spacing.unit * 2,
+    margin: 'auto',
+    marginTop: theme.spacing.unit * 2
   },
   title: {
     fontSize: 20,
@@ -44,12 +47,12 @@ class EditPage extends React.Component {
 
     return(
       <Paper className={classes.root}>
-          <EditPageHeader position={position}/>
-          <EditPageContent 
-            position={position}
-            hasAbstain={hasAbstain}
-            handleAbstainCheckboxChange={handleAbstainCheckboxChange}
-          />
+        <EditPageHeader position={position}/>
+        <EditPageContent 
+          position={position}
+          hasAbstain={hasAbstain}
+          handleAbstainCheckboxChange={handleAbstainCheckboxChange}
+        />
       </Paper>
     )
   }
