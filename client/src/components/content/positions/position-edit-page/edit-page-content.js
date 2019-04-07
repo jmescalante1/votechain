@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -28,13 +29,23 @@ const styles = theme => ({
     marginTop: 20,
     width: '50%',
   },
-  candidate: {
-    width: '50%',
-    
-  },
+  
   legend: {
     color: 'black',
   },
+  fullWidth: {
+    width: '100%'
+  },
+  candidateForm: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: theme.palette.highlight.main,
+    padding: theme.spacing.unit * 1
+  },
+  // candidate: {
+  //   // backgroundColor: 'red'
+  // },
   // legendFocused: {
   //   // color: 'red',
   //   // textColor: 'red'
@@ -184,54 +195,62 @@ class EditPageContent extends React.Component {
             </Grid>
           </FormControl>
         </Grid>
-
-        <Grid item className={classes.form}>
+        
+        <Grid item className={classNames(classes.form, classes.candidateForm)}>
           <Grid
             container
-            direction='row'
-            alignItems='center'
+            direction='column'
+            alignItems='flex-start'
             justify='flex-start'
-            spacing={8}
           >
-            <Grid item>
-              <Fab 
-                size='small' 
-                className={classes.addButton}
-              >
-                <Add className={classes.addIcon} />
-              </Fab>
-            </Grid>
-
-            <Grid item>
-              <Typography className={classes.candidateListLabel}>Candidates: </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {position.candidates.map((candidate, index) => {  
-          return (
-            <Grid item className={classes.candidate} key={index}>
+            <Grid item className={classes.fullWidth}>
               <Grid
                 container
                 direction='row'
                 alignItems='center'
-                justify='space-around'
+                justify='space-between'
               >
-                <Grid item xs={2}></Grid>
-
-                <Grid item xs={5}>
-                  <Typography>{candidate}</Typography>
+                <Grid item>
+                  <Typography className={classes.candidateListLabel}>Candidates: </Typography>
                 </Grid>
 
-                <Grid item xs={5}>
-                  <IconButton>
-                    <Delete className={classes.deleteButton}/>
-                  </IconButton>
+                <Grid item>
+                  <Fab 
+                    size='small' 
+                    className={classes.addButton}
+                  >
+                    <Add className={classes.addIcon} />
+                  </Fab>
                 </Grid>
-              </Grid>  
+              </Grid>
             </Grid>
-          )
-        })}
+
+            {position.candidates.map((candidate, index) => {  
+              return (
+                <Grid item className={classes.fullWidth} key={index}>
+                  <Grid
+                    container
+                    direction='row'
+                    alignItems='center'
+                    justify='flex-start'
+                  >
+                    <Grid item xs={2}></Grid>
+
+                    <Grid item xs={5}>
+                      <Typography>{candidate}</Typography>
+                    </Grid>
+
+                    <Grid item xs={5}>
+                      <IconButton>
+                        <Delete className={classes.deleteButton}/>
+                      </IconButton>
+                    </Grid>
+                  </Grid>  
+                </Grid>
+              )
+            })}
+          </Grid>
+        </Grid>
       </Grid>
     )
   }
