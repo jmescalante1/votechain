@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 
 import CancelButton from '../../../customized/buttons/cancel'
 import SubmitButton from '../../../customized/buttons/submit'
@@ -62,8 +63,17 @@ class AddElectionDialog extends React.Component {
         </DialogContent>
 
         <DialogActions>
-          <CancelButton handleOnClick={handleClickCloseDialog} />
-          <SubmitButton handleOnClick={handleClickCloseDialog} />
+          <Grid
+            container
+            direction='row'
+            alignItems='center'
+            justify='flex-end'
+            spacing={16}
+          >
+            <Grid item><CancelButton handleOnClick={handleClickCloseDialog} /></Grid>
+
+            <Grid item><SubmitButton handleOnClick={handleClickCloseDialog} /></Grid>
+          </Grid>
         </DialogActions>
       </Dialog>
     )
