@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Fab from '@material-ui/core/Fab'
 import IconButton from '@material-ui/core/IconButton'
+import Tooltip from '@material-ui/core/Tooltip'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -43,13 +44,6 @@ const styles = theme => ({
     borderColor: theme.palette.highlight.main,
     padding: theme.spacing.unit * 1
   },
-  // candidate: {
-  //   // backgroundColor: 'red'
-  // },
-  // legendFocused: {
-  //   // color: 'red',
-  //   // textColor: 'red'
-  // },
   candidateListLabel: {
     fontSize: 16,
   },
@@ -215,12 +209,17 @@ class EditPageContent extends React.Component {
                 </Grid>
 
                 <Grid item>
-                  <Fab 
-                    size='small' 
-                    className={classes.addButton}
+                  <Tooltip
+                    title='Add new candidate'
+                    placement='left'
                   >
-                    <Add className={classes.addIcon} />
-                  </Fab>
+                    <Fab 
+                      size='small' 
+                      className={classes.addButton}
+                    >
+                      <Add className={classes.addIcon} />
+                    </Fab>
+                  </Tooltip>
                 </Grid>
               </Grid>
             </Grid>
@@ -241,9 +240,14 @@ class EditPageContent extends React.Component {
                     </Grid>
 
                     <Grid item xs={5}>
-                      <IconButton>
-                        <Delete className={classes.deleteButton}/>
-                      </IconButton>
+                      <Tooltip 
+                        title='Remove candidate'
+                        placement='right'
+                      >
+                        <IconButton>
+                          <Delete className={classes.deleteButton}/>
+                        </IconButton>
+                      </Tooltip>
                     </Grid>
                   </Grid>  
                 </Grid>
