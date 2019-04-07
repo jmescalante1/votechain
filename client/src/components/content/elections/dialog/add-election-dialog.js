@@ -11,30 +11,14 @@ import Typography from '@material-ui/core/Typography'
 
 import CancelButton from '../../../customized/buttons/cancel'
 import SubmitButton from '../../../customized/buttons/submit'
+import CustomizedTextField from '../../../customized/forms/textfield'
 
 const styles = theme => ({
-  title: {
+  label: {
     color: '#006064',
     fontWeight: 'bold',
     fontSize: 20
-  },
-  textField: {
-    marginTop: 20,
-    width: 500,
-  },
- 
-  cssFocused: {},
-  notchedOutline: {},
-  cssOutlinedInput: {
-    '&$cssFocused $notchedOutline': {
-      borderColor: '#006064',
-    },
-  },
-  cssLabel: {
-    '&$cssFocused': {
-      color: '#006064',
-    },
-  },
+  }, 
 })
 
 class AddElectionDialog extends React.Component {
@@ -48,38 +32,21 @@ class AddElectionDialog extends React.Component {
           onClose={handleClickCloseDialog}
         >
           <DialogTitle disableTypography>
-            <Typography className={classes.title}>Add Election</Typography>
+            <Typography className={classes.label}>Add Election</Typography>
           </DialogTitle>
           
           <DialogContent>
             <DialogContentText>
               Add new election by specifying its name
             </DialogContentText>
-            <TextField
-              className={classes.textField}
-              autoFocus
-              required
-              id="name"
-              label="Election Name"
-              fullWidth
-              variant='outlined'
-              InputProps={{
-                classes: {
-                  root: classes.cssOutlinedInput,
-                  focused: classes.cssFocused,
-                  notchedOutline: classes.notchedOutline
-                }
-              }}
-              InputLabelProps={{
-                classes:{
-                  root: classes.cssLabel,
-                  focused: classes.cssFocused
-                }
-              }}
 
+            <CustomizedTextField 
+              id='election-name'
+              label='Election Name'
+              variant='outlined'
             />
           </DialogContent>
-          
+
           <DialogActions>
             <CancelButton handleOnClick={handleClickCloseDialog} />
             <SubmitButton handleOnClick={handleClickCloseDialog} />
