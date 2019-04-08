@@ -18,13 +18,13 @@ const styles = theme => ({
 
 class CancelButton extends React.Component {
   render(){
-    const { handleOnClick, classes } = this.props
+    const { onClick, classes, size } = this.props
 
     return(
       <Fab
-        size='large'
+        size={size}
         variant='extended' 
-        onClick={handleOnClick} 
+        onClick={onClick} 
         className={classes.button}
       >
         <Cancel />
@@ -36,7 +36,7 @@ class CancelButton extends React.Component {
 
 CancelButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleOnClick: PropTypes.func.isRequired
+  // onClick: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(CancelButton)

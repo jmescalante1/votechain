@@ -18,13 +18,13 @@ const styles = theme => ({
 
 class SubmitButton extends React.Component {
   render(){
-    const { handleOnClick, classes } = this.props
+    const { onClick, classes, size } = this.props
 
     return(
       <Fab
-        size='large'
+        size={size}
         variant='extended' 
-        onClick={handleOnClick} 
+        onClick={onClick} 
         className={classes.button}
       >
         <Done />
@@ -36,7 +36,7 @@ class SubmitButton extends React.Component {
 
 SubmitButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleOnClick: PropTypes.func.isRequired
+  // onClick: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(SubmitButton)

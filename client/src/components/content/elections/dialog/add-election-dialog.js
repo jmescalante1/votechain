@@ -13,8 +13,6 @@ import CancelButton from '../../../customized/buttons/cancel'
 import SubmitButton from '../../../customized/buttons/submit'
 import CustomizedTextField from '../../../customized/forms/textfield'
 
-// Edit Dialog actions positioning
-
 const styles = theme => ({
   content: {
     width: 500
@@ -70,9 +68,9 @@ class AddElectionDialog extends React.Component {
             justify='flex-end'
             spacing={16}
           >
-            <Grid item><CancelButton handleOnClick={handleClickCloseDialog} /></Grid>
+            <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton handleOnClick={handleClickCloseDialog} /></Grid>
+            <Grid item><SubmitButton onClick={handleClickCloseDialog} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+// import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -18,6 +19,8 @@ import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
 
 import CustomizedTextField from '../../../customized/forms/textfield'
+import CancelButton from '../../../customized/buttons/cancel'
+import SubmitButton from '../../../customized/buttons/submit'
 
 const styles = theme => ({
   root: {
@@ -59,6 +62,9 @@ const styles = theme => ({
     '&:hover': {
       color: '#b71c1c'
     }
+  },
+  noTextDecoration: {
+    textDecoration: 'none'
   }
 })
 
@@ -148,74 +154,100 @@ class EditPageContent extends React.Component {
           </FormControl>
         </Grid>
         
-        <Grid item className={classNames(classes.formItem, classes.candidateForm)}>
-          <Grid
-            container
-            direction='column'
-            alignItems='flex-start'
-            justify='flex-start'
-          >
-            <Grid item className={classes.fullWidth}>
-              <Grid
-                container
-                direction='row'
-                alignItems='center'
-                justify='space-between'
-              >
-                <Grid item>
-                  <Typography className={classes.candidateListLabel}>Candidates: </Typography>
-                </Grid>
+        <Grid
+          className={classNames(classes.formItem, classes.candidateForm)}
+          container
+          direction='column'
+          alignItems='flex-start'
+          justify='flex-start'
+        >
+          <Grid item className={classes.fullWidth}>
+            <Grid
+              container
+              direction='row'
+              alignItems='center'
+              justify='space-between'
+            >
+              <Grid item>
+                <Typography className={classes.candidateListLabel}>Candidates: </Typography>
+              </Grid>
 
-                <Grid item>
-                  <Tooltip
-                    title='Add new candidate'
-                    placement='left'
+              <Grid item>
+                <Tooltip
+                  title='Add new candidate'
+                  placement='left'
+                >
+                  <Fab 
+                    size='small' 
+                    className={classes.addButton}
                   >
-                    <Fab 
-                      size='small' 
-                      className={classes.addButton}
-                    >
-                      <Add className={classes.addIcon} />
-                    </Fab>
-                  </Tooltip>
-                </Grid>
+                    <Add className={classes.addIcon} />
+                  </Fab>
+                </Tooltip>
               </Grid>
             </Grid>
-
-            {position.candidates.map((candidate, index) => {  
-              return (
-                <Grid item className={classes.fullWidth} key={index}>
-                  <Grid
-                    container
-                    direction='row'
-                    alignItems='center'
-                    justify='flex-start'
-                  >
-                    <Grid item xs={2}></Grid>
-
-                    <Grid item xs={5}>
-                      <Typography>{candidate}</Typography>
-                    </Grid>
-
-                    <Grid item xs={5}>
-                      <Tooltip 
-                        title='Remove candidate'
-                        placement='right'
-                      >
-                        <IconButton className={classes.deleteButton}>
-                          <Delete className={classes.deleteIcon}/>
-                        </IconButton>
-                      </Tooltip>
-                    </Grid>
-                  </Grid>  
-                </Grid>
-              )
-            })}
           </Grid>
+
+          {position.candidates.map((candidate, index) => {  
+            return (
+              <Grid item className={classes.fullWidth} key={index}>
+                <Grid
+                  container
+                  direction='row'
+                  alignItems='center'
+                  justify='flex-start'
+                >
+                  <Grid item xs={2}></Grid>
+
+                  <Grid item xs={5}>
+                    <Typography>{candidate}</Typography>
+                  </Grid>
+
+                  <Grid item xs={5}>
+                    <Tooltip 
+                      title='Remove candidate'
+                      placement='right'
+                    >
+                      <IconButton className={classes.deleteButton}>
+                        <Delete className={classes.deleteIcon}/>
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </Grid>  
+              </Grid>
+            )
+          })}
         </Grid>
 
-        <Grid item>
-            
+        <Grid
+          className={classes.formItem}
+          container
+          direction='row'
+          alignItems='center'
+          justify='flex-end'
+          spacing={8}
+        >
+          <Grid item>
+            {/* <Link
+              className={classes.noTextDecoration}
+              to={{
+                pathname: editPageRoute.path,
+                state: {
+                  position: position
+                }
+              }}
+            > */}
+              <CancelButton 
+                size='medium'
+              />
+            {/* </Link> */}
+          </Grid>
+          
+          <Grid item>
+            <SubmitButton 
+              size='medium'
+            />
+          </Grid>
         </Grid>
       </Grid>
     )
