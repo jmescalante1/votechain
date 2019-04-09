@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
@@ -7,13 +7,11 @@ import PositionContentBody from './position-content-body'
 import PositionContentHeader from './position-content-header'
 
 const styles = theme => ({
-  root: {
+  root: {},
+  paper: {
     borderStyle: 'solid',
     borderWidth: 5,
     borderColor: '#006064',
-    width: '90%',
-    margin: 'auto',
-    marginTop: theme.spacing.unit * 4
   },
 })
 
@@ -22,15 +20,15 @@ class PositionContent extends Component {
     const { classes, election, electionData } = this.props
 
     return (
-      <Fragment>
-        {election && <Paper className={classes.root}>
+      <div className={classes.root}>
+        {election && <Paper className={classes.paper}>
           <PositionContentHeader />
           <PositionContentBody 
             election={election}
             electionData={electionData}
           />
         </Paper>}
-      </Fragment>
+      </div>
     );
   }
 }

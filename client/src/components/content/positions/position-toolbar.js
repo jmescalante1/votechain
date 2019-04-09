@@ -27,11 +27,7 @@ const selectStyles = {
 }
 
 const styles = theme => ({
-  root: {
-    marginTop: theme.spacing.unit * 4,
-    margin: 'auto',
-    width: '90%'
-  },
+  root: {},
   statusName: {
     fontSize: 18,
   },
@@ -137,7 +133,7 @@ class PositionToolbar extends React.Component {
 
 PositionToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  
+
   election: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,

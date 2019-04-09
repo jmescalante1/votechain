@@ -1,21 +1,35 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
 
 import PositionToolbar from './position-toolbar'
 import PositionContent from './position-content'
 
 const styles = theme => ({
- 
+  positionToolbar: {
+    marginTop: theme.spacing.unit * 4,
+    margin: 'auto',
+    width: '90%'
+  }, 
+  positionContent: {
+    marginTop: theme.spacing.unit * 4,
+    width: '90%',
+    margin: 'auto',
+  },
 })
 
 class Position extends React.Component {
   render() {
-    const { election, handleElectionSelectChange, electionList, electionData } = this.props
+    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
     
     return(
       <Fragment>
         <PositionToolbar 
+          classes={{
+            root: classes.positionToolbar
+          }}
+
           election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
@@ -23,6 +37,10 @@ class Position extends React.Component {
         />
 
         <PositionContent 
+          classes={{
+            root: classes.positionContent
+          }}
+          
           election={election}
           electionData={electionData}
         />
