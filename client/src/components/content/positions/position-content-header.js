@@ -4,13 +4,14 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
-import AddPositionButton from '../../customized/buttons/add-position'
+import AddPositionButton from '../../customized/buttons/add'
 
 const styles = theme => ({
   root: {
-    marginLeft: theme.spacing.unit * 2,
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
   },
   label: {
     fontSize: 30,
@@ -35,7 +36,11 @@ class PositionContentHeader extends Component {
         </Grid>
 
         <Grid item>
-      
+          <AddPositionButton 
+            tooltipTitle='Add new position'
+            placement='left'
+            size='large'
+          />
         </Grid>
       </Grid>
     )
