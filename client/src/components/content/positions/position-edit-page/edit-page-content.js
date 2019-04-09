@@ -167,6 +167,7 @@ class EditPageContent extends React.Component {
                   tooltipTitle='Add new candidate'
                   placement='left'
                   size='small'
+                  onClick={() => {}}
                 />
               </Grid>
             </Grid>
@@ -189,7 +190,7 @@ class EditPageContent extends React.Component {
 
                   <Grid item xs={5}>
                     <Tooltip 
-                      title='Remove candidate'
+                      title={'Remove ' + candidate}
                       placement='right'
                     >
                       <IconButton className={classes.deleteButton}>
