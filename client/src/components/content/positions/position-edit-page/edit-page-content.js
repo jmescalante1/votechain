@@ -5,7 +5,6 @@ import classNames from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Fab from '@material-ui/core/Fab'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Grid from '@material-ui/core/Grid'
@@ -15,12 +14,12 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
-import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
 
 import CustomizedTextField from '../../../customized/forms/textfield'
 import CancelButton from '../../../customized/buttons/cancel'
 import SubmitButton from '../../../customized/buttons/submit'
+import AddButton from '../../../customized/buttons/add'
 
 const styles = theme => ({
   root: {
@@ -45,15 +44,6 @@ const styles = theme => ({
   },
   candidateListLabel: {
     fontSize: 16,
-  },
-  addIcon: {
-    color: '#fafafa',
-  },
-  addButton: {
-    backgroundColor: '#4caf50',
-    '&:hover': {
-      backgroundColor: '#1b5e20'
-    }
   },
   deleteButton: {
     color: '#f44336',
@@ -173,17 +163,11 @@ class EditPageContent extends React.Component {
               </Grid>
 
               <Grid item>
-                <Tooltip
-                  title='Add new candidate'
+                <AddButton 
+                  tooltipTitle='Add new candidate'
                   placement='left'
-                >
-                  <Fab 
-                    size='small' 
-                    className={classes.addButton}
-                  >
-                    <Add className={classes.addIcon} />
-                  </Fab>
-                </Tooltip>
+                  size='small'
+                />
               </Grid>
             </Grid>
           </Grid>
