@@ -55,10 +55,14 @@ class CustomizedTextField extends React.Component {
 
 CustomizedTextField.propTypes = {
   classes: PropTypes.object.isRequired,
+
   variant: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+
+  required: PropTypes.bool,
+  fullWidth: PropTypes.bool,
 }
 
 export default withStyles(styles)(CustomizedTextField)

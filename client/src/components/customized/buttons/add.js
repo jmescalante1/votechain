@@ -21,7 +21,7 @@ const styles = theme => ({
 
 class CustomizedAddButton extends Component {
   render() {
-    const { classes, tooltipTitle, placement, size } = this.props
+    const { classes, tooltipTitle, placement, size, onClick } = this.props
 
     return (
       <Tooltip
@@ -31,6 +31,7 @@ class CustomizedAddButton extends Component {
         <Fab 
           size={size} 
           className={classes.addButton}
+          onClick={onClick}
         >
           <Add className={classes.addIcon} />
         </Fab>
@@ -41,6 +42,7 @@ class CustomizedAddButton extends Component {
 
 CustomizedAddButton.propTypes = {
   classes: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
 
   tooltipTitle: PropTypes.string,
   placement: PropTypes.string,

@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
 
 import PositionContentBody from './position-content-body'
-import PositionContentHeader from './position-content-header'
+import PositionContentHeaderContainer from './position-content-header-container'
 
 const styles = theme => ({
   root: {},
@@ -22,7 +22,7 @@ class PositionContent extends Component {
     return (
       <div className={classes.root}>
         {election && <Paper className={classes.paper}>
-          <PositionContentHeader />
+          <PositionContentHeaderContainer />
           <PositionContentBody 
             election={election}
             electionData={electionData}

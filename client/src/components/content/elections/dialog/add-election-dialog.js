@@ -21,7 +21,7 @@ const styles = theme => ({
     marginTop: 20,
   },
   label: {
-    color: '#006064',
+    color: theme.palette.highlight.main,
     fontWeight: 'bold',
     fontSize: 20
   },
