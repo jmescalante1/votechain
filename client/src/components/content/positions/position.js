@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
@@ -50,7 +50,7 @@ class Position extends React.Component {
     const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
     
     return(
-      <Paper className={classes.root}>
+      <Fragment>
         <PositionToolbar 
           election={election}
           handleElectionSelectChange={handleElectionSelectChange}
@@ -62,7 +62,7 @@ class Position extends React.Component {
           election={election}
           electionData={electionData}
         />
-      </Paper>
+      </Fragment>
     )
   }
 }

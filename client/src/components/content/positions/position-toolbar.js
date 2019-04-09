@@ -28,7 +28,9 @@ const selectStyles = {
 
 const styles = theme => ({
   root: {
-    margin: 40
+    marginTop: theme.spacing.unit * 4,
+    margin: 'auto',
+    width: '90%'
   },
   statusName: {
     fontSize: 18,
@@ -93,13 +95,13 @@ class PositionToolbar extends React.Component {
             spacing={16}
           >
             <Grid item>
-              <Typography className={classes.label}>Position List of </Typography>
+              <Typography className={classes.label}>Election:  </Typography>
             </Grid>
 
             <Grid item style={{width: '60%'}}>
               <Select 
                 options={options} 
-                placeholder={<Typography className={classes.placeholder}>Choose an election</Typography>}
+                placeholder={<Typography className={classes.placeholder}>Select</Typography>}
                 styles={selectStyles}
                 isClearable={true}
                 components={{ DropdownIndicator }}
