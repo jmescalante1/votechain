@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 
 import PositionToolbar from './position-toolbar'
-import PositionContent from './position-content'
+import PositionContent from './position-content/position-content'
 
 const styles = theme => ({
   positionToolbar: {

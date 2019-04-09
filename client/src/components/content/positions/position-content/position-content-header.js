@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
-import AddPositionButton from '../../customized/buttons/add'
-import AddPositionDialog from '../../customized/dialogs/add-position'
+import AddPositionButton from '../../../customized/buttons/add'
+import AddPositionDialog from '../../../customized/dialogs/add-position'
 
 const styles = theme => ({
   root: {

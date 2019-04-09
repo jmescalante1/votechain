@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Edit from '@material-ui/icons/Edit'
 import Delete from '@material-ui/icons/Delete'
 
-import editPageRoute from './position-edit-page/edit-page-route'
+import editPageRoute from '../position-edit-page/edit-page-route'
 
 const styles = theme => ({
   divider: {
