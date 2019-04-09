@@ -137,6 +137,7 @@ class PositionToolbar extends React.Component {
 
 PositionToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  
   election: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,

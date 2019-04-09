@@ -6,7 +6,6 @@ import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
 
 import Edit from '@material-ui/icons/Edit'
@@ -15,14 +14,6 @@ import Delete from '@material-ui/icons/Delete'
 import editPageRoute from './position-edit-page/edit-page-route'
 
 const styles = theme => ({
-  root: {
-    borderStyle: 'solid',
-    borderWidth: 5,
-    borderColor: '#006064',
-    width: '90%',
-    margin: 'auto',
-    marginTop: theme.spacing.unit * 4
-  },
   divider: {
     height: 2,
     width: '100%',
@@ -61,7 +52,7 @@ class PositionContentBody extends React.Component {
     const { classes, election, electionData } = this.props
 
     return(
-      <div>
+      <Fragment>
         {election && <div>
           {electionData[election].positions.map((position, index) =>{
             return(
@@ -128,7 +119,7 @@ class PositionContentBody extends React.Component {
             )
           })}
         </div> }
-      </div>
+      </Fragment>
     )
   }
 }

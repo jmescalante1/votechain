@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
@@ -22,7 +22,7 @@ class PositionContent extends Component {
     const { classes, election, electionData } = this.props
 
     return (
-      <div>
+      <Fragment>
         {election && <Paper className={classes.root}>
           <PositionContentHeader />
           <PositionContentBody 
@@ -30,7 +30,7 @@ class PositionContent extends Component {
             electionData={electionData}
           />
         </Paper>}
-      </div>
+      </Fragment>
     );
   }
 }
