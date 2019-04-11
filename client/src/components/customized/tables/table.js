@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -8,18 +8,9 @@ import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
 
-import Edit from '@material-ui/icons/Edit'
-import Delete from '@material-ui/icons/Delete'
-import Pageview from '@material-ui/icons/Pageview'
-import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
-import Stop from '@material-ui/icons/Stop'
-
-import ElectionTableToolbarContainer from './table-toolbar/election-table-toolbar-container'
-import ElectionTableHeader from './election-table-header'
+import TableHeader from '../tables/table-header'
+import TableToolbarContainer from '../tables/table-toolbar-container'
 
 const styles = theme => ({
   root: {
@@ -33,113 +24,39 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto'
   },
-  playButton: {
-    color: 'green'
-  },
-  viewButton: {
-    color: '#2196f3'
-  },
-  deleteButton: {
-    color: 'red'
-  },
-  editButton: {
-    color: 'orange'
-  },
-  stopButton: {
-    color: 'blue'
-  },
+  // playButton: {
+  //   color: 'green'
+  // },
+  // viewButton: {
+  //   color: '#2196f3'
+  // },
+  // deleteButton: {
+  //   color: 'red'
+  // },
+  // editButton: {
+  //   color: 'orange'
+  // },
+  // stopButton: {
+  //   color: 'blue'
+  // },
   action: {
     width: 300
   },
 })
 
-class ElectionTable extends React.Component {
-  constructor() {
-    super()
-
-    this.getActionsAllowed = this.getActionsAllowed.bind(this)
-  }
-
-  getActionsAllowed(status) {
-    const { classes } = this.props
-  
-    let view = {
-      className: classes.viewButton,
-      icon: <Pageview />,
-      tooltipTitle: 'View election details'
-    }
-
-    let play = {
-      className: classes.playButton,
-      icon: <PlayCircleFilled />,
-      tooltipTitle: 'Start this election'
-    }
-
-    let edit = {
-      className: classes.editButton,
-      icon: <Edit />,
-      tooltipTitle: 'Edit election details'
-    }
-
-    let remove = {
-      className: classes.deleteButton,
-      icon: <Delete />,
-      tooltipTitle: 'Delete this election'
-    }
-
-    let stop = {
-      className: classes.stopButton,
-      icon: <Stop />,
-      tooltipTitle: 'Stop the election'
-    }
-
-    const actions = {
-      Pending: [view, play, edit, remove],
-      Ongoing: [view, stop],
-      Finished: [view]
-    }
-
-    let actionsAllowed = actions[status].map((action, index) => {
-      return(
-        <Grid item key={index}>
-          <Tooltip
-            title={action.tooltipTitle}
-            placement='bottom-start'
-            enterDelay={300}
-          >
-            <IconButton className={action.className}>
-              {action.icon}
-            </IconButton>
-          </Tooltip>
-        </Grid>
-      )      
-    })
-    
-    return (
-      <Grid 
-        container
-        direction='row'
-        justify='flex-start'
-        alignItems='center'
-        spacing={0}
-      >
-        {actionsAllowed}
-      </Grid>    
-    )
-  }
-
+class CustomizedTable extends Component {
   render() {
     const { classes, data, headers, order, orderBy, rowsPerPage, page } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
-   
+
     return (
       <Paper className={classes.root}>
-        <ElectionTableToolbarContainer />
+        <TableToolbarContainer />
         
         <div className={classes.tableWrapper}>
           <Table className={classes.table} >
-            <ElectionTableHeader
+            <TableHeader
               headers={headers}
               order={order}
               orderBy={orderBy}
@@ -158,9 +75,9 @@ class ElectionTable extends React.Component {
                       </TableCell>
                       <TableCell align='left'>{row.name}</TableCell>
                       <TableCell align='left'>{row.status}</TableCell>
-                      <TableCell align='left' className={classes.action}>
+                      {/* <TableCell align='left' className={classes.action}>
                         {this.getActionsAllowed(row.status)} 
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   )
                 })}
@@ -188,11 +105,13 @@ class ElectionTable extends React.Component {
   }
 }
 
-
-ElectionTable.propTypes = {
+CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
-  headers: PropTypes.array.isRequired,
+  headers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
+  })).isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
@@ -205,4 +124,4 @@ ElectionTable.propTypes = {
   getSorting: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(ElectionTable)
+export default withStyles(styles)(CustomizedTable)

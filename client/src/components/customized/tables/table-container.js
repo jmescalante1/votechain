@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import electionData from './election-data'
-import ElectionTable from './election-table'
+import electionData from '../../content/elections/election-table/election-data'
+import CustomizedTable from './table'
 
-class ElectionTableContainer extends React.Component {
-  constructor() {
-    super()
-
+class TableContainer extends Component {
+  constructor(props) {
+    super(props)
+    
     this.state = {
       order: 'desc',
       orderBy: 'id',
@@ -72,15 +73,9 @@ class ElectionTableContainer extends React.Component {
 
   render() {
     const { data, order, orderBy, rowsPerPage, page } = this.state
-    const headers = [
-      {id: 'id', label: 'ID'},
-      {id: 'name', label: 'Name'},
-      {id: 'status', label: 'Status'},
-      {id: 'action', label: 'Action'},
-    ]
-
+    const { headers } = this.props
     return (
-      <ElectionTable 
+      <CustomizedTable
         data={data}
         headers={headers}
         order={order}
@@ -93,11 +88,16 @@ class ElectionTableContainer extends React.Component {
         handleChangeRowsPerPage={this.handleChangeRowsPerPage}
         stableSort={this.stableSort}
         getSorting={this.getSorting}
-      />
+      />  
     )
   }
 }
 
+TableContainer.propTypes = {
+  headers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
+  })).isRequired,
+}
 
-
-export default ElectionTableContainer;
+export default TableContainer

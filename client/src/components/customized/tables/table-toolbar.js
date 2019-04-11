@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
 import AddCircle from '@material-ui/icons/AddCircle'
-import { lighten } from '@material-ui/core/styles/colorManipulator'
 
 const toolbarStyles = theme => ({
   root: {
@@ -31,7 +31,7 @@ const toolbarStyles = theme => ({
   },
 })
 
-class ElectionTableToolbar extends React.Component {
+class TableToolbar extends React.Component {
   render() {
     const { classes, handleClickOpenDialog } = this.props
 
@@ -62,9 +62,9 @@ class ElectionTableToolbar extends React.Component {
   }
 }
 
-ElectionTableToolbar.propTypes = {
+TableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleClickOpenDialog: PropTypes.func.isRequired
+  handleClickOpenDialog: PropTypes.func
 }
 
-export default withStyles(toolbarStyles)(ElectionTableToolbar)
+export default withStyles(toolbarStyles)(TableToolbar)

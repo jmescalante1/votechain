@@ -6,7 +6,6 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
 import StatusSymbol from '../elections/status-symbol'
-
 import CustomizedSelect from '../../customized/selectors/select'
 
 const styles = theme => ({
