@@ -1,30 +1,13 @@
 import React from 'react'
-import Select, { components } from 'react-select'
 import PropTypes from 'prop-types'
 
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 import { withStyles } from '@material-ui/core/styles'
 
 import StatusSymbol from '../elections/status-symbol'
 
-const selectStyles = {
-  control: styles => ({
-    ...styles, 
-    backgroundColor: '#fafafa',
-    width: '100%',
-    fontSize: 20,
-  }),
-  placeholder: styles => ({
-    ...styles,
-  }),
-  menu: styles => ({
-    ...styles,
-    width: '100%',
-    fontSize: 18
-  }),
-}
+import CustomizedSelect from '../../customized/selectors/select'
 
 const styles = theme => ({
   root: {},
@@ -38,16 +21,6 @@ const styles = theme => ({
     fontSize: 18
   }
 })
-
-const DropdownIndicator = props => {
-  return (
-    components.DropdownIndicator && (
-      <components.DropdownIndicator {...props}>
-        <ArrowDropDown style={{fontSize: 30}}/>
-      </components.DropdownIndicator>
-    )
-  );
-};
 
 class PositionToolbar extends React.Component {
   constructor(){
@@ -83,28 +56,13 @@ class PositionToolbar extends React.Component {
         alignItems='center'
       >
         <Grid item xs={9}>
-          <Grid 
-            container
-            direction='row'
-            justify='flex-start'
-            alignItems='center'
-            spacing={16}
-          >
-            <Grid item>
-              <Typography className={classes.label}>Election:  </Typography>
-            </Grid>
-
-            <Grid item style={{width: '60%'}}>
-              <Select 
-                options={options} 
-                placeholder={<Typography className={classes.placeholder}>Select</Typography>}
-                styles={selectStyles}
-                isClearable={true}
-                components={{ DropdownIndicator }}
-                onChange={handleElectionSelectChange}
-              />
-            </Grid>
-          </Grid>
+          <CustomizedSelect 
+            options={options}
+            onChange={handleElectionSelectChange}
+            placeholder='Select'
+            label='Election: '
+            isClearable
+          />
         </Grid>
 
         <Grid item xs={3}>      
