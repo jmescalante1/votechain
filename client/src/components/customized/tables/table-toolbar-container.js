@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 import TableToolbar from './table-toolbar'
-import AddElectionDialog from '../../content/elections/dialog/add-election-dialog'
+import AddElectionDialog from '../dialogs/add-election'
 
 class TableToolbarContainer extends React.Component {
   constructor(){
