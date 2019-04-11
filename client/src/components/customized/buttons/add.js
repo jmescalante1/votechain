@@ -42,7 +42,7 @@ class CustomizedAddButton extends Component {
 
 CustomizedAddButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 
   tooltipTitle: PropTypes.string,
   placement: PropTypes.oneOf(['bottom-end', 'bottom-start', 'bottom', 'left-end', 'left-start', 'left', 'right-end', 'right-start', 'right', 'top-end', 'top-start', 'top']),

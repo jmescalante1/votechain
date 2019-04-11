@@ -5,8 +5,6 @@ import classNames from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
 import Grid from '@material-ui/core/Grid'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -14,12 +12,12 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
-import Delete from '@material-ui/icons/Delete'
-
 import CustomizedTextField from '../../../customized/forms/textfield'
 import CancelButton from '../../../customized/buttons/cancel'
 import SubmitButton from '../../../customized/buttons/submit'
 import AddButton from '../../../customized/buttons/add'
+import EditButton from '../../../customized/buttons/edit'
+import DeleteButton from '../../../customized/buttons/delete'
 
 const styles = theme => ({
   root: {
@@ -188,15 +186,17 @@ class EditPageContent extends React.Component {
                     <Typography>{candidate}</Typography>
                   </Grid>
 
-                  <Grid item xs={5}>
-                    <Tooltip 
-                      title={'Remove ' + candidate}
+                  <Grid item xs={5}> 
+                    <EditButton
+                      tooltipTitle='Edit candidate details'
+                      placement='left'
+                      size='small'
+                    />
+                    <DeleteButton
+                      tooltipTitle={'Remove ' + candidate}
                       placement='right'
-                    >
-                      <IconButton className={classes.deleteButton}>
-                        <Delete className={classes.deleteIcon}/>
-                      </IconButton>
-                    </Tooltip>
+                      size='small'
+                    />
                   </Grid>
                 </Grid>  
               </Grid>
@@ -209,8 +209,7 @@ class EditPageContent extends React.Component {
           container
           direction='row'
           alignItems='center'
-          justify='flex-end'
-          spacing={8}
+          justify='space-between'
         >
           <Grid item>
             {/* <Link

@@ -39,7 +39,7 @@ class CancelButton extends React.Component {
 
 CancelButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  // onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 }
 
 export default withStyles(styles)(CancelButton)
