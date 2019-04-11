@@ -14,6 +14,9 @@ const styles = theme => ({
       backgroundColor: '#4caf50'
     }
   },
+  label: {
+    marginLeft: theme.spacing.unit
+  }
 })
 
 class SubmitButton extends React.Component {
@@ -28,7 +31,7 @@ class SubmitButton extends React.Component {
         className={classes.button}
       >
         <Done />
-        Submit
+        <div className={classes.label}>Submit</div>
       </Fab>
     )
   }

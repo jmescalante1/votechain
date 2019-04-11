@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
+import Typography from '@material-ui/core/Typography'
 
 import Cancel from '@material-ui/icons/Cancel'
 
@@ -14,6 +15,9 @@ const styles = theme => ({
       backgroundColor: '#f44336'
     }
   },
+  label: {
+    marginLeft: theme.spacing.unit
+  }
 })
 
 class CancelButton extends React.Component {
@@ -28,7 +32,7 @@ class CancelButton extends React.Component {
         className={classes.button}
       >
         <Cancel />
-        Cancel
+        <div className={classes.label}>Cancel</div>
       </Fab>
     )
   }
