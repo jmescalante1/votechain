@@ -22,13 +22,13 @@ const styles = theme => ({
 
 class CustomizedTextField extends React.Component {
   render() {
-    const { classes, id, variant, label, defaultValue, type, fullWidth, required } = this.props
+    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus } = this.props
 
     return(
       <TextField
         className={classes.root}
         type={type}
-        autoFocus
+        autoFocus={autoFocus}
         required={required}
         id={id}
         label={label}

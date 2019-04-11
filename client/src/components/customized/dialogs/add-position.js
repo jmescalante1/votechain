@@ -75,6 +75,7 @@ class AddPositionDialog extends Component {
                   label='Position Name'
                   fullWidth
                   variant='outlined'
+                  autoFocus
                 /> 
               </Grid>
               

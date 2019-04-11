@@ -165,7 +165,6 @@ class EditPageContent extends React.Component {
                   tooltipTitle='Add new candidate'
                   placement='left'
                   size='small'
-                  onClick={() => {}}
                 />
               </Grid>
             </Grid>
