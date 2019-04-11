@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import electionData from '../../content/elections/election-table/election-data'
-import CustomizedTable from './table'
+import Table from './table'
 
 class TableContainer extends Component {
   constructor(props) {
     super(props)
     
     this.state = {
-      order: 'desc',
-      orderBy: 'id',
-      data: electionData,
+      order: props.defaultOrder,
+      orderBy: props.defaultOrderBy,
       page: 0,
-      rowsPerPage: 5
+      rowsPerPage: props.defaultRowsPerPage
     }
 
     this.handleRequestSort = this.handleRequestSort.bind(this)
@@ -72,16 +70,20 @@ class TableContainer extends Component {
   }
 
   render() {
-    const { data, order, orderBy, rowsPerPage, page } = this.state
-    const { headers } = this.props
+    const { order, orderBy, rowsPerPage, page } = this.state
+    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs } = this.props
     return (
-      <CustomizedTable
+      <Table
         data={data}
         headers={headers}
         order={order}
         orderBy={orderBy}
         rowsPerPage={rowsPerPage}
         page={page}
+        rowsPerPageOptions={rowsPerPageOptions}
+
+        tableTools={tableTools}
+        tableDialogs={tableDialogs}
 
         handleRequestSort={this.handleRequestSort}
         handleChangePage={this.handleChangePage}
@@ -98,6 +100,14 @@ TableContainer.propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
+
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+  defaultOrder: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  defaultOrderBy: PropTypes.string.isRequired,
+  defaultRowsPerPage: PropTypes.number.isRequired,
+
 }
 
 export default TableContainer

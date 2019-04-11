@@ -24,18 +24,15 @@ class TableToolbarContainer extends React.Component {
   }
 
   render() {
+    const { children } = this.props
+
     return(
-      <Fragment>
-        <TableToolbar
-          handleClickOpenDialog={this.handleClickOpenDialog}
-        />
-        <AddElectionDialog 
-          openDialog={this.state.openDialog}
-          handleClickCloseDialog={this.handleClickCloseDialog}
-        />
-      </Fragment>
+      <TableToolbar
+        handleClickOpenDialog={this.handleClickOpenDialog}
+      />
     )
   }
 }
+
 
 export default TableToolbarContainer

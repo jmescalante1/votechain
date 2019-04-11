@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 import TableHeader from '../tables/table-header'
-import TableToolbarContainer from '../tables/table-toolbar-container'
+import TableToolbar from '../tables/table-toolbar'
 
 const styles = theme => ({
   root: {
@@ -46,14 +46,17 @@ const styles = theme => ({
 
 class CustomizedTable extends Component {
   render() {
-    const { classes, data, headers, order, orderBy, rowsPerPage, page } = this.props
+    const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
+    const sortedData = stableSort(data, getSorting(order, orderBy))
 
     return (
       <Paper className={classes.root}>
-        <TableToolbarContainer />
-        
+        <TableToolbar 
+          tableTools={tableTools}
+        />
+          
         <div className={classes.tableWrapper}>
           <Table className={classes.table} >
             <TableHeader
@@ -65,19 +68,15 @@ class CustomizedTable extends Component {
             />
 
             <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
                     <TableRow hover tabIndex={-1} key={row.id}>
-                      <TableCell component='th' scope='row'>
-                        {row.id}
-                      </TableCell>
-                      <TableCell align='left'>{row.name}</TableCell>
-                      <TableCell align='left'>{row.status}</TableCell>
-                      {/* <TableCell align='left' className={classes.action}>
-                        {this.getActionsAllowed(row.status)} 
-                      </TableCell> */}
+                      {Object.keys(row).map(key => { 
+                        return (
+                          <TableCell key={key} align='left'>{row[key]}</TableCell>
+                        )
+                      })}    
                     </TableRow>
                   )
                 })}
@@ -91,7 +90,7 @@ class CustomizedTable extends Component {
         </div>
 
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={rowsPerPageOptions}
           component='div'
           count={data.length}
           rowsPerPage={rowsPerPage}
@@ -100,6 +99,8 @@ class CustomizedTable extends Component {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+
+        {tableDialogs}
       </Paper>
     )
   }
@@ -107,7 +108,7 @@ class CustomizedTable extends Component {
 
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.array.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   headers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
@@ -116,6 +117,8 @@ CustomizedTable.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
+  rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
+
 
   handleRequestSort: PropTypes.func.isRequired,
   handleChangePage: PropTypes.func.isRequired,

@@ -25,6 +25,10 @@ const styles = theme => ({
     fontWeight: 'bold',
     fontSize: 20
   },
+  actions: {
+    paddingLeft: theme.spacing.unit * 1,
+    paddingRight: theme.spacing.unit * 1
+  }
 })
 
 class AddElectionDialog extends React.Component {
@@ -60,13 +64,12 @@ class AddElectionDialog extends React.Component {
           />
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions className={classes.actions}>
           <Grid
             container
             direction='row'
             alignItems='center'
-            justify='flex-end'
-            spacing={16}
+            justify='space-between'
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 

@@ -45,8 +45,8 @@ CustomizedAddButton.propTypes = {
   onClick: PropTypes.func.isRequired,
 
   tooltipTitle: PropTypes.string,
-  placement: PropTypes.string,
-  size: PropTypes.string,
+  placement: PropTypes.oneOf(['bottom-end', 'bottom-start', 'bottom', 'left-end', 'left-start', 'left', 'right-end', 'right-start', 'right', 'top-end', 'top-start', 'top']),
+  size: PropTypes.oneOf(['small','medium','large']),
 };
 
 
