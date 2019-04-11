@@ -33,21 +33,6 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto'
   },
-  playButton: {
-    color: 'green'
-  },
-  viewButton: {
-    color: '#2196f3'
-  },
-  deleteButton: {
-    color: 'red'
-  },
-  editButton: {
-    color: 'orange'
-  },
-  stopButton: {
-    color: 'blue'
-  },
   action: {
     width: 300
   },
@@ -107,7 +92,7 @@ class ElectionTable extends React.Component {
             placement='bottom-start'
             enterDelay={300}
           >
-            <IconButton className={action.className}>
+            <IconButton>
               {action.icon}
             </IconButton>
           </Tooltip>

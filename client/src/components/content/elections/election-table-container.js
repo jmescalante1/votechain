@@ -23,7 +23,6 @@ class ElectionTableContainer extends Component {
   handleClickCloseDialog() {
     this.setState({ openDialog: false })
   }
-  
 
   render() {
     const { openDialog } = this.state
