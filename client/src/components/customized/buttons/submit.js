@@ -39,7 +39,6 @@ class SubmitButton extends React.Component {
 
 SubmitButton.propTypes = {
   classes: PropTypes.object.isRequired,
-  // onClick: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(SubmitButton)

@@ -24,21 +24,6 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto'
   },
-  // playButton: {
-  //   color: 'green'
-  // },
-  // viewButton: {
-  //   color: '#2196f3'
-  // },
-  // deleteButton: {
-  //   color: 'red'
-  // },
-  // editButton: {
-  //   color: 'orange'
-  // },
-  // stopButton: {
-  //   color: 'blue'
-  // },
   action: {
     width: 300
   },

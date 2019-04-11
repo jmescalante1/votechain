@@ -1,21 +1,21 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
 
 import AddCircle from '@material-ui/icons/AddCircle'
-import Edit from '@material-ui/icons/Edit'
-import Delete from '@material-ui/icons/Delete'
-import Pageview from '@material-ui/icons/Pageview'
-import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
-import Stop from '@material-ui/icons/Stop'
 
 import TableContainer from '../../customized/tables/table-container'
 import AddElectionDialog from '../../customized/dialogs/add-election'
+
+import EditButton from '../../customized/buttons/edit'
+import DeleteButton from '../../customized/buttons/delete'
+import StopButton from '../../customized/buttons/stop'
+import PlayButton from '../../customized/buttons/play'
+import ViewButton from '../../customized/buttons/view'
 
 const styles = theme => ({
   actionIcon:{
@@ -27,21 +27,6 @@ const styles = theme => ({
     backgroundColor: '#ffffff',
     color: '#006064'
   },  
-  playButton: {
-    color: 'green'
-  },
-  viewButton: {
-    color: '#2196f3'
-  },
-  deleteButton: {
-    color: 'red'
-  },
-  editButton: {
-    color: 'orange'
-  },
-  stopButton: {
-    color: 'blue'
-  },
 })
 
 class ElectionTable extends Component {
@@ -55,56 +40,51 @@ class ElectionTable extends Component {
   }
 
   getActionsAllowed(status) {
-    const { classes } = this.props
-  
-    let view = {
-      className: classes.viewButton,
-      icon: <Pageview />,
-      tooltipTitle: 'View election details'
-    }
+    let view = 
+      <ViewButton 
+        placement='bottom-start'
+        tooltipTitle='View election details'
+        size='small'
+      />
 
-    let play = {
-      className: classes.playButton,
-      icon: <PlayCircleFilled />,
-      tooltipTitle: 'Start this election'
-    }
+    let play = 
+      <PlayButton 
+        placement='bottom-start'
+        tooltipTitle='Start this election'
+        size='small'
+      />
 
-    let edit = {
-      className: classes.editButton,
-      icon: <Edit />,
-      tooltipTitle: 'Edit election details'
-    }
+    let edit = 
+      <EditButton 
+        placement='bottom-start'
+        tooltipTitle='Edit election details'
+        size='small'
+      />
 
-    let remove = {
-      className: classes.deleteButton,
-      icon: <Delete />,
-      tooltipTitle: 'Delete this election'
-    }
+    let remove = 
+      <DeleteButton 
+        placement='bottom-start'
+        tooltipTitle='Remove this election'
+        size='small'
+      />
 
-    let stop = {
-      className: classes.stopButton,
-      icon: <Stop />,
-      tooltipTitle: 'Stop the election'
-    }
+    let stop = 
+      <StopButton 
+        placement='bottom-start'
+        tooltipTitle='Stop this election'
+        size='small'
+      />
 
-    const actions = {
+    const actionButtons = {
       Pending: [view, play, edit, remove],
       Ongoing: [view, stop],
       Finished: [view]
     }
 
-    let actionsAllowed = actions[status].map((action, index) => {
+    let actionsAllowed = actionButtons[status].map((action, index) => {
       return(
         <Grid item key={index}>
-          <Tooltip
-            title={action.tooltipTitle}
-            placement='bottom-start'
-            enterDelay={300}
-          >
-            <IconButton className={action.className}>
-              {action.icon}
-            </IconButton>
-          </Tooltip>
+          {action}
         </Grid>
       )      
     })
@@ -152,7 +132,7 @@ class ElectionTable extends Component {
   }
 
   createDataPresentation(electionList) {
-    electionList.map((election) => {
+    electionList.forEach((election) => {
       election.action = this.getActionsAllowed(election.status)
     })
 
