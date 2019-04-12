@@ -33,6 +33,11 @@ const styles = theme => ({
   },
   legend: {
     color: 'black'
+  },
+  actions: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   }
 })
 
@@ -142,13 +147,12 @@ class AddPositionDialog extends Component {
             </Grid>
           </DialogContent>
 
-          <DialogActions>
+          <DialogActions className={classes.actions}>
             <Grid
               container
               direction='row'
               alignItems='center'
-              justify='flex-end'
-              spacing={16}
+              justify='space-between'
             >
               <Grid item><CancelButton onClick={onClose} /></Grid>
 

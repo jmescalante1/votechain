@@ -26,8 +26,9 @@ const styles = theme => ({
     fontSize: 20
   },
   actions: {
-    paddingLeft: theme.spacing.unit * 1,
-    paddingRight: theme.spacing.unit * 1
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   }
 })
 

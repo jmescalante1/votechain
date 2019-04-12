@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import ElectionTable from '../elections/election-table'
 
-import electionData from '../elections/election-table/election-data'
+import electionData from './election-data'
 
 class ElectionTableContainer extends Component {
   constructor(props) {
