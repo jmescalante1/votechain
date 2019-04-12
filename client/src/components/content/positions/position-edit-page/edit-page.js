@@ -44,6 +44,7 @@ const styles = theme => ({
 class EditPage extends React.Component {
   render() {
     const { classes, position, hasAbstain, handleAbstainCheckboxChange } = this.props
+    const { openAddCandidateDialog, handleOpenAddCandidateDialog, handleCloseAddCandidateDialog } = this.props
 
     return(
       <Paper className={classes.root}>
@@ -52,6 +53,10 @@ class EditPage extends React.Component {
           position={position}
           hasAbstain={hasAbstain}
           handleAbstainCheckboxChange={handleAbstainCheckboxChange}
+
+          openAddCandidateDialog={openAddCandidateDialog}
+          handleOpenAddCandidateDialog={handleOpenAddCandidateDialog}
+          handleCloseAddCandidateDialog={handleCloseAddCandidateDialog}
         />
       </Paper>
     )
@@ -64,6 +69,10 @@ EditPage.propTypes = {
   position: PropTypes.object.isRequired,
   hasAbstain: PropTypes.bool.isRequired,
   handleAbstainCheckboxChange: PropTypes.func.isRequired,
+
+  openAddCandidateDialog: PropTypes.bool.isRequired,
+  handleOpenAddCandidateDialog: PropTypes.func.isRequired,
+  handleCloseAddCandidateDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(EditPage)

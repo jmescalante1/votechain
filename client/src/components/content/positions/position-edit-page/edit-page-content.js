@@ -18,6 +18,7 @@ import SubmitButton from '../../../customized/buttons/submit'
 import AddButton from '../../../customized/buttons/add'
 import EditButton from '../../../customized/buttons/edit'
 import DeleteButton from '../../../customized/buttons/delete'
+import AddCandidateDialog from '../../../customized/dialogs/add-candidate'
 
 const styles = theme => ({
   root: {
@@ -59,6 +60,7 @@ const styles = theme => ({
 class EditPageContent extends React.Component {
   render() {
     const { classes, position, hasAbstain, handleAbstainCheckboxChange } = this.props
+    const { openAddCandidateDialog, handleOpenAddCandidateDialog, handleCloseAddCandidateDialog } = this.props
 
     return(
       <Grid
@@ -165,6 +167,7 @@ class EditPageContent extends React.Component {
                   tooltipTitle='Add new candidate'
                   placement='left'
                   size='small'
+                  onClick={handleOpenAddCandidateDialog}
                 />
               </Grid>
             </Grid>
@@ -232,6 +235,11 @@ class EditPageContent extends React.Component {
             />
           </Grid>
         </Grid>
+        
+        <AddCandidateDialog 
+          openDialog={openAddCandidateDialog}
+          handleClickCloseDialog={handleCloseAddCandidateDialog}
+        />
       </Grid>
     )
   }
@@ -243,6 +251,10 @@ EditPageContent.propTypes = {
   position: PropTypes.object.isRequired,
   hasAbstain: PropTypes.bool.isRequired,
   handleAbstainCheckboxChange: PropTypes.func.isRequired,
+
+  openAddCandidateDialog: PropTypes.bool.isRequired,
+  handleOpenAddCandidateDialog: PropTypes.func.isRequired,
+  handleCloseAddCandidateDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(EditPageContent)
