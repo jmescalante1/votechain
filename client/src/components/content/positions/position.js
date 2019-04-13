@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
 
-import PositionToolbar from './position-toolbar'
+import ElectionSelector from '../../customized/selectors/election-selector'
 import PositionContent from './position-content/position-content'
 
 const styles = theme => ({
@@ -25,7 +25,7 @@ class Position extends React.Component {
     
     return(
       <Fragment>
-        <PositionToolbar 
+        <ElectionSelector 
           classes={{
             root: classes.positionToolbar
           }}

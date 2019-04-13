@@ -95,7 +95,7 @@ export const electionData = {
       },
       {
         id: 2,
-        name: 'Vice Executive Officer',
+        name: 'CTO',
         maxNoOfCandidatesToBeElected: 1,
         hasAbstain: true,
         candidates: ['Angel', 'Cheska', 'Guen']

@@ -36,7 +36,7 @@ class ElectionTable extends Component {
     this.getActionsAllowed = this.getActionsAllowed.bind(this)
     this.createTableTools = this.createTableTools.bind(this)
     this.createTableDialogs = this.createTableDialogs.bind(this)
-    this.createDataPresentation = this.createDataPresentation.bind(this)
+    this.createTableData = this.createTableData.bind(this)
   }
 
   getActionsAllowed(status) {
@@ -131,7 +131,7 @@ class ElectionTable extends Component {
     )
   }
 
-  createDataPresentation(electionList) {
+  createTableData(electionList) {
     electionList.forEach((election) => {
       election.action = this.getActionsAllowed(election.status)
     })
@@ -144,12 +144,12 @@ class ElectionTable extends Component {
 
     let tableTools = this.createTableTools()
     let tableDialogs = this.createTableDialogs()
-    let modified = this.createDataPresentation(data)
+    let tableData = this.createTableData(data)
       
     return (
       <TableContainer 
         headers={headers}
-        data={modified}
+        data={tableData}
 
         tableTools={tableTools}
         tableDialogs={tableDialogs}
