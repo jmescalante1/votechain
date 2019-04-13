@@ -66,11 +66,6 @@ class CustomizedTable extends Component {
                     </TableRow>
                   )
                 })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={4} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>

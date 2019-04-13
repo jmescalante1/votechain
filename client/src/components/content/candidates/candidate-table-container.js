@@ -38,6 +38,7 @@ class CandidateTableContainer extends Component {
     const candidateList = this.getCandidateList(electionData, election)
 
     const headers = [
+      {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
       {id: 'position', label: 'Position'},
       {id: 'actions', label: 'Actions'}
