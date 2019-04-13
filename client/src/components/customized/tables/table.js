@@ -33,8 +33,8 @@ class CustomizedTable extends Component {
   render() {
     const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
     const sortedData = stableSort(data, getSorting(order, orderBy))
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
 
     return (
       <Paper className={classes.root}>
@@ -66,6 +66,12 @@ class CustomizedTable extends Component {
                     </TableRow>
                   )
                 })}
+
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}  
             </TableBody>
           </Table>
         </div>

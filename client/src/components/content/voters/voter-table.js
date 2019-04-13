@@ -11,7 +11,7 @@ import AddCircle from '@material-ui/icons/AddCircle'
 import TableContainer from '../../customized/tables/table-container'
 import EditButton from '../../customized/buttons/edit'
 import DeleteButton from '../../customized/buttons/delete'
-import AddCandidateDialog from '../../customized/dialogs/add-candidate'
+import AddVoterDialog from '../../customized/dialogs/add-voter'
 
 const styles = theme => ({
   actionIcon:{
@@ -25,7 +25,7 @@ const styles = theme => ({
   },  
 })
 
-class CandidateTable extends Component {
+class VoterTable extends Component {
   constructor() {
     super()
 
@@ -46,7 +46,7 @@ class CandidateTable extends Component {
         <Grid item>    
           <EditButton 
             placement='bottom-start'
-            tooltipTitle='Edit candidate details'
+            tooltipTitle='Edit voter details'
             size='small'
           />
         </Grid>
@@ -54,7 +54,7 @@ class CandidateTable extends Component {
         <Grid item>
           <DeleteButton 
             placement='bottom-start'
-            tooltipTitle='Remove this candidate'
+            tooltipTitle='Remove this voter'
             size='small'
           />
         </Grid>
@@ -62,54 +62,54 @@ class CandidateTable extends Component {
     )
   }
 
-  createTableData(candidateList) {
-    candidateList.forEach((candidate) => {
-      candidate.action = this.getActionsAllowed()
+  createTableData(voterList) {
+    voterList.forEach((voter) => {
+      voter.action = this.getActionsAllowed()
     })
 
-    return candidateList
+    return voterList
   }
   
   createTableTools(){
-    const { classes, handleOpenAddCandidateDialog } = this.props
+    const { classes, handleOpenAddVoterDialog } = this.props
 
     return (
-      <Tooltip title='Add new candidate'>
+      <Tooltip title='Add new voter(s)'>
         <Fab 
           size='large' 
           variant='extended' 
           className={classes.fab}
-          onClick={handleOpenAddCandidateDialog}
+          onClick={handleOpenAddVoterDialog}
         >
           <AddCircle className={classes.actionIcon} />
-          Add Candidate
+          Add Voter
         </Fab>
       </Tooltip>
     )
   }
 
   createTableDialogs(){
-    const { openAddCandidateDialog, handleCloseAddCandidateDialog } = this.props
+    const { openAddVoterDialog, handleCloseAddVoterDialog } = this.props
 
     return (
-      <AddCandidateDialog 
-        openDialog={openAddCandidateDialog}
-        handleClickCloseDialog={handleCloseAddCandidateDialog}
+      <AddVoterDialog 
+        openDialog={openAddVoterDialog}
+        handleClickCloseDialog={handleCloseAddVoterDialog}
       />
     )
   }
   
 
   render() {
-    const { candidateList, headers } = this.props
+    const { voterList, headers } = this.props
 
-    const tableData = this.createTableData(candidateList)
+    const tableData = this.createTableData(voterList)
     const tableTools = this.createTableTools()
     const tableDialogs = this.createTableDialogs()
 
     return (
       <TableContainer 
-        tableName='Candidate List'
+        tableName='Voter List'
         headers={headers}
         data={tableData}
 
@@ -125,17 +125,17 @@ class CandidateTable extends Component {
   }
 }
 
-CandidateTable.propTypes = {
+VoterTable.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
 
-  candidateList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  voterList: PropTypes.arrayOf(PropTypes.object).isRequired,
 
-  openAddCandidateDialog: PropTypes.bool.isRequired,
-  handleOpenAddCandidateDialog: PropTypes.func.isRequired,
-  handleCloseAddCandidateDialog: PropTypes.func.isRequired,
+  openAddVoterDialog: PropTypes.bool.isRequired,
+  handleOpenAddVoterDialog: PropTypes.func.isRequired,
+  handleCloseAddVoterDialog: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(CandidateTable)
+export default withStyles(styles)(VoterTable)
