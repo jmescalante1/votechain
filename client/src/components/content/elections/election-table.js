@@ -148,6 +148,7 @@ class ElectionTable extends Component {
       
     return (
       <TableContainer 
+        tableName='Election List'
         headers={headers}
         data={tableData}
 

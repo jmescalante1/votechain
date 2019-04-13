@@ -31,7 +31,7 @@ const styles = theme => ({
 
 class CustomizedTable extends Component {
   render() {
-    const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs } = this.props
+    const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
     const sortedData = stableSort(data, getSorting(order, orderBy))
@@ -40,6 +40,7 @@ class CustomizedTable extends Component {
       <Paper className={classes.root}>
         <TableToolbar 
           tableTools={tableTools}
+          tableName={tableName}
         />
           
         <div className={classes.tableWrapper}>
@@ -98,6 +99,7 @@ CustomizedTable.propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
+  tableName: PropTypes.string,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
@@ -109,7 +111,7 @@ CustomizedTable.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
   handleChangeRowsPerPage: PropTypes.func.isRequired,
   stableSort: PropTypes.func.isRequired,
-  getSorting: PropTypes.func.isRequired
+  getSorting: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(CustomizedTable)

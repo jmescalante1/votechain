@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
+import CandidateTableContainer from './candidate-table-container'
 
 const styles = theme => ({
   electionSelector: {
@@ -27,6 +28,11 @@ class Candidate extends Component {
           election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
+          electionData={electionData}
+        />
+
+        <CandidateTableContainer 
+          election={election}
           electionData={electionData}
         />
       </div>

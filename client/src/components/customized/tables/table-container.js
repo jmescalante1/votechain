@@ -71,9 +71,10 @@ class TableContainer extends Component {
 
   render() {
     const { order, orderBy, rowsPerPage, page } = this.state
-    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs } = this.props
+    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
     return (
       <Table
+        tableName={tableName}
         data={data}
         headers={headers}
         order={order}
@@ -96,11 +97,11 @@ class TableContainer extends Component {
 }
 
 TableContainer.propTypes = {
+  tableName: PropTypes.string,
   headers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
-
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
 

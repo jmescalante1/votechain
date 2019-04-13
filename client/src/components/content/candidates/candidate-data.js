@@ -6,63 +6,63 @@ export const electionData =  {
     status: 'finished',
     candidates: [
       {
+        id: 1,
         name: 'JM',
-        election: 'CAS',
         position: 'CEO',
       },
       {
+        id: 2,
         name: 'Alley',
-        election: 'CAS',
         position: 'CEO',
       },
       {
+        id: 3,
         name: 'Jere',
-        election: 'CAS',
         position: 'CEO',
       },
       {
+        id: 4,
         name: 'Rose',
-        election: 'CAS',
         position: 'Vice President',
       },
       {
+        id: 5,
         name: 'Timi',
-        election: 'CAS',
         position: 'Vice President',
       },
       {
+        id: 6,
         name: 'Waleed',
-        election: 'CAS',
         position: 'Vice President',
       },
       {
+        id: 7,
         name: 'Angel',
-        election: 'CAS',
         position: 'Secretary',
       },
       {
+        id: 8,
         name: 'Renee',
-        election: 'CAS',
         position: 'Secretary',
       },
       {
+        id: 9,
         name: 'Reena',
-        election: 'CAS',
         position: 'Secretary',
       },
       {
+        id: 10,
         name: 'Alee',
-        election: 'CAS',
         position: 'Treasurer',
       },
       {
+        id: 11,
         name: 'Mika',
-        election: 'CAS',
         position: 'Treasurer',
       },
       {
+        id: 12,
         name: 'David',
-        election: 'CAS',
         position: 'Treasurer',
       },
     ]
@@ -72,63 +72,63 @@ export const electionData =  {
     status: 'ongoing',
     candidates: [
       {
+        id: 13,
         name: 'Vanessa',
-        election: 'CAMP',
         position: 'Chairman',
       },
       {
+        id: 14,
         name: 'Deborah',
-        election: 'CAMP',
         position: 'Chairman',
       },
       {
+        id: 15,
         name: 'Angelika',
-        election: 'CAMP',
         position: 'Chairman',
       },
       {
+        id: 16,
         name: 'Ice',
-        election: 'CAMP',
         position: 'Vice Chairman',
       },
       {
+        id: 17,
         name: 'Nice',
-        election: 'CAMP',
         position: 'Vice Chairman',
       },
       {
+        id: 18,
         name: 'Monica',
-        election: 'CAMP',
         position: 'Public Relation',
       },
       {
+        id: 19,
         name: 'Christian',
-        election: 'CAMP',
         position: 'Public Relation',
       },
       {
+        id: 20,
         name: 'Scarlet',
-        election: 'CAMP',
         position: 'Public Relation',
       },
       {
+        id: 21,
         name: 'Karen',
-        election: 'CAMP',
         position: 'Representatives',
       },
       {
+        id: 22,
         name: 'Chloe',
-        election: 'CAMP',
         position: 'Representatives',
       },
       {
+        id: 23,
         name: 'Charles',
-        election: 'CAMP',
         position: 'Councilors',
       },
       {
+        id: 24,
         name: 'Reuben',
-        election: 'CAMP',
         position: 'Councilors',
       },  
     ]
@@ -137,63 +137,63 @@ export const electionData =  {
     status: 'pending',
     candidates: [
       {
+        id: 25,
         name: 'Anthony',
-        election: 'CN',
         position: 'CEO',
       },
       {
+        id: 26,
         name: 'Antonio',
-        election: 'CN',
         position: 'CEO',
       },
       {
+        id: 27,
         name: 'Carl',
-        election: 'CN',
         position: 'CEO',
       },
       {
+        id: 28,
         name: 'Angel',
-        election: 'CN',
         position: 'CTO',
       },
       {
+        id: 29,
         name: 'Cheska',
-        election: 'CN',
         position: 'CTO',
       },
       {
+        id: 30,
         name: 'Guen',
-        election: 'CN',
         position: 'CTO',
       },
       {
+        id: 31,
         name: 'Mary Joy',
-        election: 'CN',
         position: 'Line Manager',
       },
       {
+        id: 32,
         name: 'Alliah',
-        election: 'CN',
         position: 'Line Manager',
       },
       {
+        id: 33,
         name: 'Ally',
-        election: 'CN',
         position: 'Scrum Master',
       },
       {
+        id: 34,
         name: 'Allyssa',
-        election: 'CN',
         position: 'Scrum Master',
       },
       {
+        id: 35,
         name: 'Jake',
-        election: 'CN',
         position: 'Team Leaders',
       },
       {
+        id: 36,
         name: 'Amy',
-        election: 'CN',
         position: 'Team Leaders',
       },  
     ]

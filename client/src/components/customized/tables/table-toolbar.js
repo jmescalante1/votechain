@@ -20,14 +20,14 @@ const toolbarStyles = theme => ({
 
 class TableToolbar extends React.Component {
   render() {
-    const { classes, tableTools } = this.props
+    const { classes, tableTools, tableName } = this.props
 
     return (
       <Fragment>
         <Toolbar className= {classes.root}>
           <div className={classes.title}>
             <Typography className={classes.title} variant='h6' id='tableTitle'>
-              Election List
+              {tableName}
             </Typography>
           </div>
 
@@ -42,6 +42,7 @@ class TableToolbar extends React.Component {
 
 TableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  tableName: PropTypes.string,
 }
 
 export default withStyles(toolbarStyles)(TableToolbar)
