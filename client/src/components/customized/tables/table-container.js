@@ -38,8 +38,7 @@ class TableContainer extends Component {
   }
 
   handleChangeRowsPerPage(rowsPerPage) {
-    this.setState({ rowsPerPage })
-    console.log(rowsPerPage)
+    this.setState({ rowsPerPage, page: 0 })
   }
 
   stableSort(array, cmp) {
