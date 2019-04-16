@@ -32,7 +32,7 @@ class VoterTableContainer extends Component {
   }
 
   render() {
-    const { electionData, election } = this.props 
+    const { electionData, election, electionList, handleElectionSelectChange } = this.props 
     const { openAddVoterDialog } = this.state
 
     const voterList = this.getVoterList(electionData, election)
@@ -49,6 +49,9 @@ class VoterTableContainer extends Component {
         <VoterTable 
           headers={headers}
           voterList={voterList}
+
+          election={election}
+          electionData={electionData}
 
           openAddVoterDialog={openAddVoterDialog}
           handleOpenAddVoterDialog={this.handleOpenAddVoterDialog}

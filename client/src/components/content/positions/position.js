@@ -30,6 +30,7 @@ class Position extends React.Component {
             root: classes.positionToolbar
           }}
 
+          fontSize={18}
           election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}

@@ -33,12 +33,13 @@ class TableContainer extends Component {
     this.setState({ order, orderBy })
   }
 
-  handleChangePage(event, page) {
+  handleChangePage(page) {
     this.setState({ page })
   }
 
-  handleChangeRowsPerPage(event) {
-    this.setState({ rowsPerPage: event.target.value })
+  handleChangeRowsPerPage(rowsPerPage) {
+    this.setState({ rowsPerPage })
+    console.log(rowsPerPage)
   }
 
   stableSort(array, cmp) {

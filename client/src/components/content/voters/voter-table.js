@@ -90,11 +90,14 @@ class VoterTable extends Component {
 
   createTableDialogs(){
     const { openAddVoterDialog, handleCloseAddVoterDialog } = this.props
+    const { election } = this.props
 
     return (
       <AddVoterDialog 
         openDialog={openAddVoterDialog}
         handleClickCloseDialog={handleCloseAddVoterDialog}
+
+        election={election}
       />
     )
   }

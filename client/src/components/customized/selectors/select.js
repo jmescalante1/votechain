@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 import { withStyles } from '@material-ui/core/styles'
 
-const selectStyles = {
+const defaultSelectStyles = {
   control: styles => ({
     ...styles, 
     backgroundColor: '#fafafa',
@@ -45,7 +45,7 @@ const DropdownIndicator = props => {
 
 class CustomizedSelect extends Component {
   render() {
-    const { classes, label, placeholder, options, isClearable, onChange } = this.props
+    const { classes, label, placeholder, options, isClearable, onChange, selectStyles } = this.props
 
     return (
       <Grid 
@@ -56,14 +56,14 @@ class CustomizedSelect extends Component {
         spacing={16}
       >
         <Grid item>
-          <Typography className={classes.label}>{label}</Typography>
+          {label}
         </Grid>
 
         <Grid item style={{width: '60%'}}>
           <Select 
             options={options} 
-            placeholder={<Typography className={classes.placeholder}>{placeholder}</Typography>}
-            styles={selectStyles}
+            placeholder={placeholder}
+            styles={selectStyles ? selectStyles: defaultSelectStyles}
             isClearable={isClearable}
             components={{ DropdownIndicator }}
             onChange={onChange}
@@ -77,8 +77,8 @@ class CustomizedSelect extends Component {
 CustomizedSelect.propTypes = {
   classes: PropTypes.object.isRequired,
 
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.object.isRequired,
+  placeholder: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   isClearable: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

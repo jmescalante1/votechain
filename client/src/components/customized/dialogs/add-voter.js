@@ -14,9 +14,6 @@ import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 
 const styles = theme => ({
-  content: {
-    width: 500
-  },
   textField: {
     marginTop: 20,
   },
@@ -29,12 +26,19 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-  }
+  },
+  formFields: {
+    marginTop: theme.spacing.unit * 2,
+  },
+  statusName: {
+    fontSize: 15
+  },
 })
 
 class AddElectionDialog extends React.Component {
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { election } = this.props
 
     return (
       <Dialog
@@ -42,25 +46,24 @@ class AddElectionDialog extends React.Component {
         onClose={handleClickCloseDialog}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Add New Candidate</Typography>
+          <Typography className={classes.label}>Add New Voter</Typography>
         </DialogTitle>
         
-        <DialogContent 
-          className={classes.content}
-        >
+        <DialogContent >
           <DialogContentText>
-            Add new candidate by specifying the name.
+          Fill out the form below and click submit to add a new voter.
           </DialogContentText>
 
+          <Typography className={classes.election}>Election: {election}</Typography>
           <CustomizedTextField
             classes={{
-              root: classes.textField
+              root: classes.textField,
             }}
             required
             fullWidth
             type='string'
-            id='candidate-name'
-            label='Candidate Name'
+            id='voter-name'
+            label='Voter Name'
             variant='outlined'
           />
         </DialogContent>
@@ -84,7 +87,9 @@ class AddElectionDialog extends React.Component {
 
 AddElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
-  handleClickCloseDialog: PropTypes.func.isRequired
+  handleClickCloseDialog: PropTypes.func.isRequired,
+  
+  election: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(AddElectionDialog)

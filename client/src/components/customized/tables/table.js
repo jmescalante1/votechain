@@ -5,12 +5,14 @@ import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 import TableHeader from '../tables/table-header'
 import TableToolbar from '../tables/table-toolbar'
+
+import TablePagination from '../tables/table-pagination/table-pagination'
+
 
 const styles = theme => ({
   root: {
@@ -27,6 +29,9 @@ const styles = theme => ({
   action: {
     width: 300
   },
+  tablePaginationSelectIcon: {
+    color: 'red'
+  }
 })
 
 class CustomizedTable extends Component {
@@ -35,7 +40,7 @@ class CustomizedTable extends Component {
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const sortedData = stableSort(data, getSorting(order, orderBy))
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
-
+  
     return (
       <Paper className={classes.root}>
         <TableToolbar 
@@ -76,18 +81,19 @@ class CustomizedTable extends Component {
           </Table>
         </div>
 
-        <TablePagination
+        {tableDialogs} 
+
+        <TablePagination 
           rowsPerPageOptions={rowsPerPageOptions}
-          component='div'
-          count={data.length}
+          rowsPerPageDisplayLabel='Rows per page'
           rowsPerPage={rowsPerPage}
+          count={data.length}
           page={page}
-    
-          onChangePage={handleChangePage}
+
           onChangeRowsPerPage={handleChangeRowsPerPage}
+          onChangePage={handleChangePage}
         />
 
-        {tableDialogs}
       </Paper>
     )
   }

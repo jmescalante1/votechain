@@ -25,6 +25,7 @@ class Candidate extends Component {
             root: classes.electionSelector
           }}
 
+          fontSize={18}
           election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}

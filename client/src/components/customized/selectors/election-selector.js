@@ -13,12 +13,6 @@ const styles = theme => ({
   statusName: {
     fontSize: 18,
   },
-  placeholder: {
-    fontSize: 18
-  },
-  label: {
-    fontSize: 18
-  }
 })
 
 class ElectionSelector extends React.Component {
@@ -37,7 +31,7 @@ class ElectionSelector extends React.Component {
   }
 
   render(){
-    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
+    const { classes, fontSize, election, handleElectionSelectChange, electionList, electionData } = this.props
     
     const options = electionList.map((election) => {
       return {
@@ -45,6 +39,20 @@ class ElectionSelector extends React.Component {
         label: election
       }
     })
+
+    const selectStyles = {
+      control: styles => ({
+        ...styles, 
+        backgroundColor: '#fafafa',
+        width: '100%',
+        fontSize: fontSize,
+      }),
+      menu: styles => ({
+        ...styles,
+        width: '100%',
+        fontSize: fontSize
+      }),
+    }
 
     return(
       <Grid 
@@ -56,10 +64,11 @@ class ElectionSelector extends React.Component {
       >
         <Grid item xs={9}>
           <CustomizedSelect 
+            selectStyles={selectStyles}
             options={options}
             onChange={handleElectionSelectChange}
-            placeholder='Select'
-            label='Election: '
+            placeholder={<Typography style={{fontSize: fontSize}}>Select</Typography>}
+            label={<Typography style={{fontSize: fontSize}}>Election</Typography>}
             isClearable
           />
         </Grid>
