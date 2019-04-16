@@ -35,12 +35,44 @@ const styles = theme => ({
 })
 
 class CustomizedTable extends Component {
+  constructor(props) {
+    super(props)
+    
+    this.generateEmptyRows = this.generateEmptyRows.bind(this)
+  }
+
+  generateEmptyRows(noOfEmptyRows, noOfColumns) {
+    const { rowHeight } = this.props
+
+    let emptyRow = []
+    for(var cell = 0; cell < noOfColumns; cell++){
+      emptyRow.push(<TableCell key={cell}></TableCell>)
+    }
+
+    let emptyRows = []
+    for(var row = 0; row < noOfEmptyRows; row++){
+      emptyRows.push(
+        <TableRow style={{height: rowHeight}} key={row}>
+          {emptyRow.map((cell) => {
+            return (
+              cell
+            )
+          })}  
+        </TableRow>
+      )
+    }
+
+    return emptyRows
+  }
+  
+
   render() {
     const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
+    const { rowHeight } = this.props
     const sortedData = stableSort(data, getSorting(order, orderBy))
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
-  
+    const noOfEmptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
+
     return (
       <Paper className={classes.root}>
         <TableToolbar 
@@ -62,9 +94,9 @@ class CustomizedTable extends Component {
               {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => {
                   return (
-                    <TableRow hover tabIndex={-1} key={row.id}>
+                    <TableRow style={{height: rowHeight}} hover tabIndex={-1} key={row.id}>
                       {Object.keys(row).map(key => { 
-                        return (
+                        return (  
                           <TableCell key={key} align='left'>{row[key]}</TableCell>
                         )
                       })}    
@@ -72,11 +104,26 @@ class CustomizedTable extends Component {
                   )
                 })}
 
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}  
+              {/* {noOfEmptyRows > 0 && (
+                // <TableRow style={{ height: 49 * emptyRows }}>
+                //   <TableCell colSpan={6} />
+                // </TableRow>
+                emptyRows.map((row, index) => {
+                    return (
+                      <div key={index}></div>
+                    )
+                })
+
+              )}   */}
+
+              { noOfEmptyRows > 0 &&
+                this.generateEmptyRows(noOfEmptyRows, headers.length).map((row) => {
+                  return (
+                    row
+                  )
+                })
+              }
+
             </TableBody>
           </Table>
         </div>
@@ -119,6 +166,7 @@ CustomizedTable.propTypes = {
   handleChangeRowsPerPage: PropTypes.func.isRequired,
   stableSort: PropTypes.func.isRequired,
   getSorting: PropTypes.func.isRequired,
+  rowHeight: PropTypes.number
 }
 
 export default withStyles(styles)(CustomizedTable)

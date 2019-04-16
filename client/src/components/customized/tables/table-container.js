@@ -72,7 +72,7 @@ class TableContainer extends Component {
 
   render() {
     const { order, orderBy, rowsPerPage, page } = this.state
-    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
+    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs, tableName, rowHeight } = this.props
     return (
       <Table
         tableName={tableName}
@@ -92,6 +92,8 @@ class TableContainer extends Component {
         handleChangeRowsPerPage={this.handleChangeRowsPerPage}
         stableSort={this.stableSort}
         getSorting={this.getSorting}
+
+        rowHeight={rowHeight}
       />  
     )
   }
@@ -110,6 +112,7 @@ TableContainer.propTypes = {
   defaultOrderBy: PropTypes.string.isRequired,
   defaultRowsPerPage: PropTypes.number.isRequired,
 
+  rowHeight: PropTypes.number
 }
 
 export default TableContainer

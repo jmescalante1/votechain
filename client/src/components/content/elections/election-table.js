@@ -20,12 +20,12 @@ import ViewButton from '../../customized/buttons/view'
 const styles = theme => ({
   actionIcon:{
     marginRight: theme.spacing.unit,
-    color: '#006064'
+    color: '#006064',
   },
   fab: {
     margin: theme.spacing.unit,
     backgroundColor: '#ffffff',
-    color: '#006064'
+    color: '#006064',
   },  
 })
 
@@ -159,6 +159,8 @@ class ElectionTable extends Component {
         defaultOrder='asc'
         defaultOrderBy='id'
         defaultRowsPerPage={8}
+
+        rowHeight={60}
       />
     )
   }

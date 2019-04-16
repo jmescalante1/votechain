@@ -57,8 +57,8 @@ class ChangePage extends Component {
 ChangePage.propTypes = {
   page: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
-  rowsPerPage: PropTypes.func.isRequired,
-  count: PropTypes.func.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired
 }
 
 export default withStyles(styles)(ChangePage)
