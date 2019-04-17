@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Select, { components } from 'react-select'
 
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 import { withStyles } from '@material-ui/core/styles'
@@ -25,12 +24,12 @@ const defaultSelectStyles = {
 }
 
 const styles = theme => ({
-  placeholder: {
-    fontSize: 18
-  },
-  label: {
-    fontSize: 18
-  }
+  // placeholder: {
+  //   fontSize: 18
+  // },
+  // label: {
+  //   fontSize: 18
+  // }
 })
 
 const DropdownIndicator = props => {
@@ -45,7 +44,7 @@ const DropdownIndicator = props => {
 
 class CustomizedSelect extends Component {
   render() {
-    const { classes, label, placeholder, options, isClearable, onChange, selectStyles } = this.props
+    const { label, placeholder, options, isClearable, onChange, selectStyles } = this.props
 
     return (
       <Grid 

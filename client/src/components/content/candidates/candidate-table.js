@@ -120,6 +120,8 @@ class CandidateTable extends Component {
         defaultOrder='asc'
         defaultOrderBy='name'
         defaultRowsPerPage={8}
+
+        rowHeight={60}
       />
     )
   }

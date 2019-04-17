@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from "react-redux"
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -6,6 +7,8 @@ import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUs
 
 import Main from './components/main/main'
 import 'typeface-roboto'
+
+import { getWeb3 } from './actions/web3'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -30,13 +33,30 @@ const theme = createMuiTheme({
   },
 })
 
-const App = () => (
-  <MuiThemeProvider theme={theme}>
-    <Main />
-  </MuiThemeProvider>
-)
+class App extends React.Component {
+  async componentDidMount() {
+    await this.props.getWeb3()
+  }
 
-export default App
+  render() {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Main />
+      </MuiThemeProvider>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  web3: state.web3.web3,
+  web3Error: state.web3.web3Error
+});
+
+const mapDispatchToProps = {
+  getWeb3
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 // import React from 'react';

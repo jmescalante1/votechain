@@ -13,7 +13,6 @@ import TableToolbar from '../tables/table-toolbar'
 
 import TablePagination from '../tables/table-pagination/table-pagination'
 
-
 const styles = theme => ({
   root: {
     width: '90%',
@@ -65,7 +64,6 @@ class CustomizedTable extends Component {
     return emptyRows
   }
   
-
   render() {
     const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
@@ -103,19 +101,7 @@ class CustomizedTable extends Component {
                     </TableRow>
                   )
                 })}
-
-              {/* {noOfEmptyRows > 0 && (
-                // <TableRow style={{ height: 49 * emptyRows }}>
-                //   <TableCell colSpan={6} />
-                // </TableRow>
-                emptyRows.map((row, index) => {
-                    return (
-                      <div key={index}></div>
-                    )
-                })
-
-              )}   */}
-
+                
               { noOfEmptyRows > 0 &&
                 this.generateEmptyRows(noOfEmptyRows, headers.length).map((row) => {
                   return (
@@ -159,7 +145,6 @@ CustomizedTable.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
-
 
   handleRequestSort: PropTypes.func.isRequired,
   handleChangePage: PropTypes.func.isRequired,

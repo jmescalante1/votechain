@@ -13,6 +13,8 @@ import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 
+// import { addElection } from '../../../actions/election'
+
 const styles = theme => ({
   content: {
     width: 500
@@ -33,6 +35,19 @@ const styles = theme => ({
 })
 
 class AddElectionDialog extends React.Component {
+  constructor(props) {
+    super(props)
+  
+    this.addElection = this.addElection.bind(this)
+  }
+  
+  addElection() {
+    const { handleClickCloseDialog } = this.props
+
+    handleClickCloseDialog()
+    // await addElection()
+  }
+
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
 
@@ -74,7 +89,7 @@ class AddElectionDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={handleClickCloseDialog} /></Grid>
+            <Grid item><SubmitButton onClick={this.addElection} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -86,5 +101,13 @@ AddElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired
 }
+
+// const mapStateToProps = state => ({
+  
+// });
+
+// const mapDispatchToProps = {
+//   addElection,
+// }
 
 export default withStyles(styles)(AddElectionDialog)
