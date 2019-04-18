@@ -9,6 +9,8 @@ import Main from './components/main/main'
 import 'typeface-roboto'
 
 import { getWeb3 } from './actions/web3'
+import { getVotechainContract } from './actions/contract'
+import { fetchElectionList, addElectionUI } from './actions/election'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -35,7 +37,22 @@ const theme = createMuiTheme({
 
 class App extends React.Component {
   async componentDidMount() {
-    await this.props.getWeb3()
+    await this.props.getWeb3() // save the web3 to redux store
+    
+    if(this.props.web3)
+      await this.props.getVotechainContract(this.props.web3) // save the votechain contract to redux store
+
+    // Setup solidity event listeners
+    if(this.props.votechain) {
+      this.props.votechain.events.AddElection({}, async (error, event) => {
+        let electionKey = event.returnValues.electionKey
+        this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+      })
+    }
+
+    // fetch data
+    this.props.fetchElectionList(this.props.web3, this.props.votechain)
+
   }
 
   render() {
@@ -49,11 +66,14 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   web3: state.web3.web3,
-  web3Error: state.web3.web3Error
+  votechain: state.contract.votechain
 });
 
 const mapDispatchToProps = {
-  getWeb3
+  getWeb3,
+  getVotechainContract,
+  fetchElectionList,
+  addElectionUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -99,6 +99,7 @@ contract Votechain {
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
     }
 
+
     struct Vote {
         uint256 keyIndex;
         uint256 electionKey;
@@ -114,6 +115,10 @@ contract Votechain {
         uint256[] voteKeyList; // voters who voted for this particular abstain
         mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
     }
+
+    
+    event AddElection ( uint256 electionKey );
+
 
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
@@ -181,6 +186,7 @@ contract Votechain {
         electionList[electionKey].name = name;
         electionList[electionKey].keyIndex = electionKeyList.push(electionKey).sub(1);
         
+        emit AddElection(electionKey);
         return electionKey;
     }
 
@@ -625,6 +631,30 @@ contract Votechain {
 
     function genAbstainKey() private returns(uint256) {
         return abstainKeyCounter = abstainKeyCounter.add(1);
+    }
+
+    function getNoOfElections() public view returns(uint256) {
+        return electionKeyList.length;
+    }
+
+    function getNoOfPositions() public view returns(uint256) {
+        return positionKeyList.length;
+    }
+
+    function getNoOfCandidates() public view returns(uint256) {
+        return candidateKeyList.length;
+    }
+
+    function getNoOfVoters() public view returns(uint256) {
+        return voterKeyList.length;
+    }
+
+    function getNoOfAdmins() public view returns(uint256) {
+        return adminKeyList.length;
+    }
+
+    function getNoOfOfficials() public view returns(uint256) {
+        return officialKeyList.length;
     }
 
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {

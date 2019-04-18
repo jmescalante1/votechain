@@ -36,7 +36,7 @@ const styles = theme => ({
   }
 })
 
-class AddElectionDialog extends React.Component {
+class EditElectionDialog extends React.Component {
   constructor(props) {
     super(props)
 
@@ -44,16 +44,13 @@ class AddElectionDialog extends React.Component {
       electionName: ''
     }
 
-    this.addElection = this.addElection.bind(this)
+    this.editElection = this.editElection.bind(this)
     this.onChange = this.onChange.bind(this)
   }
   
-  addElection() {
+  editElection() {
     const { handleClickCloseDialog, addElectionVotechain, web3, votechain } = this.props
-    const { electionName } = this.state
-
-    addElectionVotechain(web3, votechain, electionName)
-    handleClickCloseDialog()
+    
   }
 
   onChange(event) {
@@ -62,21 +59,21 @@ class AddElectionDialog extends React.Component {
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-
+  
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Add Election</Typography>
+          <Typography className={classes.label}>Edit Election</Typography>
         </DialogTitle>
         
         <DialogContent 
           className={classes.content}
         >
           <DialogContentText>
-            Add new election by specifying its name
+            Modify the fields below and click submit to apply changes.
           </DialogContentText>
 
           <CustomizedTextField
@@ -110,9 +107,9 @@ class AddElectionDialog extends React.Component {
   }
 }
 
-AddElectionDialog.propTypes = {
+EditElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
-  handleClickCloseDialog: PropTypes.func.isRequired
+  handleClickCloseDialog: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -124,4 +121,4 @@ const mapDispatchToProps = {
   addElectionVotechain,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddElectionDialog))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditElectionDialog))

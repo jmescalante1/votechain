@@ -52,9 +52,9 @@ export function getWeb3() {
 
     try {
       const web3 = await buildWeb3()
-      return onSuccess(web3)
+      onSuccess(web3)
     } catch (error) {
-      return onError(error)
+      onError(error)
     }
     
   }

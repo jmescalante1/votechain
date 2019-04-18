@@ -22,7 +22,7 @@ const styles = theme => ({
 
 class CustomizedTextField extends React.Component {
   render() {
-    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus } = this.props
+    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus, onChange } = this.props
 
     return(
       <TextField
@@ -48,6 +48,8 @@ class CustomizedTextField extends React.Component {
             focused: classes.cssFocused
           }
         }}
+
+        onChange={onChange}
       />
     )
   }
@@ -63,6 +65,8 @@ CustomizedTextField.propTypes = {
 
   required: PropTypes.bool,
   fullWidth: PropTypes.bool,
+
+  onChange: PropTypes.func
 }
 
 export default withStyles(styles)(CustomizedTextField)

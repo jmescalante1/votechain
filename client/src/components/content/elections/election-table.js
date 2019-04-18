@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import Fab from '@material-ui/core/Fab'
@@ -39,9 +39,12 @@ class ElectionTable extends Component {
     this.createTableData = this.createTableData.bind(this)
   }
 
-  getActionsAllowed(status) {
+  getActionsAllowed(election) {
+    const { handleOpenEditElectionDialog } = this.props
+
     let view = 
       <ViewButton 
+        id={election.id}
         placement='bottom-start'
         tooltipTitle='View election details'
         size='small'
@@ -49,6 +52,7 @@ class ElectionTable extends Component {
 
     let play = 
       <PlayButton 
+        id={election.id}  
         placement='bottom-start'
         tooltipTitle='Start this election'
         size='small'
@@ -56,6 +60,8 @@ class ElectionTable extends Component {
 
     let edit = 
       <EditButton 
+        onClick={() => handleOpenEditElectionDialog(election.id)}
+        id={election.id}
         placement='bottom-start'
         tooltipTitle='Edit election details'
         size='small'
@@ -63,6 +69,7 @@ class ElectionTable extends Component {
 
     let remove = 
       <DeleteButton 
+        id={election.id}
         placement='bottom-start'
         tooltipTitle='Remove this election'
         size='small'
@@ -70,6 +77,7 @@ class ElectionTable extends Component {
 
     let stop = 
       <StopButton 
+        id={election.id}
         placement='bottom-start'
         tooltipTitle='Stop this election'
         size='small'
@@ -81,7 +89,7 @@ class ElectionTable extends Component {
       Finished: [view]
     }
 
-    let actionsAllowed = actionButtons[status].map((action, index) => {
+    let actionsAllowed = actionButtons[election.status].map((action, index) => {
       return(
         <Grid item key={index}>
           {action}
@@ -103,7 +111,7 @@ class ElectionTable extends Component {
   }
 
   createTableTools() {
-    const { classes, handleClickOpenDialog } = this.props
+    const { classes, handleOpenAddElectionDialog } = this.props
 
     return (
       <Tooltip title='Add new election'>
@@ -111,7 +119,7 @@ class ElectionTable extends Component {
           size='large' 
           variant='extended' 
           className={classes.fab}
-          onClick={handleClickOpenDialog}
+          onClick={handleOpenAddElectionDialog}
         >
           <AddCircle className={classes.actionIcon} />
           Add Election
@@ -121,19 +129,19 @@ class ElectionTable extends Component {
   }
 
   createTableDialogs() {
-    const { openDialog, handleClickCloseDialog } = this.props
+    const { openDialog, handleCloseAddElectionDialog } = this.props
 
     return (
       <AddElectionDialog 
         openDialog={openDialog}
-        handleClickCloseDialog={handleClickCloseDialog}
+        handleClickCloseDialog={handleCloseAddElectionDialog}
       />
     )
   }
 
   createTableData(electionList) {
     electionList.forEach((election) => {
-      election.action = this.getActionsAllowed(election.status)
+      election.action = this.getActionsAllowed(election)
     })
 
     return electionList
@@ -156,7 +164,7 @@ class ElectionTable extends Component {
         tableDialogs={tableDialogs}
 
         rowsPerPageOptions={[8, 15, 25]}
-        defaultOrder='asc'
+        defaultOrder='desc'
         defaultOrderBy='id'
         defaultRowsPerPage={8}
 
@@ -175,8 +183,9 @@ ElectionTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
 
   openDialog: PropTypes.bool.isRequired,
-  handleClickOpenDialog: PropTypes.func.isRequired,
-  handleClickCloseDialog: PropTypes.func.isRequired,
+  handleOpenAddElectionDialog: PropTypes.func.isRequired,
+  handleCloseAddElectionDialog: PropTypes.func.isRequired,
+  handleOpenEditElectionDialog: PropTypes.func.isRequired,
 }
 
 

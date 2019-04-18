@@ -47,7 +47,7 @@ class ChangePage extends Component {
         <NextButton
           size='medium'
           onClick={() => onChangePage(page + 1)}
-          disabled={(page + 1) * rowsPerPage > count ? true: false}
+          disabled={(page + 1) * rowsPerPage >= count ? true: false}
         />
       </Grid>
     )
