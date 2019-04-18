@@ -15,7 +15,7 @@ import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 
-import { addElectionVotechain } from '../../../actions/election'
+import { editElectionVotechain } from '../../../actions/election'
 
 const styles = theme => ({
   content: {
@@ -49,8 +49,11 @@ class EditElectionDialog extends React.Component {
   }
   
   editElection() {
-    const { handleClickCloseDialog, addElectionVotechain, web3, votechain } = this.props
+    const { editElectionVotechain, web3, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
+    const { electionName } = this.state
     
+    editElectionVotechain(web3, votechain, {id: idOfElectionToBeEdited, name: electionName})
+    handleClickCloseDialog()
   }
 
   onChange(event) {
@@ -99,7 +102,7 @@ class EditElectionDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.addElection} /></Grid>
+            <Grid item><SubmitButton onClick={this.editElection} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -110,6 +113,7 @@ class EditElectionDialog extends React.Component {
 EditElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
+  idOfElectionToBeEdited: PropTypes.string
 }
 
 const mapStateToProps = state => ({
@@ -118,7 +122,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  addElectionVotechain,
+  editElectionVotechain,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditElectionDialog))

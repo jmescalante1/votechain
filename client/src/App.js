@@ -10,9 +10,35 @@ import 'typeface-roboto'
 
 import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
-import { fetchElectionList, addElectionUI } from './actions/election'
+import { fetchElectionList, addElectionUI, editElectionUI } from './actions/election'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
+
+// function watchEvents(votechain) {
+//   // votechain.events.AddElection({fromBlock: 'latest'}, async (error, event) => {
+//     // let electionKey = event.returnValues.electionKey
+//     // // this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+//     // console.log(electionKey)
+//   // })
+
+//   // votechain.events.EditElection({}, async(error, event) => {
+//   //   // let electionKey = event.returnValues.electionKey
+//   //   // this.props.editElectionUI(this.props.web3, this.props.votechain, electionKey)
+//   //   console.log('Edit election Ui')
+//   // })
+
+//   votechain.events.allEvents({fromBlock: 0, toBlock: 'latest'}, async(error, result) => {
+//     if(!error) {
+//       if(['AddElection'].includes(result.event)) {
+//         // let electionKey = result.event.returnValues
+//         // this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+//         console.log(result.returnValues.electionKey)
+//       } else if (['EditElection'].includes(result.event)) {
+//         console.log('Edit')
+//       }
+//     }
+//   })
+// }
 
 const theme = createMuiTheme({
   palette: {
@@ -42,17 +68,59 @@ class App extends React.Component {
     if(this.props.web3)
       await this.props.getVotechainContract(this.props.web3) // save the votechain contract to redux store
 
+    // var options = {
+    //   fromBlock: 0,
+    //   address: this.props.web3.eth.defaultAccount,
+    //   topics: ["0x0000000000000000000000000000000000000000000000000000000000000000", null, null]
+    // };
+    // this.props.web3.eth.subscribe('logs', options, function (error, result) {
+    //     if (!error)
+    //         console.log(result);
+    // })
+    //     .on("data", function (log) {
+    //         console.log(log);
+    //     })
+    //     .on("changed", function (log) {
+    // });
+
     // Setup solidity event listeners
     if(this.props.votechain) {
-      this.props.votechain.events.AddElection({}, async (error, event) => {
-        let electionKey = event.returnValues.electionKey
-        this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+      // this.props.votechain.events.AddElection({fromBlock: 'latest'}, async (error, event) => {
+      //   let electionKey = event.returnValues.electionKey
+      //   this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+      //   console.log(electionKey)
+      // })
+      
+
+      // this.props.votechain.events.EditElection({}, async(error, event) => {
+      //   let electionKey = event.returnValues.electionKey
+      //   // this.props.editElectionUI(this.props.web3, this.props.votechain, electionKey)
+      //   console.log('Edit election Ui')
+      // })
+
+      this.props.votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
+        if(!error) {
+          if(['AddElection'].includes(result.event)) {
+            let electionKey = result.returnValues.electionKey
+            this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+            
+          } else if (['EditElection'].includes(result.event)) {
+            let electionKey = result.returnValues.electionKey
+            this.props.editElectionUI(this.props.web3, this.props.votechain, electionKey)
+          }
+        }
       })
+
+      // this.props.votechain.events.EditElection({}, async(error, event) => {
+      //   let electionKey = event.returnValues.electionKey
+      //   this.props.editElectionUI(this.props.web3, this.props.votechain, electionKey)
+      //   console.log('Edit election Ui')
+      // })
     }
 
     // fetch data
     this.props.fetchElectionList(this.props.web3, this.props.votechain)
-
+    console.log('Mount')
   }
 
   render() {
@@ -73,7 +141,8 @@ const mapDispatchToProps = {
   getWeb3,
   getVotechainContract,
   fetchElectionList,
-  addElectionUI
+  addElectionUI,
+  editElectionUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

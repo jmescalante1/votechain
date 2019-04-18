@@ -116,9 +116,8 @@ contract Votechain {
         mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
     }
 
-    
     event AddElection ( uint256 electionKey );
-
+    event EditElection ( uint256 electionKey );
 
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
@@ -274,6 +273,8 @@ contract Votechain {
         returns(bool) 
     {
         electionList[electionKey].name = newName;
+        
+        emit EditElection(electionKey);
         return true;
     }
 

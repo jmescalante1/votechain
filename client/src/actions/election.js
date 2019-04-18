@@ -21,6 +21,8 @@ export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
 export const FETCH_ELECTION_LIST = 'FETCH_ELECTION_LIST'
 export const ADD_ELECTION_UI = 'ADD_ELECTION_UI'
+export const EDIT_ELECTION_VOTECHAIN = 'EDIT_ELECTION_VOTECHAIN'
+export const EDIT_ELECTION_UI = 'EDIT_ELECTION_UI'
 
 export function addElectionVotechain(web3, votechain, electionName){
   return async (dispatch) =>  { 
@@ -75,6 +77,29 @@ export function fetchElectionList(web3, votechain) {
     dispatch({
       type: FETCH_ELECTION_LIST,
       payload: electionList
+    })
+  }
+}
+
+export function editElectionVotechain(web3, votechain, election) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updateElection(election.id, election.name).send({from: firstAccount})
+  
+    dispatch({
+      type: EDIT_ELECTION_VOTECHAIN,
+    })
+  }
+}
+
+export function editElectionUI(web3, votechain, electionKey) {
+  return async (dispatch) => {
+    let editedElection = await getElection(electionKey, votechain)
+
+    dispatch({
+      type: EDIT_ELECTION_UI,
+      editedElection
     })
   }
 }
