@@ -118,6 +118,7 @@ contract Votechain {
 
     event AddElection ( uint256 electionKey );
     event EditElection ( uint256 electionKey );
+    event DeleteElection ( uint256 electionKey );
 
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
@@ -389,6 +390,8 @@ contract Votechain {
             }          
             
         }
+
+        emit DeleteElection(electionKey);
         return indexToDelete;
     }
 

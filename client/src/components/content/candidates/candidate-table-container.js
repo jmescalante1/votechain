@@ -11,17 +11,17 @@ class CandidateTableContainer extends Component {
       openAddCandidateDialog: false
     }
 
-    this.getCandidateList = this.getCandidateList.bind(this)
+    // this.getCandidateList = this.getCandidateList.bind(this)
     this.handleCloseAddCandidateDialog = this.handleCloseAddCandidateDialog.bind(this)
     this.handleOpenAddCandidateDialog = this.handleOpenAddCandidateDialog.bind(this)
   }
   
 
-  getCandidateList(electionData, election){
-    if(electionData[election])
-      return electionData[election].candidates
-    return []
-  }
+  // getCandidateList(electionData, election){
+  //   if(electionData[election])
+  //     return electionData[election].candidates
+  //   return []
+  // }
 
   handleCloseAddCandidateDialog() {
     this.setState({ openAddCandidateDialog: false })
@@ -32,10 +32,10 @@ class CandidateTableContainer extends Component {
   }
 
   render() {
-    const { electionData, election } = this.props 
+    const { election } = this.props 
     const { openAddCandidateDialog } = this.state
 
-    const candidateList = this.getCandidateList(electionData, election)
+    // const candidateList = this.getCandidateList(electionData, election)
 
     const headers = [
       {id: 'id', label: 'ID'},
@@ -48,7 +48,7 @@ class CandidateTableContainer extends Component {
       <div>
         <CandidateTable 
           headers={headers}
-          candidateList={candidateList}
+          // candidateList={candidateList}
 
           openAddCandidateDialog={openAddCandidateDialog}
           handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
@@ -61,7 +61,6 @@ class CandidateTableContainer extends Component {
 
 CandidateTableContainer.propTypes = {
   election: PropTypes.string.isRequired,
-  electionData: PropTypes.object.isRequired,
 }
 
 export default CandidateTableContainer

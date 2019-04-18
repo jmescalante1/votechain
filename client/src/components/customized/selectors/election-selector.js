@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// import { connect } from "react-redux"
 
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -35,8 +36,8 @@ class ElectionSelector extends React.Component {
     
     const options = electionList.map((election) => {
       return {
-        value: election,
-        label: election
+        value: election.id,
+        label: (election.id + ' - ' + election.name)
       }
     })
 
@@ -87,7 +88,7 @@ class ElectionSelector extends React.Component {
 
             <Grid item >
               <StatusSymbol 
-                variant={this.getStatus(electionData[election])} 
+                variant={this.getStatus(election)} 
               />
             </Grid>
           </Grid>
@@ -103,7 +104,15 @@ ElectionSelector.propTypes = {
   election: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
-  electionData: PropTypes.object.isRequired
+  // electionData: PropTypes.object.isRequired
 }
+
+// const mapStateToProps = state => ({
+//   electionList: state.election.electionList
+// });
+
+// const mapDispatchToProps = {
+
+// }
 
 export default withStyles(styles)(ElectionSelector)

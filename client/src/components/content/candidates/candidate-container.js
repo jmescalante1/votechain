@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from "react-redux"
 
 import Candidate from './candidate'
 
-import { electionData, electionList } from './candidate-data'
+// import { electionData, electionList } from './candidate-data'
 
 class CandidateContainer extends React.Component {
   constructor(){
@@ -25,16 +26,24 @@ class CandidateContainer extends React.Component {
 
   render() {
     const { election } = this.state
+    const { electionList } = this.props
 
     return(
       <Candidate 
         election={election}
         handleElectionSelectChange={this.handleElectionSelectChange}
         electionList={electionList}
-        electionData={electionData}
       />
     )
   }
 }
 
-export default CandidateContainer
+const mapStateToProps = state => ({
+  electionList: state.election.electionList
+});
+
+const mapDispatchToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CandidateContainer)

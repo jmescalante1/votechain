@@ -40,7 +40,7 @@ class ElectionTable extends Component {
   }
 
   getActionsAllowed(election) {
-    const { handleOpenEditElectionDialog } = this.props
+    const { handleOpenEditElectionDialog, handleOpenDeleteElectionDialog } = this.props
 
     let view = 
       <ViewButton 
@@ -69,6 +69,7 @@ class ElectionTable extends Component {
 
     let remove = 
       <DeleteButton 
+        onClick={() => handleOpenDeleteElectionDialog(election.id)}
         id={election.id}
         placement='bottom-start'
         tooltipTitle='Remove this election'
@@ -142,6 +143,7 @@ class ElectionTable extends Component {
   createTableData(electionList) {
     electionList.forEach((election) => {
       election.action = this.getActionsAllowed(election)
+      election.id = Number(election.id)
     })
 
     return electionList
@@ -183,9 +185,11 @@ ElectionTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
 
   openDialog: PropTypes.bool.isRequired,
+
   handleOpenAddElectionDialog: PropTypes.func.isRequired,
   handleCloseAddElectionDialog: PropTypes.func.isRequired,
   handleOpenEditElectionDialog: PropTypes.func.isRequired,
+  handleOpenDeleteElectionDialog: PropTypes.func.isRequired,
 }
 
 

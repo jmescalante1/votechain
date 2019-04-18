@@ -101,28 +101,29 @@ class CandidateTable extends Component {
   
 
   render() {
-    const { candidateList, headers } = this.props
+    // const { candidateList, headers } = this.props
 
-    const tableData = this.createTableData(candidateList)
-    const tableTools = this.createTableTools()
-    const tableDialogs = this.createTableDialogs()
+    // const tableData = this.createTableData(candidateList)
+    // const tableTools = this.createTableTools()
+    // const tableDialogs = this.createTableDialogs()
 
     return (
-      <TableContainer 
-        tableName='Candidate List'
-        headers={headers}
-        data={tableData}
+      <div></div>
+      // <TableContainer 
+      //   tableName='Candidate List'
+      //   headers={headers}
+      //   data={tableData}
 
-        tableTools={tableTools}
-        tableDialogs={tableDialogs}
+      //   tableTools={tableTools}
+      //   tableDialogs={tableDialogs}
 
-        rowsPerPageOptions={[8, 15, 25]}
-        defaultOrder='asc'
-        defaultOrderBy='name'
-        defaultRowsPerPage={8}
+      //   rowsPerPageOptions={[8, 15, 25]}
+      //   defaultOrder='asc'
+      //   defaultOrderBy='name'
+      //   defaultRowsPerPage={8}
 
-        rowHeight={60}
-      />
+      //   rowHeight={60}
+      // />
     )
   }
 }

@@ -23,6 +23,8 @@ export const FETCH_ELECTION_LIST = 'FETCH_ELECTION_LIST'
 export const ADD_ELECTION_UI = 'ADD_ELECTION_UI'
 export const EDIT_ELECTION_VOTECHAIN = 'EDIT_ELECTION_VOTECHAIN'
 export const EDIT_ELECTION_UI = 'EDIT_ELECTION_UI'
+export const DELETE_ELECTION_VOTECHAIN = 'DELETE_ELECTION_VOTECHAIN'
+export const DELETE_ELECTION_UI = 'DELETE_ELECTION_UI'
 
 export function addElectionVotechain(web3, votechain, electionName){
   return async (dispatch) =>  { 
@@ -100,6 +102,30 @@ export function editElectionUI(web3, votechain, electionKey) {
     dispatch({
       type: EDIT_ELECTION_UI,
       editedElection
+    })
+  }
+}
+
+export function deleteElectionUI(web3, votechain, electionKey) {
+  return async (dispatch) => {
+    let deletedElection = await getElection(electionKey, votechain)
+
+    dispatch({
+      type: DELETE_ELECTION_UI,
+      deletedElection
+    })
+  }
+}
+
+export function deleteElectionVotechain(web3, votechain, electionKey) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+
+    await votechain.methods.deleteElection(electionKey).send({from: firstAccount})
+  
+    dispatch({
+      type: DELETE_ELECTION_VOTECHAIN,
     })
   }
 }

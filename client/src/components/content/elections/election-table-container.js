@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import ElectionTable from '../elections/election-table'
 import EditElectionDialog from '../../customized/dialogs/edit-election'
+import DeleteElectionDialog from '../../customized/dialogs/delete-election'
 
 import { fetchElectionList } from '../../../actions/election'
 
@@ -13,7 +14,10 @@ class ElectionTableContainer extends Component {
     this.state = {
       openAddElectionDialog: false,
       openEditElectionDialog: false,
-      idOfElectionToBeEdited: null
+      openDeleteElectionDialog: false,
+
+      idOfElectionToBeEdited: null,
+      idOfElectionToBeDeleted: null,
     }
 
     this.handleOpenAddElectionDialog = this.handleOpenAddElectionDialog.bind(this)
@@ -21,6 +25,9 @@ class ElectionTableContainer extends Component {
     
     this.handleOpenEditElectionDialog = this.handleOpenEditElectionDialog.bind(this)
     this.handleCloseEditElectionDialog = this.handleCloseEditElectionDialog.bind(this)
+  
+    this.handleOpenDeleteElectionDialog = this.handleOpenDeleteElectionDialog.bind(this)
+    this.handleCloseDeleteElectionDialog = this.handleCloseDeleteElectionDialog.bind(this)
   }
 
   componentDidMount(){
@@ -48,8 +55,19 @@ class ElectionTableContainer extends Component {
     this.setState({ openEditElectionDialog: false })
   }
 
+  handleOpenDeleteElectionDialog(electionId) {
+    this.setState({
+      openDeleteElectionDialog: true,
+      idOfElectionToBeDeleted: electionId
+    })
+  }
+
+  handleCloseDeleteElectionDialog() {
+    this.setState({ openDeleteElectionDialog: false })
+  }
+
   render() {
-    const { openAddElectionDialog, openEditElectionDialog, idOfElectionToBeEdited } = this.state
+    const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, idOfElectionToBeDeleted, idOfElectionToBeEdited } = this.state
     const { electionList } = this.props
 
     const headers = [
@@ -67,14 +85,20 @@ class ElectionTableContainer extends Component {
           
           openDialog={openAddElectionDialog}
           handleCloseAddElectionDialog={this.handleCloseAddElectionDialog}
-          handleOpenAddElectionDialog={this.handleOpenAddElectionDialog}
 
+          handleOpenAddElectionDialog={this.handleOpenAddElectionDialog}
           handleOpenEditElectionDialog={this.handleOpenEditElectionDialog}
+          handleOpenDeleteElectionDialog={this.handleOpenDeleteElectionDialog}
         />
         <EditElectionDialog 
           openDialog={openEditElectionDialog}
           handleClickCloseDialog={this.handleCloseEditElectionDialog}
           idOfElectionToBeEdited={idOfElectionToBeEdited}
+        />
+        <DeleteElectionDialog 
+          openDialog={openDeleteElectionDialog}
+          handleClickCloseDialog={this.handleCloseDeleteElectionDialog}
+          idOfElectionToBeDeleted={idOfElectionToBeDeleted}
         />
       </Fragment>
     )
