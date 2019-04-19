@@ -6,6 +6,7 @@ async function getPosition(positionKey, votechain) {
   position.name = response.name
   position.maxNoOfCandidatesThatCanBeSelected = response.maxNoOfCandidatesThatCanBeSelected
   position.hasAbstain = response.isAbstainActive
+  console.log('isAbstainActive: ' + response.isAbstainActive)
 
   return position
 }
@@ -37,7 +38,7 @@ export function addPositionVotechain(web3, votechain, position) {
   return async (dispatch) => {
     const accounts = await web3.eth.getAccounts()
     const firstAccount = accounts[0]
-    await votechain.methods.addPositionAt(position.electionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected).send({from: firstAccount})
+    await votechain.methods.addPositionAt(position.electionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: firstAccount})
     
     dispatch( {
       type: ADD_POSITION_VOTECHAIN

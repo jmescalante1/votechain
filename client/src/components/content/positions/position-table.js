@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -37,37 +38,42 @@ class PositionTable extends Component {
 
   getActionsAllowed() {
     return (
-      <Grid
-        container
-        direction='row'
-        justify='flex-start'
-        alignItems='center'   
-      >
-        <Grid item>    
+      // <Grid
+      //   container
+      //   direction='row'
+      //   justify='flex-start'
+      //   alignItems='center'   
+      // >
+        // <Grid item>
+        <div>    
           <EditButton 
             placement='bottom-start'
             tooltipTitle='Edit position details'
             size='small'
           />
-        </Grid>
+        {/* </Grid> */}
 
-        <Grid item>
+        {/* // <Grid item> */}
           <DeleteButton 
             placement='bottom-start'
             tooltipTitle='Remove this position'
             size='small'
           />
-        </Grid>
-      </Grid>
+        </div>
+        // </Grid>
+      // </Grid>
     )
   }
 
   createTableData(positionList) {
-    positionList.forEach((position) => {
+    let positionListClone = cloneDeep(positionList)
+    
+    positionListClone.forEach((position) => {
       position.action = this.getActionsAllowed()
+      position.hasAbstain = position.hasAbstain ? 'Yes' : 'No'
     })
 
-    return positionList
+    return positionListClone
   }
   
   createTableTools(){

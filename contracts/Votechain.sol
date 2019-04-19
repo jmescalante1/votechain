@@ -194,7 +194,7 @@ contract Votechain {
         return electionKey;
     }
 
-    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected) 
+    function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected, bool hasAbstain) 
         public 
         onlyAdminOrOfficial 
         electionKeyExists(electionKey)
@@ -208,6 +208,10 @@ contract Votechain {
         positionList[positionKey].keyIndex = positionKeyList.push(positionKey).sub(1);
 
         electionList[electionKey].positionKeyIndexList[positionKey] = electionList[electionKey].positionKeyList.push(positionKey).sub(1);
+        
+        if(hasAbstain){
+            addAbstainAt(positionKey);
+        }
 
         emit AddPositionAt(electionKey, positionKey);
         return positionKey;

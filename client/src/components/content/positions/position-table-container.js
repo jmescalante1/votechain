@@ -41,6 +41,7 @@ class PositionTableContainer extends Component {
       {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
       {id: 'max-no-of-candidates-to-be-elected', label: 'Max No. of Candidates to be Elected'},
+      {id: 'hasAbstain', label: 'Has abstain'},
       {id: 'actions', label: 'Actions'}
     ]
 

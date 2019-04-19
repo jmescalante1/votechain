@@ -79,8 +79,8 @@ class AddPositionDialog extends Component {
     let position = {
       electionKey: electionId,
       name: positionName,
+      maxNoOfCandidatesThatCanBeSelected,
       hasAbstain,
-      maxNoOfCandidatesThatCanBeSelected
     }
 
     addPositionVotechain(web3, votechain, position)
