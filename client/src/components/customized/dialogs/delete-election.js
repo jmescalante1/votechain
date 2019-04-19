@@ -11,8 +11,8 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
-import CancelButton from '../buttons/cancel'
-import SubmitButton from '../buttons/submit'
+import NoButton from '../buttons/no'
+import YesButton from '../buttons/yes'
 
 import { deleteElectionVotechain } from '../../../actions/election'
 
@@ -78,9 +78,9 @@ class DeleteElectionDialog extends React.Component {
             alignItems='center'
             justify='space-between'
           >
-            <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
-
-            <Grid item><SubmitButton onClick={this.deleteElection} /></Grid>
+            <Grid item><YesButton onClick={this.deleteElection} /></Grid>
+            
+            <Grid item><NoButton onClick={handleClickCloseDialog} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>

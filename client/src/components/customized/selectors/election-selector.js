@@ -20,7 +20,6 @@ class ElectionSelector extends React.Component {
     super(props)
 
     this.getStatus = this.getStatus.bind(this)
-    this.getPlaceholder = this.getPlaceholder.bind(this)
   }
   
   getStatus(electionId) {
@@ -28,20 +27,9 @@ class ElectionSelector extends React.Component {
 
     if(electionId) {
       let index = electionList.findIndex(x => x.id === electionId)
-      return electionList[index].status
-      
+      if(index != -1)
+        return electionList[index].status
     }
-  }
-
-  getPlaceholder(options){
-    const { electionId } = this.props
-    
-    if(electionId){
-      const election = options.find(option => option.value === electionId)
-      return election.id + ' - ' + election.name
-    }
-
-    return 'Select'
   }
 
   render(){
@@ -81,7 +69,7 @@ class ElectionSelector extends React.Component {
             selectStyles={selectStyles}
             options={options}
             onChange={handleElectionSelectChange}
-            placeholder={<Typography style={{fontSize: fontSize}}>{this.getPlaceholder(options)}</Typography>}
+            placeholder={<Typography style={{fontSize: fontSize}}>Select</Typography>}
             label={<Typography style={{fontSize: fontSize}}>Election</Typography>}
             isClearable
           />

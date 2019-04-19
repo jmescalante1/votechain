@@ -146,7 +146,7 @@ class ElectionTable extends Component {
 
     electionListClone.forEach((election) => {
       election.action = this.getActionsAllowed(election)
-      election.id = Number(election.id)
+      election.id = election.id
     })
 
     return electionListClone
