@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from "react-redux"
 
+import { fetchCurrentPositionList } from '../../../actions/position'
+
 import PositionTable from './position-table'
 
 class PositionTableContainer extends Component {
@@ -18,7 +20,8 @@ class PositionTableContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if(this.props.electionId !== prevProps.electionId) {
-      
+      const { web3, votechain, fetchCurrentPositionList, electionId } = this.props
+      fetchCurrentPositionList(web3, votechain, electionId)
     }
   }
 
@@ -33,18 +36,18 @@ class PositionTableContainer extends Component {
   render() {
     const { openAddPositionDialog } = this.state
     const { positionList, electionId } = this.props
-    console.log(typeof electionId)
 
     const headers = [
       {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
-      {id: 'position', label: 'Position'},
+      {id: 'max-no-of-candidates-to-be-elected', label: 'Max No. of Candidates to be Elected'},
       {id: 'actions', label: 'Actions'}
     ]
 
     return (
       <div>
         <PositionTable 
+          electionId={electionId}
           headers={headers}
           positionList={positionList}
           openAddPositionDialog={openAddPositionDialog}
@@ -61,11 +64,13 @@ PositionTableContainer.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  positionList: state.election.electionList
-});
+  positionList: state.position.currentPositionList,
+  web3: state.web3.web3,
+  votechain: state.contract.votechain,
+})
 
 const mapDispatchToProps = {
-
+  fetchCurrentPositionList
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PositionTableContainer)

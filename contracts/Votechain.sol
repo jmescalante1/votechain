@@ -120,6 +120,10 @@ contract Votechain {
     event EditElection ( uint256 electionKey );
     event DeleteElection ( uint256 electionKey );
 
+    event AddPositionAt ( uint256 electionKey, uint256 positionKey );
+    event EditPosition ( uint256 positionKey );
+    event DeletePosition ( uint256 positionKey );
+
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
@@ -205,6 +209,7 @@ contract Votechain {
 
         electionList[electionKey].positionKeyIndexList[positionKey] = electionList[electionKey].positionKeyList.push(positionKey).sub(1);
 
+        emit AddPositionAt(electionKey, positionKey);
         return positionKey;
     }
 
@@ -288,6 +293,8 @@ contract Votechain {
     {
         positionList[positionKey].name = newName;
         positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = newMaxNoOfCandidatesThatCanBeSelected;
+        
+        emit EditPosition(positionKey);
         return true;
     }
 
@@ -458,6 +465,8 @@ contract Votechain {
         if(isAbstain(abstainKey)) {
             deleteAbstain(abstainKey);
         }
+
+        emit DeletePosition(positionKey);
 
     }
 

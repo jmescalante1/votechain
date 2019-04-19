@@ -44,7 +44,7 @@ const DropdownIndicator = props => {
 
 class CustomizedSelect extends Component {
   render() {
-    const { label, placeholder, options, isClearable, onChange, selectStyles } = this.props
+    const { label, defaultInputValue, placeholder, options, isClearable, onChange, selectStyles } = this.props
 
     return (
       <Grid 

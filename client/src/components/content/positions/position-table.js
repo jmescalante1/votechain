@@ -46,7 +46,7 @@ class PositionTable extends Component {
         <Grid item>    
           <EditButton 
             placement='bottom-start'
-            tooltipTitle='Edit candidate details'
+            tooltipTitle='Edit position details'
             size='small'
           />
         </Grid>
@@ -54,7 +54,7 @@ class PositionTable extends Component {
         <Grid item>
           <DeleteButton 
             placement='bottom-start'
-            tooltipTitle='Remove this candidate'
+            tooltipTitle='Remove this position'
             size='small'
           />
         </Grid>
@@ -89,12 +89,13 @@ class PositionTable extends Component {
   }
 
   createTableDialogs(){
-    const { openAddPositionDialog, handleCloseAddPositionDialog } = this.props
+    const { openAddPositionDialog, handleCloseAddPositionDialog, electionId } = this.props
 
     return (
       <AddPositionDialog 
         openDialog={openAddPositionDialog}
         onClose={handleCloseAddPositionDialog}
+        electionId={electionId}
       />
     )
   }
@@ -138,6 +139,7 @@ PositionTable.propTypes = {
   openAddPositionDialog: PropTypes.bool.isRequired,
   handleOpenAddPositionDialog: PropTypes.func.isRequired,
   handleCloseAddPositionDialog: PropTypes.func.isRequired,
+  electionId: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(PositionTable)

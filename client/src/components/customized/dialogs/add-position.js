@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -18,6 +19,8 @@ import Checkbox from '@material-ui/core/Checkbox'
 import CustomizedTextField from '../forms/textfield'
 import SubmitButton from '../buttons/submit'
 import CancelButton from '../buttons/cancel'
+
+import { addPositionVotechain } from '../../../actions/position'
 
 const styles = theme => ({
   content: {
@@ -47,15 +50,42 @@ class AddPositionDialog extends Component {
     
     this.state = {
       hasAbstain: false,
+      positionName: '',
+      maxNoOfCandidatesThatCanBeSelected: 0,
     }
 
     this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
+    this.onChangePositionName = this.onChangePositionName.bind(this)
+    this.onChangeMaxNoOfCandidatesThatCanBeSelected = this.onChangeMaxNoOfCandidatesThatCanBeSelected.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   handleAbstainCheckboxChange(hasAbstain) {
     this.setState({ hasAbstain })
   }
-  
+
+  onChangePositionName(event) {
+    this.setState({ positionName: event.target.value })
+  }
+
+  onChangeMaxNoOfCandidatesThatCanBeSelected(event) {
+    this.setState({ maxNoOfCandidatesThatCanBeSelected: event.target.value })
+  }
+
+  onSubmit() {
+    const { onClose, addPositionVotechain, votechain, web3, electionId } = this.props
+    const { positionName, hasAbstain, maxNoOfCandidatesThatCanBeSelected } = this.state
+
+    let position = {
+      electionKey: electionId,
+      name: positionName,
+      hasAbstain,
+      maxNoOfCandidatesThatCanBeSelected
+    }
+
+    addPositionVotechain(web3, votechain, position)
+    onClose()
+  }
 
   render() {
     const { classes, openDialog, onClose } = this.props
@@ -97,6 +127,7 @@ class AddPositionDialog extends Component {
                   fullWidth
                   variant='outlined'
                   autoFocus
+                  onChange={this.onChangePositionName}
                 /> 
               </Grid>
               
@@ -105,9 +136,10 @@ class AddPositionDialog extends Component {
                   id='max-no-of-candidates-to-be-elected'
                   type='number'
                   required
-                  label='Max Number of Candidates to be Elected'
+                  label='Max Number of Candidates that can be selected'
                   fullWidth
                   variant='outlined'
+                  onChange={this.onChangeMaxNoOfCandidatesThatCanBeSelected}
                 /> 
               </Grid>
 
@@ -172,7 +204,7 @@ class AddPositionDialog extends Component {
             >
               <Grid item><CancelButton onClick={onClose} /></Grid>
 
-              <Grid item><SubmitButton onClick={onClose} /></Grid>
+              <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
             </Grid>
           </DialogActions>
         </Dialog>
@@ -186,6 +218,17 @@ AddPositionDialog.propTypes = {
 
   openDialog: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  electionId: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(AddPositionDialog)
+const mapStateToProps = state => ({
+  web3: state.web3.web3,
+  votechain: state.contract.votechain
+})
+
+const mapDispatchToProps = {
+  addPositionVotechain
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddPositionDialog))
