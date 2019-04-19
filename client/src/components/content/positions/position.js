@@ -15,7 +15,6 @@ const styles = theme => ({
 
 class Position extends Component {
 
-
   render() {
     const { classes, electionId, handleElectionSelectChange, electionList } = this.props
 

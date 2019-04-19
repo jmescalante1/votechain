@@ -6,7 +6,6 @@ async function getPosition(positionKey, votechain) {
   position.name = response.name
   position.maxNoOfCandidatesThatCanBeSelected = response.maxNoOfCandidatesThatCanBeSelected
   position.hasAbstain = response.isAbstainActive
-  console.log('isAbstainActive: ' + response.isAbstainActive)
 
   return position
 }
@@ -14,6 +13,8 @@ async function getPosition(positionKey, votechain) {
 export const FETCH_CURRENT_POSITION_LIST = 'FETCH_CURRENT_POSITION_LIST'
 export const ADD_POSITION_VOTECHAIN = 'ADD_POSITION_VOTECHAIN'
 export const ADD_POSITION_UI = 'ADD_POSITION_UI'
+export const EDIT_POSITION_VOTECHAIN = 'EDIT_POSITION_VOTECHAIN'
+export const EDIT_POSITION_UI = 'EDIT_POSITION_UI'
 
 export function fetchCurrentPositionList(web3, votechain, electionKey) {
   return async (dispatch) => {
@@ -53,6 +54,29 @@ export function addPositionUI(web3, votechain, positionKey, electionKey) {
     dispatch({
       type: ADD_POSITION_UI,
       payload: {addedPosition, electionKey}
+    })
+  }
+}
+
+export function editPositionVotechain(web3, votechain, position){
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updatePosition(position.positionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: firstAccount})
+    
+    dispatch( {
+      type: EDIT_POSITION_VOTECHAIN
+    })
+  }
+}
+
+export function editPositionUI(web3, votechain, positionKey){
+  return async (dispatch) => {
+    let editedPosition = await getPosition(positionKey, votechain)
+
+    dispatch( {
+      type: EDIT_POSITION_UI,
+      editedPosition
     })
   }
 }

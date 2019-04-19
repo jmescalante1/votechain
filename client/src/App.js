@@ -11,7 +11,7 @@ import 'typeface-roboto'
 import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI } from './actions/election'
-import { addPositionUI } from './actions/position'
+import { addPositionUI, editPositionUI } from './actions/position'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -67,6 +67,11 @@ class App extends React.Component {
             let positionKey = result.returnValues.positionKey
             this.props.addPositionUI(this.props.web3, this.props.votechain, positionKey, electionKey)
           }
+
+          else if (['EditPosition'].includes(result.event)) {
+            let positionKey = result.returnValues.positionKey
+            this.props.editPositionUI(this.props.web3, this.props.votechain, positionKey)
+          }
         }
       })
     }
@@ -98,6 +103,7 @@ const mapDispatchToProps = {
   editElectionUI,
   deleteElectionUI,
   addPositionUI,
+  editPositionUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

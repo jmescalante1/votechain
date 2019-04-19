@@ -288,7 +288,7 @@ contract Votechain {
         return true;
     }
 
-    function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected ) 
+    function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected, bool hasAbstain ) 
         public 
         onlyAdminOrOfficial 
         positionKeyExists(positionKey)  
@@ -298,6 +298,14 @@ contract Votechain {
         positionList[positionKey].name = newName;
         positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = newMaxNoOfCandidatesThatCanBeSelected;
         
+        if(hasAbstain != positionList[positionKey].isAbstainActive) { // check if there is a need to update hasAbstain field
+            if(hasAbstain) {
+                addAbstainAt(positionKey);
+            } else {
+                deleteAbstain(positionList[positionKey].abstainKey);
+            }
+        }
+
         emit EditPosition(positionKey);
         return true;
     }

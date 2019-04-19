@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from "react-redux"
 
 import { fetchCurrentPositionList } from '../../../actions/position'
 
 import PositionTable from './position-table'
+import EditPositionDialog from '../../customized/dialogs/edit-position'
 
 class PositionTableContainer extends Component {
   constructor() {
@@ -12,10 +13,16 @@ class PositionTableContainer extends Component {
     
     this.state = {
       openAddPositionDialog: false,
+      openEditPositionDialog: false,
+
+      positionToBeEdited: {},
     }
 
     this.handleCloseAddPositionDialog = this.handleCloseAddPositionDialog.bind(this)
     this.handleOpenAddPositionDialog = this.handleOpenAddPositionDialog.bind(this)
+    
+    this.handleOpenEditPositionDialog = this.handleOpenEditPositionDialog.bind(this)
+    this.handleCloseEditPositionDialog = this.handleCloseEditPositionDialog.bind(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -24,17 +31,28 @@ class PositionTableContainer extends Component {
       fetchCurrentPositionList(web3, votechain, electionId)
     }
   }
-
-  handleCloseAddPositionDialog() {
-    this.setState({ openAddPositionDialog: false })
-  }
   
   handleOpenAddPositionDialog() {
     this.setState({ openAddPositionDialog: true })
   }
 
+  handleCloseAddPositionDialog() {
+    this.setState({ openAddPositionDialog: false })
+  }
+
+  handleOpenEditPositionDialog(positionToBeEdited) {
+    this.setState({ 
+      openEditPositionDialog: true, 
+      positionToBeEdited: positionToBeEdited
+    })
+  }
+
+  handleCloseEditPositionDialog() {
+    this.setState({ openEditPositionDialog: false})
+  }
+
   render() {
-    const { openAddPositionDialog } = this.state
+    const { openAddPositionDialog, openEditPositionDialog, positionToBeEdited } = this.state
     const { positionList, electionId } = this.props
 
     const headers = [
@@ -46,16 +64,23 @@ class PositionTableContainer extends Component {
     ]
 
     return (
-      <div>
+      <Fragment>
         <PositionTable 
           electionId={electionId}
           headers={headers}
           positionList={positionList}
           openAddPositionDialog={openAddPositionDialog}
-          handleOpenAddPositionDialog={this.handleOpenAddPositionDialog}
           handleCloseAddPositionDialog={this.handleCloseAddPositionDialog}
+        
+          handleOpenAddPositionDialog={this.handleOpenAddPositionDialog}
+          handleOpenEditPositionDialog={this.handleOpenEditPositionDialog}
         />
-      </div>
+        <EditPositionDialog 
+          openDialog={openEditPositionDialog}
+          onClose={this.handleCloseEditPositionDialog}
+          positionToBeEdited={positionToBeEdited}
+        />
+      </Fragment>
     )
   }
 }

@@ -36,32 +36,33 @@ class PositionTable extends Component {
     this.createTableDialogs = this.createTableDialogs.bind(this)
   }
 
-  getActionsAllowed() {
+  getActionsAllowed(position) {
+    const { handleOpenEditPositionDialog } = this.props
+
     return (
-      // <Grid
-      //   container
-      //   direction='row'
-      //   justify='flex-start'
-      //   alignItems='center'   
-      // >
-        // <Grid item>
-        <div>    
+      <Grid
+        container
+        direction='row'
+        justify='flex-start'
+        alignItems='center'   
+      >
+        <Grid item>  
           <EditButton 
+            onClick={() => handleOpenEditPositionDialog(position)}
             placement='bottom-start'
             tooltipTitle='Edit position details'
             size='small'
           />
-        {/* </Grid> */}
+        </Grid>
 
-        {/* // <Grid item> */}
+        <Grid item>
           <DeleteButton 
             placement='bottom-start'
             tooltipTitle='Remove this position'
             size='small'
           />
-        </div>
-        // </Grid>
-      // </Grid>
+        </Grid>
+      </Grid>
     )
   }
 
@@ -69,7 +70,7 @@ class PositionTable extends Component {
     let positionListClone = cloneDeep(positionList)
     
     positionListClone.forEach((position) => {
-      position.action = this.getActionsAllowed()
+      position.action = this.getActionsAllowed(position)
       position.hasAbstain = position.hasAbstain ? 'Yes' : 'No'
     })
 
@@ -146,6 +147,8 @@ PositionTable.propTypes = {
   handleOpenAddPositionDialog: PropTypes.func.isRequired,
   handleCloseAddPositionDialog: PropTypes.func.isRequired,
   electionId: PropTypes.string.isRequired,
+
+  handleOpenEditPositionDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(PositionTable)
