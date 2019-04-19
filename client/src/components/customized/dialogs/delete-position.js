@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import NoButton from '../buttons/no'
 import YesButton from '../buttons/yes'
 
-import { deleteElectionVotechain } from '../../../actions/election'
+// import { deleteElectionVotechain } from '../../../actions/election'
 
 const styles = theme => ({
   content: {
@@ -35,38 +35,38 @@ const styles = theme => ({
   }
 })
 
-class DeleteElectionDialog extends React.Component {
+class DeletePositionDialog extends React.Component {
   constructor(props) {
     super(props)
 
-    this.deleteElection = this.deleteElection.bind(this)
+    this.deletePosition = this.deletePosition.bind(this)
   }
 
-  deleteElection() {
-    const { deleteElectionVotechain, handleClickCloseDialog, idOfElectionToBeDeleted } = this.props
-    const { web3, votechain } = this.props
+  deletePosition() {
+    // const { deleteElectionVotechain, onClose, idOfElectionToBeDeleted } = this.props
+    // const { web3, votechain } = this.props
   
-    deleteElectionVotechain(web3, votechain, idOfElectionToBeDeleted)
-    handleClickCloseDialog()
+    // deleteElectionVotechain(web3, votechain, idOfElectionToBeDeleted)
+    // onClose()
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog, title, description } = this.props
+    const { classes, openDialog, onClose, title, description } = this.props
   
     return (
       <Dialog
         open={openDialog}
-        onClose={handleClickCloseDialog}
+        onClose={onClose}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Delete Election</Typography>
+          <Typography className={classes.label}>Delete Position</Typography>
         </DialogTitle>
         
         <DialogContent 
           className={classes.content}
         >
           <DialogContentText>
-            Are you sure you want to delete this election?
+            Are you sure you want to delete this position?
           </DialogContentText>
 
         </DialogContent>
@@ -78,9 +78,9 @@ class DeleteElectionDialog extends React.Component {
             alignItems='center'
             justify='space-between'
           >
-            <Grid item><YesButton onClick={this.deleteElection} /></Grid>
+            <Grid item><YesButton onClick={this.deletePosition} /></Grid>
             
-            <Grid item><NoButton onClick={handleClickCloseDialog} /></Grid>
+            <Grid item><NoButton onClick={onClose} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -88,9 +88,9 @@ class DeleteElectionDialog extends React.Component {
   }
 }
 
-DeleteElectionDialog.propTypes = {
+DeletePositionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
-  handleClickCloseDialog: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   idOfElectionToBeDeleted: PropTypes.string,
 }
 
@@ -100,7 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  deleteElectionVotechain,
+  // deleteElectionVotechain,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DeleteElectionDialog))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DeletePositionDialog))

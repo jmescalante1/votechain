@@ -37,7 +37,7 @@ class PositionTable extends Component {
   }
 
   getActionsAllowed(position) {
-    const { handleOpenEditPositionDialog } = this.props
+    const { handleOpenEditPositionDialog, handleOpenDeletePositionDialog } = this.props
 
     return (
       <Grid
@@ -57,6 +57,7 @@ class PositionTable extends Component {
 
         <Grid item>
           <DeleteButton 
+            onClick={() => handleOpenDeletePositionDialog(position)}
             placement='bottom-start'
             tooltipTitle='Remove this position'
             size='small'
@@ -149,6 +150,7 @@ PositionTable.propTypes = {
   electionId: PropTypes.string.isRequired,
 
   handleOpenEditPositionDialog: PropTypes.func.isRequired,
+  handleOpenDeletePositionDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(PositionTable)

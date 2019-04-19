@@ -6,6 +6,7 @@ import { fetchCurrentPositionList } from '../../../actions/position'
 
 import PositionTable from './position-table'
 import EditPositionDialog from '../../customized/dialogs/edit-position'
+import DeletePositionDialog from '../../customized/dialogs/delete-position'
 
 class PositionTableContainer extends Component {
   constructor() {
@@ -14,8 +15,10 @@ class PositionTableContainer extends Component {
     this.state = {
       openAddPositionDialog: false,
       openEditPositionDialog: false,
+      openDeletePositionDialog: false,
 
       positionToBeEdited: {},
+      positionToBeDeleted: {}
     }
 
     this.handleCloseAddPositionDialog = this.handleCloseAddPositionDialog.bind(this)
@@ -23,6 +26,9 @@ class PositionTableContainer extends Component {
     
     this.handleOpenEditPositionDialog = this.handleOpenEditPositionDialog.bind(this)
     this.handleCloseEditPositionDialog = this.handleCloseEditPositionDialog.bind(this)
+
+    this.handleOpenDeletePositionDialog = this.handleOpenDeletePositionDialog.bind(this)
+    this.handleCloseDeletePositionDialog = this.handleCloseDeletePositionDialog.bind(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -51,8 +57,16 @@ class PositionTableContainer extends Component {
     this.setState({ openEditPositionDialog: false})
   }
 
+  handleOpenDeletePositionDialog() {
+    this.setState({ openDeletePositionDialog: true })
+  }
+
+  handleCloseDeletePositionDialog() {
+    this.setState({ openDeletePositionDialog: false })
+  }
+
   render() {
-    const { openAddPositionDialog, openEditPositionDialog, positionToBeEdited } = this.state
+    const { openAddPositionDialog, openEditPositionDialog, positionToBeEdited, positionToBeDeleted, openDeletePositionDialog } = this.state
     const { positionList, electionId } = this.props
 
     const headers = [
@@ -74,11 +88,17 @@ class PositionTableContainer extends Component {
         
           handleOpenAddPositionDialog={this.handleOpenAddPositionDialog}
           handleOpenEditPositionDialog={this.handleOpenEditPositionDialog}
+          handleOpenDeletePositionDialog={this.handleOpenDeletePositionDialog}
         />
         <EditPositionDialog 
           openDialog={openEditPositionDialog}
           onClose={this.handleCloseEditPositionDialog}
           positionToBeEdited={positionToBeEdited}
+        />
+        <DeletePositionDialog 
+          openDialog={openDeletePositionDialog}
+          onClose={this.handleCloseDeletePositionDialog}
+          positionToBeDeleted={positionToBeDeleted}
         />
       </Fragment>
     )
