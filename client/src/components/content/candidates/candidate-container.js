@@ -3,14 +3,12 @@ import { connect } from "react-redux"
 
 import Candidate from './candidate'
 
-// import { electionData, electionList } from './candidate-data'
-
 class CandidateContainer extends React.Component {
   constructor(){
     super()
 
     this.state = {
-      election: "",
+      electionId: "",
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -18,19 +16,19 @@ class CandidateContainer extends React.Component {
 
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ election: option.value })
+      this.setState({ electionId: option.value })
     } else {
-      this.setState({ election: "" })
+      this.setState({ electionId: null })
     }
   }
 
   render() {
-    const { election } = this.state
+    const { electionId } = this.state
     const { electionList } = this.props
 
     return(
       <Candidate 
-        election={election}
+        electionId={electionId}
         handleElectionSelectChange={this.handleElectionSelectChange}
         electionList={electionList}
       />

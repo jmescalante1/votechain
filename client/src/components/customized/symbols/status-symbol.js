@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -52,14 +54,18 @@ class StatusSymbol extends React.Component {
         enterDelay={300}
       >
         <div className={classNames(classes.default, {
-          [classes.pending]: variant === 'pending',
-          [classes.ongoing]: variant === 'ongoing',
-          [classes.finished]: variant === 'finished'
+          [classes.pending]: variant === 'Pending',
+          [classes.ongoing]: variant === 'Ongoing',
+          [classes.finished]: variant === 'Finished'
         })}>
         </div>
       </Tooltip>
     )
   }
+}
+
+StatusSymbol.propTypes = {
+  variant: PropTypes.oneOf(['Pending', 'Ongoing', 'Finished'])
 }
 
 export default withStyles(styles)(StatusSymbol)

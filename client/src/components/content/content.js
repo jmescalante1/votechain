@@ -6,9 +6,6 @@ import { headerTabs } from '../layout/header/header-tabs'
 import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
 import { sidebarSecondaryOptions } from '../layout/sidebar/sidebar-options'
 
-import editPageRoute from './positions/position-edit-page/edit-page-route'
-import EditPageContainer from './positions/position-edit-page/edit-page-container'
-
 const styles = theme => ({
   toolbar: {
     display: 'flex',
@@ -40,7 +37,6 @@ class Content extends React.Component {
           {sidebarSecondaryOptions.map((props) => (
             <Route key={props.label} path={props.path} render={() => props.component} />
           ))}
-          <Route path={editPageRoute.path} render={(props) => <EditPageContainer {...props} />} />
         </Switch>
       </main>
     )

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from "react-redux"
 
 import CandidateTable from './candidate-table'
+
+import { fetchCandidateListOfElection } from '../../../actions/candidate'
 
 class CandidateTableContainer extends Component {
   constructor() {
@@ -11,17 +14,15 @@ class CandidateTableContainer extends Component {
       openAddCandidateDialog: false
     }
 
-    // this.getCandidateList = this.getCandidateList.bind(this)
     this.handleCloseAddCandidateDialog = this.handleCloseAddCandidateDialog.bind(this)
     this.handleOpenAddCandidateDialog = this.handleOpenAddCandidateDialog.bind(this)
   }
-  
 
-  // getCandidateList(electionData, election){
-  //   if(electionData[election])
-  //     return electionData[election].candidates
-  //   return []
-  // }
+  componentDidUpdate(prevProps) {
+    if(this.props.electionId !== prevProps.electionId) {
+      this.props.fetchCandidateListOfElection(this.props.electionId)
+    }
+  }
 
   handleCloseAddCandidateDialog() {
     this.setState({ openAddCandidateDialog: false })
@@ -32,10 +33,8 @@ class CandidateTableContainer extends Component {
   }
 
   render() {
-    const { election } = this.props 
     const { openAddCandidateDialog } = this.state
-
-    // const candidateList = this.getCandidateList(electionData, election)
+    const { currentCandidateList } = this.props
 
     const headers = [
       {id: 'id', label: 'ID'},
@@ -48,7 +47,7 @@ class CandidateTableContainer extends Component {
       <div>
         <CandidateTable 
           headers={headers}
-          // candidateList={candidateList}
+          candidateList={currentCandidateList}
 
           openAddCandidateDialog={openAddCandidateDialog}
           handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
@@ -60,7 +59,15 @@ class CandidateTableContainer extends Component {
 }
 
 CandidateTableContainer.propTypes = {
-  election: PropTypes.string.isRequired,
+  electionId: PropTypes.string.isRequired,
 }
 
-export default CandidateTableContainer
+const mapStateToProps = state => ({
+  currentCandidateList: state.election.currentCandidateList
+});
+
+const mapDispatchToProps = {
+  fetchCandidateListOfElection
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CandidateTableContainer)

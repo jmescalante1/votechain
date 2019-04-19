@@ -1,51 +1,41 @@
-import React, { Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import { withStyles } from '@material-ui/core/styles'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
-import PositionContent from './position-content/position-content'
+import PositionTableContainer from './position-table-container'
 
 const styles = theme => ({
-  positionToolbar: {
+  electionSelector: {
     marginTop: theme.spacing.unit * 4,
     margin: 'auto',
     width: '90%'
-  }, 
-  positionContent: {
-    marginTop: theme.spacing.unit * 4,
-    width: '90%',
-    margin: 'auto',
-  },
+  }
 })
 
-class Position extends React.Component {
+class Position extends Component {
+
+
   render() {
-    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
-    
-    return(
-      <Fragment>
+    const { classes, electionId, handleElectionSelectChange, electionList } = this.props
+
+    return (
+      <div>
         <ElectionSelector 
           classes={{
-            root: classes.positionToolbar
+            root: classes.electionSelector
           }}
 
           fontSize={18}
-          election={election}
+          electionId={electionId}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
-          electionData={electionData}          
         />
 
-        <PositionContent 
-          classes={{
-            root: classes.positionContent
-          }}
-          
-          election={election}
-          electionData={electionData}
+        <PositionTableContainer 
+          electionId={electionId}
         />
-      </Fragment>
+      </div>
     )
   }
 }
@@ -53,10 +43,9 @@ class Position extends React.Component {
 Position.propTypes = {
   classes: PropTypes.object.isRequired,
   
-  election: PropTypes.string.isRequired,
+  electionId: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
-  electionList: PropTypes.array.isRequired,
-  electionData: PropTypes.object.isRequired,
+  electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default withStyles(styles)(Position)

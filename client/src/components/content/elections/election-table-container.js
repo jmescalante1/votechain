@@ -81,7 +81,7 @@ class ElectionTableContainer extends Component {
       <Fragment>
         <ElectionTable 
           headers={headers}
-          data={electionList}
+          electionList={electionList}
           
           openDialog={openAddElectionDialog}
           handleCloseAddElectionDialog={this.handleCloseAddElectionDialog}

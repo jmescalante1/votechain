@@ -1,47 +1,40 @@
 import React from 'react'
-import { connect } from "react-redux"
 
 import Position from './position'
+
+import { electionList, electionData } from './position-data'
 
 class PositionContainer extends React.Component {
   constructor(){
     super()
 
     this.state = {
-      electionId: '',
+      election: "",
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
   } 
-
+  
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ electionId: option.value })
+      this.setState({ election: option.value })
     } else {
-      this.setState({ electionId: ''})
+      this.setState({ election: "" })
     }
   }
 
   render() {
-    const { electionId } = this.state
-    const { electionList } = this.props
+    const { election } = this.state
 
     return(
-      <Position 
-        electionId={electionId}
+      <Position
+        election={election}
         handleElectionSelectChange={this.handleElectionSelectChange}
         electionList={electionList}
+        electionData={electionData}
       />
     )
   }
 }
 
-const mapStateToProps = state => ({
-  electionList: state.election.electionList
-});
-
-const mapDispatchToProps = {
-  
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PositionContainer)
+export default PositionContainer

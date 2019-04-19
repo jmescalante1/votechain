@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -141,20 +142,22 @@ class ElectionTable extends Component {
   }
 
   createTableData(electionList) {
-    electionList.forEach((election) => {
+    let electionListClone = cloneDeep(electionList)
+
+    electionListClone.forEach((election) => {
       election.action = this.getActionsAllowed(election)
       election.id = Number(election.id)
     })
 
-    return electionList
+    return electionListClone
   }
 
   render() {
-    const { data, headers } = this.props
+    const { electionList, headers } = this.props
 
     let tableTools = this.createTableTools()
     let tableDialogs = this.createTableDialogs()
-    let tableData = this.createTableData(data)
+    let tableData = this.createTableData(electionList)
       
     return (
       <TableContainer 
@@ -182,7 +185,7 @@ ElectionTable.propTypes = {
     label: PropTypes.string.isRequired
   })).isRequired,
 
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 
   openDialog: PropTypes.bool.isRequired,
 

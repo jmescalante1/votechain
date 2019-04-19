@@ -11,7 +11,7 @@ import AddCircle from '@material-ui/icons/AddCircle'
 import TableContainer from '../../customized/tables/table-container'
 import EditButton from '../../customized/buttons/edit'
 import DeleteButton from '../../customized/buttons/delete'
-import AddCandidateDialog from '../../customized/dialogs/add-candidate'
+import AddPositionDialog from '../../customized/dialogs/add-position'
 
 const styles = theme => ({
   actionIcon:{
@@ -25,7 +25,7 @@ const styles = theme => ({
   },  
 })
 
-class CandidateTable extends Component {
+class PositionTable extends Component {
   constructor() {
     super()
 
@@ -62,54 +62,54 @@ class CandidateTable extends Component {
     )
   }
 
-  createTableData(candidateList) {
-    candidateList.forEach((candidate) => {
-      candidate.action = this.getActionsAllowed()
+  createTableData(positionList) {
+    positionList.forEach((position) => {
+      position.action = this.getActionsAllowed()
     })
 
-    return candidateList
+    return positionList
   }
   
   createTableTools(){
-    const { classes, handleOpenAddCandidateDialog } = this.props
+    const { classes, handleOpenAddPositionDialog } = this.props
 
     return (
-      <Tooltip title='Add new candidate'>
+      <Tooltip title='Add new position'>
         <Fab 
           size='large' 
           variant='extended' 
           className={classes.fab}
-          onClick={handleOpenAddCandidateDialog}
+          onClick={handleOpenAddPositionDialog}
         >
           <AddCircle className={classes.actionIcon} />
-          Add Candidate
+          Add Position
         </Fab>
       </Tooltip>
     )
   }
 
   createTableDialogs(){
-    const { openAddCandidateDialog, handleCloseAddCandidateDialog } = this.props
+    const { openAddPositionDialog, handleCloseAddPositionDialog } = this.props
 
     return (
-      <AddCandidateDialog 
-        openDialog={openAddCandidateDialog}
-        handleClickCloseDialog={handleCloseAddCandidateDialog}
+      <AddPositionDialog 
+        openDialog={openAddPositionDialog}
+        onClose={handleCloseAddPositionDialog}
       />
     )
   }
   
 
   render() {
-    const { candidateList, headers } = this.props
+    const { positionList, headers } = this.props
 
-    const tableData = this.createTableData(candidateList)
+    const tableData = this.createTableData(positionList)
     const tableTools = this.createTableTools()
     const tableDialogs = this.createTableDialogs()
 
     return (
       <TableContainer 
-        tableName='Candidate List'
+        tableName='Position List'
         headers={headers}
         data={tableData}
 
@@ -117,8 +117,8 @@ class CandidateTable extends Component {
         tableDialogs={tableDialogs}
 
         rowsPerPageOptions={[8, 15, 25]}
-        defaultOrder='asc'
-        defaultOrderBy='name'
+        defaultOrder='desc'
+        defaultOrderBy='id'
         defaultRowsPerPage={8}
 
         rowHeight={60}
@@ -127,17 +127,17 @@ class CandidateTable extends Component {
   }
 }
 
-CandidateTable.propTypes = {
+PositionTable.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
 
-  candidateList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  positionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 
-  openAddCandidateDialog: PropTypes.bool.isRequired,
-  handleOpenAddCandidateDialog: PropTypes.func.isRequired,
-  handleCloseAddCandidateDialog: PropTypes.func.isRequired,
+  openAddPositionDialog: PropTypes.bool.isRequired,
+  handleOpenAddPositionDialog: PropTypes.func.isRequired,
+  handleCloseAddPositionDialog: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(CandidateTable)
+export default withStyles(styles)(PositionTable)

@@ -42,8 +42,24 @@ const styles = theme => ({
 })
 
 class AddPositionDialog extends Component {
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      hasAbstain: false,
+    }
+
+    this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
+  }
+
+  handleAbstainCheckboxChange(hasAbstain) {
+    this.setState({ hasAbstain })
+  }
+  
+
   render() {
-    const { classes, openDialog, onClose, hasAbstain, handleAbstainCheckboxChange } = this.props
+    const { classes, openDialog, onClose } = this.props
+    const { hasAbstain } = this.state
 
     return (
       <div>
@@ -127,14 +143,14 @@ class AddPositionDialog extends Component {
                         >  
                           <FormControlLabel
                             control={
-                              <Checkbox checked={hasAbstain} onChange={() => handleAbstainCheckboxChange(true)} value='Yes' />
+                              <Checkbox checked={hasAbstain} onChange={() => this.handleAbstainCheckboxChange(true)} value='Yes' />
                             }
                             label="Yes"
                           />
 
                           <FormControlLabel
                             control={
-                              <Checkbox checked={!hasAbstain} onChange={() => handleAbstainCheckboxChange(false)} value='No' />
+                              <Checkbox checked={!hasAbstain} onChange={() => this.handleAbstainCheckboxChange(false)} value='No' />
                             }
                             label="No"
                           />
@@ -170,10 +186,6 @@ AddPositionDialog.propTypes = {
 
   openDialog: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-
-  hasAbstain: PropTypes.bool.isRequired,
-  handleAbstainCheckboxChange: PropTypes.func.isRequired
-
 };
 
 export default withStyles(styles)(AddPositionDialog)

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { connect } from "react-redux"
 
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -17,22 +16,25 @@ const styles = theme => ({
 })
 
 class ElectionSelector extends React.Component {
-  constructor(){
-    super()
+  constructor(props) {
+    super(props)
 
     this.getStatus = this.getStatus.bind(this)
   }
+  
+  getStatus(electionId) {
+    const { electionList } = this.props
 
-  getStatus(election) {
-    if(election){
-      return election.status
-    } 
-
-    return ""
+    if(electionId) {
+      let index = electionList.findIndex(x => x.id === electionId)
+      console.log(electionList[index].status)
+      return electionList[index].status
+      
+    }
   }
 
   render(){
-    const { classes, fontSize, election, handleElectionSelectChange, electionList, electionData } = this.props
+    const { classes, fontSize, electionId, handleElectionSelectChange, electionList } = this.props
     
     const options = electionList.map((election) => {
       return {
@@ -88,7 +90,7 @@ class ElectionSelector extends React.Component {
 
             <Grid item >
               <StatusSymbol 
-                variant={this.getStatus(election)} 
+                variant={this.getStatus(electionId)}
               />
             </Grid>
           </Grid>
@@ -101,18 +103,9 @@ class ElectionSelector extends React.Component {
 ElectionSelector.propTypes = {
   classes: PropTypes.object.isRequired,
 
-  election: PropTypes.string.isRequired,
+  electionId: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
-  // electionData: PropTypes.object.isRequired
 }
-
-// const mapStateToProps = state => ({
-//   electionList: state.election.electionList
-// });
-
-// const mapDispatchToProps = {
-
-// }
 
 export default withStyles(styles)(ElectionSelector)

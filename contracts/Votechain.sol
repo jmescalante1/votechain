@@ -661,6 +661,22 @@ contract Votechain {
         return officialKeyList.length;
     }
 
+    function getNoOfPositionsAt(uint256 electionKey) public view electionKeyExists(electionKey) returns(uint256) {
+        return electionList[electionKey].positionKeyList.length;
+    }
+
+    function getNoOfCandidatesAt(uint256 positionKey) public view positionKeyExists(positionKey) returns(uint256) {
+        return positionList[positionKey].candidateKeyList.length;
+    } 
+
+    function getPositionKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
+        return electionList[electionKey].positionKeyList[index];
+    }
+
+    function getCandidateKeyAt(uint256 positionKey, uint256 index) public view positionKeyExists(positionKey) returns(uint256) {
+        return positionList[positionKey].candidateKeyList[index];
+    }
+
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
         return false;
