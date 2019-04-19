@@ -59,12 +59,19 @@ export default function reducer(state = initialState, action) {
 
     case DELETE_ELECTION_UI: {
       let deletedIndex = state.electionList.findIndex(x => x.id === action.deletedElection.id)
-      let electionListClone = cloneDeep(state.electionList)
-      electionListClone.splice(deletedIndex, 1)
+
+      if(deletedIndex != -1){
+        let electionListClone = cloneDeep(state.electionList)
+        electionListClone.splice(deletedIndex, 1)
+
+        return {
+          ...state,
+          electionList: electionListClone
+        }
+      }
 
       return {
-        ...state,
-        electionList: electionListClone
+        ...state
       }
 
     }
@@ -76,7 +83,9 @@ export default function reducer(state = initialState, action) {
     }
 
     default: {
-      return state
+      return {
+        ...state
+      }
     }
   }
 }

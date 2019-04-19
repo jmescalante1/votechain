@@ -1,7 +1,8 @@
 import cloneDeep from 'lodash/cloneDeep'
 
 import { FETCH_CURRENT_POSITION_LIST, ADD_POSITION_VOTECHAIN, ADD_POSITION_UI 
-, EDIT_POSITION_VOTECHAIN, EDIT_POSITION_UI } from '../actions/position'
+, EDIT_POSITION_VOTECHAIN, EDIT_POSITION_UI, DELETE_POSITION_VOTECHAIN
+, DELETE_POSITION_UI } from '../actions/position'
 
 import { DELETE_ELECTION_UI } from '../actions/election'
 
@@ -65,6 +66,30 @@ export default function reducer(state = initialState, action) {
           ...state,
           currentElectionKey: '',
           currentPositionList: []
+        }
+      }
+
+      return {
+        ...state
+      }
+    }
+
+    case DELETE_POSITION_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
+
+    case DELETE_POSITION_UI: {
+      let deletedIndex = state.currentPositionList.findIndex(x => x.id === action.deletedPosition.id)
+      
+      if(deletedIndex != -1) {
+        let positionListClone = cloneDeep(state.currentPositionList)
+        positionListClone.splice(deletedIndex, 1)
+
+        return {
+          ...state,
+          currentPositionList: positionListClone
         }
       }
 

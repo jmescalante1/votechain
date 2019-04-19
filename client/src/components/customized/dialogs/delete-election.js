@@ -51,7 +51,7 @@ class DeleteElectionDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog, title, description } = this.props
+    const { classes, openDialog, handleClickCloseDialog } = this.props
   
     return (
       <Dialog

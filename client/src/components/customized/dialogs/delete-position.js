@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import NoButton from '../buttons/no'
 import YesButton from '../buttons/yes'
 
-// import { deleteElectionVotechain } from '../../../actions/election'
+import { deletePositionVotechain } from '../../../actions/position'
 
 const styles = theme => ({
   content: {
@@ -43,15 +43,15 @@ class DeletePositionDialog extends React.Component {
   }
 
   deletePosition() {
-    // const { deleteElectionVotechain, onClose, idOfElectionToBeDeleted } = this.props
-    // const { web3, votechain } = this.props
+    const { deletePositionVotechain, onClose, positionToBeDeleted } = this.props
+    const { web3, votechain } = this.props
   
-    // deleteElectionVotechain(web3, votechain, idOfElectionToBeDeleted)
-    // onClose()
+    deletePositionVotechain(web3, votechain, positionToBeDeleted.id)
+    onClose()
   }
 
   render() {
-    const { classes, openDialog, onClose, title, description } = this.props
+    const { classes, openDialog, onClose } = this.props
   
     return (
       <Dialog
@@ -91,7 +91,7 @@ class DeletePositionDialog extends React.Component {
 DeletePositionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  idOfElectionToBeDeleted: PropTypes.string,
+  positionToBeDeleted: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -100,7 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  // deleteElectionVotechain,
+  deletePositionVotechain,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DeletePositionDialog))

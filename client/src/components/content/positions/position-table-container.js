@@ -57,8 +57,11 @@ class PositionTableContainer extends Component {
     this.setState({ openEditPositionDialog: false})
   }
 
-  handleOpenDeletePositionDialog() {
-    this.setState({ openDeletePositionDialog: true })
+  handleOpenDeletePositionDialog(positionToBeDeleted) {
+    this.setState({ 
+      openDeletePositionDialog: true,
+      positionToBeDeleted
+    })
   }
 
   handleCloseDeletePositionDialog() {
