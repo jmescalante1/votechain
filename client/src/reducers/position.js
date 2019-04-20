@@ -49,7 +49,7 @@ export default function reducer(state = initialState, action) {
     case EDIT_POSITION_UI: {
       let currentPositionListClone = cloneDeep(state.currentPositionList)
       let index = currentPositionListClone.findIndex(position => position.id === action.editedPosition.id)
-      if(index != -1){
+      if(index !== -1){
         console.log(index)
         currentPositionListClone[index] = action.editedPosition
       }
@@ -83,7 +83,7 @@ export default function reducer(state = initialState, action) {
     case DELETE_POSITION_UI: {
       let deletedIndex = state.currentPositionList.findIndex(x => x.id === action.deletedPosition.id)
       
-      if(deletedIndex != -1) {
+      if(deletedIndex !== -1) {
         let positionListClone = cloneDeep(state.currentPositionList)
         positionListClone.splice(deletedIndex, 1)
 

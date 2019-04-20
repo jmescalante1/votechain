@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -146,7 +146,6 @@ class ElectionTable extends Component {
 
     electionListClone.forEach((election) => {
       election.action = this.getActionsAllowed(election)
-      election.id = election.id
     })
 
     return electionListClone

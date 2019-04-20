@@ -1,0 +1,3 @@
+Position Page
+    1. Position table does not automatically update when the election selector is cleared
+    2. Election selector's value does not automatically update when an election is deleted

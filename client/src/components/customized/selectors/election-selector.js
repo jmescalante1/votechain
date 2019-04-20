@@ -27,7 +27,7 @@ class ElectionSelector extends React.Component {
 
     if(electionId) {
       let index = electionList.findIndex(x => x.id === electionId)
-      if(index != -1)
+      if(index !== -1)
         return electionList[index].status
     }
   }
