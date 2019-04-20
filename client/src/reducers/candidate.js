@@ -88,29 +88,29 @@ export default function reducer(state = initialState, action) {
     //   }
     // }
 
-    // case DELETE_CANDIDATE_VOTECHAIN: {
-    //   return {
-    //     ...state
-    //   }
-    // }
+    case DELETE_CANDIDATE_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-    // case DELETE_CANDIDATE_UI: {
-    //   let deletedIndex = state.currentCandidateList.findIndex(x => x.id === action.deletedPosition.id)
+    case DELETE_CANDIDATE_UI: {
+      let deletedIndex = state.currentCandidateList.findIndex(x => x.id === action.deletedCandidateId)
       
-    //   if(deletedIndex !== -1) {
-    //     let positionListClone = cloneDeep(state.currentCandidateList)
-    //     positionListClone.splice(deletedIndex, 1)
+      if(deletedIndex !== -1) {
+        let positionListClone = cloneDeep(state.currentCandidateList)
+        positionListClone.splice(deletedIndex, 1)
 
-    //     return {
-    //       ...state,
-    //       currentCandidateList: positionListClone
-    //     }
-    //   }
+        return {
+          ...state,
+          currentCandidateList: positionListClone
+        }
+      }
 
-    //   return {
-    //     ...state
-    //   }
-    // }
+      return {
+        ...state
+      }
+    }
   
     default: {
       return {

@@ -6,6 +6,7 @@ import { fetchCurrentCandidateList } from '../../../actions/candidate'
 
 import CandidateTable from './candidate-table'
 import EditCandidateDialog from '../../customized/dialogs/edit-candidate'
+import DeleteCandidateDialog from '../../customized/dialogs/delete-candidate'
 
 class CandidateTableContainer extends Component {
   constructor() {
@@ -14,14 +15,20 @@ class CandidateTableContainer extends Component {
     this.state = {
       openAddCandidateDialog: false,
       openEditCandidateDialog: false,
+      openDeleteCandidateDialog: false,
 
       candidateToBeEdited: {},
+      candidateToBeDeleted: {},
     }
 
     this.handleCloseAddCandidateDialog = this.handleCloseAddCandidateDialog.bind(this)
     this.handleOpenAddCandidateDialog = this.handleOpenAddCandidateDialog.bind(this)
+    
     this.handleCloseEditCandidateDialog = this.handleCloseEditCandidateDialog.bind(this)
     this.handleOpenEditCandidateDialog = this.handleOpenEditCandidateDialog.bind(this)
+  
+    this.handleCloseDeleteCandidateDialog = this.handleCloseDeleteCandidateDialog.bind(this)
+    this.handleOpenDeleteCandidateDialog = this.handleOpenDeleteCandidateDialog.bind(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -50,8 +57,19 @@ class CandidateTableContainer extends Component {
     this.setState({ openAddCandidateDialog: false })
   }
 
+  handleOpenDeleteCandidateDialog(candidateToBeDeleted) {
+    this.setState({ 
+      openDeleteCandidateDialog: true ,
+      candidateToBeDeleted
+    })
+  }
+
+  handleCloseDeleteCandidateDialog() {
+    this.setState({ openDeleteCandidateDialog: false })
+  }
+
   render() {
-    const { openAddCandidateDialog, candidateToBeEdited, openEditCandidateDialog } = this.state
+    const { openAddCandidateDialog, candidateToBeEdited, candidateToBeDeleted, openEditCandidateDialog, openDeleteCandidateDialog } = this.state
     const { currentCandidateList, electionId } = this.props
 
     const headers = [
@@ -74,11 +92,19 @@ class CandidateTableContainer extends Component {
           handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
 
           handleOpenEditCandidateDialog={this.handleOpenEditCandidateDialog}
+          handleOpenDeleteCandidateDialog={this.handleOpenDeleteCandidateDialog}
         />
+
         <EditCandidateDialog 
           candidateToBeEdited={candidateToBeEdited}
           openDialog={openEditCandidateDialog}
           handleClickCloseDialog={this.handleCloseEditCandidateDialog}
+        />
+
+        <DeleteCandidateDialog 
+          candidate={candidateToBeDeleted}
+          openDialog={openDeleteCandidateDialog}
+          handleClickCloseDialog={this.handleCloseDeleteCandidateDialog}
         />
       </Fragment>
     )

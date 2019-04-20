@@ -37,7 +37,7 @@ class CandidateTable extends Component {
   }
 
   getActionsAllowed(candidate) {
-    const { handleOpenEditCandidateDialog } = this.props
+    const { handleOpenEditCandidateDialog, handleOpenDeleteCandidateDialog } = this.props
 
     return (
       <Grid
@@ -57,6 +57,7 @@ class CandidateTable extends Component {
 
         <Grid item>
           <DeleteButton 
+            onClick={() => handleOpenDeleteCandidateDialog(candidate)}
             placement='bottom-start'
             tooltipTitle='Remove this candidate'
             size='small'
@@ -145,6 +146,7 @@ CandidateTable.propTypes = {
   handleCloseAddCandidateDialog: PropTypes.func.isRequired,
 
   handleOpenEditCandidateDialog: PropTypes.func.isRequired,
+  handleOpenDeleteCandidateDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(CandidateTable)

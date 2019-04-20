@@ -12,7 +12,7 @@ import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI } from './actions/election'
 import { addPositionUI, editPositionUI, deletePositionUI } from './actions/position'
-import { addCandidateUI, editCandidateUI } from './actions/candidate'
+import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -87,7 +87,12 @@ class App extends React.Component {
 
           else if (['EditCandidate'].includes(result.event)) {
             let candidateKey = result.returnValues.candidateKey
-            this.props.editCandidateUI(this.props.web3, this.props.votechain,candidateKey)
+            this.props.editCandidateUI(this.props.web3, this.props.votechain, candidateKey)
+          }
+
+          else if (['DeleteCandidate'].includes(result.event)) {
+            let candidateKey = result.returnValues.candidateKey
+            this.props.deleteCandidateUI(this.props.web3, this.props.votechain, candidateKey)
           }
         }
       })
@@ -95,7 +100,6 @@ class App extends React.Component {
 
     // fetch data
     this.props.fetchElectionList(this.props.web3, this.props.votechain)
-    console.log('Mount')
   }
 
   render() {
@@ -123,7 +127,8 @@ const mapDispatchToProps = {
   editPositionUI,
   deletePositionUI,
   addCandidateUI,
-  editCandidateUI
+  editCandidateUI,
+  deleteCandidateUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
