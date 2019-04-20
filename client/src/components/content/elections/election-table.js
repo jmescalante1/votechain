@@ -42,6 +42,7 @@ class ElectionTable extends Component {
 
   getActionsAllowed(election) {
     const { handleOpenEditElectionDialog, handleOpenDeleteElectionDialog } = this.props
+    const { handleOpenStartElectionDialog, handleOpenStopElectionDialog } = this.props
 
     let view = 
       <ViewButton 
@@ -54,6 +55,7 @@ class ElectionTable extends Component {
     let play = 
       <PlayButton 
         id={election.id}  
+        onClick={() => handleOpenStartElectionDialog(election)}
         placement='bottom-start'
         tooltipTitle='Start this election'
         size='small'
@@ -79,6 +81,7 @@ class ElectionTable extends Component {
 
     let stop = 
       <StopButton 
+        onClick={() => handleOpenStopElectionDialog(election)}
         id={election.id}
         placement='bottom-start'
         tooltipTitle='Stop this election'
@@ -192,6 +195,9 @@ ElectionTable.propTypes = {
   handleCloseAddElectionDialog: PropTypes.func.isRequired,
   handleOpenEditElectionDialog: PropTypes.func.isRequired,
   handleOpenDeleteElectionDialog: PropTypes.func.isRequired,
+  handleOpenStartElectionDialog: PropTypes.func.isRequired,
+  handleOpenStopElectionDialog: PropTypes.func.isRequired,
+
 }
 
 
