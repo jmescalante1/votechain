@@ -37,7 +37,7 @@ class VoterTable extends Component {
   }
 
   getActionsAllowed(voter) {
-    const { handleOpenEditVoterDialog } = this.props
+    const { handleOpenEditVoterDialog, handleOpenDeleteVoterDialog } = this.props
 
     return (
       <Grid
@@ -57,6 +57,7 @@ class VoterTable extends Component {
 
         <Grid item>
           <DeleteButton 
+            onClick={() => handleOpenDeleteVoterDialog(voter)}
             placement='bottom-start'
             tooltipTitle='Remove this voter'
             size='small'

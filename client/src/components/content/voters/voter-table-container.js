@@ -7,6 +7,7 @@ import { fetchCurrentVoterList } from '../../../actions/voter'
 import VoterTable from './voter-table'
 
 import EditVoterDialog from '../../customized/dialogs/edit-voter'
+import DeleteVoterDialog from '../../customized/dialogs/delete-voter'
 
 class VoterTableContainer extends Component {
   constructor() {
@@ -69,7 +70,7 @@ class VoterTableContainer extends Component {
   }
 
   render() {
-    const { openAddVoterDialog, openEditVoterDialog, voterToBeEdited } = this.state
+    const { openAddVoterDialog, openEditVoterDialog, voterToBeEdited, openDeleteVoterDialog, voterToBeDeleted } = this.state
     const { voterList, electionId } = this.props
 
     const headers = [
@@ -93,10 +94,18 @@ class VoterTableContainer extends Component {
           handleOpenEditVoterDialog={this.handleOpenEditVoterDialog}
           handleOpenDeleteVoterDialog={this.handleOpenDeleteVoterDialog}
         />
+        
         <EditVoterDialog 
           openDialog={openEditVoterDialog}
           handleClickCloseDialog={this.handleCloseEditVoterDialog}
           voterToBeEdited={voterToBeEdited}
+        />
+
+        <DeleteVoterDialog 
+          openDialog={openDeleteVoterDialog}
+          handleClickCloseDialog={this.handleCloseDeleteVoterDialog}
+          voterToBeDeleted={voterToBeDeleted}
+          electionId={electionId}
         />
       </Fragment>
     )

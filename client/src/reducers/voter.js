@@ -48,7 +48,7 @@ export default function reducer(state = initialState, action) {
 
     case EDIT_VOTER_UI: {
       let currentVoterListClone = cloneDeep(state.currentVoterList)
-      let index = currentVoterListClone.findIndex(position => position.id === action.editedVoter.id)
+      let index = currentVoterListClone.findIndex(voter => voter.id === action.editedVoter.id)
       if(index !== -1){
         currentVoterListClone[index] = action.editedVoter
       }
@@ -59,43 +59,43 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-    // case DELETE_ELECTION_UI: {
-    //   if(state.currentElectionKey === action.deletedElection.id){
-    //     return {
-    //       ...state,
-    //       currentElectionKey: '',
-    //       currentVoterList: []
-    //     }
-    //   }
+    case DELETE_ELECTION_UI: {
+      if(state.currentElectionKey === action.deletedElection.id){
+        return {
+          ...state,
+          currentElectionKey: '',
+          currentVoterList: []
+        }
+      }
 
-    //   return {
-    //     ...state
-    //   }
-    // }
+      return {
+        ...state
+      }
+    }
 
-    // case DELETE_VOTER_VOTECHAIN: {
-    //   return {
-    //     ...state
-    //   }
-    // }
+    case DELETE_VOTER_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-    // case DELETE_VOTER_UI: {
-    //   let deletedIndex = state.currentVoterList.findIndex(x => x.id === action.deletedVoter.id)
+    case DELETE_VOTER_UI: {
+      let deletedIndex = state.currentVoterList.findIndex(x => x.id === action.deletedVoterId)
       
-    //   if(deletedIndex !== -1) {
-    //     let positionListClone = cloneDeep(state.currentVoterList)
-    //     positionListClone.splice(deletedIndex, 1)
+      if(deletedIndex !== -1) {
+        let voterListClone = cloneDeep(state.currentVoterList)
+        voterListClone.splice(deletedIndex, 1)
 
-    //     return {
-    //       ...state,
-    //       currentVoterList: positionListClone
-    //     }
-    //   }
+        return {
+          ...state,
+          currentVoterList: voterListClone
+        }
+      }
 
-    //   return {
-    //     ...state
-    //   }
-    // }
+      return {
+        ...state
+      }
+    }
   
     default: {
       return {

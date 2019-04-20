@@ -83,27 +83,26 @@ export function editVoterUI(web3, votechain, voterKey){
 }
 
 
-// export function deleteVoterVotechain(web3, votechain, voterKey) {
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
+export function deleteVoterVotechain(web3, votechain, electionKey, voterKey) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
 
-//     await votechain.methods.deleteVoter(voterKey).send({from: firstAccount})
+    await votechain.methods.deleteVoterAt(electionKey, voterKey).send({from: firstAccount})
   
-//     dispatch({
-//       type: DELETE_VOTER_VOTECHAIN,
-//     })
-//   }
-// }
+    dispatch({
+      type: DELETE_VOTER_VOTECHAIN,
+    })
+  }
+}
 
-// export function deleteVoterUI(web3, votechain, voterKey) {
-//   return async (dispatch) => {
-//     let deletedVoter = await getVoter(voterKey, votechain)
-//     let deletedVoterKey = voterKey
-//     dispatch({
-//       type: DELETE_VOTER_UI,
-//       deletedVoter,
-//       deletedVoterKey
-//     })
-//   }
-// }
+export function deleteVoterUI(web3, votechain, voterKey) {
+  return async (dispatch) => {
+    let deletedVoterId = voterKey
+    
+    dispatch({
+      type: DELETE_VOTER_UI,
+      deletedVoterId
+    })
+  }
+}
