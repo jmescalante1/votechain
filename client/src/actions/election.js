@@ -27,6 +27,9 @@ export const DELETE_ELECTION_VOTECHAIN = 'DELETE_ELECTION_VOTECHAIN'
 export const DELETE_ELECTION_UI = 'DELETE_ELECTION_UI'
 export const START_ELECTION_VOTECHAIN = 'START_ELECTION_VOTECHAIN'
 export const START_ELECTION_UI = 'START_ELECTION_UI'
+export const STOP_ELECTION_VOTECHAIN = 'STOP_ELECTION_VOTECHAIN'
+export const STOP_ELECTION_UI = 'STOP_ELECTION_UI'
+
 
 export function addElectionVotechain(web3, votechain, electionName){
   return async (dispatch) =>  { 
@@ -152,6 +155,30 @@ export function startElectionUI(web3, votechain, electionKey) {
     dispatch({
       type: START_ELECTION_UI,
       payload: {startedElection}
+    })
+  }
+}
+
+export function stopElectionVotechain(web3, votechain, electionKey) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+
+    await votechain.methods.stopElection(electionKey).send({from: firstAccount})
+
+    dispatch({
+      type: STOP_ELECTION_VOTECHAIN
+    })
+  }
+}
+
+export function stopElectionUI(web3, votechain, electionKey) {
+  return async (dispatch) => {
+    let stoppedElection = await getElection(electionKey, votechain)
+
+    dispatch({
+      type: STOP_ELECTION_UI,
+      payload: {stoppedElection}
     })
   }
 }

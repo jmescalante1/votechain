@@ -10,7 +10,7 @@ import 'typeface-roboto'
 
 import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
-import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, startElectionUI } from './actions/election'
+import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, startElectionUI, stopElectionUI } from './actions/election'
 import { addPositionUI, editPositionUI, deletePositionUI } from './actions/position'
 import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
@@ -116,6 +116,11 @@ class App extends React.Component {
             let electionKey = result.returnValues.electionKey
             this.props.startElectionUI(this.props.web3, this.props.votechain, electionKey)
           }
+
+          else if (['StopElection'].includes(result.event)) {
+            let electionKey = result.returnValues.electionKey
+            this.props.stopElectionUI(this.props.web3, this.props.votechain, electionKey)
+          }
         }
       })
     }
@@ -159,6 +164,7 @@ const mapDispatchToProps = {
   deleteVoterUI,
 
   startElectionUI,
+  stopElectionUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

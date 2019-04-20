@@ -5,6 +5,7 @@ import ElectionTable from '../elections/election-table'
 import EditElectionDialog from '../../customized/dialogs/edit-election'
 import DeleteElectionDialog from '../../customized/dialogs/delete-election'
 import StartElectionDialog from '../../customized/dialogs/start-election'
+import StopElectionDialog from '../../customized/dialogs/stop-election'
 
 import { fetchElectionList } from '../../../actions/election'
 
@@ -22,7 +23,8 @@ class ElectionTableContainer extends Component {
 
       idOfElectionToBeEdited: '',
       idOfElectionToBeDeleted: '',
-      electionToStart: {}
+      electionToStart: {},
+      electionToStop: {},
     }
 
     this.handleOpenAddElectionDialog = this.handleOpenAddElectionDialog.bind(this)
@@ -91,7 +93,7 @@ class ElectionTableContainer extends Component {
 
   handleOpenStopElectionDialog(election) {
     this.setState({
-      openDeleteElectionDialog: true,
+      openStopElectionDialog: true,
       electionToStop: election
     })
   }
@@ -103,7 +105,7 @@ class ElectionTableContainer extends Component {
 
   render() {
     const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, idOfElectionToBeDeleted, idOfElectionToBeEdited } = this.state
-    const { electionToStart, openStartElectionDialog } = this.state
+    const { electionToStart, openStartElectionDialog, electionToStop, openStopElectionDialog } = this.state
     const { electionList } = this.props
 
 
@@ -144,6 +146,11 @@ class ElectionTableContainer extends Component {
           openDialog={openStartElectionDialog}
           handleClickCloseDialog={this.handleCloseStartElectionDialog}
           electionToStart={electionToStart}
+        />
+        <StopElectionDialog 
+          openDialog={openStopElectionDialog}
+          handleClickCloseDialog={this.handleCloseStopElectionDialog}
+          electionToStop={electionToStop}
         />
       </Fragment>
     )
