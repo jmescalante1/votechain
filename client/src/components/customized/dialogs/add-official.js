@@ -15,7 +15,7 @@ import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 
-import { addVoterVotechain } from '../../../actions/voter'
+import { addOfficialVotechain } from '../../../actions/official'
 
 const styles = theme => ({
   textField: {
@@ -39,47 +39,38 @@ const styles = theme => ({
   },
 })
 
-class AddVoterDialog extends React.Component {
+class AddOfficialDialog extends React.Component {
   constructor(props) {
     super(props)
 
-
     this.state = {
-      voterName: '',
-      studentNo: '',
-      voterKey: '',
+      officialName: '',
+      officialKey: '',
     }
 
-    this.onChangeVoterName = this.onChangeVoterName.bind(this)
-    this.onChangeStudentNo = this.onChangeStudentNo.bind(this)
-    this.onChangeVoterKey = this.onChangeVoterKey.bind(this)
+    this.onChangeOfficialName = this.onChangeOfficialName.bind(this)
+    this.onChangeOfficialKey = this.onChangeOfficialKey.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onChangeVoterName(event) {
-    this.setState({ voterName: event.target.value })
+  onChangeOfficialName(event) {
+    this.setState({ officialName: event.target.value })
   }
 
-  onChangeStudentNo(event) {
-    this.setState({ studentNo: event.target.value })
-  }
-
-  onChangeVoterKey(event) {
-    this.setState({ voterKey: event.target.value })
+  onChangeOfficialKey(event) {
+    this.setState({ officialKey: event.target.value })
   }
 
   onSubmit() {
-    const { handleClickCloseDialog, addVoterVotechain, votechain, web3, electionId } = this.props
-    const { voterName, studentNo, voterKey } = this.state
+    const { handleClickCloseDialog, addOfficialVotechain, votechain, web3 } = this.props
+    const { officialName, officialKey } = this.state
 
-    let voter = {
-      electionKey: electionId,
-      voterKey,
-      studentNo,
-      name: voterName,
+    let official = {
+      officialKey,
+      name: officialName,
     }
 
-    addVoterVotechain(web3, votechain, voter)
+    addOfficialVotechain(web3, votechain, official)
     handleClickCloseDialog()
   }
   
@@ -93,12 +84,12 @@ class AddVoterDialog extends React.Component {
         onClose={handleClickCloseDialog}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Add New Voter</Typography>
+          <Typography className={classes.label}>Add New Official</Typography>
         </DialogTitle>
         
         <DialogContent >
           <DialogContentText>
-          Fill out the form below and click submit to add a new voter.
+          Fill out the form below and click submit to add a new official.
           </DialogContentText>
 
           <CustomizedTextField
@@ -108,10 +99,10 @@ class AddVoterDialog extends React.Component {
             required
             fullWidth
             type='string'
-            id='voter-key'
-            label='Voter Key/Address'
+            id='official-key'
+            label='Official Key/Address'
             variant='outlined'
-            onChange={this.onChangeVoterKey}
+            onChange={this.onChangeOfficialKey}
           />
 
           <CustomizedTextField
@@ -121,23 +112,10 @@ class AddVoterDialog extends React.Component {
             required
             fullWidth
             type='string'
-            id='voter-name'
-            label='Voter Name'
+            id='official-name'
+            label='Official Name'
             variant='outlined'
-            onChange={this.onChangeVoterName}
-          />
-
-          <CustomizedTextField
-            classes={{
-              root: classes.textField,
-            }}
-            required
-            fullWidth
-            type='string'
-            id='student-no'
-            label="Voter's student number"
-            variant='outlined'
-            onChange={this.onChangeStudentNo}
+            onChange={this.onChangeOfficialName}
           />
         </DialogContent>
 
@@ -158,11 +136,9 @@ class AddVoterDialog extends React.Component {
   }
 }
 
-AddVoterDialog.propTypes = {
+AddOfficialDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  
-  electionId: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -171,7 +147,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  addVoterVotechain
+  addOfficialVotechain
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddVoterDialog))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddOfficialDialog))

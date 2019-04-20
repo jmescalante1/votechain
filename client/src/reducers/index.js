@@ -7,6 +7,7 @@ import contract from './contract'
 import position from './position'
 import candidate from './candidate'
 import voter from './voter'
+import official from './official'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -15,5 +16,6 @@ export default (history) => combineReducers({
   contract: contract,
   position: position,
   candidate: candidate,
-  voter: voter
+  voter: voter,
+  official: official,
 });
