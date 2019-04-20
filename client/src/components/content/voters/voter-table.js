@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -35,7 +36,7 @@ class VoterTable extends Component {
     this.createTableDialogs = this.createTableDialogs.bind(this)
   }
 
-  getActionsAllowed() {
+  getActionsAllowed(voter) {
     return (
       <Grid
         container
@@ -63,11 +64,13 @@ class VoterTable extends Component {
   }
 
   createTableData(voterList) {
-    voterList.forEach((voter) => {
-      voter.action = this.getActionsAllowed()
+    let voterListClone = cloneDeep(voterList)
+
+    voterListClone.forEach((voter) => {
+      voter.action = this.getActionsAllowed(voter)
     })
 
-    return voterList
+    return voterListClone
   }
   
   createTableTools(){
@@ -90,14 +93,13 @@ class VoterTable extends Component {
 
   createTableDialogs(){
     const { openAddVoterDialog, handleCloseAddVoterDialog } = this.props
-    const { election } = this.props
+    const { electionId } = this.props
 
     return (
       <AddVoterDialog 
         openDialog={openAddVoterDialog}
         handleClickCloseDialog={handleCloseAddVoterDialog}
-
-        election={election}
+        electionId={electionId}
       />
     )
   }
@@ -141,6 +143,11 @@ VoterTable.propTypes = {
   openAddVoterDialog: PropTypes.bool.isRequired,
   handleOpenAddVoterDialog: PropTypes.func.isRequired,
   handleCloseAddVoterDialog: PropTypes.func.isRequired,
+  
+  electionId: PropTypes.string.isRequired,
+
+  handleOpenEditVoterDialog: PropTypes.func.isRequired,
+  handleOpenDeleteVoterDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(VoterTable)

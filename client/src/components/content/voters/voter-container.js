@@ -1,15 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Voter from './voter'
-
-import { electionData, electionList } from './voter-data'
 
 class VoterContainer extends React.Component {
   constructor(){
     super()
 
     this.state = {
-      election: "",
+      electionId: '',
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -17,24 +16,32 @@ class VoterContainer extends React.Component {
 
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ election: option.value })
+      this.setState({ electionId: option.value })
     } else {
-      this.setState({ election: "" })
+      this.setState({ electionId: '' })
     }
   }
 
   render() {
-    const { election } = this.state
+    const { electionId } = this.state
+    const { electionList } = this.props
 
     return(
       <Voter 
-        election={election}
+        electionId={electionId}
         handleElectionSelectChange={this.handleElectionSelectChange}
         electionList={electionList}
-        electionData={electionData}
       />
     )
   }
 }
 
-export default VoterContainer
+const mapStateToProps = state => ({
+  electionList: state.election.electionList
+});
+
+const mapDispatchToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VoterContainer)

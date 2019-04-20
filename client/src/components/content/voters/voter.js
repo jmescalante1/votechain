@@ -16,7 +16,7 @@ const styles = theme => ({
 class Voter extends Component {
 
   render() {
-    const { classes, election, handleElectionSelectChange, electionList, electionData } = this.props
+    const { classes, electionId, handleElectionSelectChange, electionList } = this.props
     
     return (
       <div>
@@ -26,15 +26,13 @@ class Voter extends Component {
           }}
 
           fontSize={18}
-          election={election}
+          electionId={electionId}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
-          electionData={electionData}
         />
 
         <VoterTableContainer 
-          election={election}
-          electionData={electionData}
+          electionId={electionId}
         />
       </div>
     )
@@ -44,10 +42,9 @@ class Voter extends Component {
 Voter.propTypes = {
   classes: PropTypes.object.isRequired,
   
-  election: PropTypes.string.isRequired,
+  electionId: PropTypes.string.isRequired,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
-  electionData: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(Voter)

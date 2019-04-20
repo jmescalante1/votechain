@@ -1,5 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+import { fetchCurrentVoterList } from '../../../actions/voter'
 
 import VoterTable from './voter-table'
 
@@ -8,21 +11,31 @@ class VoterTableContainer extends Component {
     super()
     
     this.state = {
-      openAddVoterDialog: false
+      openAddVoterDialog: false,
+      openEditVoterDialog: false,
+      openDeleteVoterDialog: false,
+
+      voterToBeEdited: {},
+      voterToBeDeleted: {}
     }
 
-    this.getVoterList = this.getVoterList.bind(this)
     this.handleCloseAddVoterDialog = this.handleCloseAddVoterDialog.bind(this)
     this.handleOpenAddVoterDialog = this.handleOpenAddVoterDialog.bind(this)
+  
+    this.handleOpenEditVoterDialog = this.handleOpenEditVoterDialog.bind(this)
+    this.handleCloseEditVoterDialog = this.handleCloseEditVoterDialog.bind(this)
+
+    this.handleOpenDeleteVoterDialog = this.handleOpenDeleteVoterDialog.bind(this)
+    this.handleCloseDeleteVoterDialog = this.handleCloseDeleteVoterDialog.bind(this)
   }
   
-
-  getVoterList(electionData, election){
-    if(electionData[election])
-      return electionData[election].voters
-    return []
+  componentDidUpdate(prevProps) {
+    if(this.props.electionId !== prevProps.electionId) {
+      const { web3, votechain, fetchCurrentVoterList, electionId } = this.props
+      fetchCurrentVoterList(web3, votechain, electionId)
+    }
   }
-
+  
   handleCloseAddVoterDialog() {
     this.setState({ openAddVoterDialog: false })
   }
@@ -31,40 +44,71 @@ class VoterTableContainer extends Component {
     this.setState({ openAddVoterDialog: true })
   }
 
-  render() {
-    const { electionData, election } = this.props 
-    const { openAddVoterDialog } = this.state
+  handleOpenEditVoterDialog(voterToBeEdited) {
+    this.setState({ 
+      openEditVoterDialog: true, 
+      voterToBeEdited
+    })
+  }
 
-    const voterList = this.getVoterList(electionData, election)
+  handleCloseEditVoterDialog() {
+    this.setState({ openEditVoterDialog: false})
+  }
+
+  handleOpenDeleteVoterDialog(voterToBeDeleted) {
+    this.setState({ 
+      openDeleteVoterDialog: true,
+      voterToBeDeleted
+    })
+  }
+
+  handleCloseDeleteVoterDialog() {
+    this.setState({ openDeleteVoterDialog: false })
+  }
+
+  render() {
+    const { openAddVoterDialog } = this.state
+    const { voterList, electionId } = this.props
 
     const headers = [
-      {id: 'id', label: 'ID'},
+      {id: 'id', label: 'Voter Address'},
       {id: 'name', label: 'Name'},
       {id: 'student-number', label: 'Student Number'},
       {id: 'actions', label: 'Actions'}
     ]
 
     return (
-      <div>
+      <Fragment>
         <VoterTable 
+          electionId={electionId}
           headers={headers}
           voterList={voterList}
-
-          election={election}
-          electionData={electionData}
 
           openAddVoterDialog={openAddVoterDialog}
           handleOpenAddVoterDialog={this.handleOpenAddVoterDialog}
           handleCloseAddVoterDialog={this.handleCloseAddVoterDialog}
+
+          handleOpenEditVoterDialog={this.handleOpenEditVoterDialog}
+          handleOpenDeleteVoterDialog={this.handleOpenDeleteVoterDialog}
         />
-      </div>
+      </Fragment>
     )
   }
 }
 
 VoterTableContainer.propTypes = {
-  election: PropTypes.string.isRequired,
-  electionData: PropTypes.object.isRequired,
+  electionId: PropTypes.string.isRequired,
+  
 }
 
-export default VoterTableContainer
+const mapStateToProps = state => ({
+  voterList: state.voter.currentVoterList,
+  web3: state.web3.web3,
+  votechain: state.contract.votechain,
+})
+
+const mapDispatchToProps = {
+  fetchCurrentVoterList
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VoterTableContainer)

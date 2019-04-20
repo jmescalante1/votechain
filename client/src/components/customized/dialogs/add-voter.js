@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -12,6 +14,8 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+
+import { addVoterVotechain } from '../../../actions/voter'
 
 const styles = theme => ({
   textField: {
@@ -35,10 +39,54 @@ const styles = theme => ({
   },
 })
 
-class AddElectionDialog extends React.Component {
+class AddVoterDialog extends React.Component {
+  constructor(props) {
+    super(props)
+
+
+    this.state = {
+      voterName: '',
+      studentNo: '',
+      voterKey: '',
+    }
+
+    this.onChangeVoterName = this.onChangeVoterName.bind(this)
+    this.onChangeStudentNo = this.onChangeStudentNo.bind(this)
+    this.onChangeVoterKey = this.onChangeVoterKey.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onChangeVoterName(event) {
+    this.setState({ voterName: event.target.value })
+  }
+
+  onChangeStudentNo(event) {
+    this.setState({ studentNo: event.target.value })
+  }
+
+  onChangeVoterKey(event) {
+    this.setState({ voterKey: event.target.value })
+  }
+
+  onSubmit() {
+    const { handleClickCloseDialog, addVoterVotechain, votechain, web3, electionId } = this.props
+    const { voterName, studentNo, voterKey } = this.state
+
+    let voter = {
+      electionKey: electionId,
+      voterKey,
+      studentNo,
+      name: voterName,
+    }
+
+    addVoterVotechain(web3, votechain, voter)
+    handleClickCloseDialog()
+  }
+  
+
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-    const { election } = this.props
+    const {  } = this.props
 
     return (
       <Dialog
@@ -54,7 +102,19 @@ class AddElectionDialog extends React.Component {
           Fill out the form below and click submit to add a new voter.
           </DialogContentText>
 
-          <Typography className={classes.election}>Election: {election}</Typography>
+          <CustomizedTextField
+            classes={{
+              root: classes.textField,
+            }}
+            required
+            fullWidth
+            type='string'
+            id='voter-key'
+            label='Voter Key/Address'
+            variant='outlined'
+            onChange={this.onChangeVoterKey}
+          />
+
           <CustomizedTextField
             classes={{
               root: classes.textField,
@@ -65,6 +125,20 @@ class AddElectionDialog extends React.Component {
             id='voter-name'
             label='Voter Name'
             variant='outlined'
+            onChange={this.onChangeVoterName}
+          />
+
+          <CustomizedTextField
+            classes={{
+              root: classes.textField,
+            }}
+            required
+            fullWidth
+            type='string'
+            id='student-no'
+            label="Voter's student number"
+            variant='outlined'
+            onChange={this.onChangeStudentNo}
           />
         </DialogContent>
 
@@ -77,7 +151,7 @@ class AddElectionDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={handleClickCloseDialog} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -85,11 +159,20 @@ class AddElectionDialog extends React.Component {
   }
 }
 
-AddElectionDialog.propTypes = {
+AddVoterDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
   
-  election: PropTypes.string.isRequired,
+  electionId: PropTypes.string.isRequired
 }
 
-export default withStyles(styles)(AddElectionDialog)
+const mapStateToProps = state => ({
+  web3: state.web3.web3,
+  votechain: state.contract.votechain,
+})
+
+const mapDispatchToProps = {
+  addVoterVotechain
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddVoterDialog))
