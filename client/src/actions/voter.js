@@ -59,28 +59,28 @@ export function addVoterUI(web3, votechain, voterKey, electionKey) {
   }
 }
 
-// export function editVoterVotechain(web3, votechain, voter){
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
-//     await votechain.methods.updateVoter(voter.voterKey, voter.name, voter.maxNoOfCandidatesThatCanBeSelected, voter.hasAbstain).send({from: firstAccount})
+export function editVoterVotechain(web3, votechain, voter){
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updateVoter(voter.voterKey, voter.studentNo, voter.name).send({from: firstAccount})
     
-//     dispatch( {
-//       type: EDIT_VOTER_VOTECHAIN
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_VOTER_VOTECHAIN
+    })
+  }
+}
 
-// export function editVoterUI(web3, votechain, voterKey){
-//   return async (dispatch) => {
-//     let editedVoter = await getVoter(voterKey, votechain)
+export function editVoterUI(web3, votechain, voterKey){
+  return async (dispatch) => {
+    let editedVoter = await getVoter(voterKey, votechain)
 
-//     dispatch( {
-//       type: EDIT_VOTER_UI,
-//       editedVoter
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_VOTER_UI,
+      editedVoter
+    })
+  }
+}
 
 
 // export function deleteVoterVotechain(web3, votechain, voterKey) {

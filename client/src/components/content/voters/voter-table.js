@@ -37,6 +37,8 @@ class VoterTable extends Component {
   }
 
   getActionsAllowed(voter) {
+    const { handleOpenEditVoterDialog } = this.props
+
     return (
       <Grid
         container
@@ -46,6 +48,7 @@ class VoterTable extends Component {
       >
         <Grid item>    
           <EditButton 
+            onClick={() => handleOpenEditVoterDialog(voter)}
             placement='bottom-start'
             tooltipTitle='Edit voter details'
             size='small'
