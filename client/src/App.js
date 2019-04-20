@@ -14,7 +14,7 @@ import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, sta
 import { addPositionUI, editPositionUI, deletePositionUI } from './actions/position'
 import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
-import { addOfficialUI } from './actions/official'
+import { addOfficialUI, editOfficialUI, deleteOfficialUI } from './actions/official'
 
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
@@ -128,6 +128,16 @@ class App extends React.Component {
             let officialKey = result.returnValues.officialKey
             this.props.addOfficialUI(this.props.web3, this.props.votechain, officialKey)
           }
+
+          else if (['EditOfficial'].includes(result.event)) {
+            let officialKey = result.returnValues.officialKey
+            this.props.editOfficialUI(this.props.web3, this.props.votechain, officialKey)
+          }
+
+          else if (['DeleteOfficial'].includes(result.event)) {
+            let officialKey = result.returnValues.officialKey
+            this.props.deleteOfficialUI(this.props.web3, this.props.votechain, officialKey)
+          }
         }
       })
     }
@@ -174,6 +184,8 @@ const mapDispatchToProps = {
   stopElectionUI,
 
   addOfficialUI,
+  editOfficialUI,
+  deleteOfficialUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

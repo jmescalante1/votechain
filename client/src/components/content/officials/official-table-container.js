@@ -6,8 +6,8 @@ import { fetchOfficialList } from '../../../actions/official'
 
 import OfficialTable from './official-table'
 
-// import EditOfficialDialog from '../../customized/dialogs/edit-official'
-// import DeleteOfficialDialog from '../../customized/dialogs/delete-official'
+import EditOfficialDialog from '../../customized/dialogs/edit-official'
+import DeleteOfficialDialog from '../../customized/dialogs/delete-official'
 
 class OfficialTableContainer extends Component {
   constructor() {
@@ -95,7 +95,7 @@ class OfficialTableContainer extends Component {
           handleOpenDeleteOfficialDialog={this.handleOpenDeleteOfficialDialog}
         />
         
-        {/* <EditOfficialDialog 
+        <EditOfficialDialog 
           openDialog={openEditOfficialDialog}
           handleClickCloseDialog={this.handleCloseEditOfficialDialog}
           officialToBeEdited={officialToBeEdited}
@@ -105,7 +105,7 @@ class OfficialTableContainer extends Component {
           openDialog={openDeleteOfficialDialog}
           handleClickCloseDialog={this.handleCloseDeleteOfficialDialog}
           officialToBeDeleted={officialToBeDeleted}
-        /> */}
+        />
       </Fragment>
     )
   }

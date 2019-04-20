@@ -30,62 +30,49 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-  //   case EDIT_OFFICIAL_VOTECHAIN: {
-  //     return {
-  //       ...state
-  //     }
-  //   }
+    case EDIT_OFFICIAL_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-  //   case EDIT_OFFICIAL_UI: {
-  //     let officialListClone = cloneDeep(state.officialList)
-  //     let index = officialListClone.findIndex(official => official.id === action.editedOfficial.id)
-  //     if(index !== -1){
-  //       officialListClone[index] = action.editedOfficial
-  //     }
+    case EDIT_OFFICIAL_UI: {
+      let officialListClone = cloneDeep(state.officialList)
+      let index = officialListClone.findIndex(official => official.id === action.payload.editedOfficial.id)
+      if(index !== -1){
+        officialListClone[index] = action.payload.editedOfficial
+      }
 
-  //     return {
-  //       ...state,
-  //       officialList: officialListClone
-  //     }
-  //   }
+      return {
+        ...state,
+        officialList: officialListClone
+      }
+    }
 
-  //   case DELETE_ELECTION_UI: {
-  //     if(state.currentElectionKey === action.deletedElection.id){
-  //       return {
-  //         ...state,
-  //         currentElectionKey: '',
-  //         officialList: []
-  //       }
-  //     }
 
-  //     return {
-  //       ...state
-  //     }
-  //   }
+    case DELETE_OFFICIAL_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-  //   case DELETE_OFFICIAL_VOTECHAIN: {
-  //     return {
-  //       ...state
-  //     }
-  //   }
-
-  //   case DELETE_OFFICIAL_UI: {
-  //     let deletedIndex = state.officialList.findIndex(x => x.id === action.deletedOfficialId)
+    case DELETE_OFFICIAL_UI: {
+      let deletedIndex = state.officialList.findIndex(x => x.id === action.payload.deletedOfficialKey)
       
-  //     if(deletedIndex !== -1) {
-  //       let officialListClone = cloneDeep(state.officialList)
-  //       officialListClone.splice(deletedIndex, 1)
+      if(deletedIndex !== -1) {
+        let officialListClone = cloneDeep(state.officialList)
+        officialListClone.splice(deletedIndex, 1)
 
-  //       return {
-  //         ...state,
-  //         officialList: officialListClone
-  //       }
-  //     }
+        return {
+          ...state,
+          officialList: officialListClone
+        }
+      }
 
-  //     return {
-  //       ...state
-  //     }
-  //   }
+      return {
+        ...state
+      }
+    }
   
     default: {
       return {

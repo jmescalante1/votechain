@@ -338,7 +338,7 @@ contract Votechain {
 
     function updateOfficial(address officialKey, string memory newName) 
         public 
-        onlySelf(officialKey) 
+        onlyAdminOrSelf(officialKey)
         officialKeyExists(officialKey) 
     {
         officialList[officialKey].name = newName;
@@ -718,6 +718,11 @@ contract Votechain {
 
     modifier onlyAdminOrOfficial() {
         require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
+        _;
+    }
+
+    modifier onlyAdminOrSelf(address accountKey) {
+        require(isAdmin(msg.sender) || msg.sender == accountKey, "Only admins or the account owner can change the official's profile.");
         _;
     }
 

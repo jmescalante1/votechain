@@ -59,50 +59,50 @@ export function addOfficialUI(web3, votechain, officialKey) {
   }
 }
 
-// export function editOfficialVotechain(web3, votechain, official){
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
-//     await votechain.methods.updateOfficial(official.officialKey, official.studentNo, official.name).send({from: firstAccount})
+export function editOfficialVotechain(web3, votechain, official){
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updateOfficial(official.officialKey, official.name).send({from: firstAccount})
     
-//     dispatch( {
-//       type: EDIT_OFFICIAL_VOTECHAIN
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_OFFICIAL_VOTECHAIN
+    })
+  }
+}
 
-// export function editOfficialUI(web3, votechain, officialKey){
-//   return async (dispatch) => {
-//     let editedOfficial = await getOfficial(officialKey, votechain)
+export function editOfficialUI(web3, votechain, officialKey){
+  return async (dispatch) => {
+    let editedOfficial = await getOfficial(officialKey, votechain)
 
-//     dispatch( {
-//       type: EDIT_OFFICIAL_UI,
-//       editedOfficial
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_OFFICIAL_UI,
+      payload: {editedOfficial}
+    })
+  }
+}
 
 
-// export function deleteOfficialVotechain(web3, votechain, electionKey, officialKey) {
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
+export function deleteOfficialVotechain(web3, votechain, officialKey) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
 
-//     await votechain.methods.deleteOfficialAt(electionKey, officialKey).send({from: firstAccount})
+    await votechain.methods.deleteOfficial(officialKey).send({from: firstAccount})
   
-//     dispatch({
-//       type: DELETE_OFFICIAL_VOTECHAIN,
-//     })
-//   }
-// }
+    dispatch({
+      type: DELETE_OFFICIAL_VOTECHAIN,
+    })
+  }
+}
 
-// export function deleteOfficialUI(web3, votechain, officialKey) {
-//   return async (dispatch) => {
-//     let deletedOfficialId = officialKey
+export function deleteOfficialUI(web3, votechain, officialKey) {
+  return async (dispatch) => {
+    let deletedOfficialKey = officialKey
     
-//     dispatch({
-//       type: DELETE_OFFICIAL_UI,
-//       deletedOfficialId
-//     })
-//   }
-// }
+    dispatch({
+      type: DELETE_OFFICIAL_UI,
+      payload: {deletedOfficialKey}
+    })
+  }
+}
