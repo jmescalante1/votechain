@@ -93,28 +93,28 @@ export function addCandidateUI(web3, votechain, positionKey, candidateKey) {
   }
 }
 
-// export function editPositionVotechain(web3, votechain, position){
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
-//     await votechain.methods.updatePosition(position.positionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: firstAccount})
+export function editCandidateVotechain(web3, votechain, candidate){
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updateCandidate(candidate.candidateKey, candidate.name).send({from: firstAccount})
     
-//     dispatch( {
-//       type: EDIT_CANDIDATE_VOTECHAIN
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_CANDIDATE_VOTECHAIN
+    })
+  }
+}
 
-// export function editPositionUI(web3, votechain, positionKey){
-//   return async (dispatch) => {
-//     let editedPosition = await getPosition(positionKey, votechain)
+export function editCandidateUI(web3, votechain, candidateKey){
+  return async (dispatch) => {
+    let editedCandidate = await getCandidate(candidateKey, votechain)
 
-//     dispatch( {
-//       type: EDIT_CANDIDATE_UI,
-//       editedPosition
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_CANDIDATE_UI,
+      editedCandidate
+    })
+  }
+}
 
 
 // export function deletePositionVotechain(web3, votechain, positionKey) {

@@ -37,6 +37,8 @@ class CandidateTable extends Component {
   }
 
   getActionsAllowed(candidate) {
+    const { handleOpenEditCandidateDialog } = this.props
+
     return (
       <Grid
         container
@@ -46,6 +48,7 @@ class CandidateTable extends Component {
       >
         <Grid item>    
           <EditButton 
+            onClick={() => handleOpenEditCandidateDialog(candidate)}
             placement='bottom-start'
             tooltipTitle='Edit candidate details'
             size='small'
@@ -67,7 +70,7 @@ class CandidateTable extends Component {
     let candidateListClone = cloneDeep(candidateList);
 
     candidateListClone.forEach((candidate) => {
-      candidate.action = this.getActionsAllowed()
+      candidate.action = this.getActionsAllowed(candidate)
     })
 
     return candidateListClone
@@ -102,7 +105,6 @@ class CandidateTable extends Component {
     )
   }
   
-
   render() {
     const { candidateList, headers } = this.props
 
@@ -141,6 +143,8 @@ CandidateTable.propTypes = {
   openAddCandidateDialog: PropTypes.bool.isRequired,
   handleOpenAddCandidateDialog: PropTypes.func.isRequired,
   handleCloseAddCandidateDialog: PropTypes.func.isRequired,
+
+  handleOpenEditCandidateDialog: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(CandidateTable)

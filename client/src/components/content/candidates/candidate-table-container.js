@@ -5,17 +5,23 @@ import { connect } from "react-redux"
 import { fetchCurrentCandidateList } from '../../../actions/candidate'
 
 import CandidateTable from './candidate-table'
+import EditCandidateDialog from '../../customized/dialogs/edit-candidate'
 
 class CandidateTableContainer extends Component {
   constructor() {
     super()
     
     this.state = {
-      openAddCandidateDialog: false
+      openAddCandidateDialog: false,
+      openEditCandidateDialog: false,
+
+      candidateToBeEdited: {},
     }
 
     this.handleCloseAddCandidateDialog = this.handleCloseAddCandidateDialog.bind(this)
     this.handleOpenAddCandidateDialog = this.handleOpenAddCandidateDialog.bind(this)
+    this.handleCloseEditCandidateDialog = this.handleCloseEditCandidateDialog.bind(this)
+    this.handleOpenEditCandidateDialog = this.handleOpenEditCandidateDialog.bind(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -23,6 +29,17 @@ class CandidateTableContainer extends Component {
       const { web3, votechain, fetchCurrentCandidateList, electionId } = this.props
       fetchCurrentCandidateList(web3, votechain, electionId)
     }
+  }
+
+  handleOpenEditCandidateDialog(candidateToBeEdited) {
+    this.setState({ 
+      openEditCandidateDialog: true,
+      candidateToBeEdited
+    })
+  }
+
+  handleCloseEditCandidateDialog() {
+    this.setState({ openEditCandidateDialog: false })
   }
 
   handleOpenAddCandidateDialog() {
@@ -34,7 +51,7 @@ class CandidateTableContainer extends Component {
   }
 
   render() {
-    const { openAddCandidateDialog } = this.state
+    const { openAddCandidateDialog, candidateToBeEdited, openEditCandidateDialog } = this.state
     const { currentCandidateList, electionId } = this.props
 
     const headers = [
@@ -55,6 +72,13 @@ class CandidateTableContainer extends Component {
           openAddCandidateDialog={openAddCandidateDialog}
           handleCloseAddCandidateDialog={this.handleCloseAddCandidateDialog}
           handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
+
+          handleOpenEditCandidateDialog={this.handleOpenEditCandidateDialog}
+        />
+        <EditCandidateDialog 
+          candidateToBeEdited={candidateToBeEdited}
+          openDialog={openEditCandidateDialog}
+          handleClickCloseDialog={this.handleCloseEditCandidateDialog}
         />
       </Fragment>
     )

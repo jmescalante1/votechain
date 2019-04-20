@@ -55,25 +55,24 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-    // case EDIT_CANDIDATE_VOTECHAIN: {
-    //   return {
-    //     ...state
-    //   }
-    // }
+    case EDIT_CANDIDATE_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-    // case EDIT_CANDIDATE_UI: {
-    //   let currentCandidateListClone = cloneDeep(state.currentCandidateList)
-    //   let index = currentCandidateListClone.findIndex(position => position.id === action.editedPosition.id)
-    //   if(index !== -1){
-    //     console.log(index)
-    //     currentCandidateListClone[index] = action.editedPosition
-    //   }
+    case EDIT_CANDIDATE_UI: {
+      let currentCandidateListClone = cloneDeep(state.currentCandidateList)
+      let index = currentCandidateListClone.findIndex(candidate => candidate.id === action.editedCandidate.id)
+      if(index !== -1){
+        currentCandidateListClone[index] = action.editedCandidate
+      }
 
-    //   return {
-    //     ...state,
-    //     currentCandidateList: currentCandidateListClone
-    //   }
-    // }
+      return {
+        ...state,
+        currentCandidateList: currentCandidateListClone
+      }
+    }
 
     // case DELETE_ELECTION_UI: {
     //   if(state.currentElectionKey === action.deletedElection.id){
