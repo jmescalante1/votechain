@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain - data update", async(accounts) => { 
   let votechainInstance;
-  const adminAccount = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+  const adminAccount = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
   const adminName = "JM";
 
   beforeEach(async () => {
@@ -92,7 +92,7 @@ contract("Votechain - data update", async(accounts) => {
 
   it("should update an admin.", async () => {
     // add first an admin
-    let expectedAdminKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedAdminKey = "0xc0254096f0b6fb30e22a5cc57fdd53313E28DD5E";
     let expectedAdminName = "MJ";
     await votechainInstance.addAdmin.sendTransaction(expectedAdminKey, expectedAdminName, {from: adminAccount});
 
@@ -109,7 +109,7 @@ contract("Votechain - data update", async(accounts) => {
 
   it("should update an official.", async () => {
     // add first an official
-    let expectedOfficialKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedOfficialKey = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
     let expectedOfficialName = "MJ";
 
     await votechainInstance.addOfficial.sendTransaction(expectedOfficialKey, expectedOfficialName, {from: adminAccount});
@@ -132,7 +132,7 @@ contract("Votechain - data update", async(accounts) => {
     await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
 
     // add a voter
-    let expectedVoterKey = "0x26E54a83d8DC1B1E00cb9fFEA7834Bb3294eECDC";
+    let expectedVoterKey = "0xefbE8Ec783D3815576622932e63594546769b5ea";
     let expectedElectionKey = new BigNumber(1);
     let expectedVoterName = "Yella";
     let expectedVoterStudentNo = "2014-09899";

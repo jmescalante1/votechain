@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x0C8D9A6BBB5B79289bD93739E04366c6c27A2f05";
+  const adminAccount = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
   const adminName = "JM";
 
   beforeEach(async () => {
@@ -39,7 +39,7 @@ contract("Votechain", async(accounts) => {
     expect(isCandidateAtPosition, "The candidate should be added.").to.be.true;
 
     // add a voter
-    let expectedVoterKey = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+    let expectedVoterKey = "0xefbE8Ec783D3815576622932e63594546769b5ea";
     let expectedVoterStudentNo = "2015-09899";
     let expectedVoterName = "Alley";
     await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});

@@ -99,7 +99,6 @@ contract Votechain {
         mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
     }
 
-
     struct Vote {
         uint256 keyIndex;
         uint256 electionKey;
@@ -116,27 +115,49 @@ contract Votechain {
         mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
     }
 
-    event AddElection ( uint256 electionKey );
-    event EditElection ( uint256 electionKey );
-    event DeleteElection ( uint256 electionKey );
+    event StartElection (uint256 electionKey);
+    event StopElection (uint256 electionKey);
 
-    event AddPositionAt ( uint256 electionKey, uint256 positionKey );
-    event EditPosition ( uint256 positionKey );
-    event DeletePosition ( uint256 positionKey );
+    event AddElection (uint256 electionKey);
+    event EditElection (uint256 electionKey);
+    event DeleteElection (uint256 electionKey);
+
+    event AddPositionAt (uint256 electionKey, uint256 positionKey);
+    event EditPosition (uint256 positionKey);
+    event DeletePosition (uint256 positionKey);
+
+    event AddCandidateAt (uint256 positionKey, uint256 candidateKey);
+    event EditCandidate (uint256 candidateKey);
+    event DeleteCandidate (uint256 candidateKey);
+
+    event AddVoterAt (uint256 electionKey, address voterKey);
+    event EditVoter (address voterKey);
+    event DeleteVoterAt (uint256 electionKey, address voterKey);
+
+    event AddAbstainAt(uint256 positionKey, uint256 abstainKey);
+    event DeleteAbstain(uint abstainKey);
+
+    event AddAdmin (address adminKey);
+    event EditAdmin (address adminKey);
+    event DeleteAdmin (address adminKey);
+
+    event AddOfficial (address officialKey);
+    event EditOfficial (address officialKey);
+    event DeleteOfficial (address officialKey);
 
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
     }
 
-    function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey) returns(bool success){
+    function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
         electionList[electionKey].stage = Stage.Started;
-        return true;
+        emit StartElection(electionKey);
     }
 
-    function stopElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) hasStarted(electionKey) returns (bool success) {
+    function stopElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) hasStarted(electionKey){
         electionList[electionKey].stage = Stage.Finished;
-        return true;
+        emit StopElection(electionKey);
     }
 
     function vote(uint256 candidateKey) 
@@ -170,28 +191,27 @@ contract Votechain {
         position.noOfVotesSubmittedBy[msg.sender] = position.noOfVotesSubmittedBy[msg.sender].add(1);
     }
 
-    function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey) returns(address) {
+    function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey){
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
         
-        return adminKey;
+        emit AddAdmin(adminKey);
     }
 
-    function addOfficial(address officialKey, string memory name) public onlyAdmin notOfficial(officialKey) returns(address) {
+    function addOfficial(address officialKey, string memory name) public onlyAdmin notOfficial(officialKey){
         officialList[officialKey].name = name;
         officialList[officialKey].keyIndex = officialKeyList.push(officialKey).sub(1);
 
-        return officialKey;
+        emit AddOfficial(officialKey);
     }
 
-    function addElection(string memory name) public onlyAdminOrOfficial returns(uint256) {
+    function addElection(string memory name) public onlyAdminOrOfficial{
         uint256 electionKey = genElectionKey();
         electionList[electionKey].stage = Stage.Setup;
         electionList[electionKey].name = name;
         electionList[electionKey].keyIndex = electionKeyList.push(electionKey).sub(1);
         
         emit AddElection(electionKey);
-        return electionKey;
     }
 
     function addPositionAt(uint256 electionKey, string memory name, uint256 maxNoOfCandidatesThatCanBeSelected, bool hasAbstain) 
@@ -199,7 +219,6 @@ contract Votechain {
         onlyAdminOrOfficial 
         electionKeyExists(electionKey)
         inSetupStage(electionKey) 
-        returns(uint256) 
     {
         uint256 positionKey = genPositionKey();
         positionList[positionKey].name = name;
@@ -214,7 +233,6 @@ contract Votechain {
         }
 
         emit AddPositionAt(electionKey, positionKey);
-        return positionKey;
     }
 
     function addCandidateAt(uint256 positionKey, string memory name) 
@@ -222,7 +240,6 @@ contract Votechain {
         onlyAdminOrOfficial
         positionKeyExists(positionKey)
         inSetupStage(positionList[positionKey].electionKey)  
-        returns(uint256) 
     {
         uint256 candidateKey = genCandidateKey();
         candidateList[candidateKey].name = name;
@@ -231,7 +248,7 @@ contract Votechain {
 
         positionList[positionKey].candidateKeyIndexList[candidateKey] = positionList[positionKey].candidateKeyList.push(candidateKey).sub(1);
        
-        return candidateKey;
+        emit AddCandidateAt(positionKey, candidateKey);
     }
 
     function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) 
@@ -240,7 +257,6 @@ contract Votechain {
         electionKeyExists(electionKey)
         inSetupStage(electionKey) 
         notVoterAt(electionKey, voterKey) 
-        returns(address)
     {
         if(isVoter(voterKey)){ // the voter is already registered
             voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
@@ -254,7 +270,7 @@ contract Votechain {
         Election storage election = electionList[electionKey];
 
         election.voterKeyIndexList[voterKey] = election.voterKeyList.push(voterKey).sub(1);
-        return voterKey;
+        emit AddVoterAt(electionKey, voterKey);
     }
 
     function addAbstainAt(uint256 positionKey) 
@@ -263,7 +279,6 @@ contract Votechain {
         positionKeyExists(positionKey) 
         inSetupStage(positionList[positionKey].electionKey)
         atMostOneAbstain(positionKey) 
-        returns(uint256) 
     {
         uint256 abstainKey = genAbstainKey();
         abstainList[abstainKey].positionKey = positionKey;
@@ -272,7 +287,7 @@ contract Votechain {
         positionList[positionKey].abstainKey = abstainKey;
         positionList[positionKey].isAbstainActive = true;
 
-        return abstainKey; 
+        emit AddAbstainAt(positionKey, abstainKey);
     }
 
     function updateElection(uint256 electionKey, string memory newName) 
@@ -280,12 +295,10 @@ contract Votechain {
         onlyAdminOrOfficial 
         electionKeyExists(electionKey) 
         inSetupStage(electionKey)
-        returns(bool) 
     {
         electionList[electionKey].name = newName;
         
         emit EditElection(electionKey);
-        return true;
     }
 
     function updatePosition(uint256 positionKey, string memory newName, uint256 newMaxNoOfCandidatesThatCanBeSelected, bool hasAbstain ) 
@@ -293,7 +306,6 @@ contract Votechain {
         onlyAdminOrOfficial 
         positionKeyExists(positionKey)  
         inSetupStage(positionList[positionKey].electionKey)
-        returns(bool) 
     {
         positionList[positionKey].name = newName;
         positionList[positionKey].maxNoOfCandidatesThatCanBeSelected = newMaxNoOfCandidatesThatCanBeSelected;
@@ -307,7 +319,6 @@ contract Votechain {
         }
 
         emit EditPosition(positionKey);
-        return true;
     }
 
     function updateCandidate(uint256 candidateKey, string memory newName) 
@@ -315,59 +326,57 @@ contract Votechain {
         onlyAdminOrOfficial 
         candidateKeyExists(candidateKey)  
         inSetupStage(positionList[candidateList[candidateKey].positionKey].electionKey)
-        returns(bool) 
     {
         candidateList[candidateKey].name = newName;
-        return true;
+        emit EditCandidate(candidateKey);
     }
 
-    function updateAdmin(address adminKey, string memory newName) public onlySelf(adminKey) adminKeyExists(adminKey) returns(bool) {
+    function updateAdmin(address adminKey, string memory newName) public onlySelf(adminKey) adminKeyExists(adminKey){
         adminList[adminKey].name = newName;
-        return true;
+        emit EditAdmin(adminKey);
     }
 
     function updateOfficial(address officialKey, string memory newName) 
         public 
         onlySelf(officialKey) 
         officialKeyExists(officialKey) 
-        returns(bool) 
     {
         officialList[officialKey].name = newName;
-        return true;
+        emit EditOfficial(officialKey);
     }
 
     function updateVoter(address voterKey, string memory newStudentNo, string memory newName) 
         public 
         onlySelf(voterKey) 
         voterKeyExists(voterKey) 
-        returns(bool) 
     {
         voterList[voterKey].name = newName;
         voterList[voterKey].studentNo = newStudentNo;
-        return true;
+        
+        emit EditVoter(voterKey);
     }
 
-    function deleteAdmin(address adminKey) public onlyAdmin adminKeyExists(adminKey) returns(uint256) {
+    function deleteAdmin(address adminKey) public onlyAdmin adminKeyExists(adminKey){
         uint256 indexToDelete = adminList[adminKey].keyIndex;
         address keyToMove = adminKeyList[adminKeyList.length.sub(1)];
         adminKeyList[indexToDelete] = keyToMove;
         adminList[keyToMove].keyIndex = indexToDelete;
         adminKeyList.length = adminKeyList.length.sub(1);
 
-        return indexToDelete; 
+        emit DeleteAdmin(adminKey);
     }
 
-    function deleteOfficial(address officialKey) public onlyAdmin officialKeyExists(officialKey) returns(uint256) {
+    function deleteOfficial(address officialKey) public onlyAdmin officialKeyExists(officialKey){
         uint256 indexToDelete = officialList[officialKey].keyIndex;
         address keyToMove = officialKeyList[officialKeyList.length.sub(1)];
         officialKeyList[indexToDelete] = keyToMove;
         officialList[keyToMove].keyIndex = indexToDelete;
         officialKeyList.length = officialKeyList.length.sub(1);
 
-        return indexToDelete;
+        emit DeleteOfficial(officialKey);
     }
 
-    function deleteElection(uint256 electionKey) public onlyAdminOrOfficial electionKeyExists(electionKey) returns(uint256) {
+    function deleteElection(uint256 electionKey) public onlyAdminOrOfficial electionKeyExists(electionKey){
         uint256 indexToDelete = electionList[electionKey].keyIndex;
         uint256 keyToMove = electionKeyList[electionKeyList.length.sub(1)];
         electionKeyList[indexToDelete] = keyToMove;
@@ -397,6 +406,8 @@ contract Votechain {
             positionList[keyToMove].keyIndex = indexToDelete;
             positionKeyList.length = positionKeyList.length.sub(1);
 
+            emit DeletePosition(positionKey);
+
             // delete all the candidates under this position
             Position storage position = positionList[positionKey];
             for(uint256 j = 0; j < position.candidateKeyList.length; j++){
@@ -406,19 +417,19 @@ contract Votechain {
                 candidateKeyList[indexToDelete] = keyToMove;
                 candidateList[keyToMove].keyIndex = indexToDelete;
                 candidateKeyList.length = candidateKeyList.length.sub(1);
+
+                emit DeleteCandidate(candidateKey);
             }          
             
         }
 
         emit DeleteElection(electionKey);
-        return indexToDelete;
     }
 
     function deleteCandidate(uint256 candidateKey) public 
         onlyAdminOrOfficial 
         candidateKeyExists(candidateKey)
         inSetupStage(positionList[candidateList[candidateKey].positionKey].electionKey) 
-        returns(uint256) 
     {
         uint256 indexToDelete = candidateList[candidateKey].keyIndex;
         uint256 positionKey = candidateList[candidateKey].positionKey;
@@ -434,7 +445,7 @@ contract Votechain {
         position.candidateKeyIndexList[keyToMoveInPosition] = indexToDeleteInPosition;
         position.candidateKeyList.length --;
 
-        return 1;
+        emit DeleteCandidate(candidateKey);
     }
 
     function deletePosition(uint256 positionKey) 
@@ -442,7 +453,6 @@ contract Votechain {
         onlyAdminOrOfficial 
         positionKeyExists(positionKey) 
         inSetupStage(positionList[positionKey].electionKey)
-        returns(uint256) 
     {
         uint256 electionKey = positionList[positionKey].electionKey;
 
@@ -488,7 +498,6 @@ contract Votechain {
         electionKeyExists(electionKey) 
         voterKeyExistsAt(electionKey, voterKey)
         inSetupStage(electionKey) 
-        returns(uint256) 
     {
         // remove the voter key from the specified election
         Election storage election = electionList[electionKey];
@@ -506,6 +515,7 @@ contract Votechain {
         voter.electionKeyIndexList[electionKeyToMove] = indexToDelete;
         voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
 
+        emit DeleteVoterAt(electionKey, voterKey);
     }
 
     function deleteAbstain(uint256 abstainKey) 
@@ -513,7 +523,6 @@ contract Votechain {
         onlyAdminOrOfficial 
         abstainKeyExists(abstainKey) 
         inSetupStage(positionList[abstainList[abstainKey].positionKey].electionKey)
-        returns(uint256) 
     {
         uint256 indexToDelete = abstainList[abstainKey].keyIndex;
         uint256 keyToMove = abstainKeyList[abstainKeyList.length.sub(1)];
@@ -525,7 +534,7 @@ contract Votechain {
         uint256 positionKey = abstainList[abstainKey].positionKey;
         positionList[positionKey].isAbstainActive = false;
 
-        return indexToDelete;
+        emit DeleteAbstain(abstainKey);
     }
 
     function isAdmin(address adminKey) public view returns(bool) {

@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain - data insertion", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x281a1316FC1e113C8Dc8542D4E281412a28490be";
+  const adminAccount = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
   const adminName = "JM";
 
   beforeEach(async () => {
@@ -199,7 +199,8 @@ contract("Votechain - data insertion", async(accounts) => {
     let expectedElectionKey = new BigNumber(1);
     let expectedPositionName = "President";
     let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
-    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
+    let hasAbstain = false;
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, hasAbstain, {from: adminAccount});
 
     // then add an abstain option in the added election position
     let expectedPositionKey = new BigNumber(1);
