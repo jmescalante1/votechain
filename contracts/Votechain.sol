@@ -406,8 +406,6 @@ contract Votechain {
             positionList[keyToMove].keyIndex = indexToDelete;
             positionKeyList.length = positionKeyList.length.sub(1);
 
-            emit DeletePosition(positionKey);
-
             // delete all the candidates under this position
             Position storage position = positionList[positionKey];
             for(uint256 j = 0; j < position.candidateKeyList.length; j++){
@@ -417,8 +415,6 @@ contract Votechain {
                 candidateKeyList[indexToDelete] = keyToMove;
                 candidateList[keyToMove].keyIndex = indexToDelete;
                 candidateKeyList.length = candidateKeyList.length.sub(1);
-
-                emit DeleteCandidate(candidateKey);
             }          
             
         }
