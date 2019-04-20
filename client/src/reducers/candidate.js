@@ -74,19 +74,20 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-    // case DELETE_ELECTION_UI: {
-    //   if(state.currentElectionKey === action.deletedElection.id){
-    //     return {
-    //       ...state,
-    //       currentElectionKey: '',
-    //       currentCandidateList: []
-    //     }
-    //   }
+    case DELETE_ELECTION_UI: {
+      if(state.currentElectionKey === action.deletedElection.id){
+        return {
+          ...state,
+          currentElectionKey: '',
+          currentPositionList: [],
+          currentCandidateList: []
+        }
+      }
 
-    //   return {
-    //     ...state
-    //   }
-    // }
+      return {
+        ...state
+      }
+    }
 
     case DELETE_CANDIDATE_VOTECHAIN: {
       return {
