@@ -221,7 +221,7 @@ AddPositionDialog.propTypes = {
 
 const mapStateToProps = state => ({
   web3: state.web3.web3,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
 })
 
 const mapDispatchToProps = {

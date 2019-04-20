@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -12,10 +14,13 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import PositionSelector from '../selectors/position-selector'
+
+import { addCandidateVotechain } from '../../../actions/candidate'
 
 const styles = theme => ({
   content: {
-    width: 500
+    width: 500,
   },
   textField: {
     marginTop: 20,
@@ -29,12 +34,55 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+  },
+  positionSelector: {
+    width: '100%',
+    marginTop: 20,
   }
 })
 
-class AddElectionDialog extends React.Component {
+class AddCandidateDialog extends React.Component {
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      selectedPositionId: '',
+      candidateName: '',
+    }
+
+    this.handlePositionSelectChange = this.handlePositionSelectChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onChangeCandidateName = this.onChangeCandidateName.bind(this)
+  }
+
+  handlePositionSelectChange(option) {
+    if(option){
+      this.setState({ selectedPositionId: option.value })
+    } else {
+      this.setState({ selectedPositionId: ''})
+    }
+  }
+
+  onChangeCandidateName(event) {
+    this.setState({ candidateName: event.target.value })
+  }
+
+  onSubmit() {
+    const { handleClickCloseDialog, addCandidateVotechain, votechain, web3 } = this.props
+    const { candidateName, selectedPositionId } = this.state
+
+    let candidate = {
+      positionKey: selectedPositionId,
+      name: candidateName,
+    }
+
+    addCandidateVotechain(web3, votechain, candidate)
+    handleClickCloseDialog()
+  }
+
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, currentPositionList } = this.props
+    const { selectedPositionId } = this.state
 
     return (
       <Dialog
@@ -52,6 +100,16 @@ class AddElectionDialog extends React.Component {
             Add new candidate by specifying the name.
           </DialogContentText>
 
+          <PositionSelector 
+            classes={{
+              root: classes.positionSelector
+            }}
+            width='85%'
+            handlePositionSelectChange={this.handlePositionSelectChange}
+            positionList={currentPositionList}
+            selectedPositionId={selectedPositionId}
+          />
+
           <CustomizedTextField
             classes={{
               root: classes.textField
@@ -62,6 +120,7 @@ class AddElectionDialog extends React.Component {
             id='candidate-name'
             label='Candidate Name'
             variant='outlined'
+            onChange={this.onChangeCandidateName}
           />
         </DialogContent>
 
@@ -74,7 +133,7 @@ class AddElectionDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={handleClickCloseDialog} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -82,9 +141,19 @@ class AddElectionDialog extends React.Component {
   }
 }
 
-AddElectionDialog.propTypes = {
+AddCandidateDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(AddElectionDialog)
+const mapStateToProps = state => ({
+  web3: state.web3.web3,
+  votechain: state.contract.votechain,
+  currentPositionList: state.candidate.currentPositionList
+})
+
+const mapDispatchToProps = {
+  addCandidateVotechain
+}
+
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddCandidateDialog))

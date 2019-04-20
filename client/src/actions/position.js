@@ -100,10 +100,11 @@ export function deletePositionVotechain(web3, votechain, positionKey) {
 export function deletePositionUI(web3, votechain, positionKey) {
   return async (dispatch) => {
     let deletedPosition = await getPosition(positionKey, votechain)
-
+    let deletedPositionKey = positionKey
     dispatch({
       type: DELETE_POSITION_UI,
-      deletedPosition
+      deletedPosition,
+      deletedPositionKey
     })
   }
 }

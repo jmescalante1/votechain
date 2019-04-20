@@ -8,7 +8,7 @@ class CandidateContainer extends React.Component {
     super()
 
     this.state = {
-      electionId: "",
+      electionId: '',
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -18,7 +18,7 @@ class CandidateContainer extends React.Component {
     if(option){
       this.setState({ electionId: option.value })
     } else {
-      this.setState({ electionId: null })
+      this.setState({ electionId: '' })
     }
   }
 

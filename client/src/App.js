@@ -12,6 +12,7 @@ import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI } from './actions/election'
 import { addPositionUI, editPositionUI, deletePositionUI } from './actions/position'
+import { addCandidateUI } from './actions/candidate'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -77,6 +78,12 @@ class App extends React.Component {
             let positionKey = result.returnValues.positionKey
             this.props.deletePositionUI(this.props.web3, this.props.votechain, positionKey)
           }
+
+          else if (['AddCandidateAt'].includes(result.event)) {
+            let positionKey = result.returnValues.positionKey
+            let candidateKey = result.returnValues.candidateKey
+            this.props.addCandidateUI(this.props.web3, this.props.votechain, positionKey, candidateKey)
+          }
         }
       })
     }
@@ -109,7 +116,8 @@ const mapDispatchToProps = {
   deleteElectionUI,
   addPositionUI,
   editPositionUI,
-  deletePositionUI
+  deletePositionUI,
+  addCandidateUI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

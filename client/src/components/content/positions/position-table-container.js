@@ -86,10 +86,11 @@ class PositionTableContainer extends Component {
           electionId={electionId}
           headers={headers}
           positionList={positionList}
+
           openAddPositionDialog={openAddPositionDialog}
           handleCloseAddPositionDialog={this.handleCloseAddPositionDialog}
-        
           handleOpenAddPositionDialog={this.handleOpenAddPositionDialog}
+          
           handleOpenEditPositionDialog={this.handleOpenEditPositionDialog}
           handleOpenDeletePositionDialog={this.handleOpenDeletePositionDialog}
         />

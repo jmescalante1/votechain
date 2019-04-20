@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from "react-redux"
 
-import CandidateTable from './candidate-table'
+import { fetchCurrentCandidateList } from '../../../actions/candidate'
 
-import { fetchCandidateListOfElection } from '../../../actions/candidate'
+import CandidateTable from './candidate-table'
 
 class CandidateTableContainer extends Component {
   constructor() {
@@ -20,40 +20,43 @@ class CandidateTableContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if(this.props.electionId !== prevProps.electionId) {
-      this.props.fetchCandidateListOfElection(this.props.electionId)
+      const { web3, votechain, fetchCurrentCandidateList, electionId } = this.props
+      fetchCurrentCandidateList(web3, votechain, electionId)
     }
+  }
+
+  handleOpenAddCandidateDialog() {
+    this.setState({ openAddCandidateDialog: true })
   }
 
   handleCloseAddCandidateDialog() {
     this.setState({ openAddCandidateDialog: false })
   }
-  
-  handleOpenAddCandidateDialog() {
-    this.setState({ openAddCandidateDialog: true })
-  }
 
   render() {
     const { openAddCandidateDialog } = this.state
-    const { currentCandidateList } = this.props
+    const { currentCandidateList, electionId } = this.props
 
     const headers = [
       {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
-      {id: 'position', label: 'Position'},
+      {id: 'position-key', label: 'Position Key'},
+      {id: 'position-name', label: 'Position Name'},
       {id: 'actions', label: 'Actions'}
     ]
 
     return (
-      <div>
+      <Fragment>
         <CandidateTable 
+          electionId={electionId}
           headers={headers}
           candidateList={currentCandidateList}
 
           openAddCandidateDialog={openAddCandidateDialog}
-          handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
           handleCloseAddCandidateDialog={this.handleCloseAddCandidateDialog}
+          handleOpenAddCandidateDialog={this.handleOpenAddCandidateDialog}
         />
-      </div>
+      </Fragment>
     )
   }
 }
@@ -63,11 +66,13 @@ CandidateTableContainer.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  currentCandidateList: state.election.currentCandidateList
+  web3: state.web3.web3,
+  votechain: state.contract.votechain,
+  currentCandidateList: state.candidate.currentCandidateList
 });
 
 const mapDispatchToProps = {
-  fetchCandidateListOfElection
+  fetchCurrentCandidateList
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CandidateTableContainer)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -35,7 +36,7 @@ class CandidateTable extends Component {
     this.createTableDialogs = this.createTableDialogs.bind(this)
   }
 
-  getActionsAllowed() {
+  getActionsAllowed(candidate) {
     return (
       <Grid
         container
@@ -63,11 +64,13 @@ class CandidateTable extends Component {
   }
 
   createTableData(candidateList) {
-    candidateList.forEach((candidate) => {
+    let candidateListClone = cloneDeep(candidateList);
+
+    candidateListClone.forEach((candidate) => {
       candidate.action = this.getActionsAllowed()
     })
 
-    return candidateList
+    return candidateListClone
   }
   
   createTableTools(){
