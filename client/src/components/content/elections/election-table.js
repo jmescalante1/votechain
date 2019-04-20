@@ -18,6 +18,8 @@ import StopButton from '../../customized/buttons/stop'
 import PlayButton from '../../customized/buttons/play'
 import ViewButton from '../../customized/buttons/view'
 
+import StatusSymbol from '../../customized/symbols/status-symbol'
+
 const styles = theme => ({
   actionIcon:{
     marginRight: theme.spacing.unit,
@@ -149,6 +151,7 @@ class ElectionTable extends Component {
 
     electionListClone.forEach((election) => {
       election.action = this.getActionsAllowed(election)
+      election.status = <StatusSymbol variant={election.status}/>
     })
 
     return electionListClone
@@ -197,7 +200,6 @@ ElectionTable.propTypes = {
   handleOpenDeleteElectionDialog: PropTypes.func.isRequired,
   handleOpenStartElectionDialog: PropTypes.func.isRequired,
   handleOpenStopElectionDialog: PropTypes.func.isRequired,
-
 }
 
 
