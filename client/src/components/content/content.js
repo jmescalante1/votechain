@@ -6,6 +6,9 @@ import { headerTabs } from '../layout/header/header-tabs'
 import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
 import { sidebarSecondaryOptions } from '../layout/sidebar/sidebar-options'
 
+import electionView from '../content/elections/election-view/election-view-route'
+import ElectionViewContainer from '../content/elections/election-view/election-view-container'
+
 const styles = theme => ({
   toolbar: {
     display: 'flex',
@@ -37,6 +40,7 @@ class Content extends React.Component {
           {sidebarSecondaryOptions.map((props) => (
             <Route key={props.label} path={props.path} render={() => props.component} />
           ))}
+          <Route key={electionView.label} path={electionView.path} render={(props) => <ElectionViewContainer location={this.props.location} {...props}/>} />
         </Switch>
       </main>
     )
