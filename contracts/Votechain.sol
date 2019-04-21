@@ -145,6 +145,8 @@ contract Votechain {
     event EditOfficial (address officialKey);
     event DeleteOfficial (address officialKey);
 
+    event Vote( uint256 voteKey);
+
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
@@ -189,6 +191,14 @@ contract Votechain {
 
         candidateList[candidateKey].wasVotedBy[msg.sender] = true;
         position.noOfVotesSubmittedBy[msg.sender] = position.noOfVotesSubmittedBy[msg.sender].add(1);
+
+        emit Vote(voteKey);
+    }
+
+    function bulkVote(uint256[] candidateKeyList) public {
+        for(int i = 0; i < candidateKeyList.length; i++){
+            vote(candidateKeyList[i])
+        }
     }
 
     function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey){
