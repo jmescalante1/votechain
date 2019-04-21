@@ -32,7 +32,7 @@ contract("Votechain", async(accounts) => {
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
     await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
-
+    
     // verify if the candidate was successfully recorded
     let expectedCandidateKey = new BigNumber(1);
     let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
@@ -52,7 +52,7 @@ contract("Votechain", async(accounts) => {
     await votechainInstance.startElection.sendTransaction(expectedElectionKey, {from: adminAccount});
 
     // cast a vote
-    await votechainInstance.vote.sendTransaction(expectedCandidateKey, {from: expectedVoterKey});
+    await votechainInstance.castVote.sendTransaction(expectedCandidateKey, {from: expectedVoterKey});
 
     // verify if the vote was successfully casted
     let expectedVoteKey = new BigNumber(1);
@@ -81,5 +81,64 @@ contract("Votechain", async(accounts) => {
     // verify if the key was also added in the list of vote keys of the voter
     let isVoteAtVoter = await votechainInstance.isVoteAtVoter.call(expectedVoterKey, expectedVoteKey);
     expect(isVoteAtVoter, "The key of the casted vote should be added in the list of votekeys of the voter.").to.be.true;
+  });
+  
+  
+  it("should allow a voter to cast a bulk vote.", async () => {
+    // add first an election 
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a position
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPositionName = "CEO";
+    let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
+
+    // add a candidate
+    let expectedPositionKey = new BigNumber(1);
+    let expectedCandidateName = "JM";
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+
+    // add another candidate
+    let expectedCandidateName2 = "Alley";
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName2, {from: adminAccount});
+    
+    // verify if the first candidate was successfully recorded
+    let expectedCandidateKey = new BigNumber(1);
+    let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
+    expect(isCandidateAtPosition, "The first candidate should be added.").to.be.true;
+
+    // verify if the second candidate was successfully recorded
+    let expectedCandidateKey2 = new BigNumber(2);
+    let isCandidate2AtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey2);
+    expect(isCandidate2AtPosition, "The second candidate should be added.").to.be.true;
+
+    // add a voter
+    let expectedVoterKey = "0xefbE8Ec783D3815576622932e63594546769b5ea";
+    let expectedVoterStudentNo = "2015-09899";
+    let expectedVoterName = "Alley";
+    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});
+
+    // verify if the voter was successfully recorded.
+    let isVoterAtElection = await votechainInstance.isVoterAt.call(expectedElectionKey, expectedVoterKey);
+    expect(isVoterAtElection, "The voter should be added in the election.").to.be.true;
+
+    // start the election
+    await votechainInstance.startElection.sendTransaction(expectedElectionKey, {from: adminAccount});
+
+    // cast bulk vote
+    await votechainInstance.bulkVote.sendTransaction([expectedCandidateKey, expectedCandidateKey2], {from: expectedVoterKey});
+
+    // verify if the votes were successfully casted
+    let expectedVoteKey = new BigNumber(1);
+    let isVote = await votechainInstance.isVote.call(expectedVoteKey);
+    expect(isVote, "The first vote was not casted successfully.").to.be.true;
+
+    let expectedVoteKey2 = new BigNumber(2);
+    let isVote2 = await votechainInstance.isVote.call(expectedVoteKey2);
+    expect(isVote2, "The second vote was not casted successfully.").to.be.true;
+    
+
   }); 
 });

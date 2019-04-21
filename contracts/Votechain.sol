@@ -145,7 +145,7 @@ contract Votechain {
     event EditOfficial (address officialKey);
     event DeleteOfficial (address officialKey);
 
-    event Vote( uint256 voteKey);
+    event CastVote (uint256 voteKey);
 
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
@@ -162,7 +162,7 @@ contract Votechain {
         emit StopElection(electionKey);
     }
 
-    function vote(uint256 candidateKey) 
+    function castVote(uint256 candidateKey) 
         public 
         candidateKeyExists(candidateKey)
         hasStarted(positionList[candidateList[candidateKey].positionKey].electionKey)
@@ -192,12 +192,12 @@ contract Votechain {
         candidateList[candidateKey].wasVotedBy[msg.sender] = true;
         position.noOfVotesSubmittedBy[msg.sender] = position.noOfVotesSubmittedBy[msg.sender].add(1);
 
-        emit Vote(voteKey);
+        emit CastVote(voteKey);
     }
 
-    function bulkVote(uint256[] candidateKeyList) public {
-        for(int i = 0; i < candidateKeyList.length; i++){
-            vote(candidateKeyList[i])
+    function bulkVote(uint256[] memory candidateKeys) public {
+        for(uint256 i = 0; i < candidateKeys.length; i++){
+            castVote(candidateKeys[i]);
         }
     }
 
@@ -840,7 +840,7 @@ contract Votechain {
         uint256 noOfVotesSubmittedInThePosition = positionList[positionKey].noOfVotesSubmittedBy[msg.sender];
         uint256 maxNoOfCandidatesThatCanBeSelected = positionList[positionKey].maxNoOfCandidatesThatCanBeSelected;
         
-        require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "The voter cannot vote for another candidate.");
+        require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "The voter exceeded the amount of candidates he can vote for this position.");
         _;
     }
 
