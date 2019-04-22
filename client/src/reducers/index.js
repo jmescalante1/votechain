@@ -8,6 +8,8 @@ import position from './position'
 import candidate from './candidate'
 import voter from './voter'
 import official from './official'
+import persistState from './persist-state'
+import ballot from './ballot'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -18,4 +20,6 @@ export default (history) => combineReducers({
   candidate: candidate,
   voter: voter,
   official: official,
+  persistState: persistState,
+  ballot: ballot,
 });

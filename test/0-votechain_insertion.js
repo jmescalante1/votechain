@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain - data insertion", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
+  const adminAccount = "0x536675fE7f52686B6f85a6DeF57B48C1A08218F1";
   const adminName = "JM";
 
   beforeEach(async () => {

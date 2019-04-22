@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4";
+  const adminAccount = "0x536675fE7f52686B6f85a6DeF57B48C1A08218F1";
   const adminName = "JM";
 
   beforeEach(async () => {
@@ -39,7 +39,7 @@ contract("Votechain", async(accounts) => {
     expect(isCandidateAtPosition, "The candidate should be added.").to.be.true;
 
     // add a voter
-    let expectedVoterKey = "0xefbE8Ec783D3815576622932e63594546769b5ea";
+    let expectedVoterKey = "0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975";
     let expectedVoterStudentNo = "2015-09899";
     let expectedVoterName = "Alley";
     await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});
@@ -115,7 +115,7 @@ contract("Votechain", async(accounts) => {
     expect(isCandidate2AtPosition, "The second candidate should be added.").to.be.true;
 
     // add a voter
-    let expectedVoterKey = "0xefbE8Ec783D3815576622932e63594546769b5ea";
+    let expectedVoterKey = "0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975";
     let expectedVoterStudentNo = "2015-09899";
     let expectedVoterName = "Alley";
     await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});
@@ -130,7 +130,7 @@ contract("Votechain", async(accounts) => {
     // cast bulk vote
     await votechainInstance.bulkVote.sendTransaction([expectedCandidateKey, expectedCandidateKey2], {from: expectedVoterKey});
 
-    // verify if the votes were successfully casted
+    // verify if the votes were succ  essfully casted
     let expectedVoteKey = new BigNumber(1);
     let isVote = await votechainInstance.isVote.call(expectedVoteKey);
     expect(isVote, "The first vote was not casted successfully.").to.be.true;

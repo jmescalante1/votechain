@@ -150,6 +150,35 @@ contract Votechain {
     constructor(address adminKey, string memory name) public {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
+
+        // For testing UI
+        addElection('UP Manila Student Council Election');
+        addElection('Codeninja Board Of Directors Election');
+
+        // for election1
+        addPositionAt(1, 'Chairman', 1, false);
+
+        // for election2
+        addPositionAt(2, 'CEO', 1, false);
+        addPositionAt(2, 'CTO', 2, false);
+
+        // for position1
+        addCandidateAt(1, 'Neil');
+        addCandidateAt(1, 'Alee');
+        addCandidateAt(1, 'Bea');
+
+        // for position2
+        addCandidateAt(2, 'Paulo');
+        addCandidateAt(2, 'Ben');
+        addCandidateAt(2, 'Guen');
+
+        // for position3
+        addCandidateAt(3, 'JM');
+        addCandidateAt(3, 'Mike');
+        addCandidateAt(3, 'Alley');
+
+        addVoterAt(1, 0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4, '2015-08795', 'JM');
+        addVoterAt(2, 0xefbE8Ec783D3815576622932e63594546769b5ea, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){

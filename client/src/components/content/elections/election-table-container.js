@@ -160,7 +160,8 @@ class ElectionTableContainer extends Component {
 const mapStateToProps = state => ({
   web3: state.web3.web3,
   votechain: state.contract.votechain,
-  electionList: state.election.electionList 
+  electionList: state.election.electionList,
+  location: state.router.location
 });
 
 const mapDispatchToProps = {
