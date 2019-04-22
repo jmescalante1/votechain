@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import PositionRadioGroup from '../../../customized/selectors/position-radio-group'
+import SubmitButton from '../../../customized/buttons/submit'
 
 class Ballot extends Component {
   constructor(props) {
@@ -15,8 +16,7 @@ class Ballot extends Component {
   }
 
   render() {
-    const { election } = this.props
-    const { positionListState } = this.props
+    const { election, positionListState, handleOpenSubmitDialog } = this.props
 
     return (
       <div>
@@ -30,7 +30,7 @@ class Ballot extends Component {
             />
           )
         })}
-        
+        <SubmitButton onClick={handleOpenSubmitDialog}/>
       </div>
     )
   }

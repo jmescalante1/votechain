@@ -7,17 +7,56 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import Ballot from './ballot'
 import { fetchElection } from '../../../../actions/ballot'
+import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
 
 class ElectionViewContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       positionList: {
+        /*
+          positionId: {
+            candidateIds:{
 
-      }
+            }
+            noOfChecks
+          }
+        */
+      },
+      openSubmitBallotDialog: false,
+      candidateKeyList: [],
     }
     
     this.handleBallotChange = this.handleBallotChange.bind(this)
+   
+    this.handleCloseSubmitDialog = this.handleCloseSubmitDialog.bind(this)
+    this.handleOpenSubmitDialog = this.handleOpenSubmitDialog.bind(this)
+  }
+
+  handleCloseSubmitDialog() {
+    this.setState({ openSubmitBallotDialog: false })
+  }
+
+  handleOpenSubmitDialog() {
+    const { positionList } = this.state 
+    let candidateKeyList = []
+
+    Object.keys(positionList).forEach((positionId) => {
+      let position = positionList[positionId]
+      
+      Object.keys(position.candidateIds).forEach((candidateId) => {
+        if(position.candidateIds[candidateId]){
+          candidateKeyList.push(candidateId)
+        }
+      })
+    })
+
+    console.log(candidateKeyList)
+
+    this.setState({ 
+      candidateKeyList,
+      openSubmitBallotDialog: true 
+    })
   }
   
   async handleBallotChange(candidateId, checked, position) {
@@ -63,7 +102,7 @@ class ElectionViewContainer extends Component {
     }
     
     const { election } = this.props
-    const { positionList } = this.state
+    const { positionList, openSubmitBallotDialog, candidateKeyList } = this.state
 
     return (
       <div>
@@ -74,6 +113,13 @@ class ElectionViewContainer extends Component {
               election={election}
               positionListState={positionList}
               handleBallotChange={this.handleBallotChange}
+
+              handleOpenSubmitDialog={this.handleOpenSubmitDialog}
+            />
+            <SubmitBallotDialog 
+              openDialog={openSubmitBallotDialog}
+              handleClickCloseDialog={this.handleCloseSubmitDialog}
+              candidateKeyList={candidateKeyList}
             />
           </div> 
         : ''}

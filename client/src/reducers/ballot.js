@@ -1,4 +1,4 @@
-import { FETCH_ELECTION } from '../actions/ballot'
+import { FETCH_ELECTION, CAST_BULK_VOTE_VOTECHAIN } from '../actions/ballot'
 
 const initialState = {
   election: {},
@@ -13,6 +13,12 @@ export default function reducer(state = initialState, action) {
       }
     }
     
+    case CAST_BULK_VOTE_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
+
     default: {
       return {
         ...state

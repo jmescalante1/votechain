@@ -177,8 +177,8 @@ contract Votechain {
         addCandidateAt(3, 'Mike');
         addCandidateAt(3, 'Alley');
 
-        addVoterAt(1, 0x3Ad34a4D3bc3e4443ac4659F9dF404FD38f1Ece4, '2015-08795', 'JM');
-        addVoterAt(2, 0xefbE8Ec783D3815576622932e63594546769b5ea, '2015-09899', 'Alley');
+        addVoterAt(1, 0x536675fE7f52686B6f85a6DeF57B48C1A08218F1, '2015-08795', 'JM');
+        addVoterAt(2, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -776,7 +776,7 @@ contract Votechain {
     }
 
     modifier onlyVoterAt(uint256 electionKey) {
-        require(isVoterAt(electionKey, msg.sender), "Only voters can invoke this method.");
+        require(isVoterAt(electionKey, msg.sender), "Only registered voters can invoke this method.");
         _;
     }
 
