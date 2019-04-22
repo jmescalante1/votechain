@@ -177,8 +177,8 @@ contract Votechain {
         addCandidateAt(3, 'Mike');
         addCandidateAt(3, 'Alley');
 
-        addVoterAt(1, 0x536675fE7f52686B6f85a6DeF57B48C1A08218F1, '2015-08795', 'JM');
-        addVoterAt(2, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-09899', 'Alley');
+        addVoterAt(1, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-08795', 'JM');
+        addVoterAt(2, 0x211f3138e1bA20F517B2569B225d7174f4FAaC8E, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -230,14 +230,14 @@ contract Votechain {
         }
     }
 
-    function addAdmin(address adminKey, string memory name) public onlyAdmin notAdmin(adminKey){
+    function addAdmin(address adminKey, string memory name) public onlyAdmin notVoter(adminKey) notOfficial(adminKey) notAdmin(adminKey){
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
         
         emit AddAdmin(adminKey);
     }
 
-    function addOfficial(address officialKey, string memory name) public onlyAdmin notOfficial(officialKey){
+    function addOfficial(address officialKey, string memory name) public onlyAdmin notAdmin(officialKey) notVoter(officialKey) notOfficial(officialKey){
         officialList[officialKey].name = name;
         officialList[officialKey].keyIndex = officialKeyList.push(officialKey).sub(1);
 
@@ -296,6 +296,8 @@ contract Votechain {
         electionKeyExists(electionKey)
         inSetupStage(electionKey) 
         notVoterAt(electionKey, voterKey) 
+        notAdmin(voterKey)
+        notOfficial(voterKey)
     {
         if(isVoter(voterKey)){ // the voter is already registered
             voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
@@ -549,6 +551,15 @@ contract Votechain {
         voter.electionKeyList[indexToDelete] = electionKeyToMove;
         voter.electionKeyIndexList[electionKeyToMove] = indexToDelete;
         voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
+
+        // remove the voter from the application if it is not involve in any elections
+        if(voter.electionKeyList.length == 0 ) {
+            indexToDelete = voterList[voterKey].keyIndex;
+            keyToMove = voterKeyList[voterKeyList.length.sub(1)];
+            voterKeyList[indexToDelete] = keyToMove;
+            voterList[keyToMove].keyIndex = indexToDelete;
+            voterKeyList.length = voterKeyList.length.sub(1);
+        }
 
         emit DeleteVoterAt(electionKey, voterKey);
     }
@@ -846,12 +857,17 @@ contract Votechain {
     }
 
     modifier notAdmin(address adminKey) {
-        require(!isAdmin(adminKey), "The admin key provided already exists.");
+        require(!isAdmin(adminKey), "The account address provided is registered as admin.");
         _;
     }
 
     modifier notOfficial(address officialKey) {
-        require(!isOfficial(officialKey), "The official key provided already exists.");
+        require(!isOfficial(officialKey), "The account address provided is registered as official.");
+        _;
+    }
+
+    modifier notVoter(address voterKey){
+        require(!isVoter(voterKey), "The account address provided is registered as voter.");
         _;
     }
 

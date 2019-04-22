@@ -51,8 +51,6 @@ class ElectionViewContainer extends Component {
       })
     })
 
-    console.log(candidateKeyList)
-
     this.setState({ 
       candidateKeyList,
       openSubmitBallotDialog: true 
@@ -93,6 +91,7 @@ class ElectionViewContainer extends Component {
     if(this.props.location.params) {
       const { web3, votechain, fetchElection, location } = this.props
       fetchElection(web3, votechain, location.params.election.id)
+      console.log(web3.eth.defaultAccount)
     }
   }
   

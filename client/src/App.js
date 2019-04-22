@@ -15,6 +15,7 @@ import { addPositionUI, editPositionUI, deletePositionUI } from './actions/posit
 import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
 import { addOfficialUI, editOfficialUI, deleteOfficialUI } from './actions/official'
+import { addAdminUI } from './actions/admin'
 
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
@@ -44,9 +45,10 @@ class App extends React.Component {
   async componentDidMount() {
     await this.props.getWeb3() // save the web3 to redux store
     
-    if(this.props.web3)
+    if(this.props.web3) {
       await this.props.getVotechainContract(this.props.web3) // save the votechain contract to redux store
-
+    
+    }
     // Setup solidity event listeners
     if(this.props.votechain) {
       this.props.votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
@@ -138,8 +140,17 @@ class App extends React.Component {
             let officialKey = result.returnValues.officialKey
             this.props.deleteOfficialUI(this.props.web3, this.props.votechain, officialKey)
           }
+
+          else if (['AddAdmin'].includes(result.event)) {
+            let adminKey = result.returnValues.adminKey
+            this.props.addAdminUI(this.props.web3, this.props.votechain, adminKey)
+          }
         }
       })
+
+      // window.ethereum.on('accountsChanged', (accounts) => {
+      //   this.props.web3.eth.defaultAccount = accounts[0]
+      // })
     }
 
     // fetch data
@@ -185,7 +196,9 @@ const mapDispatchToProps = {
 
   addOfficialUI,
   editOfficialUI,
-  deleteOfficialUI
+  deleteOfficialUI,
+
+  addAdminUI,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
