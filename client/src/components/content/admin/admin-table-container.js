@@ -5,8 +5,8 @@ import { fetchAdminList } from '../../../actions/admin'
 
 import AdminTable from './admin-table'
 
-// import EditAdminDialog from '../../customized/dialogs/edit-admin'
-// import DeleteAdminDialog from '../../customized/dialogs/delete-admin'
+import EditAdminDialog from '../../customized/dialogs/edit-admin'
+import DeleteAdminDialog from '../../customized/dialogs/delete-admin'
 
 class AdminTableContainer extends Component {
   constructor() {
@@ -94,7 +94,7 @@ class AdminTableContainer extends Component {
           handleOpenDeleteAdminDialog={this.handleOpenDeleteAdminDialog}
         />
         
-        {/* <EditAdminDialog 
+        <EditAdminDialog 
           openDialog={openEditAdminDialog}
           handleClickCloseDialog={this.handleCloseEditAdminDialog}
           adminToBeEdited={adminToBeEdited}
@@ -104,7 +104,7 @@ class AdminTableContainer extends Component {
           openDialog={openDeleteAdminDialog}
           handleClickCloseDialog={this.handleCloseDeleteAdminDialog}
           adminToBeDeleted={adminToBeDeleted}
-        /> */}
+        />
       </Fragment>
     )
   }

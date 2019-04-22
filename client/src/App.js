@@ -15,7 +15,7 @@ import { addPositionUI, editPositionUI, deletePositionUI } from './actions/posit
 import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
 import { addOfficialUI, editOfficialUI, deleteOfficialUI } from './actions/official'
-import { addAdminUI } from './actions/admin'
+import { addAdminUI, editAdminUI, deleteAdminUI } from './actions/admin'
 
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
@@ -145,6 +145,16 @@ class App extends React.Component {
             let adminKey = result.returnValues.adminKey
             this.props.addAdminUI(this.props.web3, this.props.votechain, adminKey)
           }
+
+          else if (['EditAdmin'].includes(result.event)) {
+            let adminKey = result.returnValues.adminKey
+            this.props.editAdminUI(this.props.web3, this.props.votechain, adminKey)
+          }
+
+          else if (['DeleteAdmin'].includes(result.event)) {
+            let adminKey = result.returnValues.adminKey
+            this.props.deleteAdminUI(this.props.web3, this.props.votechain, adminKey)
+          }
         }
       })
 
@@ -199,6 +209,8 @@ const mapDispatchToProps = {
   deleteOfficialUI,
 
   addAdminUI,
+  editAdminUI,
+  deleteAdminUI,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

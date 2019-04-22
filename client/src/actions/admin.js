@@ -59,50 +59,50 @@ export function addAdminUI(web3, votechain, adminKey) {
   }
 }
 
-// export function editAdminVotechain(web3, votechain, admin){
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
-//     await votechain.methods.updateAdmin(admin.adminKey, admin.name).send({from: firstAccount})
+export function editAdminVotechain(web3, votechain, admin){
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
+    await votechain.methods.updateAdmin(admin.adminKey, admin.name).send({from: firstAccount})
     
-//     dispatch( {
-//       type: EDIT_ADMIN_VOTECHAIN
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_ADMIN_VOTECHAIN
+    })
+  }
+}
 
-// export function editAdminUI(web3, votechain, adminKey){
-//   return async (dispatch) => {
-//     let editedAdmin = await getAdmin(adminKey, votechain)
+export function editAdminUI(web3, votechain, adminKey){
+  return async (dispatch) => {
+    let editedAdmin = await getAdmin(adminKey, votechain)
 
-//     dispatch( {
-//       type: EDIT_ADMIN_UI,
-//       payload: {editedAdmin}
-//     })
-//   }
-// }
+    dispatch( {
+      type: EDIT_ADMIN_UI,
+      payload: {editedAdmin}
+    })
+  }
+}
 
 
-// export function deleteAdminVotechain(web3, votechain, adminKey) {
-//   return async (dispatch) => {
-//     const accounts = await web3.eth.getAccounts()
-//     const firstAccount = accounts[0]
+export function deleteAdminVotechain(web3, votechain, adminKey) {
+  return async (dispatch) => {
+    const accounts = await web3.eth.getAccounts()
+    const firstAccount = accounts[0]
 
-//     await votechain.methods.deleteAdmin(adminKey).send({from: firstAccount})
+    await votechain.methods.deleteAdmin(adminKey).send({from: firstAccount})
   
-//     dispatch({
-//       type: DELETE_ADMIN_VOTECHAIN,
-//     })
-//   }
-// }
+    dispatch({
+      type: DELETE_ADMIN_VOTECHAIN,
+    })
+  }
+}
 
-// export function deleteAdminUI(web3, votechain, adminKey) {
-//   return async (dispatch) => {
-//     let deletedAdminKey = adminKey
+export function deleteAdminUI(web3, votechain, adminKey) {
+  return async (dispatch) => {
+    let deletedAdminKey = adminKey
     
-//     dispatch({
-//       type: DELETE_ADMIN_UI,
-//       payload: {deletedAdminKey}
-//     })
-//   }
-// }
+    dispatch({
+      type: DELETE_ADMIN_UI,
+      payload: {deletedAdminKey}
+    })
+  }
+}

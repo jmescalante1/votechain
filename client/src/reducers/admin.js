@@ -30,49 +30,49 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-    // case EDIT_ADMIN_VOTECHAIN: {
-    //   return {
-    //     ...state
-    //   }
-    // }
+    case EDIT_ADMIN_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-    // case EDIT_ADMIN_UI: {
-    //   let adminListClone = cloneDeep(state.adminList)
-    //   let index = adminListClone.findIndex(admin => admin.id === action.payload.editedAdmin.id)
-    //   if(index !== -1){
-    //     adminListClone[index] = action.payload.editedAdmin
-    //   }
+    case EDIT_ADMIN_UI: {
+      let adminListClone = cloneDeep(state.adminList)
+      let index = adminListClone.findIndex(admin => admin.id === action.payload.editedAdmin.id)
+      if(index !== -1){
+        adminListClone[index] = action.payload.editedAdmin
+      }
 
-    //   return {
-    //     ...state,
-    //     adminList: adminListClone
-    //   }
-    // }
+      return {
+        ...state,
+        adminList: adminListClone
+      }
+    }
 
 
-    // case DELETE_ADMIN_VOTECHAIN: {
-    //   return {
-    //     ...state
-    //   }
-    // }
+    case DELETE_ADMIN_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
 
-    // case DELETE_ADMIN_UI: {
-    //   let deletedIndex = state.adminList.findIndex(x => x.id === action.payload.deletedAdminKey)
+    case DELETE_ADMIN_UI: {
+      let deletedIndex = state.adminList.findIndex(x => x.id === action.payload.deletedAdminKey)
       
-    //   if(deletedIndex !== -1) {
-    //     let adminListClone = cloneDeep(state.adminList)
-    //     adminListClone.splice(deletedIndex, 1)
+      if(deletedIndex !== -1) {
+        let adminListClone = cloneDeep(state.adminList)
+        adminListClone.splice(deletedIndex, 1)
 
-    //     return {
-    //       ...state,
-    //       adminList: adminListClone
-    //     }
-    //   }
+        return {
+          ...state,
+          adminList: adminListClone
+        }
+      }
 
-    //   return {
-    //     ...state
-    //   }
-    // }
+      return {
+        ...state
+      }
+    }
   
     default: {
       return {
