@@ -7,7 +7,11 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
+import Grid from '@material-ui/core/Grid'
+
 import MenuIcon from '@material-ui/icons/Menu'
+
+import Icon from '../../customized/icons/icon'
 
 
 const styles = theme => ({
@@ -31,7 +35,8 @@ const styles = theme => ({
     backgroundColor: '#006064'
   },
   title: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 30
   },
   menuIcon: {
     fontSize: 36
@@ -55,10 +60,24 @@ class Header extends React.Component {
           >
             <MenuIcon className={classes.menuIcon}/>
           </IconButton>
-
-        <Typography className={classes.title} variant='h6' color='inherit' noWrap>
-          VoteChain
-        </Typography>
+        
+        <Grid
+          container
+          direction='row'
+          alignItems='center'
+          justify='flex-start'
+          spacing={24}
+        >
+          <Grid item>
+            <Icon name='votechain' size={40} color='#FFFFFF'/>
+          </Grid>
+          
+          <Grid item>
+            <Typography className={classes.title} color='inherit' noWrap>
+              VoteChain
+            </Typography>
+          </Grid>
+        </Grid>
           
           <div className={classes.tabs}>
             {this.props.headerTabs.map((props) => (
