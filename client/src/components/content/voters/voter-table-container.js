@@ -34,8 +34,8 @@ class VoterTableContainer extends Component {
   
   componentDidUpdate(prevProps) {
     if(this.props.electionId !== prevProps.electionId) {
-      const { web3, votechain, fetchCurrentVoterList, electionId } = this.props
-      fetchCurrentVoterList(web3, votechain, electionId)
+      const {votechain, fetchCurrentVoterList, electionId } = this.props
+      fetchCurrentVoterList(votechain, electionId)
     }
   }
   
@@ -119,7 +119,6 @@ VoterTableContainer.propTypes = {
 
 const mapStateToProps = state => ({
   voterList: state.voter.currentVoterList,
-  web3: state.web3.web3,
   votechain: state.contract.votechain,
 })
 
