@@ -46,7 +46,7 @@ async function getCandidate(candidateKey, votechain) {
 export const FETCH_ELECTION = 'FETCH_ELECTION'
 export const CAST_BULK_VOTE_VOTECHAIN = 'CAST_BULK_VOTE_VOTECHAIN'
 
-export function fetchElection(web3, votechain, electionKey) {
+export function fetchElection(votechain, electionKey) {
   return async (dispatch) => {
     let election = await getElection(electionKey, votechain)
 
@@ -80,12 +80,9 @@ export function fetchElection(web3, votechain, electionKey) {
   }
 }
 
-export function castBulkVoteVotechain(web3, votechain, candidateKeyList){
+export function castBulkVoteVotechain(account, votechain, candidateKeyList){
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts() 
-    const firstAccount = accounts[0]
-
-    await votechain.methods.bulkVote(candidateKeyList).send({from: firstAccount})
+    await votechain.methods.bulkVote(candidateKeyList).send({from: account})
 
     dispatch({
       type: CAST_BULK_VOTE_VOTECHAIN,

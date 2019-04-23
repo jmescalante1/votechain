@@ -89,9 +89,8 @@ class ElectionViewContainer extends Component {
 
   componentDidMount() {
     if(this.props.location.params) {
-      const { web3, votechain, fetchElection, location } = this.props
-      fetchElection(web3, votechain, location.params.election.id)
-      console.log(web3.eth.defaultAccount)
+      const {votechain, fetchElection, location } = this.props
+      fetchElection(votechain, location.params.election.id)
     }
   }
   
@@ -128,7 +127,6 @@ class ElectionViewContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
   votechain: state.contract.votechain,
   election: state.ballot.election 
 });

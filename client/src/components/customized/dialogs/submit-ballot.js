@@ -44,9 +44,9 @@ class SubmitBallotDialog extends React.Component {
 
   submitBallot() {
     const { castBulkVoteVotechain, handleClickCloseDialog, candidateKeyList } = this.props
-    const { web3, votechain } = this.props
+    const { account, votechain } = this.props
   
-    castBulkVoteVotechain(web3, votechain, candidateKeyList)
+    castBulkVoteVotechain(account, votechain, candidateKeyList)
     handleClickCloseDialog()
   }
 
@@ -95,7 +95,7 @@ SubmitBallotDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 

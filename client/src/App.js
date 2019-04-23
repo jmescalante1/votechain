@@ -170,6 +170,12 @@ class App extends React.Component {
             let adminKey = result.returnValues.adminKey
             deleteAdminUI(adminKey)
           }
+
+          else if ('CastVote' === result.event) {
+            let voteKey = result.returnValues.voteKey
+            let vote = await votechain.methods.voteList(voteKey).call()
+            console.log(vote)
+          }
         }
       })
 
