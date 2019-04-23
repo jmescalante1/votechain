@@ -68,7 +68,7 @@ class AddCandidateDialog extends React.Component {
   }
 
   onSubmit() {
-    const { handleClickCloseDialog, addCandidateVotechain, votechain, web3 } = this.props
+    const { handleClickCloseDialog, addCandidateVotechain, votechain, account } = this.props
     const { candidateName, selectedPositionId } = this.state
 
     let candidate = {
@@ -76,7 +76,7 @@ class AddCandidateDialog extends React.Component {
       name: candidateName,
     }
 
-    addCandidateVotechain(web3, votechain, candidate)
+    addCandidateVotechain(account, votechain, candidate)
     handleClickCloseDialog()
   }
 
@@ -147,7 +147,7 @@ AddCandidateDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain,
   currentPositionList: state.candidate.currentPositionList
 })

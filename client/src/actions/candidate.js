@@ -38,7 +38,7 @@ export const EDIT_CANDIDATE_UI = 'EDIT_CANDIDATE_UI'
 export const DELETE_CANDIDATE_VOTECHAIN = 'DELETE_CANDIDATE_VOTECHAIN'
 export const DELETE_CANDIDATE_UI = 'DELETE_CANDIDATE_UI'
 
-export function fetchCurrentCandidateList(web3, votechain, electionKey) {
+export function fetchCurrentCandidateList(votechain, electionKey) {
   return async (dispatch) => {
     const noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
     let candidateList = []
@@ -67,11 +67,9 @@ export function fetchCurrentCandidateList(web3, votechain, electionKey) {
   }
 }
 
-export function addCandidateVotechain(web3, votechain, candidate) {
+export function addCandidateVotechain(account, votechain, candidate) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.addCandidateAt(candidate.positionKey, candidate.name).send({from: firstAccount})
+    await votechain.methods.addCandidateAt(candidate.positionKey, candidate.name).send({from: account})
     
     dispatch( {
       type: ADD_CANDIDATE_VOTECHAIN
@@ -79,7 +77,7 @@ export function addCandidateVotechain(web3, votechain, candidate) {
   }
 }
 
-export function addCandidateUI(web3, votechain, positionKey, candidateKey) {
+export function addCandidateUI(votechain, positionKey, candidateKey) {
   return async (dispatch) => {
     let addedCandidate = await getCandidate(candidateKey, votechain)
 
@@ -93,11 +91,9 @@ export function addCandidateUI(web3, votechain, positionKey, candidateKey) {
   }
 }
 
-export function editCandidateVotechain(web3, votechain, candidate){
+export function editCandidateVotechain(account, votechain, candidate){
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.updateCandidate(candidate.candidateKey, candidate.name).send({from: firstAccount})
+    await votechain.methods.updateCandidate(candidate.candidateKey, candidate.name).send({from: account})
     
     dispatch( {
       type: EDIT_CANDIDATE_VOTECHAIN
@@ -105,7 +101,7 @@ export function editCandidateVotechain(web3, votechain, candidate){
   }
 }
 
-export function editCandidateUI(web3, votechain, candidateKey){
+export function editCandidateUI(votechain, candidateKey){
   return async (dispatch) => {
     let editedCandidate = await getCandidate(candidateKey, votechain)
 
@@ -117,12 +113,9 @@ export function editCandidateUI(web3, votechain, candidateKey){
 }
 
 
-export function deleteCandidateVotechain(web3, votechain, candidateKey) {
+export function deleteCandidateVotechain(account, votechain, candidateKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.deleteCandidate(candidateKey).send({from: firstAccount})
+    await votechain.methods.deleteCandidate(candidateKey).send({from: account})
   
     dispatch({
       type: DELETE_CANDIDATE_VOTECHAIN,
@@ -130,7 +123,7 @@ export function deleteCandidateVotechain(web3, votechain, candidateKey) {
   }
 }
 
-export function deleteCandidateUI(web3, votechain, candidateKey) {
+export function deleteCandidateUI(candidateKey) {
   return async (dispatch) => {
     let deletedCandidateId = candidateKey
 

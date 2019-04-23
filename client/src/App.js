@@ -112,7 +112,7 @@ class App extends React.Component {
 
           else if ('DeleteCandidate' === result.event) {
             let candidateKey = result.returnValues.candidateKey
-            deleteCandidateUI(votechain, candidateKey)
+            deleteCandidateUI(candidateKey)
           }
 
           else if ('AddVoterAt' === result.event) {
