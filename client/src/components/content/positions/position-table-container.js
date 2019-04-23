@@ -33,8 +33,8 @@ class PositionTableContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if(this.props.electionId !== prevProps.electionId) {
-      const { web3, votechain, fetchCurrentPositionList, electionId } = this.props
-      fetchCurrentPositionList(web3, votechain, electionId)
+      const {votechain, fetchCurrentPositionList, electionId } = this.props
+      fetchCurrentPositionList(votechain, electionId)
     }
   }
   
@@ -115,7 +115,6 @@ PositionTableContainer.propTypes = {
 
 const mapStateToProps = state => ({
   positionList: state.position.currentPositionList,
-  web3: state.web3.web3,
   votechain: state.contract.votechain,
 })
 

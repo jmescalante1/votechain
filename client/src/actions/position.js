@@ -18,7 +18,7 @@ export const EDIT_POSITION_UI = 'EDIT_POSITION_UI'
 export const DELETE_POSITION_VOTECHAIN = 'DELETE_POSITION_VOTECHAIN'
 export const DELETE_POSITION_UI = 'DELETE_POSITION_UI'
 
-export function fetchCurrentPositionList(web3, votechain, electionKey) {
+export function fetchCurrentPositionList(votechain, electionKey) {
   return async (dispatch) => {
     const noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
     let positionList = []
@@ -37,11 +37,9 @@ export function fetchCurrentPositionList(web3, votechain, electionKey) {
   }
 }
 
-export function addPositionVotechain(web3, votechain, position) {
+export function addPositionVotechain(account, votechain, position) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.addPositionAt(position.electionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: firstAccount})
+    await votechain.methods.addPositionAt(position.electionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: account})
     
     dispatch( {
       type: ADD_POSITION_VOTECHAIN
@@ -49,7 +47,7 @@ export function addPositionVotechain(web3, votechain, position) {
   }
 }
 
-export function addPositionUI(web3, votechain, positionKey, electionKey) {
+export function addPositionUI(votechain, positionKey, electionKey) {
   return async (dispatch) => {
     let addedPosition = await getPosition(positionKey, votechain)
 
@@ -60,11 +58,9 @@ export function addPositionUI(web3, votechain, positionKey, electionKey) {
   }
 }
 
-export function editPositionVotechain(web3, votechain, position){
+export function editPositionVotechain(account, votechain, position){
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.updatePosition(position.positionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: firstAccount})
+    await votechain.methods.updatePosition(position.positionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: account})
     
     dispatch( {
       type: EDIT_POSITION_VOTECHAIN
@@ -72,7 +68,7 @@ export function editPositionVotechain(web3, votechain, position){
   }
 }
 
-export function editPositionUI(web3, votechain, positionKey){
+export function editPositionUI(votechain, positionKey){
   return async (dispatch) => {
     let editedPosition = await getPosition(positionKey, votechain)
 
@@ -84,12 +80,9 @@ export function editPositionUI(web3, votechain, positionKey){
 }
 
 
-export function deletePositionVotechain(web3, votechain, positionKey) {
+export function deletePositionVotechain(account, votechain, positionKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.deletePosition(positionKey).send({from: firstAccount})
+    await votechain.methods.deletePosition(positionKey).send({from: account})
   
     dispatch({
       type: DELETE_POSITION_VOTECHAIN,
@@ -97,7 +90,7 @@ export function deletePositionVotechain(web3, votechain, positionKey) {
   }
 }
 
-export function deletePositionUI(web3, votechain, positionKey) {
+export function deletePositionUI(votechain, positionKey) {
   return async (dispatch) => {
     let deletedPosition = await getPosition(positionKey, votechain)
     let deletedPositionKey = positionKey

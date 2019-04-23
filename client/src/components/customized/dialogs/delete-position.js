@@ -44,9 +44,9 @@ class DeletePositionDialog extends React.Component {
 
   deletePosition() {
     const { deletePositionVotechain, onClose, positionToBeDeleted } = this.props
-    const { web3, votechain } = this.props
+    const { account, votechain } = this.props
   
-    deletePositionVotechain(web3, votechain, positionToBeDeleted.id)
+    deletePositionVotechain(account, votechain, positionToBeDeleted.id)
     onClose()
   }
 
@@ -95,7 +95,7 @@ DeletePositionDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 

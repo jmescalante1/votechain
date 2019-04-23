@@ -79,7 +79,7 @@ class EditPositionDialog extends React.Component {
   }
 
   onSubmit() {
-    const { onClose, editPositionVotechain, votechain, web3, positionToBeEdited } = this.props
+    const { onClose, editPositionVotechain, votechain, account, positionToBeEdited } = this.props
     const { positionName, hasAbstain, maxNoOfCandidatesThatCanBeSelected } = this.state
   
     let editedPosition = {
@@ -89,7 +89,7 @@ class EditPositionDialog extends React.Component {
       hasAbstain,
     }
 
-    editPositionVotechain(web3, votechain, editedPosition)
+    editPositionVotechain(account, votechain, editedPosition)
     onClose()
   }
 
@@ -226,7 +226,7 @@ EditPositionDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 

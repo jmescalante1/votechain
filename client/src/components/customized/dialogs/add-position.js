@@ -73,7 +73,7 @@ class AddPositionDialog extends Component {
   }
 
   onSubmit() {
-    const { onClose, addPositionVotechain, votechain, web3, electionId } = this.props
+    const { onClose, addPositionVotechain, votechain, account, electionId } = this.props
     const { positionName, hasAbstain, maxNoOfCandidatesThatCanBeSelected } = this.state
 
     let position = {
@@ -83,7 +83,7 @@ class AddPositionDialog extends Component {
       hasAbstain,
     }
 
-    addPositionVotechain(web3, votechain, position)
+    addPositionVotechain(account, votechain, position)
     onClose()
   }
 
@@ -220,7 +220,7 @@ AddPositionDialog.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain,
 })
 
