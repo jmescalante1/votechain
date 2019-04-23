@@ -2,6 +2,7 @@ import Web3 from 'web3'
 
 export const GET_WEB3 = 'GET_WEB3'
 export const GET_WEB3_ERROR = 'GET_WEB3_ERROR'
+export const CHANGE_DEFAULT_ACCOUNT = 'CHANGE_DEFAULT_ACCOUNT'
 
 export function getWeb3() {
   return async (dispatch) => {
@@ -60,6 +61,7 @@ export function getWeb3() {
     
   }
 }
+
 
 
 

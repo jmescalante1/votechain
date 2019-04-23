@@ -16,7 +16,7 @@ import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/ca
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
 import { addOfficialUI, editOfficialUI, deleteOfficialUI } from './actions/official'
 import { addAdminUI, editAdminUI, deleteAdminUI } from './actions/admin'
-
+import { changeAccount } from './actions/account'
 
 library.add(faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog)
 
@@ -43,128 +43,147 @@ const theme = createMuiTheme({
 
 class App extends React.Component {
   async componentDidMount() {
-    await this.props.getWeb3() // save the web3 to redux store
+    const { getWeb3 } = this.props
+    await getWeb3() // save the web3 to redux store
     
-    if(this.props.web3) {
-      await this.props.getVotechainContract(this.props.web3) // save the votechain contract to redux store
+    const { web3 } = this.props
     
+    if(web3) {
+      const { getVotechainContract } = this.props
+      await getVotechainContract(web3) // save the votechain contract to redux store
     }
+
+    const { votechain } = this.props
+
     // Setup solidity event listeners
-    if(this.props.votechain) {
-      this.props.votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
+    if(votechain) {
+      const { addElectionUI, editElectionUI, deleteElectionUI
+        , addPositionUI, editPositionUI, deletePositionUI
+        , addCandidateUI, editCandidateUI, deleteCandidateUI
+        , addVoterUI, editVoterUI, deleteVoterUI
+        , startElectionUI, stopElectionUI
+        , addOfficialUI, editOfficialUI, deleteOfficialUI
+        , addAdminUI, editAdminUI, deleteAdminUI
+        , changeAccount } = this.props
+
+      votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
         if(!error) {
-          if(['AddElection'].includes(result.event)) {
+          if('AddElection' === result.event) {
             let electionKey = result.returnValues.electionKey
-            this.props.addElectionUI(this.props.web3, this.props.votechain, electionKey)
+            addElectionUI(web3, votechain, electionKey)
           } 
           
-          else if (['EditElection'].includes(result.event)) {
+          else if ('EditElection' === result.event) {
             let electionKey = result.returnValues.electionKey
-            this.props.editElectionUI(this.props.web3, this.props.votechain, electionKey)
+            editElectionUI(web3, votechain, electionKey)
           } 
           
-          else if (['DeleteElection'].includes(result.event)) {
+          else if ('DeleteElection' === result.event) {
             let electionKey = result.returnValues.electionKey
-            this.props.deleteElectionUI(this.props.web3, this.props.votechain, electionKey)
+            deleteElectionUI(web3, votechain, electionKey)
           } 
           
-          else if (['AddPositionAt'].includes(result.event)) {
+          else if ('AddPositionAt' === result.event) {
             let electionKey = result.returnValues.electionKey
             let positionKey = result.returnValues.positionKey
-            this.props.addPositionUI(this.props.web3, this.props.votechain, positionKey, electionKey)
+            addPositionUI(web3, votechain, positionKey, electionKey)
           }
 
-          else if (['EditPosition'].includes(result.event)) {
+          else if ('EditPosition' === result.event) {
             let positionKey = result.returnValues.positionKey
-            this.props.editPositionUI(this.props.web3, this.props.votechain, positionKey)
+            editPositionUI(web3, votechain, positionKey)
           }
 
-          else if (['DeletePosition'].includes(result.event)) {
+          else if ('DeletePosition' === result.event) {
             let positionKey = result.returnValues.positionKey
-            this.props.deletePositionUI(this.props.web3, this.props.votechain, positionKey)
+            deletePositionUI(web3, votechain, positionKey)
           }
 
-          else if (['AddCandidateAt'].includes(result.event)) {
+          else if ('AddCandidateAt' === result.event) {
             let positionKey = result.returnValues.positionKey
             let candidateKey = result.returnValues.candidateKey
-            this.props.addCandidateUI(this.props.web3, this.props.votechain, positionKey, candidateKey)
+            addCandidateUI(web3, votechain, positionKey, candidateKey)
           }
 
-          else if (['EditCandidate'].includes(result.event)) {
+          else if ('EditCandidate' === result.event) {
             let candidateKey = result.returnValues.candidateKey
-            this.props.editCandidateUI(this.props.web3, this.props.votechain, candidateKey)
+            editCandidateUI(web3, votechain, candidateKey)
           }
 
-          else if (['DeleteCandidate'].includes(result.event)) {
+          else if ('DeleteCandidate' === result.event) {
             let candidateKey = result.returnValues.candidateKey
-            this.props.deleteCandidateUI(this.props.web3, this.props.votechain, candidateKey)
+            deleteCandidateUI(web3, votechain, candidateKey)
           }
 
-          else if (['AddVoterAt'].includes(result.event)) {
+          else if ('AddVoterAt' === result.event) {
             let electionKey = result.returnValues.electionKey
             let voterKey = result.returnValues.voterKey
-            this.props.addVoterUI(this.props.web3, this.props.votechain, voterKey, electionKey)
+            addVoterUI(web3, votechain, voterKey, electionKey)
           }
 
-          else if (['EditVoter'].includes(result.event)) {
+          else if ('EditVoter' === result.event) {
             let voterKey = result.returnValues.voterKey
-            this.props.editVoterUI(this.props.web3, this.props.votechain, voterKey)
+            editVoterUI(web3, votechain, voterKey)
           }
 
-          else if (['DeleteVoterAt'].includes(result.event)) {
+          else if ('DeleteVoterAt' === result.event) {
             let voterKey = result.returnValues.voterKey
-            this.props.deleteVoterUI(this.props.web3, this.props.votechain, voterKey)
+            deleteVoterUI(web3, votechain, voterKey)
           }
 
-          else if (['StartElection'].includes(result.event)) {
+          else if ('StartElection' === result.event) {
             let electionKey = result.returnValues.electionKey
-            this.props.startElectionUI(this.props.web3, this.props.votechain, electionKey)
+            startElectionUI(web3, votechain, electionKey)
           }
 
-          else if (['StopElection'].includes(result.event)) {
+          else if ('StopElection' === result.event) {
             let electionKey = result.returnValues.electionKey
-            this.props.stopElectionUI(this.props.web3, this.props.votechain, electionKey)
+            stopElectionUI(web3, votechain, electionKey)
           }
 
-          else if (['AddOfficial'].includes(result.event)) {
+          else if ('AddOfficial' === result.event) {
             let officialKey = result.returnValues.officialKey
-            this.props.addOfficialUI(this.props.web3, this.props.votechain, officialKey)
+            addOfficialUI(web3, votechain, officialKey)
           }
 
-          else if (['EditOfficial'].includes(result.event)) {
+          else if ('EditOfficial' === result.event) {
             let officialKey = result.returnValues.officialKey
-            this.props.editOfficialUI(this.props.web3, this.props.votechain, officialKey)
+            editOfficialUI(web3, votechain, officialKey)
           }
 
-          else if (['DeleteOfficial'].includes(result.event)) {
+          else if ('DeleteOfficial' === result.event) {
             let officialKey = result.returnValues.officialKey
-            this.props.deleteOfficialUI(this.props.web3, this.props.votechain, officialKey)
+            deleteOfficialUI(web3, votechain, officialKey)
           }
 
-          else if (['AddAdmin'].includes(result.event)) {
+          else if ('AddAdmin' === result.event) {
             let adminKey = result.returnValues.adminKey
-            this.props.addAdminUI(this.props.web3, this.props.votechain, adminKey)
+            addAdminUI(web3, votechain, adminKey)
           }
 
-          else if (['EditAdmin'].includes(result.event)) {
+          else if ('EditAdmin' === result.event) {
             let adminKey = result.returnValues.adminKey
-            this.props.editAdminUI(this.props.web3, this.props.votechain, adminKey)
+            editAdminUI(web3, votechain, adminKey)
           }
 
-          else if (['DeleteAdmin'].includes(result.event)) {
+          else if ('DeleteAdmin' === result.event) {
             let adminKey = result.returnValues.adminKey
-            this.props.deleteAdminUI(this.props.web3, this.props.votechain, adminKey)
+            deleteAdminUI(web3, votechain, adminKey)
           }
         }
       })
 
-      // window.ethereum.on('accountsChanged', (accounts) => {
-      //   this.props.web3.eth.defaultAccount = accounts[0]
-      // })
-    }
+      window.ethereum.on('accountsChanged', (accounts) => {
+        changeAccount(web3, accounts[0])
+      })
+      
+      
+      const { fetchElectionList } = this.props
 
-    // fetch data
-    this.props.fetchElectionList(this.props.web3, this.props.votechain)
+      // fetch data
+      fetchElectionList(web3, votechain)
+    }
+    
   }
 
   render() {
@@ -211,6 +230,8 @@ const mapDispatchToProps = {
   addAdminUI,
   editAdminUI,
   deleteAdminUI,
+
+  changeAccount,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

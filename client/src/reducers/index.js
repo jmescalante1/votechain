@@ -11,6 +11,7 @@ import official from './official'
 import persistState from './persist-state'
 import ballot from './ballot'
 import admin from './admin'
+import account from './account'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -24,4 +25,5 @@ export default (history) => combineReducers({
   persistState: persistState,
   ballot: ballot,
   admin: admin,
+  account: account
 });
