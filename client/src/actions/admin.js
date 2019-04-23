@@ -16,7 +16,7 @@ export const EDIT_ADMIN_UI = 'EDIT_ADMIN_UI'
 export const DELETE_ADMIN_VOTECHAIN = 'DELETE_ADMIN_VOTECHAIN'
 export const DELETE_ADMIN_UI = 'DELETE_ADMIN_UI'
 
-export function fetchAdminList(web3, votechain) {
+export function fetchAdminList(votechain) {
   return async (dispatch) => {
     const noOfAdmins = await votechain.methods.getNoOfAdmins().call()
     let adminList = []
@@ -35,20 +35,17 @@ export function fetchAdminList(web3, votechain) {
   }
 }
 
-export function addAdminVotechain(web3, votechain, admin) {
+export function addAdminVotechain(account, votechain, admin) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.addAdmin(admin.adminKey, admin.name).send({from: firstAccount})
+    await votechain.methods.addAdmin(admin.adminKey, admin.name).send({from: account})
     
-
     dispatch( {
       type: ADD_ADMIN_VOTECHAIN
     })
   }
 }
 
-export function addAdminUI(web3, votechain, adminKey) {
+export function addAdminUI(votechain, adminKey) {
   return async (dispatch) => {
     let addedAdmin = await getAdmin(adminKey, votechain)
 
@@ -59,11 +56,9 @@ export function addAdminUI(web3, votechain, adminKey) {
   }
 }
 
-export function editAdminVotechain(web3, votechain, admin){
+export function editAdminVotechain(account, votechain, admin){
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.updateAdmin(admin.adminKey, admin.name).send({from: firstAccount})
+    await votechain.methods.updateAdmin(admin.adminKey, admin.name).send({from: account})
     
     dispatch( {
       type: EDIT_ADMIN_VOTECHAIN
@@ -71,7 +66,7 @@ export function editAdminVotechain(web3, votechain, admin){
   }
 }
 
-export function editAdminUI(web3, votechain, adminKey){
+export function editAdminUI(votechain, adminKey){
   return async (dispatch) => {
     let editedAdmin = await getAdmin(adminKey, votechain)
 
@@ -83,12 +78,9 @@ export function editAdminUI(web3, votechain, adminKey){
 }
 
 
-export function deleteAdminVotechain(web3, votechain, adminKey) {
+export function deleteAdminVotechain(account, votechain, adminKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.deleteAdmin(adminKey).send({from: firstAccount})
+    await votechain.methods.deleteAdmin(adminKey).send({from: account})
   
     dispatch({
       type: DELETE_ADMIN_VOTECHAIN,
@@ -96,7 +88,7 @@ export function deleteAdminVotechain(web3, votechain, adminKey) {
   }
 }
 
-export function deleteAdminUI(web3, votechain, adminKey) {
+export function deleteAdminUI(adminKey) {
   return async (dispatch) => {
     let deletedAdminKey = adminKey
     

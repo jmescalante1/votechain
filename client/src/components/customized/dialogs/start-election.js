@@ -44,9 +44,9 @@ class StartElectionDialog extends React.Component {
 
   startElection() {
     const { startElectionVotechain, handleClickCloseDialog, electionToStart } = this.props
-    const { web3, votechain } = this.props
+    const { account, votechain } = this.props
   
-    startElectionVotechain(web3, votechain, electionToStart.id)
+    startElectionVotechain(account, votechain, electionToStart.id)
     handleClickCloseDialog()
   }
 
@@ -97,7 +97,8 @@ StartElectionDialog.propTypes = {
 
 const mapStateToProps = state => ({
   web3: state.web3.web3,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
+  account: state.account.account
 });
 
 const mapDispatchToProps = {

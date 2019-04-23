@@ -62,7 +62,7 @@ class AddAdminDialog extends React.Component {
   }
 
   onSubmit() {
-    const { handleClickCloseDialog, addAdminVotechain, votechain, web3 } = this.props
+    const { handleClickCloseDialog, addAdminVotechain, votechain, account } = this.props
     const { adminName, adminKey } = this.state
 
     let admin = {
@@ -70,7 +70,7 @@ class AddAdminDialog extends React.Component {
       name: adminName,
     }
 
-    addAdminVotechain(web3, votechain, admin)
+    addAdminVotechain(account, votechain, admin)
     handleClickCloseDialog()
   }
   
@@ -142,7 +142,7 @@ AddAdminDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain,
 })
 

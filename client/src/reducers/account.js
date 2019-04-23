@@ -1,4 +1,4 @@
-import { CHANGE_ACCOUNT } from '../actions/account'
+import { SET_ACCOUNT } from '../actions/account'
 
 const initialState = {
   account: ''
@@ -6,7 +6,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action){
   switch(action.type) {
-    case CHANGE_ACCOUNT: {
+    case SET_ACCOUNT: {
       return {
         ...state,
         account: action.payload.account

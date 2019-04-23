@@ -49,10 +49,10 @@ class AddElectionDialog extends React.Component {
   }
   
   addElection() {
-    const { handleClickCloseDialog, addElectionVotechain, web3, votechain } = this.props
+    const { handleClickCloseDialog, addElectionVotechain, account, votechain } = this.props
     const { electionName } = this.state
 
-    addElectionVotechain(web3, votechain, electionName)
+    addElectionVotechain(account, votechain, electionName)
     handleClickCloseDialog()
   }
 
@@ -116,8 +116,8 @@ AddElectionDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
+  account: state.account.account
 });
 
 const mapDispatchToProps = {

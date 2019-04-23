@@ -31,7 +31,7 @@ export const STOP_ELECTION_VOTECHAIN = 'STOP_ELECTION_VOTECHAIN'
 export const STOP_ELECTION_UI = 'STOP_ELECTION_UI'
 
 
-export function addElectionVotechain(web3, votechain, electionName){
+export function addElectionVotechain(account, votechain, electionName){
   return async (dispatch) =>  { 
 
       function onSuccess() {
@@ -48,9 +48,7 @@ export function addElectionVotechain(web3, votechain, electionName){
       }
       
       try {
-        const accounts = await web3.eth.getAccounts()
-        const firstAccount = accounts[0]
-        await votechain.methods.addElection(electionName).send({from: firstAccount})
+        await votechain.methods.addElection(electionName).send({from: account})
         onSuccess()
       } catch (error) {
         onError(error)
@@ -58,7 +56,7 @@ export function addElectionVotechain(web3, votechain, electionName){
   }
 }
 
-export function addElectionUI(web3, votechain, electionKey){
+export function addElectionUI(votechain, electionKey){
   return async (dispatch) =>  { 
     let addedElection = await getElection(electionKey, votechain)
     
@@ -69,7 +67,7 @@ export function addElectionUI(web3, votechain, electionKey){
   }
 }
 
-export function fetchElectionList(web3, votechain) {
+export function fetchElectionList(votechain) {
   return async (dispatch) => {
     const noOfElections = await votechain.methods.getNoOfElections().call()
     let electionList = []
@@ -88,11 +86,9 @@ export function fetchElectionList(web3, votechain) {
   }
 }
 
-export function editElectionVotechain(web3, votechain, election) {
+export function editElectionVotechain(account, votechain, election) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.updateElection(election.id, election.name).send({from: firstAccount})
+    await votechain.methods.updateElection(election.id, election.name).send({from: account})
   
     dispatch({
       type: EDIT_ELECTION_VOTECHAIN,
@@ -100,7 +96,7 @@ export function editElectionVotechain(web3, votechain, election) {
   }
 }
 
-export function editElectionUI(web3, votechain, electionKey) {
+export function editElectionUI(votechain, electionKey) {
   return async (dispatch) => {
     let editedElection = await getElection(electionKey, votechain)
 
@@ -111,7 +107,7 @@ export function editElectionUI(web3, votechain, electionKey) {
   }
 }
 
-export function deleteElectionUI(web3, votechain, electionKey) {
+export function deleteElectionUI(votechain, electionKey) {
   return async (dispatch) => {
     let deletedElection = await getElection(electionKey, votechain)
 
@@ -122,12 +118,9 @@ export function deleteElectionUI(web3, votechain, electionKey) {
   }
 }
 
-export function deleteElectionVotechain(web3, votechain, electionKey) {
+export function deleteElectionVotechain(account, votechain, electionKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.deleteElection(electionKey).send({from: firstAccount})
+    await votechain.methods.deleteElection(electionKey).send({from: account})
   
     dispatch({
       type: DELETE_ELECTION_VOTECHAIN,
@@ -135,12 +128,9 @@ export function deleteElectionVotechain(web3, votechain, electionKey) {
   }
 }
 
-export function startElectionVotechain(web3, votechain, electionKey) {
+export function startElectionVotechain(account, votechain, electionKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.startElection(electionKey).send({from: firstAccount})
+    await votechain.methods.startElection(electionKey).send({from: account})
 
     dispatch({
       type: START_ELECTION_VOTECHAIN
@@ -148,7 +138,7 @@ export function startElectionVotechain(web3, votechain, electionKey) {
   }
 }
 
-export function startElectionUI(web3, votechain, electionKey) {
+export function startElectionUI(votechain, electionKey) {
   return async (dispatch) => {
     let startedElection = await getElection(electionKey, votechain)
 
@@ -159,12 +149,9 @@ export function startElectionUI(web3, votechain, electionKey) {
   }
 }
 
-export function stopElectionVotechain(web3, votechain, electionKey) {
+export function stopElectionVotechain(account, votechain, electionKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.stopElection(electionKey).send({from: firstAccount})
+    await votechain.methods.stopElection(electionKey).send({from: account})
 
     dispatch({
       type: STOP_ELECTION_VOTECHAIN
@@ -172,7 +159,7 @@ export function stopElectionVotechain(web3, votechain, electionKey) {
   }
 }
 
-export function stopElectionUI(web3, votechain, electionKey) {
+export function stopElectionUI(votechain, electionKey) {
   return async (dispatch) => {
     let stoppedElection = await getElection(electionKey, votechain)
 

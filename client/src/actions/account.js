@@ -1,11 +1,11 @@
-export const CHANGE_ACCOUNT = 'CHANGE_ACCOUNT'
+export const SET_ACCOUNT = 'SET_ACCOUNT'
 
-export function changeAccount(web3, account){
+export function setAccount(web3, account){
   web3.eth.defaultAccount = account
   
   return async (dispatch) => {
     dispatch({
-      type: CHANGE_ACCOUNT,
+      type: SET_ACCOUNT,
       payload: {account}
     })
   }

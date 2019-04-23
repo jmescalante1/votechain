@@ -31,13 +31,10 @@ class AdminTableContainer extends Component {
     this.handleCloseDeleteAdminDialog = this.handleCloseDeleteAdminDialog.bind(this)
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props.web3 !== prevProps.web3 || this.props.votechain !== prevProps.votechain) {
-      const { web3, votechain, fetchAdminList } = this.props
-      
-      if(votechain && web3)
-        fetchAdminList(web3, votechain)
-    }
+  componentDidMount(){
+    const { fetchAdminList, votechain } = this.props
+    if(votechain)
+      fetchAdminList(votechain)
   }
   
   handleCloseAddAdminDialog() {
@@ -112,7 +109,7 @@ class AdminTableContainer extends Component {
 
 const mapStateToProps = state => ({
   adminList: state.admin.adminList,
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain,
 })
 

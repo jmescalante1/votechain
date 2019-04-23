@@ -16,7 +16,7 @@ export const EDIT_OFFICIAL_UI = 'EDIT_OFFICIAL_UI'
 export const DELETE_OFFICIAL_VOTECHAIN = 'DELETE_OFFICIAL_VOTECHAIN'
 export const DELETE_OFFICIAL_UI = 'DELETE_OFFICIAL_UI'
 
-export function fetchOfficialList(web3, votechain) {
+export function fetchOfficialList(votechain) {
   return async (dispatch) => {
     const noOfOfficials = await votechain.methods.getNoOfOfficials().call()
     let officialList = []

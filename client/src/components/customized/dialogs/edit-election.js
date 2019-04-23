@@ -49,10 +49,10 @@ class EditElectionDialog extends React.Component {
   }
   
   editElection() {
-    const { editElectionVotechain, web3, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
+    const { editElectionVotechain, account, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
     const { electionName } = this.state
     
-    editElectionVotechain(web3, votechain, {id: idOfElectionToBeEdited, name: electionName})
+    editElectionVotechain(account, votechain, {id: idOfElectionToBeEdited, name: electionName})
     handleClickCloseDialog()
   }
 
@@ -117,8 +117,8 @@ EditElectionDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
+  account: state.account.account
 });
 
 const mapDispatchToProps = {

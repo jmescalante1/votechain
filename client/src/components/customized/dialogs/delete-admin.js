@@ -44,9 +44,9 @@ class DeleteAdminDialog extends React.Component {
 
   deleteAdmin() {
     const { deleteAdminVotechain, handleClickCloseDialog, adminToBeDeleted } = this.props
-    const { web3, votechain } = this.props
+    const { account, votechain } = this.props
   
-    deleteAdminVotechain(web3, votechain, adminToBeDeleted.id)
+    deleteAdminVotechain(account, votechain, adminToBeDeleted.id)
     handleClickCloseDialog()
   }
 
@@ -95,7 +95,7 @@ DeleteAdminDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 

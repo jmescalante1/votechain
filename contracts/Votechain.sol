@@ -372,7 +372,7 @@ contract Votechain {
         emit EditCandidate(candidateKey);
     }
 
-    function updateAdmin(address adminKey, string memory newName) public onlySelf(adminKey) adminKeyExists(adminKey){
+    function updateAdmin(address adminKey, string memory newName) public onlyAdmin adminKeyExists(adminKey){
         adminList[adminKey].name = newName;
         emit EditAdmin(adminKey);
     }
@@ -388,7 +388,7 @@ contract Votechain {
 
     function updateVoter(address voterKey, string memory newStudentNo, string memory newName) 
         public 
-        onlySelf(voterKey) 
+        onlyAdminOrOfficialOrSelf(voterKey) 
         voterKeyExists(voterKey) 
     {
         voterList[voterKey].name = newName;
@@ -766,18 +766,23 @@ contract Votechain {
         return false;
     }
 
-    modifier onlyAdminOrOfficial() {
-        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
-        _;
-    }
-
     modifier onlyAdminOrSelf(address accountKey) {
         require(isAdmin(msg.sender) || msg.sender == accountKey, "Only admins or the account owner can change the official's profile.");
         _;
     }
 
+    modifier onlyAdminOrOfficialOrSelf(address accountKey) {
+        require(isAdmin(msg.sender) || isOfficial(msg.sender) || msg.sender == accountKey, "Only admins, officials, and the account owner can change the voter's profile.");
+        _;
+    }
+
     modifier onlyAdmin() {
         require(isAdmin(msg.sender), "Only admins can invoke this method.");
+        _;
+    }
+
+    modifier onlyAdminOrOfficial() {
+        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
         _;
     }
 

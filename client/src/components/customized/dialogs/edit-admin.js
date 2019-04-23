@@ -49,7 +49,7 @@ class EditAdminDialog extends React.Component {
   }
   
   editAdmin() {
-    const { editAdminVotechain, web3, votechain, handleClickCloseDialog, adminToBeEdited } = this.props
+    const { editAdminVotechain, account, votechain, handleClickCloseDialog, adminToBeEdited } = this.props
     const { adminName } = this.state
 
     let admin = {
@@ -57,7 +57,7 @@ class EditAdminDialog extends React.Component {
       name: adminName,
     }
 
-    editAdminVotechain(web3, votechain, admin)
+    editAdminVotechain(account, votechain, admin)
     handleClickCloseDialog()
   }
 
@@ -122,7 +122,7 @@ EditAdminDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 

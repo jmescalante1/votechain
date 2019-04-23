@@ -45,9 +45,9 @@ class ElectionTableContainer extends Component {
   }
 
   componentDidMount(){
-    const { fetchElectionList, web3, votechain } = this.props
-    if(web3 && votechain)
-      fetchElectionList(web3, votechain)
+    const { fetchElectionList, votechain } = this.props
+    if(votechain)
+      fetchElectionList(votechain)
   }
 
   handleOpenAddElectionDialog() {
@@ -158,7 +158,6 @@ class ElectionTableContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
   votechain: state.contract.votechain,
   electionList: state.election.electionList,
   location: state.router.location
