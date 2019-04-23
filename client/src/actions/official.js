@@ -35,12 +35,9 @@ export function fetchOfficialList(votechain) {
   }
 }
 
-export function addOfficialVotechain(web3, votechain, official) {
+export function addOfficialVotechain(account, votechain, official) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.addOfficial(official.officialKey, official.name).send({from: firstAccount})
-    console.log(official)
+    await votechain.methods.addOfficial(official.officialKey, official.name).send({from: account})
 
     dispatch( {
       type: ADD_OFFICIAL_VOTECHAIN
@@ -48,7 +45,7 @@ export function addOfficialVotechain(web3, votechain, official) {
   }
 }
 
-export function addOfficialUI(web3, votechain, officialKey) {
+export function addOfficialUI(votechain, officialKey) {
   return async (dispatch) => {
     let addedOfficial = await getOfficial(officialKey, votechain)
 
@@ -59,11 +56,9 @@ export function addOfficialUI(web3, votechain, officialKey) {
   }
 }
 
-export function editOfficialVotechain(web3, votechain, official){
+export function editOfficialVotechain(account, votechain, official){
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-    await votechain.methods.updateOfficial(official.officialKey, official.name).send({from: firstAccount})
+    await votechain.methods.updateOfficial(official.officialKey, official.name).send({from: account})
     
     dispatch( {
       type: EDIT_OFFICIAL_VOTECHAIN
@@ -71,7 +66,7 @@ export function editOfficialVotechain(web3, votechain, official){
   }
 }
 
-export function editOfficialUI(web3, votechain, officialKey){
+export function editOfficialUI(votechain, officialKey){
   return async (dispatch) => {
     let editedOfficial = await getOfficial(officialKey, votechain)
 
@@ -83,12 +78,9 @@ export function editOfficialUI(web3, votechain, officialKey){
 }
 
 
-export function deleteOfficialVotechain(web3, votechain, officialKey) {
+export function deleteOfficialVotechain(account, votechain, officialKey) {
   return async (dispatch) => {
-    const accounts = await web3.eth.getAccounts()
-    const firstAccount = accounts[0]
-
-    await votechain.methods.deleteOfficial(officialKey).send({from: firstAccount})
+    await votechain.methods.deleteOfficial(officialKey).send({from: account})
   
     dispatch({
       type: DELETE_OFFICIAL_VOTECHAIN,
@@ -96,7 +88,7 @@ export function deleteOfficialVotechain(web3, votechain, officialKey) {
   }
 }
 
-export function deleteOfficialUI(web3, votechain, officialKey) {
+export function deleteOfficialUI(officialKey) {
   return async (dispatch) => {
     let deletedOfficialKey = officialKey
     

@@ -31,13 +31,10 @@ class OfficialTableContainer extends Component {
     this.handleCloseDeleteOfficialDialog = this.handleCloseDeleteOfficialDialog.bind(this)
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props.web3 !== prevProps.web3 || this.props.votechain !== prevProps.votechain) {
-      const { web3, votechain, fetchOfficialList } = this.props
-      
-      if(votechain && web3)
-        fetchOfficialList(web3, votechain)
-    }
+  componentDidMount(){
+    const { fetchOfficialList, votechain } = this.props
+    if(votechain)
+      fetchOfficialList(votechain)
   }
   
   handleCloseAddOfficialDialog() {
@@ -112,7 +109,6 @@ class OfficialTableContainer extends Component {
 
 const mapStateToProps = state => ({
   officialList: state.official.officialList,
-  web3: state.web3.web3,
   votechain: state.contract.votechain,
 })
 

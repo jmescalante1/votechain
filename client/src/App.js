@@ -153,7 +153,7 @@ class App extends React.Component {
 
           else if ('DeleteOfficial' === result.event) {
             let officialKey = result.returnValues.officialKey
-            deleteOfficialUI(votechain, officialKey)
+            deleteOfficialUI(officialKey)
           }
 
           else if ('AddAdmin' === result.event) {

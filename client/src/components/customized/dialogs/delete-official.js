@@ -44,9 +44,9 @@ class DeleteOfficialDialog extends React.Component {
 
   deleteOfficial() {
     const { deleteOfficialVotechain, handleClickCloseDialog, officialToBeDeleted } = this.props
-    const { web3, votechain } = this.props
+    const { account, votechain } = this.props
   
-    deleteOfficialVotechain(web3, votechain, officialToBeDeleted.id)
+    deleteOfficialVotechain(account, votechain, officialToBeDeleted.id)
     handleClickCloseDialog()
   }
 
@@ -95,7 +95,7 @@ DeleteOfficialDialog.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  web3: state.web3.web3,
+  account: state.account.account,
   votechain: state.contract.votechain
 });
 
