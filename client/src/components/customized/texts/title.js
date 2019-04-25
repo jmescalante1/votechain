@@ -4,23 +4,25 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#bdbdbd',
+    backgroundColor: '#64b5f6',
+    height: theme.spacing.unit * 6,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   title: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   }
 })
 
 class Title extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, fontSize } = this.props
 
     return (
       <div className={classes.root}>
-        <Typography className={classes.title}>
+        <Typography  className={classes.title} style={{ fontSize: fontSize ? fontSize : 20}}>
           {this.props.children}
         </Typography>
       </div>

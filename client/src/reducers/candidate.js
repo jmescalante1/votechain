@@ -47,11 +47,15 @@ export default function reducer(state = initialState, action) {
     case DELETE_POSITION_UI: {
       // delete all candidates with position key equal to the deleted position key
       let currentCandidateListClone = cloneDeep(state.currentCandidateList)
-      let filtered = currentCandidateListClone.filter(candidate => candidate.positionId !== action.deletedPositionKey)
-      console.log(filtered)
+      let filteredCandidateList = currentCandidateListClone.filter(candidate => candidate.positionId !== action.deletedPositionKey)
+
+      // delete position in position list
+      let currentPositionListClone = cloneDeep(state.currentPositionList)
+      let filteredPositionList = currentPositionListClone.filter(position => position.id !== action.deletedPositionKey)
       return {
         ...state,
-        currentCandidateList: filtered
+        currentCandidateList: filteredCandidateList,
+        currentPositionList: filteredPositionList
       }
     }
 

@@ -3,12 +3,14 @@ import cloneDeep from 'lodash/cloneDeep'
 import { ADD_ELECTION_VOTECHAIN, ADD_ELECTION_VOTECHAIN_ERROR, FETCH_ELECTION_LIST 
   , ADD_ELECTION_UI, EDIT_ELECTION_VOTECHAIN, EDIT_ELECTION_UI
   , DELETE_ELECTION_VOTECHAIN, DELETE_ELECTION_UI, START_ELECTION_VOTECHAIN 
-  , START_ELECTION_UI, STOP_ELECTION_VOTECHAIN, STOP_ELECTION_UI } from '../actions/election'
+  , START_ELECTION_UI, STOP_ELECTION_VOTECHAIN, STOP_ELECTION_UI
+  , FETCH_ELECTION_DETAILS } from '../actions/election'
 
 
 const initialState = {
   electionList: [],
-  addElectionError: ''
+  addElectionError: '',
+  electionDetailsForElectionView: {}
 }
 
 
@@ -128,6 +130,13 @@ export default function reducer(state = initialState, action) {
 
       return {
         ...state
+      }
+    }
+
+    case FETCH_ELECTION_DETAILS: {
+      return {
+        ...state,
+        electionDetailsForElectionView: action.payload.electionDetails
       }
     }
 

@@ -17,6 +17,29 @@ async function getElection(electionKey, votechain) {
   return election
 }
 
+async function getElectionDetailsForElectionView(votechain, electionKey) {
+  let election = await getElection(electionKey, votechain)
+
+  let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
+  let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
+  let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
+
+  election.noOfPositions = Number(noOfPositions)
+  election.noOfVoters = Number(noOfVoters)
+  election.noOfVotes = Number(noOfVotes)
+
+  let noOfCandidates = 0
+
+  for(let i = 0; i < noOfPositions; i++){
+    let positionKey = await votechain.methods.getPositionKeyAt(electionKey, i).call()
+    noOfCandidates += Number(await votechain.methods.getNoOfCandidatesAt(positionKey).call())
+  }
+
+  election.noOfCandidates = noOfCandidates
+
+  return election
+}
+
 export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
 export const FETCH_ELECTION_LIST = 'FETCH_ELECTION_LIST'
@@ -29,7 +52,7 @@ export const START_ELECTION_VOTECHAIN = 'START_ELECTION_VOTECHAIN'
 export const START_ELECTION_UI = 'START_ELECTION_UI'
 export const STOP_ELECTION_VOTECHAIN = 'STOP_ELECTION_VOTECHAIN'
 export const STOP_ELECTION_UI = 'STOP_ELECTION_UI'
-
+export const FETCH_ELECTION_DETAILS = 'FETCH_ELECTION_DETAILS'
 
 export function addElectionVotechain(account, votechain, electionName){
   return async (dispatch) =>  { 
@@ -166,6 +189,17 @@ export function stopElectionUI(votechain, electionKey) {
     dispatch({
       type: STOP_ELECTION_UI,
       payload: {stoppedElection}
+    })
+  }
+}
+
+export function fetchElectionDetails(votechain, electionKey) {
+  return async (dispatch) => {
+    let electionDetails = await getElectionDetailsForElectionView(votechain, electionKey)
+
+    dispatch({
+      type: FETCH_ELECTION_DETAILS,
+      payload: { electionDetails }
     })
   }
 }

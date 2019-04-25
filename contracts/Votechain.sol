@@ -56,7 +56,10 @@ contract Votechain {
         mapping(uint256 => uint256) positionKeyIndexList; // position key to index in positionKeyList
 
         address[] voterKeyList;
-        mapping(address => uint256) voterKeyIndexList; // voter kye to index in voterKeyList;
+        mapping(address => uint256) voterKeyIndexList; // voter key to index in voterKeyList;
+
+        uint256[] voteKeyList;
+        // there is no voteKeyIndexList since a vote will never be deleted
     }
 
     struct Position {
@@ -101,10 +104,10 @@ contract Votechain {
 
     struct Vote {
         uint256 keyIndex;
+        address voterKey;
         uint256 electionKey;
         uint256 positionKey;
         uint256 candidateKey;
-        address voterKey;
     }
 
     struct Abstain {
@@ -217,6 +220,9 @@ contract Votechain {
 
         // insert the key of the casted vote to the voteKeyList of the voter
         voter.voteKeyIndexList[voteKey] = voter.voteKeyList.push(voteKey).sub(1);
+
+        // insert the key of the casted vote to the voteKeyList of the election
+        electionList[position.electionKey].voteKeyList.push(voteKey);
 
         candidateList[candidateKey].wasVotedBy[msg.sender] = true;
         position.noOfVotesSubmittedBy[msg.sender] = position.noOfVotesSubmittedBy[msg.sender].add(1);
@@ -747,6 +753,14 @@ contract Votechain {
 
     function getNoOfVotersAt(uint256 electionKey) public view electionKeyExists(electionKey) returns(uint256) {
         return electionList[electionKey].voterKeyList.length;
+    }
+
+    function getNoOfVotesOfVoter(address voterKey) public view voterKeyExists(voterKey) returns(uint256) {
+        return voterList[voterKey].voteKeyList.length;
+    }
+
+    function getNoOfVotesOfElection(uint256 electionKey) public view electionKeyExists(electionKey) returns(uint256) {
+        return electionList[electionKey].voteKeyList.length;
     }
 
     function getPositionKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {

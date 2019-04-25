@@ -5,16 +5,17 @@ import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 
-import Ballot from './ballot'
-import { fetchElection } from '../../../../actions/ballot'
+import Ballot from '../../ballot/ballot'
+// import { fetchElection } from '../../../../actions/ballot'
 import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
+import { fetchElectionDetails } from '../../../../actions/election'
 
 class ElectionViewContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       positionList: {
-        /*
+        /* Structure
           positionId: {
             candidateIds:{
 
@@ -89,8 +90,8 @@ class ElectionViewContainer extends Component {
 
   componentDidMount() {
     if(this.props.location.params) {
-      const {votechain, fetchElection, location } = this.props
-      fetchElection(votechain, location.params.election.id)
+      const {votechain, fetchElectionDetails, location } = this.props
+      fetchElectionDetails(votechain, location.params.election.id)
     }
   }
   
@@ -107,7 +108,7 @@ class ElectionViewContainer extends Component {
         {!isEmpty(election) ?   
           <div>
             <ElectionView election={election}/>
-            <Ballot 
+            {/* <Ballot 
               election={election}
               positionListState={positionList}
               handleBallotChange={this.handleBallotChange}
@@ -118,7 +119,7 @@ class ElectionViewContainer extends Component {
               openDialog={openSubmitBallotDialog}
               handleClickCloseDialog={this.handleCloseSubmitDialog}
               candidateKeyList={candidateKeyList}
-            />
+            /> */}
           </div> 
         : ''}
       </div>
@@ -128,11 +129,12 @@ class ElectionViewContainer extends Component {
 
 const mapStateToProps = state => ({
   votechain: state.contract.votechain,
-  election: state.ballot.election 
+  election: state.election.electionDetailsForElectionView 
 });
 
 const mapDispatchToProps = {
-  fetchElection
+  // fetchElection,
+  fetchElectionDetails
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionViewContainer)

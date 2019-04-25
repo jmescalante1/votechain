@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import PositionRadioGroup from '../../../customized/selectors/position-radio-group'
-import SubmitButton from '../../../customized/buttons/submit'
+import PositionRadioGroup from '../../customized/selectors/position-radio-group'
+import SubmitButton from '../../customized/buttons/submit'
 
 class Ballot extends Component {
   constructor(props) {

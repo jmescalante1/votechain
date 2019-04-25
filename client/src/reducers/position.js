@@ -50,7 +50,6 @@ export default function reducer(state = initialState, action) {
       let currentPositionListClone = cloneDeep(state.currentPositionList)
       let index = currentPositionListClone.findIndex(position => position.id === action.editedPosition.id)
       if(index !== -1){
-        console.log(index)
         currentPositionListClone[index] = action.editedPosition
       }
 
