@@ -7,26 +7,26 @@ contract Votechain {
 
     enum Stage { Setup, Started, Finished }
 
-    uint256 private electionKeyCounter = 0; 
+    uint256 private electionKeyCounter;
     mapping(uint256 => Election) public electionList;
     uint256[] public electionKeyList;
     
-    uint256 private positionKeyCounter = 0;
+    uint256 private positionKeyCounter;
     mapping(uint256 => Position) public positionList;
     uint256[] public positionKeyList;
 
-    uint256 private candidateKeyCounter = 0;
+    uint256 private candidateKeyCounter;
     mapping(uint256 => Candidate) public candidateList;
     uint256[] public candidateKeyList;
 
     mapping(address => Voter) public voterList;
     address[] public voterKeyList;
 
-    uint256 private voteKeyCounter = 0;
+    uint256 private voteKeyCounter;
     mapping(uint256 => Vote) public voteList;
     uint256[] public voteKeyList;
 
-    uint256 private abstainKeyCounter = 0;
+    uint256 private abstainKeyCounter;
     mapping(uint256 => Abstain) public abstainList;
     uint256[] public abstainKeyList;
 
@@ -53,26 +53,25 @@ contract Votechain {
         Stage stage;
 
         uint256[] positionKeyList;
-        mapping(uint256 => uint256) positionKeyIndexList; // position key to index in positionKeyList
+        mapping(uint256 => uint256) positionKeyIndexList; 
 
         address[] voterKeyList;
-        mapping(address => uint256) voterKeyIndexList; // voter key to index in voterKeyList;
+        mapping(address => uint256) voterKeyIndexList; 
 
         uint256[] voteKeyList;
-        // there is no voteKeyIndexList since a vote will never be deleted
     }
 
     struct Position {
         uint256 keyIndex;
         string name;
         
-        uint256 maxNoOfCandidatesThatCanBeSelected; // the total number of candidates a voter can vote in this position.
-        mapping(address => uint256) noOfVotesSubmittedBy; // voter id to no of votes that has been casted by this voter in this position.
+        uint256 maxNoOfCandidatesThatCanBeSelected; 
+        mapping(address => uint256) noOfVotesSubmittedBy;
 
         uint256 electionKey;
 
         uint256[] candidateKeyList;
-        mapping(uint256 => uint256) candidateKeyIndexList; // candidate key to index in candidateKeyList
+        mapping(uint256 => uint256) candidateKeyIndexList;
 
         uint256 abstainKey;
         bool isAbstainActive;
@@ -86,8 +85,8 @@ contract Votechain {
 
         mapping(address => bool) wasVotedBy;
 
-        uint256[] voteKeyList; // votes received
-        mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
+        uint256[] voteKeyList;
+        mapping(uint256 => uint256) voteKeyIndexList;
     }
 
     struct Voter {
@@ -96,10 +95,10 @@ contract Votechain {
         string studentNo;
 
         uint256[] electionKeyList;
-        mapping(uint256 => uint256) electionKeyIndexList; // electionKey to index in electionKeyList
+        mapping(uint256 => uint256) electionKeyIndexList; 
 
         uint256[] voteKeyList;
-        mapping(uint256 => uint256) voteKeyIndexList; // vote key to index in voteKeyList
+        mapping(uint256 => uint256) voteKeyIndexList; 
     }
 
     struct Vote {
@@ -114,8 +113,8 @@ contract Votechain {
         uint256 keyIndex;
         uint256 positionKey;
 
-        uint256[] voteKeyList; // voters who voted for this particular abstain
-        mapping(uint256 => uint256) voteKeyIndexList; // voter key to index in the voterKeyList
+        uint256[] voteKeyList;
+        mapping(uint256 => uint256) voteKeyIndexList;
     }
 
     event StartElection (uint256 electionKey);
@@ -155,33 +154,33 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        addElection('UP Manila Student Council Election');
-        addElection('Codeninja Board Of Directors Election');
+        // addElection('UP Manila Student Council Election');
+        // addElection('Codeninja Board Of Directors Election');
 
-        // for election1
-        addPositionAt(1, 'Chairman', 1, false);
+        // // for election1
+        // addPositionAt(1, 'Chairman', 1, false);
 
-        // for election2
-        addPositionAt(2, 'CEO', 1, false);
-        addPositionAt(2, 'CTO', 2, false);
+        // // for election2
+        // addPositionAt(2, 'CEO', 1, false);
+        // addPositionAt(2, 'CTO', 2, false);
 
-        // for position1
-        addCandidateAt(1, 'Neil');
-        addCandidateAt(1, 'Alee');
-        addCandidateAt(1, 'Bea');
+        // // for position1
+        // addCandidateAt(1, 'Neil');
+        // addCandidateAt(1, 'Alee');
+        // addCandidateAt(1, 'Bea');
 
-        // for position2
-        addCandidateAt(2, 'Paulo');
-        addCandidateAt(2, 'Ben');
-        addCandidateAt(2, 'Guen');
+        // // for position2
+        // addCandidateAt(2, 'Paulo');
+        // addCandidateAt(2, 'Ben');
+        // addCandidateAt(2, 'Guen');
 
-        // for position3
-        addCandidateAt(3, 'JM');
-        addCandidateAt(3, 'Mike');
-        addCandidateAt(3, 'Alley');
+        // // for position3
+        // addCandidateAt(3, 'JM');
+        // addCandidateAt(3, 'Mike');
+        // addCandidateAt(3, 'Alley');
 
-        addVoterAt(1, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-08795', 'JM');
-        addVoterAt(2, 0x211f3138e1bA20F517B2569B225d7174f4FAaC8E, '2015-09899', 'Alley');
+        // addVoterAt(1, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-08795', 'JM');
+        // addVoterAt(2, 0x211f3138e1bA20F517B2569B225d7174f4FAaC8E, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -444,26 +443,7 @@ contract Votechain {
 
         // delete all the positions under this election
         for(uint256 i = 0; i < election.positionKeyList.length; i++){
-            uint256 positionKey = election.positionKeyList[i];
-
-            // delete this position
-            indexToDelete = positionList[positionKey].keyIndex;
-            keyToMove = positionKeyList[positionKeyList.length.sub(1)];
-            positionKeyList[indexToDelete] = keyToMove;
-            positionList[keyToMove].keyIndex = indexToDelete;
-            positionKeyList.length = positionKeyList.length.sub(1);
-
-            // delete all the candidates under this position
-            Position storage position = positionList[positionKey];
-            for(uint256 j = 0; j < position.candidateKeyList.length; j++){
-                uint256 candidateKey = position.candidateKeyList[j];
-                indexToDelete = candidateList[candidateKey].keyIndex;
-                keyToMove = candidateKeyList[candidateKeyList.length.sub(1)];
-                candidateKeyList[indexToDelete] = keyToMove;
-                candidateList[keyToMove].keyIndex = indexToDelete;
-                candidateKeyList.length = candidateKeyList.length.sub(1);
-            }          
-            
+            deletePosition(election.positionKeyList[i]);            
         }
 
         emit DeleteElection(electionKey);
@@ -518,11 +498,7 @@ contract Votechain {
         uint256[] memory candidateKeyListInPosition = positionList[positionKey].candidateKeyList;
         for(uint256 i = 0; i < candidateKeyListInPosition.length; i++){
             uint256 candidateKey = candidateKeyListInPosition[i];
-            indexToDelete = candidateList[candidateKey].keyIndex;
-            keyToMove = candidateKeyList[candidateKeyList.length.sub(1)];
-            candidateKeyList[indexToDelete] = keyToMove;
-            candidateList[keyToMove].keyIndex = indexToDelete;
-            candidateKeyList.length = candidateKeyList.length.sub(1);
+            deleteCandidate(candidateKey);
         }
 
         // delete its abstain option if it exists
@@ -772,139 +748,255 @@ contract Votechain {
     }
 
     function getVoterKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(address) {
+        // string memory test = 'sdfsd';
         return electionList[electionKey].voterKeyList[index];
     }
+
+    // function getVoteKeyOfElection(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
+      
+    //     return electionList[electionKey].voteKeyList[index];
+    // }
+
+    // function getVoteKey(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
+      
+    //     return electionList[electionKey].voteKeyList.length;
+    // }
+
+    // function nothing() public view returns(uint256){
+    //     return 1;
+    // }
 
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
         return false;
     }
 
+    function isOnlySelf(address accountKey) internal view returns(bool) {
+        return msg.sender == accountKey;
+    }
+
+    function isOnlyAdminOrSelf(address accountKey) internal view {
+        require(isAdmin(msg.sender) || isOnlySelf(accountKey), "Admin & owner only");
+    }
+
+    function isOnlyAdminOrOfficialOrSelf(address accountKey) internal view {
+        require(isAdmin(msg.sender) || isOfficial(msg.sender) || isOnlySelf(accountKey), "Admin, Official, & Owner only");
+    }
+    
+    function isOnlyAdmin() internal view {
+        require(isAdmin(msg.sender), "Admin only");
+    }
+
+    function isOnlyAdminOrOfficial() internal view {
+        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Admin & Official only");
+    }
+
+    function isOnlyOfficial() internal view {
+        require(isOfficial(msg.sender), "Official only");
+    }
+
+    function isOnlyVoterAt(uint256 electionKey) internal view {
+        require(isVoterAt(electionKey, msg.sender), "Only registered voter");
+    }
+    
+    function isInSetupStage(uint256 electionKey) internal view {
+        require(electionList[electionKey].stage == Stage.Setup, "Election not in setup");
+    }
+
+    function isHasStarted(uint256 electionKey) internal view {
+        require(electionList[electionKey].stage == Stage.Started, "Election hasn't started");
+    }
+
+    function isHasFinished(uint256 electionKey) internal view {
+        require(electionList[electionKey].stage == Stage.Finished, "Election not finished.");
+    }
+
+    function _adminKeyExists(address adminKey) internal view {
+        require(isAdmin(adminKey), "Bad admin key");
+    }
+
+    function _officialKeyExists(address officialKey) internal view {
+        require(isOfficial(officialKey), "Bad official key");
+    }
+
+    function _electionKeyExists(uint256 electionKey) internal view {
+        require(isElection(electionKey), "Bad election key");
+    }
+
+    function _positionKeyExists(uint256 positionKey) internal view {
+        require(isPosition(positionKey), "Bad position key");
+    }
+
+    function _candidateKeyExists(uint256 candidateKey) internal view {
+        require(isCandidate(candidateKey), "Bad candidate key");
+    }
+
+    function _voterKeyExists(address voterKey) internal view {
+        require(isVoter(voterKey), "Bad voter key");
+    }
+
+    function _voterKeyExistsAt(uint256 electionKey, address voterKey) internal view {
+        require(isVoterAt(electionKey, voterKey), "Bad voter key");
+    }
+
+    function _abstainKeyExists(uint256 abstainKey) internal view {
+        require(isAbstain(abstainKey), "Bad abstain key");
+    }
+
+    function _notVoterAt(uint256 electionKey, address voterKey) internal view {
+        require(!isVoterAt(electionKey, voterKey), "Is voter at");
+    }
+
+    function _notAdmin(address adminKey) internal view {
+        require(!isAdmin(adminKey), "Is admin");
+    }
+
+    function _notOfficial(address officialKey) internal view {
+        require(!isOfficial(officialKey), "Is official");
+    }
+
+    function _notVoter(address voterKey) internal view {
+        require(!isVoter(voterKey), "Is voter");
+    }
+
+    function _atMostOneAbstain(uint256 positionKey) internal view {
+        require(!positionList[positionKey].isAbstainActive, "Already has abstain");
+    }
+    
+    function _hasNotVotedFor(uint256 candidateKey) internal view {
+        require(!candidateList[candidateKey].wasVotedBy[msg.sender], "Already voted candidate");
+    }
+
+    function _canStillVoteAt(uint256 positionKey) internal view {
+        uint256 noOfVotesSubmittedInThePosition = positionList[positionKey].noOfVotesSubmittedBy[msg.sender];
+        uint256 maxNoOfCandidatesThatCanBeSelected = positionList[positionKey].maxNoOfCandidatesThatCanBeSelected;
+        
+        require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "Exceeded no of votes allowed");
+    }
+
+
     modifier onlyAdminOrSelf(address accountKey) {
-        require(isAdmin(msg.sender) || msg.sender == accountKey, "Only admins or the account owner can change the official's profile.");
+        isOnlyAdminOrSelf(accountKey);
         _;
     }
 
     modifier onlyAdminOrOfficialOrSelf(address accountKey) {
-        require(isAdmin(msg.sender) || isOfficial(msg.sender) || msg.sender == accountKey, "Only admins, officials, and the account owner can change the voter's profile.");
+        isOnlyAdminOrOfficialOrSelf(accountKey);
         _;
     }
 
     modifier onlyAdmin() {
-        require(isAdmin(msg.sender), "Only admins can invoke this method.");
+        isOnlyAdmin();
         _;
     }
 
     modifier onlyAdminOrOfficial() {
-        require(isAdmin(msg.sender) || isOfficial(msg.sender), "Only admins and officials can invoke this method.");
+        isOnlyAdminOrOfficial();
         _;
     }
 
     modifier onlyOfficial() {
-        require(isOfficial(msg.sender), "Only the voting officials can invoke this method.");
+        isOnlyOfficial();
         _;
     }
 
     modifier onlyVoterAt(uint256 electionKey) {
-        require(isVoterAt(electionKey, msg.sender), "Only registered voters can invoke this method.");
+        isOnlyVoterAt(electionKey);
         _;
     }
 
     modifier onlySelf(address accountKey) {
-        require(msg.sender == accountKey, "Only the owner of the account can change his profile.");
+        isOnlySelf(accountKey);
         _;
     }
 
     modifier inSetupStage(uint256 electionKey) {
-        require(electionList[electionKey].stage == Stage.Setup, "The election is not in setup stage.");
+        isInSetupStage(electionKey);
         _;
     }
 
     modifier hasStarted(uint256 electionKey) {
-        require(electionList[electionKey].stage == Stage.Started, "The election has not started yet.");
+        isHasStarted(electionKey);
         _;
     }
 
     modifier isFinished(uint256 electionKey) {
-        require(electionList[electionKey].stage == Stage.Finished, "The election is not finished yet.");
+        isHasFinished(electionKey);
         _;
     }
 
     modifier adminKeyExists(address adminKey) {
-        require(isAdmin(adminKey), "The admin key provided does not exist.");
+        _adminKeyExists(adminKey);
         _;
     }
 
     modifier officialKeyExists(address officialKey) {
-        require(isOfficial(officialKey), "The official key provided does not exist.");
+        _officialKeyExists(officialKey);
         _;
     }
 
     modifier electionKeyExists(uint256 electionKey) {
-        require(isElection(electionKey), "The election key provided does not exist.");
+        _electionKeyExists(electionKey);
         _;
     }
 
     modifier positionKeyExists(uint256 positionKey) {
-        require(isPosition(positionKey), "The position key provided does not exits.");
+        _positionKeyExists(positionKey);
         _;
     }
 
     modifier candidateKeyExists(uint256 candidateKey) {
-        require(isCandidate(candidateKey), "The candidate key provided does not exist.");
+        _candidateKeyExists(candidateKey);
         _;
     }
 
     modifier voterKeyExists(address voterKey) {
-        require(isVoter(voterKey), "The voter key provided does not exist.");
+        _voterKeyExists(voterKey);
         _;
     }
 
     modifier voterKeyExistsAt(uint256 electionKey, address voterKey) {
-        require(isVoterAt(electionKey, voterKey), "The voter key provided does not exist in the specified election.");
+        _voterKeyExistsAt(electionKey, voterKey);
         _;
     }
 
     modifier abstainKeyExists(uint256 abstainKey){
-        require(isAbstain(abstainKey), "The abstain key provided does not exist.");
+        _abstainKeyExists(abstainKey);
         _;
     }
 
     modifier notVoterAt(uint256 electionKey, address voterKey) {
-        require(!isVoterAt(electionKey, voterKey), "The voter key provided is already registered in this election.");
+        _notVoterAt(electionKey, voterKey);
         _;
     }
 
     modifier notAdmin(address adminKey) {
-        require(!isAdmin(adminKey), "The account address provided is registered as admin.");
+        _notAdmin(adminKey);
         _;
     }
 
     modifier notOfficial(address officialKey) {
-        require(!isOfficial(officialKey), "The account address provided is registered as official.");
+        _notOfficial(officialKey);
         _;
     }
 
     modifier notVoter(address voterKey){
-        require(!isVoter(voterKey), "The account address provided is registered as voter.");
+        _notVoter(voterKey);
         _;
     }
 
     modifier atMostOneAbstain(uint256 positionKey) {
-        require(!positionList[positionKey].isAbstainActive, "The position already has an abstain option.");
+        _atMostOneAbstain(positionKey);
         _;
     }
     
     modifier hasNotVotedFor(uint256 candidateKey) {
-        require(!candidateList[candidateKey].wasVotedBy[msg.sender], "The voter has already voted this candidate.");
+        _hasNotVotedFor(candidateKey);
         _;
     }
 
     modifier canStillVoteAt(uint256 positionKey) {
-        uint256 noOfVotesSubmittedInThePosition = positionList[positionKey].noOfVotesSubmittedBy[msg.sender];
-        uint256 maxNoOfCandidatesThatCanBeSelected = positionList[positionKey].maxNoOfCandidatesThatCanBeSelected;
-        
-        require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "The voter exceeded the amount of candidates he can vote for this position.");
+        _canStillVoteAt(positionKey);
         _;
     }
 
