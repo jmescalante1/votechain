@@ -1,8 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+
+import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
+import { withStyles } from '@material-ui/core/styles'
 
 import PositionRadioGroup from '../../customized/selectors/position-radio-group'
 import SubmitButton from '../../customized/buttons/submit'
+import Title from '../../customized/texts/title'
+
+const styles = theme => ({
+  submitButton: {
+    margin: theme.spacing.unit * 2
+  }
+})
 
 class Ballot extends Component {
   constructor(props) {
@@ -16,22 +27,32 @@ class Ballot extends Component {
   }
 
   render() {
-    const { election, positionListState, handleOpenSubmitDialog } = this.props
+    const { election, positionListState, handleOpenSubmitDialog, classes } = this.props
 
     return (
-      <div>
+      <Paper>
+        <Title fontSize={30}>{election.name}</Title>
         {election.positionList.map((position) => {
           return (
-            <PositionRadioGroup 
-              key={position.id}
-              position={position}
-              positionState={positionListState[position.id]}
-              handlePositionChange={this.handlePositionChange}
-            />
+            <Fragment key={position.id}>
+              <Divider /> 
+              <PositionRadioGroup 
+                position={position}
+                positionState={positionListState[position.id]}
+                handlePositionChange={this.handlePositionChange}
+              />
+            </Fragment>
           )
         })}
-        <SubmitButton onClick={handleOpenSubmitDialog}/>
-      </div>
+        {/* <div className={classes.actions}> */}
+          <SubmitButton 
+            classes={{
+              button: classes.submitButton
+            }} 
+            onClick={handleOpenSubmitDialog}
+          />
+        {/* </div> */}
+      </Paper>
     )
   }
 }
@@ -57,7 +78,9 @@ Ballot.propTypes = {
     })).isRequired
   }).isRequired,
 
-  handleBallotChange: PropTypes.func.isRequired
+  handleBallotChange: PropTypes.func.isRequired,
+  handleOpenSubmitDialog: PropTypes.func.isRequired,
+  positionListState: PropTypes.object.isRequired,
 }
 
-export default Ballot
+export default withStyles(styles)(Ballot)

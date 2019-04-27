@@ -7,7 +7,10 @@ import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
 import { sidebarSecondaryOptions } from '../layout/sidebar/sidebar-options'
 
 import electionView from '../content/elections/election-view/election-view-route'
+import ballotRoute from '../content/ballot/ballot-route'
+
 import ElectionViewContainer from '../content/elections/election-view/election-view-container'
+import BallotContainer from '../content/ballot/ballot-container'
 
 const styles = theme => ({
   toolbar: {
@@ -41,6 +44,7 @@ class Content extends React.Component {
             <Route key={props.label} path={props.path} render={() => props.component} />
           ))}
           <Route key={electionView.label} path={electionView.path} render={(props) => <ElectionViewContainer location={this.props.location} {...props}/>} />
+          <Route key={ballotRoute.label} path={ballotRoute.path} render={(props) => <BallotContainer location={this.props.location} {...props}/>} />
         </Switch>
       </main>
     )

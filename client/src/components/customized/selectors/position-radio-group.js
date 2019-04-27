@@ -19,6 +19,12 @@ const styles = theme => ({
   group: {
     margin: `${theme.spacing.unit}px 0`,
   },
+  formLabel: {
+    fontSize: 25
+  },
+  formGroup: {
+    margin: theme.spacing.unit
+  }
 })
 
 class PositionRadioGroup extends Component {
@@ -49,8 +55,8 @@ class PositionRadioGroup extends Component {
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">{position.name}</FormLabel>
-          <FormGroup>
+          <FormLabel className={classes.formLabel} component="legend">{position.name}</FormLabel>
+          <FormGroup className={classes.formGroup}>
 
             {position.candidateList.map((candidate) => {
               return (
@@ -71,7 +77,7 @@ class PositionRadioGroup extends Component {
             })}
             
           </FormGroup>
-          <FormHelperText>Max no of candidates that can be selected: {position.maxNoOfCandidatesThatCanBeSelected}</FormHelperText>
+          <FormHelperText>You can vote up to {position.maxNoOfCandidatesThatCanBeSelected} candidate(s).</FormHelperText>
         </FormControl>
         
       </div>

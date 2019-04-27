@@ -66,7 +66,7 @@ class SubmitBallotDialog extends React.Component {
           className={classes.content}
         >
           <DialogContentText>
-            Are you sure you want to submit this ballot? Please review your votes before submitting.
+            Are you sure you want to submit this ballot? You can only vote once. Please review your ballot.
           </DialogContentText>
 
         </DialogContent>

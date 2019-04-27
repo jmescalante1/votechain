@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import ElectionView from './election-view'
 import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 
-import Ballot from '../../ballot/ballot'
-// import { fetchElection } from '../../../../actions/ballot'
-import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
-import { fetchElectionDetails } from '../../../../actions/election'
-import { fetchCurrentVoteList } from '../../../../actions/vote'
+import Ballot from './ballot'
+import SubmitBallotDialog from '../../customized/dialogs/submit-ballot'
+
+import { fetchElection } from '../../../actions/ballot'
 
 class ElectionViewContainer extends Component {
   constructor(props) {
@@ -33,6 +31,15 @@ class ElectionViewContainer extends Component {
    
     this.handleCloseSubmitDialog = this.handleCloseSubmitDialog.bind(this)
     this.handleOpenSubmitDialog = this.handleOpenSubmitDialog.bind(this)
+  }
+
+  componentDidMount() {
+    if(this.props.location.params) {
+      const {votechain, fetchElection, location } = this.props
+      const electionId = location.params.election.id
+     
+      fetchElection(votechain, electionId)
+    }
   }
 
   handleCloseSubmitDialog() {
@@ -88,35 +95,20 @@ class ElectionViewContainer extends Component {
       })
     }
   }
-
-  componentDidMount() {
-    if(this.props.location.params) {
-      const {votechain, fetchElectionDetails, location, fetchCurrentVoteList } = this.props
-      const electionId = location.params.election.id
-      fetchElectionDetails(votechain, electionId)
-      fetchCurrentVoteList(votechain, electionId)
-    }
-  }
   
   render() {  
     if(!this.props.location.params){
       return <Redirect to='/elections' />
     }
     
-    const { election, voteList } = this.props
+    const { election } = this.props
     const { positionList, openSubmitBallotDialog, candidateKeyList } = this.state
-
-    // console.log(voteList)
 
     return (
       <div>
         {!isEmpty(election) ?   
           <div>
-            <ElectionView 
-              election={election}
-              voteList={voteList}
-            />
-            {/* <Ballot 
+            <Ballot 
               election={election}
               positionListState={positionList}
               handleBallotChange={this.handleBallotChange}
@@ -127,7 +119,7 @@ class ElectionViewContainer extends Component {
               openDialog={openSubmitBallotDialog}
               handleClickCloseDialog={this.handleCloseSubmitDialog}
               candidateKeyList={candidateKeyList}
-            /> */}
+            />
           </div> 
         : ''}
       </div>
@@ -137,14 +129,11 @@ class ElectionViewContainer extends Component {
 
 const mapStateToProps = state => ({
   votechain: state.contract.votechain,
-  election: state.election.electionDetailsForElectionView,
-  voteList: state.vote.currentVoteList,
+  election: state.ballot.election,
 });
 
 const mapDispatchToProps = {
-  // fetchElection,
-  fetchElectionDetails,
-  fetchCurrentVoteList
+  fetchElection,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionViewContainer)

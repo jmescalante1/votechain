@@ -1,6 +1,6 @@
 var Votechain = artifacts.require("Votechain");
 
-const adminAccount = "0x536675fE7f52686B6f85a6DeF57B48C1A08218F1";
+const adminAccount = "0x3c5108f668dA18E148579219b70faD3556968B7a";
 const adminName = "JM";
 
 module.exports = function(deployer) {

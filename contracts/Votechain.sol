@@ -154,33 +154,33 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        // addElection('UP Manila Student Council Election');
-        // addElection('Codeninja Board Of Directors Election');
+        addElection('UP Manila Student Council Election');
+        addElection('Codeninja Board Of Directors Election');
 
-        // // for election1
-        // addPositionAt(1, 'Chairman', 1, false);
+        // for election1
+        addPositionAt(1, 'Chairman', 1, false);
 
-        // // for election2
-        // addPositionAt(2, 'CEO', 1, false);
-        // addPositionAt(2, 'CTO', 2, false);
+        // for election2
+        addPositionAt(2, 'CEO', 1, false);
+        addPositionAt(2, 'CTO', 2, false);
 
-        // // for position1
-        // addCandidateAt(1, 'Neil');
-        // addCandidateAt(1, 'Alee');
-        // addCandidateAt(1, 'Bea');
+        // for position1
+        addCandidateAt(1, 'Neil');
+        addCandidateAt(1, 'Alee');
+        addCandidateAt(1, 'Bea');
 
-        // // for position2
-        // addCandidateAt(2, 'Paulo');
-        // addCandidateAt(2, 'Ben');
-        // addCandidateAt(2, 'Guen');
+        // for position2
+        addCandidateAt(2, 'Paulo');
+        addCandidateAt(2, 'Ben');
+        addCandidateAt(2, 'Guen');
 
-        // // for position3
-        // addCandidateAt(3, 'JM');
-        // addCandidateAt(3, 'Mike');
-        // addCandidateAt(3, 'Alley');
+        // for position3
+        addCandidateAt(3, 'JM');
+        addCandidateAt(3, 'Mike');
+        addCandidateAt(3, 'Alley');
 
-        // addVoterAt(1, 0xc09972BaE6E393b4C3f22D81DB3AC55554c1b975, '2015-08795', 'JM');
-        // addVoterAt(2, 0x211f3138e1bA20F517B2569B225d7174f4FAaC8E, '2015-09899', 'Alley');
+        addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -748,14 +748,12 @@ contract Votechain {
     }
 
     function getVoterKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(address) {
-        // string memory test = 'sdfsd';
         return electionList[electionKey].voterKeyList[index];
     }
 
-    // function getVoteKeyOfElection(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
-      
-    //     return electionList[electionKey].voteKeyList[index];
-    // }
+    function getVoteKeyOfElection(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
+        return electionList[electionKey].voteKeyList[index];
+    }
 
     // function getVoteKey(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
       
