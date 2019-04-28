@@ -26,7 +26,7 @@ export function fetchCurrentVoteList(votechain, electionKey) {
 
     for(let i = 0; i < noOfVotes; i++) {
       let voteKey = await votechain.methods.getVoteKeyOfElection(electionKey, i).call()
-      console.log(voteKey)
+      
       let vote = await getVote(voteKey, votechain)
 
       voteList.push(vote)

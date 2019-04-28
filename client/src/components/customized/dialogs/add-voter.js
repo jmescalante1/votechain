@@ -162,7 +162,7 @@ AddVoterDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
   
-  electionId: PropTypes.string.isRequired
+  electionId: PropTypes.number
 }
 
 const mapStateToProps = state => ({

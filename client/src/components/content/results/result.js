@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
 import ElectionResult from './election-result'
+import ResultExport from './result-export'
 
 
 class Result extends Component {
@@ -20,6 +21,9 @@ class Result extends Component {
         {!isEmpty(currentFinishedElection) &&
           <div>
             <ElectionResult 
+              currentFinishedElection={currentFinishedElection}
+            />
+            <ResultExport 
               currentFinishedElection={currentFinishedElection}
             />
           </div>

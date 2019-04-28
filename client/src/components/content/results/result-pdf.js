@@ -1,43 +1,29 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles'
+import ElectionResult from './election-result'
 
-// download html2canvas and jsPDF and save the files in app/ext, or somewhere else
-// the built versions are directly consumable
-// import {html2canvas, jsPDF} from 'app/ext';
-
-
-export default class Export extends Component {
-  constructor(props) {
-    super(props);
+const styles = theme => ({
+  root: {
+    backgroundColor: '#f5f5f5',
+    width: '210mm',
+    minHeight: '297mm',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
+})
 
-  printDocument() {
-    const input = document.getElementById('divToPrint');
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'JPEG', 0, 0);
-        // pdf.output('dataurlnewwindow');
-        pdf.save("download.pdf");
-      })
-    ;
-  }
-
+class ResultPDF extends Component {
   render() {
-    return (<div>
-      <div className="mb5">
-        <button onClick={this.printDocument}>Print</button>
+    const { classes, currentFinishedElection } = this.props
+
+    return (
+      <div className={classes.root}>
+        <ElectionResult 
+          currentFinishedElection={currentFinishedElection}
+        />
       </div>
-      <div id="divToPrint" className="mt4" {...css({
-        backgroundColor: '#f5f5f5',
-        width: '210mm',
-        minHeight: '297mm',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      })}>
-        <div>Note: Here the dimensions of div are same as A4</div> 
-        <div>You Can add any component here</div>
-      </div>
-    </div>);
+    );
   }
 }
+
+export default withStyles(styles)(ResultPDF);

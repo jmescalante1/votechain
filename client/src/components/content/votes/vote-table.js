@@ -5,14 +5,14 @@ import TableContainer from '../../customized/tables/table-container'
 
 class VoteTable extends Component {
   render() {
+    const { voteList } = this.props
+    
     const headers = [
       {id: 'id', label: 'Vote Key'},
-      {id: 'voter-address', label: 'Voter Address'},
-      {id: 'candidate-name', label: 'Candidate Name'},
-      {id: 'position-name', label: 'Position Name'},
+      {id: 'voterId', label: 'Voter Address'},
+      {id: 'candidateName', label: 'Candidate Name'},
+      {id: 'positionName', label: 'Position Name'},
     ]
-
-    const { voteList } = this.props
 
     return (
       <TableContainer 
@@ -31,7 +31,6 @@ class VoteTable extends Component {
 }
 
 VoteTable.propTypes = {
-  election: PropTypes.object.isRequired,
 
   voteList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }

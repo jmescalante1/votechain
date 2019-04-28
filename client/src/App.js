@@ -69,54 +69,54 @@ class App extends React.Component {
       votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
         if(!error) {
           if('AddElection' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             addElectionUI(votechain, electionKey)
           } 
           
           else if ('EditElection' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             editElectionUI(votechain, electionKey)
           } 
           
           else if ('DeleteElection' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             deleteElectionUI(votechain, electionKey)
           } 
           
           else if ('AddPositionAt' === result.event) {
-            let electionKey = result.returnValues.electionKey
-            let positionKey = result.returnValues.positionKey
+            let electionKey = Number(result.returnValues.electionKey)
+            let positionKey = Number(result.returnValues.positionKey)
             addPositionUI(votechain, positionKey, electionKey)
           }
 
           else if ('EditPosition' === result.event) {
-            let positionKey = result.returnValues.positionKey
+            let positionKey = Number(result.returnValues.positionKey)
             editPositionUI(votechain, positionKey)
           }
 
           else if ('DeletePosition' === result.event) {
-            let positionKey = result.returnValues.positionKey
+            let positionKey = Number(result.returnValues.positionKey)
             deletePositionUI(votechain, positionKey)
           }
 
           else if ('AddCandidateAt' === result.event) {
-            let positionKey = result.returnValues.positionKey
-            let candidateKey = result.returnValues.candidateKey
+            let positionKey = Number(result.returnValues.positionKey)
+            let candidateKey = Number(result.returnValues.candidateKey)
             addCandidateUI(votechain, positionKey, candidateKey)
           }
 
           else if ('EditCandidate' === result.event) {
-            let candidateKey = result.returnValues.candidateKey
+            let candidateKey = Number(result.returnValues.candidateKey)
             editCandidateUI(votechain, candidateKey)
           }
 
           else if ('DeleteCandidate' === result.event) {
-            let candidateKey = result.returnValues.candidateKey
+            let candidateKey = Number(result.returnValues.candidateKey)
             deleteCandidateUI(candidateKey)
           }
 
           else if ('AddVoterAt' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             let voterKey = result.returnValues.voterKey
             addVoterUI(votechain, voterKey, electionKey)
           }
@@ -132,12 +132,12 @@ class App extends React.Component {
           }
 
           else if ('StartElection' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             startElectionUI(votechain, electionKey)
           }
 
           else if ('StopElection' === result.event) {
-            let electionKey = result.returnValues.electionKey
+            let electionKey = Number(result.returnValues.electionKey)
             stopElectionUI(votechain, electionKey)
           }
 
@@ -172,8 +172,8 @@ class App extends React.Component {
           }
 
           else if ('CastVote' === result.event) {
-            let voteKey = result.returnValues.voteKey
-            let vote = await votechain.methods.voteList(voteKey).call()
+            let voteKey = Number(result.returnValues.voteKey)
+            // let vote = await votechain.methods.voteList(voteKey).call()
           }
         }
       })

@@ -147,6 +147,8 @@ CandidateTable.propTypes = {
 
   handleOpenEditCandidateDialog: PropTypes.func.isRequired,
   handleOpenDeleteCandidateDialog: PropTypes.func.isRequired,
+
+ 
 }
 
 export default withStyles(styles)(CandidateTable)

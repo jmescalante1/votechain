@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "html2canvas": "^1.0.0-rc.1",
+    "jspdf": "^1.5.3",
     "lodash": "^4.17.11",
     "openzeppelin-solidity": "2.1.2",
     "redux-logger": "^3.0.6"

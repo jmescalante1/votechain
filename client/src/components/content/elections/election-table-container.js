@@ -21,8 +21,8 @@ class ElectionTableContainer extends Component {
       openStartElectionDialog: false,
       openStopElectionDialog: false,
 
-      idOfElectionToBeEdited: '',
-      idOfElectionToBeDeleted: '',
+      idOfElectionToBeEdited: null,
+      idOfElectionToBeDeleted: null,
       electionToStart: {},
       electionToStop: {},
     }

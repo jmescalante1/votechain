@@ -69,6 +69,7 @@ class CustomizedTable extends Component {
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
     const { rowHeight } = this.props
     const sortedData = stableSort(data, getSorting(order, orderBy))
+  
     const noOfEmptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
 
     return (

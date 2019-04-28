@@ -29,5 +29,5 @@ export default (history) => combineReducers({
   admin: admin,
   account: account,
   vote: vote,
-  result: result
+  result: result,
 });

@@ -91,7 +91,7 @@ class DeleteElectionDialog extends React.Component {
 DeleteElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  idOfElectionToBeDeleted: PropTypes.string,
+  idOfElectionToBeDeleted: PropTypes.number,
 }
 
 const mapStateToProps = state => ({

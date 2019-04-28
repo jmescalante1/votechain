@@ -42,7 +42,7 @@ class Candidate extends Component {
 Candidate.propTypes = {
   classes: PropTypes.object.isRequired,
   
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }

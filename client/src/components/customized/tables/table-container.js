@@ -29,7 +29,6 @@ class TableContainer extends Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc'
     }
-
     this.setState({ order, orderBy })
   }
 
@@ -72,6 +71,7 @@ class TableContainer extends Component {
   render() {
     const { order, orderBy, rowsPerPage, page } = this.state
     const { headers, data, rowsPerPageOptions, tableTools, tableDialogs, tableName, rowHeight } = this.props
+   
     return (
       <Table
         tableName={tableName}

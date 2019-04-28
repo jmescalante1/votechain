@@ -147,7 +147,7 @@ PositionTable.propTypes = {
   openAddPositionDialog: PropTypes.bool.isRequired,
   handleOpenAddPositionDialog: PropTypes.func.isRequired,
   handleCloseAddPositionDialog: PropTypes.func.isRequired,
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
 
   handleOpenEditPositionDialog: PropTypes.func.isRequired,
   handleOpenDeletePositionDialog: PropTypes.func.isRequired,

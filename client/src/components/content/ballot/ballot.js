@@ -72,7 +72,7 @@ Ballot.propTypes = {
       candidateList: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        positionId: PropTypes.string.isRequired,
+        positionId: PropTypes.number.isRequired,
         positionName: PropTypes.string.isRequired,
       })).isRequired
     })).isRequired

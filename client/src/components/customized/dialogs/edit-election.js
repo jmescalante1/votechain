@@ -113,7 +113,7 @@ class EditElectionDialog extends React.Component {
 EditElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  idOfElectionToBeEdited: PropTypes.string
+  idOfElectionToBeEdited: PropTypes.number
 }
 
 const mapStateToProps = state => ({

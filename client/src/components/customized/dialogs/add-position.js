@@ -216,7 +216,7 @@ AddPositionDialog.propTypes = {
 
   openDialog: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
 };
 
 const mapStateToProps = state => ({

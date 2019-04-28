@@ -148,7 +148,7 @@ VoterTable.propTypes = {
   handleOpenAddVoterDialog: PropTypes.func.isRequired,
   handleCloseAddVoterDialog: PropTypes.func.isRequired,
   
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
 
   handleOpenEditVoterDialog: PropTypes.func.isRequired,
   handleOpenDeleteVoterDialog: PropTypes.func.isRequired,

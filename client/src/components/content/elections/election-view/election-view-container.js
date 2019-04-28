@@ -5,9 +5,6 @@ import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 
-import Ballot from '../../ballot/ballot'
-// import { fetchElection } from '../../../../actions/ballot'
-import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
 import { fetchElectionDetails } from '../../../../actions/election'
 import { fetchCurrentVoteList } from '../../../../actions/vote'
 
@@ -104,9 +101,6 @@ class ElectionViewContainer extends Component {
     }
     
     const { election, voteList } = this.props
-    const { positionList, openSubmitBallotDialog, candidateKeyList } = this.state
-
-    // console.log(voteList)
 
     return (
       <div>
@@ -116,18 +110,6 @@ class ElectionViewContainer extends Component {
               election={election}
               voteList={voteList}
             />
-            {/* <Ballot 
-              election={election}
-              positionListState={positionList}
-              handleBallotChange={this.handleBallotChange}
-
-              handleOpenSubmitDialog={this.handleOpenSubmitDialog}
-            />
-            <SubmitBallotDialog 
-              openDialog={openSubmitBallotDialog}
-              handleClickCloseDialog={this.handleCloseSubmitDialog}
-              candidateKeyList={candidateKeyList}
-            /> */}
           </div> 
         : ''}
       </div>
@@ -142,7 +124,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  // fetchElection,
   fetchElectionDetails,
   fetchCurrentVoteList
 }

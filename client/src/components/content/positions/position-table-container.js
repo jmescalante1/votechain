@@ -110,7 +110,7 @@ class PositionTableContainer extends Component {
 }
 
 PositionTableContainer.propTypes = {
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
 }
 
 const mapStateToProps = state => ({

@@ -113,7 +113,7 @@ class VoterTableContainer extends Component {
 }
 
 VoterTableContainer.propTypes = {
-  electionId: PropTypes.string.isRequired,
+  electionId: PropTypes.number,
   
 }
 

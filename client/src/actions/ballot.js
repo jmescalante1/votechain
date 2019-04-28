@@ -43,6 +43,26 @@ async function getCandidate(candidateKey, votechain) {
   return candidate
 }
 
+async function getVote(voteKey, votechain) {
+  let response = await votechain.methods.voteList(voteKey).call()
+ 
+  let vote = {}
+
+  vote.id = Number(voteKey)
+  vote.voterId = response.voterKey
+
+  // get candidate name
+  let candidate = await votechain.methods.candidateList(response.candidateKey).call()
+  vote.candidateName = candidate.name
+
+  // get position name
+  let position = await votechain.methods.positionList(response.positionKey).call()
+  vote.positionName = position.name
+
+  return vote
+}
+
+export const FETCH_BALLOT_LIST = 'FETCH_BALLOT_LIST'
 export const FETCH_ELECTION = 'FETCH_ELECTION'
 export const CAST_BULK_VOTE_VOTECHAIN = 'CAST_BULK_VOTE_VOTECHAIN'
 
@@ -86,6 +106,64 @@ export function castBulkVoteVotechain(account, votechain, candidateKeyList){
 
     dispatch({
       type: CAST_BULK_VOTE_VOTECHAIN,
+    })
+  }
+}
+
+export function fetchBallotList(votechain, electionKey){
+  return async (dispatch) => {
+    // get election
+    // let election = await getElection(electionKey, votechain)
+
+    // get all votes under the election
+    const noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
+
+    let ballotList = []
+
+    for(let voteKeyIndex = 0; voteKeyIndex < noOfVotes; voteKeyIndex++){
+      let voteKey = await votechain.methods.getVoteKeyOfElection(electionKey, voteKeyIndex).call()
+
+      let vote = await getVote(voteKey, votechain)
+
+      if(!ballotList[vote.voterId]) {
+        let ballot = {
+          voteList: {
+
+          }
+        }
+
+        ballotList[vote.voterId] = ballot
+      }
+
+      if(!ballotList[vote.voterId].voteList[vote.positionName]){
+        let voteStructure = {
+          candidateList: []
+        }
+
+        ballotList[vote.voterId].voteList[vote.positionName] = voteStructure
+      }
+
+      ballotList[vote.voterId].voteList[vote.positionName].candidateList.push(vote.candidateName)
+    }
+
+    console.log(ballotList)
+
+    // form the ballots from the votes
+    // ballot structure
+    // ballotList :{
+        // voterKeyAddress: { // dynamic
+            // voteList: {
+               // positionName: { // dynamic
+                      // candidateList: []
+                //}
+            //}]
+        //}
+    //}
+
+
+    dispatch({
+      type: FETCH_BALLOT_LIST,
+      payload: { ballotList }
     })
   }
 }
