@@ -10,7 +10,7 @@ async function getElection(electionKey, votechain) {
   let response = await votechain.methods.electionList(electionKey).call()
   let election = {}
 
-  election.id = electionKey
+  election.id = Number(electionKey)
   election.name = response.name
   election.status = convertStageToStatus(Number(response.stage))
 
@@ -24,6 +24,7 @@ async function getElectionDetailsForElectionView(votechain, electionKey) {
   let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
   let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
 
+  election.id = Number(electionKey)
   election.noOfPositions = Number(noOfPositions)
   election.noOfVoters = Number(noOfVoters)
   election.noOfVotes = Number(noOfVotes)
@@ -93,6 +94,7 @@ export function addElectionUI(votechain, electionKey){
 export function fetchElectionList(votechain) {
   return async (dispatch) => {
     const noOfElections = await votechain.methods.getNoOfElections().call()
+ 
     let electionList = []
 
     for(let i = 0; i < noOfElections; i++){

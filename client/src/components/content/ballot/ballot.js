@@ -59,18 +59,18 @@ class Ballot extends Component {
 
 Ballot.propTypes = {
   election: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
 
     positionList: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       hasAbstain: PropTypes.bool.isRequired,
-      maxNoOfCandidatesThatCanBeSelected: PropTypes.string.isRequired,
+      maxNoOfCandidatesThatCanBeSelected: PropTypes.number.isRequired,
 
       candidateList: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         positionId: PropTypes.string.isRequired,
         positionName: PropTypes.string.isRequired,

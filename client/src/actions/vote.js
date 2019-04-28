@@ -3,7 +3,7 @@ async function getVote(voteKey, votechain) {
  
   let vote = {}
 
-  vote.id = voteKey
+  vote.id = Number(voteKey)
   vote.voterId = response.voterKey
 
   // get candidate name

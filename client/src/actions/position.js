@@ -2,9 +2,9 @@ async function getPosition(positionKey, votechain) {
   let response = await votechain.methods.positionList(positionKey).call()
   let position = {}
 
-  position.id = positionKey
+  position.id = Number(positionKey)
   position.name = response.name
-  position.maxNoOfCandidatesThatCanBeSelected = response.maxNoOfCandidatesThatCanBeSelected
+  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
   position.hasAbstain = response.isAbstainActive
 
   return position

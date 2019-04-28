@@ -18,7 +18,7 @@ const styles = theme => ({
 
 class EditButton extends Component {
   render() {
-    const { classes, tooltipTitle, placement, size, onClick } = this.props
+    const { classes, tooltipTitle, placement, size, onClick, iconSize } = this.props
 
     return (
       <Tooltip
@@ -30,7 +30,7 @@ class EditButton extends Component {
           className={classes.editButton}
           onClick={onClick}
         >
-          <Edit />
+          <Edit style={{fontSize: iconSize}}/>
         </IconButton>
       </Tooltip>
     )

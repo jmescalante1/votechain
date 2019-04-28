@@ -58,6 +58,7 @@ export function addVoterUI(votechain, voterKey, electionKey) {
 }
 
 export function editVoterVotechain(account, votechain, voter){
+
   return async (dispatch) => {
     await votechain.methods.updateVoter(voter.voterKey, voter.studentNo, voter.name).send({from: account})
     

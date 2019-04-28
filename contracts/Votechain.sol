@@ -739,6 +739,10 @@ contract Votechain {
         return electionList[electionKey].voteKeyList.length;
     }
 
+    function getNoOfVotesReceivedBy(uint256 candidateKey) public view candidateKeyExists(candidateKey) returns (uint256) {
+        return candidateList[candidateKey].voteKeyList.length;
+    }
+
     function getPositionKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
         return electionList[electionKey].positionKeyList[index];
     }

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Divider   from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -48,6 +49,8 @@ class ElectionCard extends Component {
             {election.name}
           </Title>
 
+          <Divider />
+
           <Grid
             container
             direction='column'
@@ -69,6 +72,8 @@ class ElectionCard extends Component {
               </Grid>
             </Grid>
 
+            <Divider />
+
             <Grid item>
               <Typography className={classes.detail}>Votes: {election.noOfVotes}</Typography>
             </Grid>
@@ -77,9 +82,13 @@ class ElectionCard extends Component {
               <Typography className={classes.detail}>Voters: {election.noOfVoters}</Typography>
             </Grid>
 
+            <Divider />
+
             <Grid item>
               <Typography className={classes.detail}>Positions: {election.noOfPositions}</Typography>
             </Grid>
+
+            <Divider />
 
             <Grid item>
               <Typography className={classes.detail}>Candidates: {election.noOfCandidates}</Typography>

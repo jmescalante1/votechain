@@ -43,12 +43,12 @@ async function getCandidate(candidateKey, votechain) {
   return candidate
 }
 
-export const FETCH_ELECTION = 'FETCH_ELECTION'
-export const CAST_BULK_VOTE_VOTECHAIN = 'CAST_BULK_VOTE_VOTECHAIN'
+export const FETCH_FINISHED_ELECTION_LIST = 'FETCH_FINISHED_ELECTION_LIST'
+export const FETCH_FINISHED_ELECTION_RESULT = 'FETCH_FINISHED_ELECTION_RESULT'
 
-export function fetchElection(votechain, electionKey) {
+export function fetchFinishedElectionResult(votechain, electionKey) {
   return async (dispatch) => {
-    let election = await getElection(electionKey, votechain)
+    let finishedElection = await getElection(electionKey, votechain)
 
     const noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
     let positionList = []
@@ -64,6 +64,7 @@ export function fetchElection(votechain, electionKey) {
         let candidateKey = await votechain.methods.getCandidateKeyAt(positionKey, candidateKeyIndex).call()
         let candidate = await getCandidate(candidateKey, votechain)
 
+        candidate.noOfVotesReceived = Number(await votechain.methods.getNoOfVotesReceivedBy(candidateKey).call())
         candidateList.push(candidate)
       }
 
@@ -71,21 +72,33 @@ export function fetchElection(votechain, electionKey) {
       positionList.push(position)
     }
 
-    election.positionList = positionList
+    finishedElection.positionList = positionList
 
     dispatch({
-      type: FETCH_ELECTION,
-      payload: {election}
+      type: FETCH_FINISHED_ELECTION_RESULT,
+      payload: {finishedElection}
     })
   }
 }
 
-export function castBulkVoteVotechain(account, votechain, candidateKeyList){
+export function fetchFinishedElectionList(votechain) {
   return async (dispatch) => {
-    await votechain.methods.bulkVote(candidateKeyList).send({from: account})
+    let finishedElectionList = []
+
+    let noOfElections = await votechain.methods.getNoOfElections().call() 
+    
+    for(let electionIndex = 0; electionIndex < noOfElections; electionIndex++) {
+      let electionKey = await votechain.methods.electionKeyList(electionIndex).call()
+      let election = await getElection(electionKey, votechain)
+
+      if(election.status === 'Finished') {
+        finishedElectionList.push(election)
+      }
+    }
 
     dispatch({
-      type: CAST_BULK_VOTE_VOTECHAIN,
+      type: FETCH_FINISHED_ELECTION_LIST,
+      payload: {finishedElectionList}
     })
   }
 }

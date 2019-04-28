@@ -13,6 +13,7 @@ import ballot from './ballot'
 import admin from './admin'
 import account from './account'
 import vote from './vote'
+import result from './result'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -27,5 +28,6 @@ export default (history) => combineReducers({
   ballot: ballot,
   admin: admin,
   account: account,
-  vote: vote
+  vote: vote,
+  result: result
 });

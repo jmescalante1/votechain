@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ElectionIcon from '@material-ui/icons/HowToVote'
 
 import ResultIcon from '@material-ui/icons/Poll'
+import BulletinBoardIcon from '@material-ui/icons/Dashboard'
 
 import ElectionContainer from '../../content/elections/election-container' 
 import PositionContainer from '../../content/positions/position-container'
@@ -10,6 +11,7 @@ import PartyContainer from '../../content/parties/party-container'
 import CandidateContainer from '../../content/candidates/candidate-container'
 import VoterContainer from '../../content/voters/voter-container'
 import ResultContainer from '../../content/results/result-container'
+import BulletinBoardContainer from '../../content/bulletin-board/bulletin-board-container'
 
 import AdminContainer from '../../content/admin/admin-container'
 import OfficialContainer from '../../content/officials/official-container'
@@ -50,6 +52,12 @@ export const sidebarMainOptions = [
     icon: <FontAwesomeIcon style={style} icon='person-booth' />,
     path: '/voters',
     component: <VoterContainer />
+  },
+  {
+    label: 'Bulletin Board',
+    icon: <BulletinBoardIcon style={style} />,
+    path: '/bulletin-board',
+    component: <BulletinBoardContainer />
   },
   {
     label: 'Results',

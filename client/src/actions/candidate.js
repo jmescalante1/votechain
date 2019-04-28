@@ -7,9 +7,9 @@ async function getPosition(positionKey, votechain) {
   let response = await votechain.methods.positionList(positionKey).call()
   let position = {}
 
-  position.id = positionKey
+  position.id = Number(positionKey)
   position.name = response.name
-  position.maxNoOfCandidatesThatCanBeSelected = response.maxNoOfCandidatesThatCanBeSelected
+  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
   position.hasAbstain = response.isAbstainActive
 
   return position
@@ -19,9 +19,9 @@ async function getCandidate(candidateKey, votechain) {
   let response = await votechain.methods.candidateList(candidateKey).call()
   let candidate = {}
 
-  candidate.id = candidateKey
+  candidate.id = Number(candidateKey)
   candidate.name = response.name
-  candidate.positionId = response.positionKey
+  candidate.positionId = Number(response.positionKey)
   
   let position = await getRawPosition(candidate.positionId, votechain)
 
