@@ -1,13 +1,47 @@
 import React from 'react'
+import { connect } from "react-redux"
+
+import Party from './party'
 
 class PartyContainer extends React.Component {
+  constructor(){
+    super()
+
+    this.state = {
+      electionId: null,
+    }
+
+    this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
+  } 
+
+  handleElectionSelectChange(option) {
+    if(option){
+      this.setState({ electionId: option.value })
+    } else {
+      this.setState({ electionId: null})
+    }
+  }
+
   render() {
+    const { electionId } = this.state
+    const { electionList } = this.props
+
     return(
-      <div>
-        Parties
-      </div>
+      <Party 
+        electionId={electionId}
+        handleElectionSelectChange={this.handleElectionSelectChange}
+        electionList={electionList}
+      />
     )
   }
 }
 
-export default PartyContainer
+const mapStateToProps = state => ({
+  electionList: state.election.electionList
+});
+
+const mapDispatchToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PartyContainer)

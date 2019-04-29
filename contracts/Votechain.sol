@@ -174,34 +174,37 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        // addElection('UP Manila Student Council Election');
-        // addElection('Codeninja Board Of Directors Election');
+        addElection('UP Manila Student Council Election');
+        addElection('Codeninja Board Of Directors Election');
 
-        // // for election1
-        // addPositionAt(1, 'Chairman', 1, false);
+        // for election1
+        addPositionAt(1, 'Chairman', 1, false);
+        addPartyAt(1, 'Great Party List'); // id 1
+        addPartyAt(1, 'Normal Party List'); // id 2
 
-        // // for election2
-        // addPositionAt(2, 'CEO', 1, false);
-        // addPositionAt(2, 'CTO', 2, false);
+        // for election2
+        addPositionAt(2, 'CEO', 1, false);
+        addPositionAt(2, 'CTO', 2, false);
+        addPartyAt(2, 'Great Party List'); // id 3
+        addPartyAt(2, 'Walastik Party List'); // id 4
 
-        // // for position1
-        // addCandidateAt(1, 'Neil');
-        // addCandidateAt(1, 'Alee');
-        // addCandidateAt(1, 'Bea');
+        // for election 1 position1
+        addCandidateAt(1, 'Neil', 1); // Great party list
+        addCandidateAt(1, 'Alee', 2); // Normal party list
+        addCandidateAt(1, 'Bea', 0); // Independent
 
-        // // for position2
-        // addCandidateAt(2, 'Paulo');
-        // addCandidateAt(2, 'Ben');
-        // addCandidateAt(2, 'Guen');
+        // for election 2 position2
+        addCandidateAt(2, 'Paulo', 3); // Great Party list
+        addCandidateAt(2, 'Ben', 4); // Walastik Party list
+        addCandidateAt(2, 'Guen', 0); // Independent
 
-        // // for position3
-        // addCandidateAt(3, 'JM');
-        // addCandidateAt(3, 'Mike');
-        // addCandidateAt(3, 'Alley');
+        // for election 2 position3
+        addCandidateAt(3, 'JM', 3); // Great Party list
+        addCandidateAt(3, 'Mike', 4); // Walastik Party list
+        addCandidateAt(3, 'Alley', 0); // Independent
 
-        // addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
-        // addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
-
+        addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){

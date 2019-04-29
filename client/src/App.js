@@ -12,6 +12,7 @@ import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, startElectionUI, stopElectionUI } from './actions/election'
 import { addPositionUI, editPositionUI, deletePositionUI } from './actions/position'
+import { addPartyUI, editPartyUI, deletePartyUI } from './actions/party'
 import { addCandidateUI, editCandidateUI, deleteCandidateUI } from './actions/candidate'
 import { addVoterUI, editVoterUI, deleteVoterUI } from './actions/voter'
 import { fetchOfficialList, addOfficialUI, editOfficialUI, deleteOfficialUI } from './actions/official'
@@ -59,6 +60,7 @@ class App extends React.Component {
       const { addElectionUI, editElectionUI, deleteElectionUI
         , addPositionUI, editPositionUI, deletePositionUI
         , addCandidateUI, editCandidateUI, deleteCandidateUI
+        , addPartyUI, editPartyUI, deletePartyUI
         , addVoterUI, editVoterUI, deleteVoterUI
         , startElectionUI, stopElectionUI
         , addOfficialUI, editOfficialUI, deleteOfficialUI
@@ -175,6 +177,22 @@ class App extends React.Component {
             let voteKey = Number(result.returnValues.voteKey)
             // let vote = await votechain.methods.voteList(voteKey).call()
           }
+
+          else if ('AddPartyAt' === result.event) {
+            let electionKey = Number(result.returnValues.electionKey)
+            let partyKey = Number(result.returnValues.partyKey)
+            addPartyUI(votechain, partyKey, electionKey)
+          }
+
+          else if ('EditParty' === result.event) {
+            let partyKey = Number(result.returnValues.partyKey)
+            editPartyUI(votechain, partyKey)
+          }
+
+          else if ('DeleteParty' === result.event) {
+            let partyKey = Number(result.returnValues.partyKey)
+            deletePartyUI(votechain, partyKey)
+          }
         }
       })
 
@@ -223,6 +241,10 @@ const mapDispatchToProps = {
   addElectionUI,
   editElectionUI,
   deleteElectionUI,
+
+  addPartyUI,
+  editPartyUI,
+  deletePartyUI,
   
   addPositionUI,
   editPositionUI,

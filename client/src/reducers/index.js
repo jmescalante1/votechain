@@ -5,6 +5,7 @@ import election from './election'
 import web3 from './web3'
 import contract from './contract'
 import position from './position'
+import party from './party'
 import candidate from './candidate'
 import voter from './voter'
 import official from './official'
@@ -14,6 +15,7 @@ import admin from './admin'
 import account from './account'
 import vote from './vote'
 import result from './result'
+
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -30,4 +32,5 @@ export default (history) => combineReducers({
   account: account,
   vote: vote,
   result: result,
+  party: party,
 });

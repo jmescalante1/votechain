@@ -15,6 +15,7 @@ import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 import PositionSelector from '../selectors/position-selector'
+import PartySelector from '../selectors/party-selector'
 
 import { addCandidateVotechain } from '../../../actions/candidate'
 
@@ -35,7 +36,7 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
-  positionSelector: {
+  selector: {
     width: '100%',
     marginTop: 20,
   }
@@ -48,11 +49,13 @@ class AddCandidateDialog extends React.Component {
     this.state = {
       selectedPositionId: '',
       candidateName: '',
+      selectedPartyId: 0,
     }
 
     this.handlePositionSelectChange = this.handlePositionSelectChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.onChangeCandidateName = this.onChangeCandidateName.bind(this)
+    this.handlePartySelectChange = this.handlePartySelectChange.bind(this)
   }
 
   handlePositionSelectChange(option) {
@@ -60,6 +63,14 @@ class AddCandidateDialog extends React.Component {
       this.setState({ selectedPositionId: option.value })
     } else {
       this.setState({ selectedPositionId: ''})
+    }
+  }
+
+  handlePartySelectChange(option) {
+    if(option){
+      this.setState({ selectedPositionId: option.value })
+    } else {
+      this.setState({ selectedPositionId: 0})
     }
   }
 
@@ -82,7 +93,7 @@ class AddCandidateDialog extends React.Component {
 
   render() {
     const { classes, openDialog, handleClickCloseDialog, currentPositionList } = this.props
-    const { selectedPositionId } = this.state
+    const { selectedPositionId, selectedPartyId } = this.state
 
     return (
       <Dialog
@@ -102,12 +113,22 @@ class AddCandidateDialog extends React.Component {
 
           <PositionSelector 
             classes={{
-              root: classes.positionSelector
+              root: classes.selector
             }}
             width='85%'
             handlePositionSelectChange={this.handlePositionSelectChange}
             positionList={currentPositionList}
             selectedPositionId={selectedPositionId}
+          />
+
+          <PartySelector 
+            classes={{
+              root: classes.selector
+            }}
+            width='85%'
+            handlePartySelectChange={this.handlePartySelectChange}
+            positionList={currentPositionList}
+            selectedPartyId={selectedPartyId}
           />
 
           <CustomizedTextField
