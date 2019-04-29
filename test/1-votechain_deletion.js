@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain - data deletion", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x536675fE7f52686B6f85a6DeF57B48C1A08218F1";
+  const adminAccount = accounts[0];
   const adminName = "JM";
   
   beforeEach(async () => {
@@ -71,8 +71,9 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isPosition, "The position should be added first in the election.").to.be.true;
 
     // add a candidate 
+    let noPartyKey = new BigNumber(0);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, noPartyKey, {from: adminAccount});
 
     // verify if the candidate was indeed recorded
     let expectedCandidateKey = new BigNumber(1);
@@ -114,6 +115,29 @@ contract("Votechain - data deletion", async(accounts) => {
     expect(isDeletedCandidateAtPosition, "The candidate under the deleted position should also be deleted.").to.be.true;
   });
 
+  it("should delete a party", async () => {
+    // add an election
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a party
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPartyName = 'Party';
+    await votechainInstance.addPartyAt.sendTransaction(expectedElectionKey, expectedPartyName, {from: adminAccount});
+
+    // verify if the party is successfully added 
+    let expectedPartyKey = new BigNumber(1);
+    let isParty = await votechainInstance.isParty.call(expectedPartyKey);
+    expect(isParty, 'The new party should be added.').to.be.true;
+
+    // delete the party
+    await votechainInstance.deleteParty.sendTransaction(expectedPartyKey, {from: adminAccount});
+
+    // verify if the party is successfully deleted
+    let isNotParty = !(await votechainInstance.isParty.call(expectedPartyKey));
+    expect(isNotParty, 'The party should be deleted.').to.be.true;
+  });
+
   it("should delete a candidate", async () => {
     // add first an election
     let expectedElectionName = "CAS";
@@ -126,9 +150,10 @@ contract("Votechain - data deletion", async(accounts) => {
     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
 
     // finally, add a candidate at the position
+    let noPartyKey = new BigNumber(0);
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, noPartyKey, {from: adminAccount});
 
     // verify if the candidate was indeed recorded
     let expectedCandidateKey = new BigNumber(1);
@@ -147,7 +172,6 @@ contract("Votechain - data deletion", async(accounts) => {
     // verify if the candidate was also deleted in the position where it belongs to
     let isDeletedCandidateAtPosition = !(await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey));
     expect(isDeletedCandidateAtPosition, "The candidate should also be deleted in the position with key " + expectedPositionKey.toString() + ".").to.be.true;
-
   });
 
   it("should delete a position", async () => {
@@ -163,13 +187,14 @@ contract("Votechain - data deletion", async(accounts) => {
     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, hasAbstain, {from: adminAccount});
 
     // finally, add a candidate 
+    let noPartyKey = new BigNumber(0);
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, noPartyKey, {from: adminAccount});
 
     // and another candidate
     let expectedCandidateName2 = "Alley";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName2, {from: adminAccount});
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName2, noPartyKey, {from: adminAccount});
 
     // verify if the position was indeed recorded
     let isPosition = await votechainInstance.isPosition.call(expectedPositionKey);

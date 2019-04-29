@@ -15,6 +15,10 @@ contract Votechain {
     mapping(uint256 => Position) public positionList;
     uint256[] public positionKeyList;
 
+    uint256 private partyKeyCounter;
+    mapping(uint256 => Party) public partyList;
+    uint256[] public partyKeyList;
+
     uint256 private candidateKeyCounter;
     mapping(uint256 => Candidate) public candidateList;
     uint256[] public candidateKeyList;
@@ -59,6 +63,8 @@ contract Votechain {
         mapping(address => uint256) voterKeyIndexList; 
 
         uint256[] voteKeyList;
+
+        mapping(address => bool) hasVoted;
     }
 
     struct Position {
@@ -77,11 +83,21 @@ contract Votechain {
         bool isAbstainActive;
     }
 
+    struct Party {
+        uint256 electionKey;
+        uint256 keyIndex;
+        string name;
+
+        uint256[] candidateKeyList;
+        mapping(uint256 => uint256) candidateKeyIndexList;
+    }
+
     struct Candidate {
         uint256 keyIndex;
         string name;
 
         uint256 positionKey;
+        uint256 partyKey;
 
         mapping(address => bool) wasVotedBy;
 
@@ -147,6 +163,10 @@ contract Votechain {
     event EditOfficial (address officialKey);
     event DeleteOfficial (address officialKey);
 
+    event AddPartyAt (uint256 electionKey, uint256 partyKey);
+    event EditParty (uint256 partyKey);
+    event DeleteParty (uint256 partyKey);
+
     event CastVote (uint256 voteKey);
 
     constructor(address adminKey, string memory name) public {
@@ -154,33 +174,34 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        addElection('UP Manila Student Council Election');
-        addElection('Codeninja Board Of Directors Election');
+        // addElection('UP Manila Student Council Election');
+        // addElection('Codeninja Board Of Directors Election');
 
-        // for election1
-        addPositionAt(1, 'Chairman', 1, false);
+        // // for election1
+        // addPositionAt(1, 'Chairman', 1, false);
 
-        // for election2
-        addPositionAt(2, 'CEO', 1, false);
-        addPositionAt(2, 'CTO', 2, false);
+        // // for election2
+        // addPositionAt(2, 'CEO', 1, false);
+        // addPositionAt(2, 'CTO', 2, false);
 
-        // for position1
-        addCandidateAt(1, 'Neil');
-        addCandidateAt(1, 'Alee');
-        addCandidateAt(1, 'Bea');
+        // // for position1
+        // addCandidateAt(1, 'Neil');
+        // addCandidateAt(1, 'Alee');
+        // addCandidateAt(1, 'Bea');
 
-        // for position2
-        addCandidateAt(2, 'Paulo');
-        addCandidateAt(2, 'Ben');
-        addCandidateAt(2, 'Guen');
+        // // for position2
+        // addCandidateAt(2, 'Paulo');
+        // addCandidateAt(2, 'Ben');
+        // addCandidateAt(2, 'Guen');
 
-        // for position3
-        addCandidateAt(3, 'JM');
-        addCandidateAt(3, 'Mike');
-        addCandidateAt(3, 'Alley');
+        // // for position3
+        // addCandidateAt(3, 'JM');
+        // addCandidateAt(3, 'Mike');
+        // addCandidateAt(3, 'Alley');
 
-        addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
-        addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
+        // addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        // addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
+
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -194,7 +215,7 @@ contract Votechain {
     }
 
     function castVote(uint256 candidateKey) 
-        public 
+        private 
         candidateKeyExists(candidateKey)
         hasStarted(positionList[candidateList[candidateKey].positionKey].electionKey)
         onlyVoterAt(positionList[candidateList[candidateKey].positionKey].electionKey) 
@@ -230,6 +251,12 @@ contract Votechain {
     }
 
     function bulkVote(uint256[] memory candidateKeys) public {
+        if(candidateKeys.length > 0) { 
+            uint256 electionKey = positionList[candidateList[candidateKeys[0]].positionKey].electionKey;
+            _hasNotVotedAt(electionKey); // can only vote once
+
+            electionList[electionKey].hasVoted[msg.sender] = true;
+        }
         for(uint256 i = 0; i < candidateKeys.length; i++){
             castVote(candidateKeys[i]);
         }
@@ -279,7 +306,7 @@ contract Votechain {
         emit AddPositionAt(electionKey, positionKey);
     }
 
-    function addCandidateAt(uint256 positionKey, string memory name) 
+    function addCandidateAt(uint256 positionKey, string memory name, uint256 partyKey) 
         public 
         onlyAdminOrOfficial
         positionKeyExists(positionKey)
@@ -289,6 +316,7 @@ contract Votechain {
         candidateList[candidateKey].name = name;
         candidateList[candidateKey].positionKey = positionKey;
         candidateList[candidateKey].keyIndex = candidateKeyList.push(candidateKey).sub(1);
+        candidateList[candidateKey].partyKey = partyKey;
 
         positionList[positionKey].candidateKeyIndexList[candidateKey] = positionList[positionKey].candidateKeyList.push(candidateKey).sub(1);
        
@@ -336,6 +364,48 @@ contract Votechain {
         emit AddAbstainAt(positionKey, abstainKey);
     }
 
+    function addPartyAt(uint256 electionKey, string memory name) 
+        public 
+        onlyAdminOrOfficial
+        electionKeyExists(electionKey)
+        inSetupStage(electionKey)
+    {
+        uint256 partyKey = genPartyKey();
+
+        partyList[partyKey].electionKey = electionKey;
+        partyList[partyKey].keyIndex = partyKeyList.push(partyKey).sub(1);
+        partyList[partyKey].name = name;
+
+        emit AddPartyAt(electionKey, partyKey);
+    }  
+
+    function updateParty(uint256 partyKey, string memory name)
+        onlyAdminOrOfficial 
+        partyKeyExists(partyKey)
+        inSetupStage(partyList[partyKey].electionKey)
+        public 
+    {
+        partyList[partyKey].name = name;
+
+        emit EditParty(partyKey);
+    }
+
+    function deleteParty(uint256 partyKey) partyKeyExists(partyKey) 
+        public 
+        onlyAdminOrOfficial
+        partyKeyExists(partyKey)
+        inSetupStage(partyList[partyKey].electionKey)    
+    {   
+        // delete the party 
+        uint256 indexToDelete = partyList[partyKey].keyIndex;
+        uint256 keyToMove = partyKeyList[partyKeyList.length.sub(1)];
+        partyKeyList[indexToDelete] = keyToMove;
+        partyList[keyToMove].keyIndex = indexToDelete;
+        partyKeyList.length = partyKeyList.length.sub(1);
+
+        emit DeleteParty(partyKey);
+    }
+
     function updateElection(uint256 electionKey, string memory newName) 
         public 
         onlyAdminOrOfficial 
@@ -367,13 +437,15 @@ contract Votechain {
         emit EditPosition(positionKey);
     }
 
-    function updateCandidate(uint256 candidateKey, string memory newName) 
+    function updateCandidate(uint256 candidateKey, string memory newName, uint256 partyKey) 
         public 
         onlyAdminOrOfficial 
-        candidateKeyExists(candidateKey)  
+        candidateKeyExists(candidateKey)
         inSetupStage(positionList[candidateList[candidateKey].positionKey].electionKey)
     {
         candidateList[candidateKey].name = newName;
+        candidateList[candidateKey].partyKey = partyKey;
+
         emit EditCandidate(candidateKey);
     }
 
@@ -609,6 +681,13 @@ contract Votechain {
         return election.positionKeyList[keyIndex] == positionKey;
     }
 
+    function isParty(uint256 partyKey) public view returns(bool) {
+        uint256 keyIndex = partyList[partyKey].keyIndex;
+        
+        if(partyKeyList.length == 0 || indexOutOfRange(keyIndex, partyKeyList.length)) return false;
+        return partyKeyList[keyIndex] == partyKey;
+    }
+
     function isCandidate(uint256 candidateKey) public view returns(bool) {
         uint256 keyIndex = candidateList[candidateKey].keyIndex;
         
@@ -683,6 +762,10 @@ contract Votechain {
         return positionKeyCounter = positionKeyCounter.add(1);
     }
 
+    function genPartyKey() private returns(uint256) {
+        return partyKeyCounter = partyKeyCounter.add(1);
+    }
+
     function genCandidateKey() private returns(uint256) {
         return candidateKeyCounter = candidateKeyCounter.add(1);
     }
@@ -701,6 +784,10 @@ contract Votechain {
 
     function getNoOfPositions() public view returns(uint256) {
         return positionKeyList.length;
+    }
+
+    function getNoOfParties() public view returns(uint256) {
+        return partyKeyList.length;
     }
 
     function getNoOfCandidates() public view returns(uint256) {
@@ -845,6 +932,10 @@ contract Votechain {
         require(isAbstain(abstainKey), "Bad abstain key");
     }
 
+    function _partyKeyExists(uint256 partyKey) internal view {
+        require(isParty(partyKey), "Bad party key");
+    }
+
     function _notVoterAt(uint256 electionKey, address voterKey) internal view {
         require(!isVoterAt(electionKey, voterKey), "Is voter at");
     }
@@ -876,6 +967,13 @@ contract Votechain {
         require(noOfVotesSubmittedInThePosition < maxNoOfCandidatesThatCanBeSelected, "Exceeded no of votes allowed");
     }
 
+    function hasVotedAt(uint256 electionKey, address voterKey) public view returns(bool){
+        return electionList[electionKey].hasVoted[voterKey];
+    }
+
+    function _hasNotVotedAt(uint256 electionKey) internal view {
+        require(!hasVotedAt(electionKey, msg.sender), 'already voted.');
+    }
 
     modifier onlyAdminOrSelf(address accountKey) {
         isOnlyAdminOrSelf(accountKey);
@@ -964,6 +1062,11 @@ contract Votechain {
 
     modifier abstainKeyExists(uint256 abstainKey){
         _abstainKeyExists(abstainKey);
+        _;
+    }
+
+    modifier partyKeyExists(uint256 partyKey) {
+        _partyKeyExists(partyKey);
         _;
     }
 

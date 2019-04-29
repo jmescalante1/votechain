@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 contract("Votechain - data insertion", async(accounts) => {
   let votechainInstance;
-  const adminAccount = "0x536675fE7f52686B6f85a6DeF57B48C1A08218F1";
+  const adminAccount = accounts[0];
   const adminName = "JM";
 
   beforeEach(async () => {
@@ -114,6 +114,35 @@ contract("Votechain - data insertion", async(accounts) => {
     expect(isPositionAtElection, "The added position should be in the election with key " + expectedElectionKey + ".").to.be.true;
   });
 
+  it("should add a party.", async () => {
+    // add an election
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a party
+    let expectedElectionKey = new BigNumber(1);
+    let expectedPartyName = 'Party';
+    await votechainInstance.addPartyAt.sendTransaction(expectedElectionKey, expectedPartyName, {from: adminAccount});
+
+    // verify if the party is successfully added 
+    let expectedPartyKey = new BigNumber(1);
+    let isParty = await votechainInstance.isParty.call(expectedPartyKey);
+    expect(isParty, 'The new party should be added.').to.be.true;
+
+    // verify if it has correct fields
+    let expectedPartyKeyIndex = 0;
+    let party = await votechainInstance.partyList.call(expectedPartyKey);
+
+    let actualPartyName = party['name']
+    let actualPartyElectionKey = party['electionKey']
+    let actualPartyKeyIndex = party['keyIndex']
+
+    expect(actualPartyName, expectedPartyName + ' should be the name of the party.').to.be.deep.equal(expectedPartyName);
+    expect(actualPartyElectionKey.toString(), expectedElectionKey + ' should be the electionKey of the party.').to.be.deep.equal(expectedElectionKey.toString());
+    expect(actualPartyKeyIndex.toString(), expectedPartyKeyIndex + ' should be the keyIndex of the party.').to.be.deep.equal(expectedPartyKeyIndex.toString());
+
+  })
+
   it("should add a new candidate.", async () => {
     // add an election
     let expectedElectionName = "CAS";
@@ -126,10 +155,15 @@ contract("Votechain - data insertion", async(accounts) => {
     // add a position
     await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, expectedMaxNoOfCandidatesThatCanBeSelected, {from: adminAccount});
 
+    // add a party
+    let expectedPartyName = 'Party'
+    await votechainInstance.addPartyAt.sendTransaction(expectedElectionKey, expectedPartyName, {from: adminAccount});
+
     // add a candidate
+    let expectedPartyKey = new BigNumber(1)
     let expectedPositionKey = new BigNumber(1);
     let expectedCandidateName = "JM";
-    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, {from: adminAccount});
+    await votechainInstance.addCandidateAt.sendTransaction(expectedPositionKey, expectedCandidateName, expectedPartyKey, {from: adminAccount});
 
     // verify if the new candidate was successfully recorded     
     let expectedCandidateKey = new BigNumber(1);
@@ -143,10 +177,12 @@ contract("Votechain - data insertion", async(accounts) => {
     let actualCandidateName = candidate["name"];
     let actualPositionKey = candidate["positionKey"];
     let actualKeyIndex = candidate["keyIndex"];
+    let actualPartyKey = candidate['partyKey'];
 
     expect(actualCandidateName, expectedCandidateName + " should be the name of the added candidate.").to.be.deep.equal(expectedCandidateName);
     expect(actualPositionKey.toString(), expectedPositionKey.toString() + " should be the position key of the added candidate.").to.be.deep.equal(expectedPositionKey.toString());
     expect(actualKeyIndex.toString(), expectedCandidateKeyIndex.toString() + " should be the key index of the added candidate.").to.be.deep.equal(expectedCandidateKeyIndex.toString());
+    expect(actualPartyKey.toString(), expectedPartyKey.toString() + " should be the party key of the added candidate.").to.be.deep.equal(expectedPartyKey.toString());
 
     // the added candidate should be added in the position it is referred to
     let isCandidateAtPosition = await votechainInstance.isCandidateAt.call(expectedPositionKey, expectedCandidateKey);
