@@ -51,7 +51,7 @@ class ProfileCard extends Component {
   getProfileData = (profile) => {
     let profileData = []
 
-    {Object.keys(profile).forEach((key) => {
+    Object.keys(profile).forEach((key) => {
       let data = {
         label: '', 
         value: ''
@@ -71,7 +71,7 @@ class ProfileCard extends Component {
       }
 
       profileData.push(data)
-    })}
+    })
 
 
     return profileData

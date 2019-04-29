@@ -1,5 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep'
-
 import { FETCH_CURRENT_VOTE_LIST } from '../actions/vote'
 
 const initialState = {

@@ -174,7 +174,7 @@ class App extends React.Component {
           }
 
           else if ('CastVote' === result.event) {
-            let voteKey = Number(result.returnValues.voteKey)
+            // let voteKey = Number(result.returnValues.voteKey)
             // let vote = await votechain.methods.voteList(voteKey).call()
           }
 

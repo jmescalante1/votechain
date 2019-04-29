@@ -10,11 +10,6 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
-import Checkbox from '@material-ui/core/Checkbox'
 
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
@@ -75,7 +70,6 @@ class EditPartyDialog extends React.Component {
 
   render() {
     const { classes, openDialog, onClose, partyToBeEdited } = this.props
-    const { hasAbstain } = this.state
     
     return (
       <Dialog

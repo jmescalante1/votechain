@@ -73,6 +73,12 @@ export default function reducer(state = initialState, action) {
       }
     }
 
+    case DELETE_PARTY_VOTECHAIN: {
+      return {
+        ...state
+      }
+    }
+
     case DELETE_PARTY_UI: {
       let deletedIndex = state.currentPartyList.findIndex(x => x.id === action.payload.deletedParty.id)
       

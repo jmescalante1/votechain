@@ -70,7 +70,7 @@ class CandidateTableContainer extends Component {
 
   render() {
     const { openAddCandidateDialog, candidateToBeEdited, candidateToBeDeleted, openEditCandidateDialog, openDeleteCandidateDialog } = this.state
-    const { currentCandidateList, electionId } = this.props
+    const { currentCandidateList } = this.props
 
     const headers = [
       {id: 'id', label: 'ID'},

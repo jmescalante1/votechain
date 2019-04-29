@@ -36,7 +36,7 @@ const styles = theme => ({
   contentText: {
     fontSize: 20,
     color: '#616161',
-    // backgroundColor: '#9e9e  9e'
+    // backgroundColor: '#9e9e9e'
   },
   label: {
     fontSize: 18,
@@ -62,10 +62,6 @@ const styles = theme => ({
 })
 
 class DeleteAdminDialog extends React.Component {
-  constructor(props) {
-    super(props)
-
-  }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog, voterAddress, voteList } = this.props
