@@ -75,8 +75,8 @@ class CandidateTableContainer extends Component {
     const headers = [
       {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
-      {id: 'position-key', label: 'Position Key'},
-      {id: 'position-name', label: 'Position Name'},
+      {id: 'positionId', label: 'Position Id'},
+      {id: 'positionName', label: 'Position Name'},
       {id: 'actions', label: 'Actions'}
     ]
 
