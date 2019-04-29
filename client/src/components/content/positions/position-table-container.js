@@ -71,11 +71,12 @@ class PositionTableContainer extends Component {
   render() {
     const { openAddPositionDialog, openEditPositionDialog, positionToBeEdited, positionToBeDeleted, openDeletePositionDialog } = this.state
     const { positionList, electionId } = this.props
+    console.log(positionList)
 
     const headers = [
       {id: 'id', label: 'ID'},
       {id: 'name', label: 'Name'},
-      {id: 'max-no-of-candidates-to-be-elected', label: 'Max No. of Candidates to be Elected'},
+      {id: 'maxNoOfCandidatesThatCanBeSelected', label: 'Max No. of Candidates to be Elected'},
       {id: 'hasAbstain', label: 'Has abstain'},
       {id: 'actions', label: 'Actions'}
     ]
