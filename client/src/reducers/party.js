@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 
 import { FETCH_CURRENT_PARTY_LIST, ADD_PARTY_VOTECHAIN, ADD_PARTY_UI 
-, EDIT_PARTY_VOTECHAIN, EDIT_PARTY_UI, DELETE_PARTY_VOTECHAIN
+, EDIT_PARTY_VOTECHAIN, EDIT_PARTY_UI,
 , DELETE_PARTY_UI } from '../actions/party'
 
 import { DELETE_ELECTION_UI } from '../actions/election'
@@ -68,12 +68,6 @@ export default function reducer(state = initialState, action) {
         }
       }
 
-      return {
-        ...state
-      }
-    }
-
-    case DELETE_PARTY_VOTECHAIN: {
       return {
         ...state
       }
