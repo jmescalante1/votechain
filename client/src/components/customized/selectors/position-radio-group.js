@@ -32,6 +32,7 @@ class PositionRadioGroup extends Component {
     super(props)
 
     this.isChecked = this.isChecked.bind(this)
+    this.isAbstainCheck = this.isAbstainCheck.bind(this)
   }
 
 
@@ -48,10 +49,20 @@ class PositionRadioGroup extends Component {
 
     return false
   }
+
+  isAbstainCheck() {
+    const { positionState } = this.props
+    
+    if(positionState){
+      return positionState.isAbstain
+    }
+
+    return false
+  }
   
   render() {
-    const { classes, position, handlePositionChange } = this.props
-
+    const { classes, position, handlePositionChange, handleAbstainCheck } = this.props
+    console.log(position)
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
@@ -64,10 +75,10 @@ class PositionRadioGroup extends Component {
                   key={candidate.id}
                   control={
                     <Checkbox
-                      checked={this.isChecked(candidate.id)}
+                      checked={!this.isAbstainCheck() && this.isChecked(candidate.id)}
                       onChange={(event) => {
                         let checked = event.target.checked
-                        handlePositionChange(candidate.id, checked, position)
+                        handlePositionChange(this.isAbstainCheck(), candidate.id, checked, position)
                       }}
                     />
                 }
@@ -75,6 +86,22 @@ class PositionRadioGroup extends Component {
                 />
               )
             })}
+
+            {position.hasAbstain && 
+              <FormControlLabel
+                key={position.abstainId}
+                control={
+                  <Checkbox
+                    checked={this.isAbstainCheck()}
+                    onChange={(event) => {
+                      let checked = event.target.checked
+                      handleAbstainCheck(checked, position)
+                    }}
+                  />
+                }
+                label='Abstain'
+              /> 
+            }
             
           </FormGroup>
           <FormHelperText>You can vote up to {position.maxNoOfCandidatesThatCanBeSelected} candidate(s).</FormHelperText>
@@ -100,7 +127,8 @@ PositionRadioGroup.propTypes = {
     })).isRequired
   }).isRequired,
 
-  handlePositionChange: PropTypes.func.isRequired
+  handlePositionChange: PropTypes.func.isRequired,
+  handleAbstainCheck: PropTypes.func.isRequired,
 }
 
 

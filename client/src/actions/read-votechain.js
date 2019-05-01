@@ -86,6 +86,7 @@ export async function getPosition(positionKey, votechain) {
   position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
   position.hasAbstain = response.isAbstainActive
   position.electionId = Number(response.electionKey)
+  position.abstainId = Number(response.abstainKey)
 
   return position
 }

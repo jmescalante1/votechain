@@ -19,7 +19,8 @@ class ElectionViewContainer extends Component {
             candidateIds:{
 
             }
-            noOfChecks
+            noOfChecks,
+            isAbstain: 
           }
         */
       },
@@ -28,6 +29,7 @@ class ElectionViewContainer extends Component {
     }
     
     this.handleBallotChange = this.handleBallotChange.bind(this)
+    this.handleAbstainCheck = this.handleAbstainCheck.bind(this)
    
     this.handleCloseSubmitDialog = this.handleCloseSubmitDialog.bind(this)
     this.handleOpenSubmitDialog = this.handleOpenSubmitDialog.bind(this)
@@ -65,12 +67,39 @@ class ElectionViewContainer extends Component {
       openSubmitBallotDialog: true 
     })
   }
+
+  async handleAbstainCheck(checked, position) {
+    if(!this.state.positionList[position.id]){
+      let noOfChecks = 0;
+      let candidateIds = {}
+      let isAbstain = false
+      let positionState = {candidateIds, noOfChecks, isAbstain}
+      
+      await this.setState(prevState => ({
+        positionList: {
+          ...prevState.positionList,
+          [position.id]: positionState
+        }
+      }))
+    }
+
+    await this.setState(prevState => ({
+      positionList: {
+        ...prevState.positionList,
+        [position.id]: {
+          ...prevState.positionList[position.id],
+          isAbstain: checked
+        }
+      }
+    }))
+  }
   
   async handleBallotChange(candidateId, checked, position) {
     if(!this.state.positionList[position.id]){
       let noOfChecks = 0;
       let candidateIds = {}
-      let positionState = {candidateIds, noOfChecks}
+      let isAbstain = false
+      let positionState = {candidateIds, noOfChecks, isAbstain}
       
       await this.setState(prevState => ({
         positionList: {
@@ -112,6 +141,7 @@ class ElectionViewContainer extends Component {
               election={election}
               positionListState={positionList}
               handleBallotChange={this.handleBallotChange}
+              handleAbstainCheck={this.handleAbstainCheck}
 
               handleOpenSubmitDialog={this.handleOpenSubmitDialog}
             />

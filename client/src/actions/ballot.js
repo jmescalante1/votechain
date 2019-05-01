@@ -84,8 +84,6 @@ export function fetchBallotList(votechain, electionKey){
       ballotList[vote.voterId].voteList[vote.positionName].candidateList.push(vote.candidateName)
     }
 
-    console.log(ballotList)
-
     // form the ballots from the votes
     // ballot structure
     // ballotList :{

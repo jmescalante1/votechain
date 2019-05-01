@@ -22,12 +22,15 @@ class Ballot extends Component {
     this.handlePositionChange = this.handlePositionChange.bind(this)
   }
   
-  handlePositionChange(candidateId, checked, position) {
-    this.props.handleBallotChange(candidateId, checked, position)
+  handlePositionChange(isAbstainCheck, candidateId, checked, position) {
+    
+    if(!isAbstainCheck){
+      this.props.handleBallotChange(candidateId, checked, position)
+    }   
   }
 
   render() {
-    const { election, positionListState, handleOpenSubmitDialog, classes } = this.props
+    const { election, positionListState, handleOpenSubmitDialog, classes, handleAbstainCheck } = this.props
 
     return (
       <Paper>
@@ -40,6 +43,7 @@ class Ballot extends Component {
                 position={position}
                 positionState={positionListState[position.id]}
                 handlePositionChange={this.handlePositionChange}
+                handleAbstainCheck={handleAbstainCheck}
               />
             </Fragment>
           )
@@ -79,6 +83,8 @@ Ballot.propTypes = {
   }).isRequired,
 
   handleBallotChange: PropTypes.func.isRequired,
+  handleAbstainCheck: PropTypes.func.isRequired,
+
   handleOpenSubmitDialog: PropTypes.func.isRequired,
   positionListState: PropTypes.object.isRequired,
 }
