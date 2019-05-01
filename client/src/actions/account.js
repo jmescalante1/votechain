@@ -1,21 +1,10 @@
 import { editAdminVotechain } from './admin'
 import { editOfficialVotechain } from './official'
 import { editVoterVotechain } from './voter'
+import { getRole } from './read-votechain'
 
 export const SET_ACCOUNT = 'SET_ACCOUNT'
 export const GET_ACCOUNT_DETAILS = 'GET_ACCOUNT_DETAILS'
-
-async function getRole(votechain, accountKey) {
-  if(await votechain.methods.isAdmin(accountKey).call()){
-    return 'Administrator'
-  } else if (await votechain.methods.isOfficial(accountKey).call()) {
-    return 'Official'
-  } else if (await votechain.methods.isVoter(accountKey).call()) {
-    return 'Voter'
-  }
-
-  return 'Unregistered'
-}
 
 export function setAccount(web3, account){
   web3.eth.defaultAccount = account
@@ -79,7 +68,6 @@ export function editProfile(votechain, profile, accountKey) {
         profile.adminKey = profile.accountAddress
         return dispatch(editAdminVotechain(accountKey, votechain, profile))
       default: {
-        console.log('Unregistered')
         break;
       }
     }
