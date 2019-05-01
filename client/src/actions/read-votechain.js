@@ -52,7 +52,7 @@ export async function getParty(partyKey, votechain){
   
   let party = {}
 
-  party.id = partyKey
+  party.id = Number(partyKey)
   party.name = response.name
   party.electionId = Number(response.electionKey)
 

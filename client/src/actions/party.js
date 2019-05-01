@@ -1,13 +1,4 @@
-async function getParty(partyKey, votechain) {
-  let response = await votechain.methods.partyList(partyKey).call()
-  let party = {}
-
-  party.id = Number(partyKey)
-  party.electionId = Number(response.electionKey)
-  party.name = response.name
-
-  return party
-}
+import { getParty } from './read-votechain'
 
 export const FETCH_CURRENT_PARTY_LIST = 'FETCH_CURRENT_PARTY_LIST'
 export const ADD_PARTY_VOTECHAIN = 'ADD_PARTY_VOTECHAIN'
@@ -27,9 +18,10 @@ export function fetchCurrentPartyList(votechain, electionKey) {
       let party = await getParty(partyKey, votechain)
 
       if(electionKey === party.electionId) {
-        partyList.push(party);
+        partyList.push(party)
       }
     }
+    
 
     dispatch({
       type: FETCH_CURRENT_PARTY_LIST,
