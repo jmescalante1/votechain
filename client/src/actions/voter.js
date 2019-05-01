@@ -1,13 +1,4 @@
-async function getVoter(voterKey, votechain) {
-  let response = await votechain.methods.voterList(voterKey).call()
-  let voter = {}
-
-  voter.id = voterKey
-  voter.name = response.name
-  voter.studentNo = response.studentNo
-
-  return voter
-}
+import { getVoter } from './read-votechain'
 
 export const FETCH_CURRENT_VOTER_LIST = 'FETCH_CURRENT_VOTER_LIST'
 export const ADD_VOTER_VOTECHAIN = 'ADD_VOTER_VOTECHAIN'

@@ -165,3 +165,15 @@ export async function getOfficial(officialKey, votechain) {
 
   return official
 }
+
+
+export async function getVoter(voterKey, votechain) {
+  let response = await votechain.methods.voterList(voterKey).call()
+  let voter = {}
+
+  voter.id = voterKey
+  voter.name = response.name
+  voter.studentNo = response.studentNo
+
+  return voter
+}
