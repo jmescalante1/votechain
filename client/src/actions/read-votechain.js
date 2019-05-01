@@ -1,3 +1,10 @@
+function convertStageToStatus(stage) {
+  if(stage === 0) return 'Pending'
+  else if (stage === 1) return 'Ongoing'
+  else if (stage === 2) return 'Finished'
+  return 'Unknown Status'
+}
+
 export async function getRole(votechain, accountKey) {
   if(await votechain.methods.isAdmin(accountKey).call()){
     return 'Administrator'
@@ -20,12 +27,16 @@ export async function getAdmin(adminKey, votechain) {
   return admin
 }
 
-function convertStageToStatus(stage) {
-  if(stage === 0) return 'Pending'
-  else if (stage === 1) return 'Ongoing'
-  else if (stage === 2) return 'Finished'
-  return 'Unknown Status'
+export async function getOfficial(officialKey, votechain) {
+  let response = await votechain.methods.officialList(officialKey).call()
+  let official = {}
+
+  official.id = officialKey
+  official.name = response.name
+
+  return official
 }
+
 export async function getElection(electionKey, votechain) {
   let response = await votechain.methods.electionList(electionKey).call()
   let election = {}
@@ -37,8 +48,45 @@ export async function getElection(electionKey, votechain) {
   return election
 }
 
+export async function getElectionDetailsForElectionView(votechain, electionKey) {
+  let election = await getElection(electionKey, votechain)
+
+  let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
+  let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
+  let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
+
+  election.id = Number(electionKey)
+  election.noOfPositions = Number(noOfPositions)
+  election.noOfVoters = Number(noOfVoters)
+  election.noOfVotes = Number(noOfVotes)
+
+  let noOfCandidates = 0
+
+  for(let i = 0; i < noOfPositions; i++){
+    let positionKey = await votechain.methods.getPositionKeyAt(electionKey, i).call()
+    noOfCandidates += Number(await votechain.methods.getNoOfCandidatesAt(positionKey).call())
+  }
+
+  election.noOfCandidates = noOfCandidates
+
+  return election
+}
+
 export async function getRawPosition(positionKey, votechain){
   let position  = await votechain.methods.positionList(positionKey).call()
+  return position
+}
+
+export async function getPosition(positionKey, votechain) {
+  let response = await votechain.methods.positionList(positionKey).call()
+  let position = {}
+
+  position.id = Number(positionKey)
+  position.name = response.name
+  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
+  position.hasAbstain = response.isAbstainActive
+  position.electionId = Number(response.electionKey)
+
   return position
 }
 
@@ -77,19 +125,6 @@ export async function getPartyListOfElection(electionKey, votechain){
   return partyList
 }
 
-export async function getPosition(positionKey, votechain) {
-  let response = await votechain.methods.positionList(positionKey).call()
-  let position = {}
-
-  position.id = Number(positionKey)
-  position.name = response.name
-  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
-  position.hasAbstain = response.isAbstainActive
-  position.electionId = Number(response.electionKey)
-
-  return position
-}
-
 export async function getCandidate(candidateKey, votechain) {
   let response = await votechain.methods.candidateList(candidateKey).call()
   let candidate = {}
@@ -113,6 +148,17 @@ export async function getCandidate(candidateKey, votechain) {
   return candidate
 }
 
+export async function getVoter(voterKey, votechain) {
+  let response = await votechain.methods.voterList(voterKey).call()
+  let voter = {}
+
+  voter.id = voterKey
+  voter.name = response.name
+  voter.studentNo = response.studentNo
+
+  return voter
+}
+
 export async function getVote(voteKey, votechain) {
   let response = await votechain.methods.voteList(voteKey).call()
  
@@ -132,48 +178,3 @@ export async function getVote(voteKey, votechain) {
   return vote
 }
 
-export async function getElectionDetailsForElectionView(votechain, electionKey) {
-  let election = await getElection(electionKey, votechain)
-
-  let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
-  let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
-  let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
-
-  election.id = Number(electionKey)
-  election.noOfPositions = Number(noOfPositions)
-  election.noOfVoters = Number(noOfVoters)
-  election.noOfVotes = Number(noOfVotes)
-
-  let noOfCandidates = 0
-
-  for(let i = 0; i < noOfPositions; i++){
-    let positionKey = await votechain.methods.getPositionKeyAt(electionKey, i).call()
-    noOfCandidates += Number(await votechain.methods.getNoOfCandidatesAt(positionKey).call())
-  }
-
-  election.noOfCandidates = noOfCandidates
-
-  return election
-}
-
-export async function getOfficial(officialKey, votechain) {
-  let response = await votechain.methods.officialList(officialKey).call()
-  let official = {}
-
-  official.id = officialKey
-  official.name = response.name
-
-  return official
-}
-
-
-export async function getVoter(voterKey, votechain) {
-  let response = await votechain.methods.voterList(voterKey).call()
-  let voter = {}
-
-  voter.id = voterKey
-  voter.name = response.name
-  voter.studentNo = response.studentNo
-
-  return voter
-}
