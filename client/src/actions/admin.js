@@ -1,12 +1,4 @@
-async function getAdmin(adminKey, votechain) {
-  let response = await votechain.methods.adminList(adminKey).call()
-  let admin = {}
-
-  admin.id = adminKey
-  admin.name = response.name
-
-  return admin
-}
+import { getAdmin } from './read-votechain'
 
 export const FETCH_ADMIN_LIST = 'FETCH_ADMIN_LIST'
 export const ADD_ADMIN_VOTECHAIN = 'ADD_ADMIN_VOTECHAIN'
