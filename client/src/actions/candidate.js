@@ -1,4 +1,4 @@
-import { getRawPosition, getRawParty, getParty, getPartyListOfElection, getPosition, getCandidate } from './read-votechain'
+import { getPartyListOfElection, getPosition, getCandidate } from './read-votechain'
 
 export const FETCH_CURRENT_CANDIDATE_LIST = 'FETCH_CURRENT_CANDIDATE_LIST'
 export const ADD_CANDIDATE_VOTECHAIN = 'ADD_CANDIDATE_VOTECHAIN'
