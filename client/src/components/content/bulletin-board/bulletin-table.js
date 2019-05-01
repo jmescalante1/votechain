@@ -10,6 +10,9 @@ import AddCircle from '@material-ui/icons/AddCircle'
 import TableContainer from '../../customized/tables/table-container'
 import ViewButton from '../../customized/buttons/view'
 
+import BulletinBoardPDF from './bulletin-board-pdf'
+import Export from '../../export/export'
+
 const styles = theme => ({
   actionIcon:{
     marginRight: theme.spacing.unit,
@@ -30,19 +33,35 @@ class BulletinTable extends Component {
   }
   
   createTableTools() {
-    const { classes } = this.props
+    const { classes, ballotList, electionList, electionId } = this.props
+
+    let election = electionList.find((election) => election.id === electionId)
+
+    if(!election) {
+      return null
+    }
 
     return (
-      <Tooltip title='Export Bulletin Board'>
-        <Fab 
-          size='large' 
-          variant='extended' 
-          className={classes.fab}
-        >
-          <AddCircle className={classes.actionIcon} />
-          Export
-        </Fab>
-      </Tooltip>
+      <Export
+        fileName='Bulletin Board.pdf'
+        document={
+          <BulletinBoardPDF 
+            ballotList={ballotList} 
+            election={election}
+          />
+        }
+      >
+        <Tooltip title='Export Bulletin Board'>
+          <Fab 
+            size='large' 
+            variant='extended' 
+            className={classes.fab}
+          >
+            <AddCircle className={classes.actionIcon} />
+            Export
+          </Fab>
+        </Tooltip>
+      </Export>
     )
   }
 
@@ -85,7 +104,6 @@ class BulletinTable extends Component {
         defaultOrder='desc'
         defaultOrderBy='id'
         defaultRowsPerPage={10}
-
       />
     )
   }
@@ -94,6 +112,8 @@ class BulletinTable extends Component {
 BulletinTable.propTypes = {
   handleOpenViewVotesDialog: PropTypes.func.isRequired,
   ballotList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  electionId: PropTypes.number,
+  electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default withStyles(styles)(BulletinTable)

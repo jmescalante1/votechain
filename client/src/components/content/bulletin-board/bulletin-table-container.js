@@ -55,12 +55,14 @@ class BulletinTableContainer extends Component {
   }
 
   render() {
-    const { ballotList } = this.props
+    const { ballotList, electionList, electionId } = this.props
     const { openViewVotesDialog, voterAddressToOpen } = this.state
 
     return (
       <div>
         <BulletinTable 
+          electionList={electionList}
+          electionId={electionId}
           ballotList={ballotList}
           handleOpenViewVotesDialog={this.handleOpenViewVotesDialog}
         />
@@ -78,6 +80,7 @@ class BulletinTableContainer extends Component {
 const mapStateToProps = state => ({
   votechain: state.contract.votechain,
   ballotList: state.ballot.ballotList,
+  electionList: state.election.electionList,
 })
 
 const mapDispatchToProps = {
@@ -86,7 +89,6 @@ const mapDispatchToProps = {
 
 BulletinTableContainer.propTypes = {
   electionId: PropTypes.number
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BulletinTableContainer)

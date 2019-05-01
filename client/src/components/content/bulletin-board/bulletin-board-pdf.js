@@ -56,31 +56,23 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   cell: {
-    width: '33%',
+    width: '50%',
     fontSize: 14,
     color: '#424242',
-    marginBottom: '12pt',
-    flexWrap: 'wrap',
+    marginBottom: '12pt'
   },
   columnHeader: {
-    width: '33%',
+    width: '50%',
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: '18pt',
-    
-  },
-
-  // cellContainer: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-start',
-  // }
+    marginBottom: '18pt'
+  }
 });
 
-class ResultPDF extends Component {
+class BulletinBoardPDF extends Component {
   render() {
-    const { currentFinishedElection } = this.props
+    const { election, ballotList } = this.props
+    console.log(ballotList)
 
     return (
       <Document>
@@ -89,36 +81,44 @@ class ResultPDF extends Component {
           style={styles.page}
         >
           <View style={styles.title} fixed>
-            <Text>Election Results</Text>
+            <Text>Public Bulletin Board of Votes</Text>
           </View>
           <View style={styles.subtitle} fixed>
-            <Text>{currentFinishedElection.name}</Text>
+            <Text>{election.name}</Text>
           </View>
 
-          {currentFinishedElection.positionList.map((position) => {
-            return (
-               <View style={styles.section} key={position.id}>
-                <Text style={styles.sectionTitle}>{position.name} </Text>
-                <Text style={styles.line}></Text>
-                
-                <View style={styles.subsection}>
+          {Object.keys(ballotList).map((voterKeyAddress) => {  
+            let ballot = ballotList[voterKeyAddress]
 
+            return (  
+              <View style={styles.section} key={voterKeyAddress}>
+                <Text style={styles.sectionTitle}>{voterKeyAddress}</Text>
+                <Text style={styles.line}></Text>
+
+                <View style={styles.subsection}>
                   <View style={styles.row}>
-                    <Text style={styles.columnHeader}>Candidate</Text>
-                    <Text style={styles.columnHeader}>Votes Received</Text>
-                    <Text style={styles.columnHeader}>Party</Text>
+                    <Text style={styles.columnHeader}>Position</Text>
+                    <Text style={styles.columnHeader}>Candidate(s)</Text>
                   </View>
 
-                  {position.candidateList.map((candidate) => {
+                  {Object.keys(ballot.voteList).map((positionName) => {
+                    let candidateList = ballot.voteList[positionName].candidateList
+
                     return (
-                      <View key={candidate.id} style={styles.row}>
-                        <Text style={styles.cell}>{candidate.name}</Text>
-                        <Text style={styles.cell}>{candidate.noOfVotesReceived}</Text>
-                        <Text style={styles.cell}>{candidate.partyName}</Text>
+                      <View style={styles.row} key={positionName}>
+                        <Text style={styles.cell}>{positionName}</Text>
+                        <Text style={styles.cell}>
+                          {candidateList.map((candidate, index) => {
+                            return (
+                              <Text key={candidate}>{candidate}{index === candidateList.length - 1 ? '' : ', '}</Text>
+                            )
+                          })}
+                        </Text>
                       </View>
                     )
                   })}
                 </View>
+    
               </View>
             )
           })}
@@ -132,4 +132,4 @@ class ResultPDF extends Component {
   }
 }
 
-export default ResultPDF;
+export default BulletinBoardPDF;

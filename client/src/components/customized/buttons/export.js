@@ -19,7 +19,7 @@ const styles = theme => ({
   },
 })
 
-class DownloadButton extends React.Component {
+class ExportButton extends React.Component {
   render(){
     const { onClick, classes, size } = this.props
 
@@ -31,15 +31,15 @@ class DownloadButton extends React.Component {
         className={classes.button}
       >
         <SaveAlt />
-        <div className={classes.label}>Download</div>
+        <div className={classes.label}>Export</div>
       </Fab>
     )
   }
 }
 
-DownloadButton.propTypes = {
+ExportButton.propTypes = {
   classes: PropTypes.object.isRequired,
   onClick: PropTypes.func,
 }
 
-export default withStyles(styles)(DownloadButton)
+export default withStyles(styles)(ExportButton)

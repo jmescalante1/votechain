@@ -26,7 +26,7 @@ class Result extends Component {
             />
             <Export 
               document={<ResultPDF currentFinishedElection={currentFinishedElection}/>}
-              fileName='election-result.pdf'
+              fileName='Election Results.pdf'
             />
           </div>
         }
