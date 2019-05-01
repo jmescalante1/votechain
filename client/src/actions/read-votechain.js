@@ -155,3 +155,13 @@ export async function getElectionDetailsForElectionView(votechain, electionKey) 
 
   return election
 }
+
+export async function getOfficial(officialKey, votechain) {
+  let response = await votechain.methods.officialList(officialKey).call()
+  let official = {}
+
+  official.id = officialKey
+  official.name = response.name
+
+  return official
+}

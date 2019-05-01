@@ -1,12 +1,4 @@
-async function getOfficial(officialKey, votechain) {
-  let response = await votechain.methods.officialList(officialKey).call()
-  let official = {}
-
-  official.id = officialKey
-  official.name = response.name
-
-  return official
-}
+import { getOfficial } from './read-votechain'
 
 export const FETCH_OFFICIAL_LIST = 'FETCH_OFFICIAL_LIST'
 export const ADD_OFFICIAL_VOTECHAIN = 'ADD_OFFICIAL_VOTECHAIN'
