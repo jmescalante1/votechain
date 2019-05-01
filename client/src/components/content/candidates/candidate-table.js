@@ -68,10 +68,18 @@ class CandidateTable extends Component {
   }
 
   createTableData(candidateList) {
-    let candidateListClone = cloneDeep(candidateList);
+    let candidateListClone = [];
 
-    candidateListClone.forEach((candidate) => {
-      candidate.action = this.getActionsAllowed(candidate)
+    candidateList.forEach((candidate) => {
+      let candidateClone = {}
+      
+      candidateClone.id = candidate.id
+      candidateClone.name = candidate.name
+      candidateClone.positionName = candidate.positionName
+      candidateClone.partyName = candidate.partyName
+      candidateClone.actions = this.getActionsAllowed(candidate)
+      
+      candidateListClone.push(candidateClone)
     })
 
     return candidateListClone

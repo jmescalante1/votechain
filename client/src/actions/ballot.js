@@ -4,7 +4,6 @@ function convertStageToStatus(stage) {
   else if (stage === 2) return 'Finished'
   return 'Unknown Status'
 }
-
 async function getElection(electionKey, votechain) {
   let response = await votechain.methods.electionList(electionKey).call()
   let election = {}

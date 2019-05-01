@@ -68,9 +68,9 @@ class AddCandidateDialog extends React.Component {
 
   handlePartySelectChange(option) {
     if(option){
-      this.setState({ selectedPositionId: option.value })
+      this.setState({ selectedPartyId: option.value })
     } else {
-      this.setState({ selectedPositionId: 0})
+      this.setState({ selectedPartyId: 0})
     }
   }
 
@@ -80,11 +80,12 @@ class AddCandidateDialog extends React.Component {
 
   onSubmit() {
     const { handleClickCloseDialog, addCandidateVotechain, votechain, account } = this.props
-    const { candidateName, selectedPositionId } = this.state
+    const { candidateName, selectedPositionId, selectedPartyId } = this.state
 
     let candidate = {
       positionKey: selectedPositionId,
       name: candidateName,
+      partyKey: selectedPartyId,
     }
 
     addCandidateVotechain(account, votechain, candidate)
@@ -92,7 +93,7 @@ class AddCandidateDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog, currentPositionList } = this.props
+    const { classes, openDialog, handleClickCloseDialog, currentPositionList, currentPartyList } = this.props
     const { selectedPositionId, selectedPartyId } = this.state
 
     return (
@@ -127,7 +128,7 @@ class AddCandidateDialog extends React.Component {
             }}
             width='85%'
             handlePartySelectChange={this.handlePartySelectChange}
-            positionList={currentPositionList}
+            partyList={currentPartyList}
             selectedPartyId={selectedPartyId}
           />
 
@@ -170,7 +171,8 @@ AddCandidateDialog.propTypes = {
 const mapStateToProps = state => ({
   account: state.account.account,
   votechain: state.contract.votechain,
-  currentPositionList: state.candidate.currentPositionList
+  currentPositionList: state.candidate.currentPositionList,
+  currentPartyList: state.candidate.currentPartyList,
 })
 
 const mapDispatchToProps = {

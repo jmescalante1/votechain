@@ -8,9 +8,12 @@ import { DELETE_ELECTION_UI } from '../actions/election'
 
 import { DELETE_POSITION_UI } from '../actions/position'
 
+import { DELETE_PARTY_UI } from '../actions/party'
+
 const initialState = {
   currentCandidateList: [],
   currentPositionList: [],
+  currentPartyList: [], 
   currentElectionKey: '' 
 }
 
@@ -22,6 +25,7 @@ export default function reducer(state = initialState, action) {
         currentCandidateList: action.payload.candidateList,
         currentPositionList: action.payload.positionList,
         currentElectionKey: action.payload.electionKey,
+        currentPartyList: action.payload.partyList
       }
     }
     
@@ -32,6 +36,8 @@ export default function reducer(state = initialState, action) {
     }
 
     case ADD_CANDIDATE_UI: {
+      console.log(action.payload.electionKey)
+      console.log(state.currentElectionKey)
       if(state.currentElectionKey === action.payload.electionKey) {
         return {
           ...state,
@@ -43,6 +49,7 @@ export default function reducer(state = initialState, action) {
         ...state,
       }
     }
+
 
     case DELETE_POSITION_UI: {
       // delete all candidates with position key equal to the deleted position key

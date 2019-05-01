@@ -849,14 +849,7 @@ contract Votechain {
         return electionList[electionKey].voteKeyList[index];
     }
 
-    // function getVoteKey(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
-      
-    //     return electionList[electionKey].voteKeyList.length;
-    // }
 
-    // function nothing() public view returns(uint256){
-    //     return 1;
-    // }
 
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
