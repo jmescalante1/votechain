@@ -47,27 +47,29 @@ const styles = theme => ({
 class EditPositionDialog extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      hasAbstain: false,
-      positionName: '',
-      maxNoOfCandidatesThatCanBeSelected: 0,
+      positionName: props.positionToBeEdited.name,
+      maxNoOfCandidatesThatCanBeSelected:  props.positionToBeEdited.maxNoOfCandidatesThatCanBeSelected,
+      hasAbstain: props.positionToBeEdited.hasAbstain,
     }
 
-    this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
     this.onChangePositionName = this.onChangePositionName.bind(this)
     this.onChangeMaxNoOfCandidatesThatCanBeSelected = this.onChangeMaxNoOfCandidatesThatCanBeSelected.bind(this)
+    this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidUpdate(prevProps){
     if(prevProps.positionToBeEdited !== this.props.positionToBeEdited){
-      let hasAbstain =  this.props.positionToBeEdited.hasAbstain === 'Yes' ? true : false
-      this.setState({ hasAbstain })
-    }
-  }
+      const { positionToBeEdited } = this.props
 
-  handleAbstainCheckboxChange(hasAbstain) {
-    this.setState({ hasAbstain })
+      let positionName = positionToBeEdited.name
+      let maxNoOfCandidatesThatCanBeSelected = positionToBeEdited.maxNoOfCandidatesThatCanBeSelected 
+      let hasAbstain =  positionToBeEdited.hasAbstain
+
+      this.setState({ positionName, maxNoOfCandidatesThatCanBeSelected, hasAbstain })
+    }
   }
 
   onChangePositionName(event) {
@@ -76,6 +78,10 @@ class EditPositionDialog extends React.Component {
 
   onChangeMaxNoOfCandidatesThatCanBeSelected(event) {
     this.setState({ maxNoOfCandidatesThatCanBeSelected: event.target.value })
+  }
+
+  handleAbstainCheckboxChange(hasAbstain) {
+    this.setState({ hasAbstain })
   }
 
   onSubmit() {

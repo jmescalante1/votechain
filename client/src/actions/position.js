@@ -1,14 +1,4 @@
-async function getPosition(positionKey, votechain) {
-  let response = await votechain.methods.positionList(positionKey).call()
-  let position = {}
-
-  position.id = Number(positionKey)
-  position.name = response.name
-  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
-  position.hasAbstain = response.isAbstainActive
-
-  return position
-}
+import { getPosition } from './read-votechain'
 
 export const FETCH_CURRENT_POSITION_LIST = 'FETCH_CURRENT_POSITION_LIST'
 export const ADD_POSITION_VOTECHAIN = 'ADD_POSITION_VOTECHAIN'

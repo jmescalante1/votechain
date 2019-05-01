@@ -68,11 +68,18 @@ class PositionTable extends Component {
   }
 
   createTableData(positionList) {
-    let positionListClone = cloneDeep(positionList)
+    let positionListClone = []
     
-    positionListClone.forEach((position) => {
-      position.action = this.getActionsAllowed(position)
-      position.hasAbstain = position.hasAbstain ? 'Yes' : 'No'
+    positionList.forEach((position) => {
+      let positionClone = {}
+
+      positionClone.id = position.id
+      positionClone.name = position.name
+      positionClone.maxNoOfCandidatesThatCanBeSelected = position.maxNoOfCandidatesThatCanBeSelected
+      positionClone.hasAbstain = position.hasAbstain ? 'Yes' : 'No'
+      positionClone.action = this.getActionsAllowed(position)
+    
+      positionListClone.push(positionClone)
     })
 
     return positionListClone
