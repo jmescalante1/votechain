@@ -131,3 +131,27 @@ export async function getVote(voteKey, votechain) {
 
   return vote
 }
+
+export async function getElectionDetailsForElectionView(votechain, electionKey) {
+  let election = await getElection(electionKey, votechain)
+
+  let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
+  let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
+  let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
+
+  election.id = Number(electionKey)
+  election.noOfPositions = Number(noOfPositions)
+  election.noOfVoters = Number(noOfVoters)
+  election.noOfVotes = Number(noOfVotes)
+
+  let noOfCandidates = 0
+
+  for(let i = 0; i < noOfPositions; i++){
+    let positionKey = await votechain.methods.getPositionKeyAt(electionKey, i).call()
+    noOfCandidates += Number(await votechain.methods.getNoOfCandidatesAt(positionKey).call())
+  }
+
+  election.noOfCandidates = noOfCandidates
+
+  return election
+}

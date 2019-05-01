@@ -1,45 +1,4 @@
-
-function convertStageToStatus(stage) {
-  if(stage === 0) return 'Pending'
-  else if (stage === 1) return 'Ongoing'
-  else if (stage === 2) return 'Finished'
-  return 'Unknown Status'
-}
-
-async function getElection(electionKey, votechain) {
-  let response = await votechain.methods.electionList(electionKey).call()
-  let election = {}
-
-  election.id = Number(electionKey)
-  election.name = response.name
-  election.status = convertStageToStatus(Number(response.stage))
-
-  return election
-}
-
-async function getElectionDetailsForElectionView(votechain, electionKey) {
-  let election = await getElection(electionKey, votechain)
-
-  let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
-  let noOfVoters = await votechain.methods.getNoOfVotersAt(electionKey).call()
-  let noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
-
-  election.id = Number(electionKey)
-  election.noOfPositions = Number(noOfPositions)
-  election.noOfVoters = Number(noOfVoters)
-  election.noOfVotes = Number(noOfVotes)
-
-  let noOfCandidates = 0
-
-  for(let i = 0; i < noOfPositions; i++){
-    let positionKey = await votechain.methods.getPositionKeyAt(electionKey, i).call()
-    noOfCandidates += Number(await votechain.methods.getNoOfCandidatesAt(positionKey).call())
-  }
-
-  election.noOfCandidates = noOfCandidates
-
-  return election
-}
+import { getElection, getElectionDetailsForElectionView } from './read-votechain'
 
 export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
