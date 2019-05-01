@@ -1,47 +1,4 @@
-function convertStageToStatus(stage) {
-  if(stage === 0) return 'Pending'
-  else if (stage === 1) return 'Ongoing'
-  else if (stage === 2) return 'Finished'
-  return 'Unknown Status'
-}
-
-async function getElection(electionKey, votechain) {
-  let response = await votechain.methods.electionList(electionKey).call()
-  let election = {}
-
-  election.id = Number(electionKey)
-  election.name = response.name
-  election.status = convertStageToStatus(Number(response.stage))
-
-  return election
-}
-
-async function getPosition(positionKey, votechain) {
-  let response = await votechain.methods.positionList(positionKey).call()
-  let position = {}
-
-  position.id = Number(positionKey)
-  position.name = response.name
-  position.maxNoOfCandidatesThatCanBeSelected = Number(response.maxNoOfCandidatesThatCanBeSelected)
-  position.hasAbstain = response.isAbstainActive
-
-  return position
-}
-
-async function getCandidate(candidateKey, votechain) {
-  let response = await votechain.methods.candidateList(candidateKey).call()
-  let candidate = {}
-
-  candidate.id = Number(candidateKey)
-  candidate.name = response.name
-  candidate.positionId = Number(response.positionKey)
-  
-  let position = await getPosition(candidate.positionId, votechain)
-
-  candidate.positionName = position.name
-
-  return candidate
-}
+import { getElection, getPosition, getCandidate } from './read-votechain'
 
 export const FETCH_FINISHED_ELECTION_LIST = 'FETCH_FINISHED_ELECTION_LIST'
 export const FETCH_FINISHED_ELECTION_RESULT = 'FETCH_FINISHED_ELECTION_RESULT'
