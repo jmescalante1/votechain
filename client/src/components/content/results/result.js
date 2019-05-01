@@ -4,7 +4,8 @@ import isEmpty from 'lodash/isEmpty'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
 import ElectionResult from './election-result'
-import ResultExport from './result-export'
+import ResultPDF from './result-pdf'
+import Export from '../../export/export'
 
 
 class Result extends Component {
@@ -23,8 +24,9 @@ class Result extends Component {
             <ElectionResult 
               currentFinishedElection={currentFinishedElection}
             />
-            <ResultExport 
-              currentFinishedElection={currentFinishedElection}
+            <Export 
+              document={<ResultPDF currentFinishedElection={currentFinishedElection}/>}
+              fileName='election-result.pdf'
             />
           </div>
         }

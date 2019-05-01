@@ -1,9 +1,26 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import Fab from '@material-ui/core/Fab'
+import Tooltip from '@material-ui/core/Tooltip'
+import { withStyles } from '@material-ui/core/styles'
+
+import AddCircle from '@material-ui/icons/AddCircle'
+
 import TableContainer from '../../customized/tables/table-container'
 import ViewButton from '../../customized/buttons/view'
 
+const styles = theme => ({
+  actionIcon:{
+    marginRight: theme.spacing.unit,
+    color: '#006064'
+  },
+  fab: {
+    margin: theme.spacing.unit,
+    backgroundColor: '#ffffff',
+    color: '#006064'
+  },  
+})
 
 class BulletinTable extends Component {
   constructor(props) {
@@ -12,6 +29,22 @@ class BulletinTable extends Component {
     this.createTableData = this.createTableData.bind(this)
   }
   
+  createTableTools() {
+    const { classes } = this.props
+
+    return (
+      <Tooltip title='Export Bulletin Board'>
+        <Fab 
+          size='large' 
+          variant='extended' 
+          className={classes.fab}
+        >
+          <AddCircle className={classes.actionIcon} />
+          Export
+        </Fab>
+      </Tooltip>
+    )
+  }
 
   createTableData(ballotList) {
     const { handleOpenViewVotesDialog } = this.props
@@ -34,6 +67,7 @@ class BulletinTable extends Component {
   render() {
     const { ballotList } = this.props
     const tableData = this.createTableData(ballotList)
+    const tableTools = this.createTableTools()
 
     const headers = [
       {id: 'id', label: 'Alias'},
@@ -45,6 +79,7 @@ class BulletinTable extends Component {
         tableName="Bulletin Board of Votes"
         headers={headers}
         data={tableData}
+        tableTools={tableTools}
 
         rowsPerPageOptions={[10, 25, 50, 100]}
         defaultOrder='desc'
@@ -61,4 +96,4 @@ BulletinTable.propTypes = {
   ballotList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
-export default BulletinTable
+export default withStyles(styles)(BulletinTable)

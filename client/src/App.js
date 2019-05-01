@@ -275,3 +275,27 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
+// import React from 'react'
+// import { PDFDownloadLink , Document, Page, View, Text } from '@react-pdf/renderer'
+
+// const MyDoc = () => (
+//   <Document>
+//     <Page
+//       wrap={true}
+//     >
+//       <View>
+//         <Text>sdfdsf</Text>
+//       </View>
+//     </Page>
+//   </Document>
+// )
+
+// const App = () => (
+//   <div>
+//     <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
+//       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+//     </PDFDownloadLink>
+//   </div>
+// )
+
+// export default App
