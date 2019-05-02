@@ -129,7 +129,7 @@ contract("Votechain", async(accounts) => {
     await votechainInstance.startElection.sendTransaction(expectedElectionKey, {from: adminAccount});
 
     // cast bulk vote
-    await votechainInstance.bulkVote.sendTransaction([expectedCandidateKey, expectedCandidateKey2], {from: expectedVoterKey});
+    await votechainInstance.bulkVote.sendTransaction([expectedCandidateKey, expectedCandidateKey2], [], {from: expectedVoterKey});
 
     // verify if the votes were successfully casted
     let expectedVoteKey = new BigNumber(1);
@@ -139,7 +139,54 @@ contract("Votechain", async(accounts) => {
     let expectedVoteKey2 = new BigNumber(2);
     let isVote2 = await votechainInstance.isVote.call(expectedVoteKey2);
     expect(isVote2, "The second vote was not casted successfully.").to.be.true;
-    
-
   }); 
+
+  it("should allow the voter to cast an abstain vote.", async () => {
+    // add first an election 
+    let expectedElectionName = "CAS";
+    await votechainInstance.addElection.sendTransaction(expectedElectionName, {from: adminAccount});
+
+    // add a voter
+    let expectedElectionKey = new BigNumber(1);
+    let expectedVoterKey = "0xF2311fDf9494A76399A68Bf172cF0E9a95a7CC62";
+    let expectedVoterStudentNo = "2015-09899";
+    let expectedVoterName = "Alley";
+    await votechainInstance.addVoterAt.sendTransaction(expectedElectionKey, expectedVoterKey, expectedVoterStudentNo, expectedVoterName, {from: adminAccount});
+
+    // add a position
+    let expectedPositionName = "CEO";
+    let maxNoOfCandidatesThatCanBeSelected = new BigNumber(2);
+    let hasAbstain = true;
+
+    await votechainInstance.addPositionAt.sendTransaction(expectedElectionKey, expectedPositionName, maxNoOfCandidatesThatCanBeSelected, hasAbstain, {from: adminAccount});
+
+    // start the election
+    await votechainInstance.startElection.sendTransaction(expectedElectionKey, {from: adminAccount});
+
+    // get the added position
+    let expectedPositionKey = new BigNumber(1);
+    let position = await votechainInstance.positionList.call(expectedPositionKey);
+    
+    // check if the abstain is successfully added
+    let isAbstainActive = position['isAbstainActive'];
+    expect(isAbstainActive, 'The abstain option in the position should be active.').to.be.true;
+
+    let expectedAbstainKey = position['abstainKey'];
+    let isAbstain = await votechainInstance.isAbstain.call(expectedAbstainKey);
+    expect(isAbstain, 'An abstain option is expected to be added in the position.').to.be.true;
+
+    // cast an abstain vote
+    await votechainInstance.castAbstain.sendTransaction(expectedAbstainKey, {from: expectedVoterKey});
+
+    // check if the voter successfully casted a vote
+    let expectedVoteKey = new BigNumber(1);
+
+    let isVote = await votechainInstance.isVote.call(expectedVoteKey);
+    expect(isVote, 'The vote should be casted.').to.be.true;
+
+    // check if the vote is an abstain vote
+    let vote = await votechainInstance.voteList.call(expectedVoteKey);
+    let actualAbstainKey = vote['abstainKey'];
+    expect(actualAbstainKey.toString(), 'The vote has wrong abstain key.').to.be.deep.equal(expectedAbstainKey.toString());
+  });
 });

@@ -38,9 +38,9 @@ export function fetchElection(votechain, electionKey) {
   }
 }
 
-export function castBulkVoteVotechain(account, votechain, candidateKeyList){
+export function castBulkVoteVotechain(account, votechain, candidateKeyList, abstainKeyList){
   return async (dispatch) => {
-    await votechain.methods.bulkVote(candidateKeyList).send({from: account})
+    await votechain.methods.bulkVote(candidateKeyList, abstainKeyList).send({from: account})
 
     dispatch({
       type: CAST_BULK_VOTE_VOTECHAIN,

@@ -43,16 +43,18 @@ class SubmitBallotDialog extends React.Component {
   }
 
   submitBallot() {
-    const { castBulkVoteVotechain, handleClickCloseDialog, candidateKeyList } = this.props
+    const { castBulkVoteVotechain, handleClickCloseDialog, candidateKeyList, abstainKeyList } = this.props
     const { account, votechain } = this.props
-  
-    castBulkVoteVotechain(account, votechain, candidateKeyList)
+
+    castBulkVoteVotechain(account, votechain, candidateKeyList, abstainKeyList)
     handleClickCloseDialog()
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-  
+    // console.log(this.props.candidateKeyList)
+    // console.log(this.props.abstainKeyList)
+
     return (
       <Dialog
         open={openDialog}
@@ -91,7 +93,8 @@ class SubmitBallotDialog extends React.Component {
 SubmitBallotDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  candidateKeyList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  candidateKeyList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  abstainKeyList: PropTypes.arrayOf(PropTypes.number).isRequired
 }
 
 const mapStateToProps = state => ({

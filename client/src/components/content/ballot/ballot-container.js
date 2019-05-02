@@ -20,12 +20,14 @@ class ElectionViewContainer extends Component {
 
             }
             noOfChecks,
-            isAbstain: 
+            isAbstain:
+            abstainId: 
           }
         */
       },
       openSubmitBallotDialog: false,
       candidateKeyList: [],
+      abstainKeyList: [],
     }
     
     this.handleBallotChange = this.handleBallotChange.bind(this)
@@ -51,24 +53,30 @@ class ElectionViewContainer extends Component {
   handleOpenSubmitDialog() {
     const { positionList } = this.state 
     let candidateKeyList = []
+    let abstainKeyList = []
 
     Object.keys(positionList).forEach((positionId) => {
       let position = positionList[positionId]
       
-      Object.keys(position.candidateIds).forEach((candidateId) => {
-        if(position.candidateIds[candidateId]){
-          candidateKeyList.push(candidateId)
-        }
-      })
+      if(position.isAbstain) {
+        abstainKeyList.push(position.abstainId)
+      } else {
+        Object.keys(position.candidateIds).forEach((candidateId) => {
+          if(position.candidateIds[candidateId]){
+            candidateKeyList.push(candidateId)
+          }
+        })
+      }
     })
 
     this.setState({ 
       candidateKeyList,
+      abstainKeyList,
       openSubmitBallotDialog: true 
     })
   }
 
-  async handleAbstainCheck(checked, position) {
+  async handleAbstainCheck(id, checked, position) {
     if(!this.state.positionList[position.id]){
       let noOfChecks = 0;
       let candidateIds = {}
@@ -88,7 +96,8 @@ class ElectionViewContainer extends Component {
         ...prevState.positionList,
         [position.id]: {
           ...prevState.positionList[position.id],
-          isAbstain: checked
+          isAbstain: checked,
+          abstainId: id
         }
       }
     }))
@@ -131,7 +140,7 @@ class ElectionViewContainer extends Component {
     }
     
     const { election } = this.props
-    const { positionList, openSubmitBallotDialog, candidateKeyList } = this.state
+    const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList } = this.state
 
     return (
       <div>
@@ -149,6 +158,7 @@ class ElectionViewContainer extends Component {
               openDialog={openSubmitBallotDialog}
               handleClickCloseDialog={this.handleCloseSubmitDialog}
               candidateKeyList={candidateKeyList}
+              abstainKeyList={abstainKeyList}
             />
           </div> 
         : ''}

@@ -62,7 +62,7 @@ class PositionRadioGroup extends Component {
   
   render() {
     const { classes, position, handlePositionChange, handleAbstainCheck } = this.props
-    console.log(position)
+
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
@@ -77,8 +77,8 @@ class PositionRadioGroup extends Component {
                     <Checkbox
                       checked={!this.isAbstainCheck() && this.isChecked(candidate.id)}
                       onChange={(event) => {
-                        let checked = event.target.checked
-                        handlePositionChange(this.isAbstainCheck(), candidate.id, checked, position)
+                        if(!this.isAbstainCheck())
+                          handlePositionChange(candidate.id, event.target.checked, position)
                       }}
                     />
                 }
@@ -95,7 +95,7 @@ class PositionRadioGroup extends Component {
                     checked={this.isAbstainCheck()}
                     onChange={(event) => {
                       let checked = event.target.checked
-                      handleAbstainCheck(checked, position)
+                      handleAbstainCheck(position.abstainId, checked, position)
                     }}
                   />
                 }
@@ -104,7 +104,7 @@ class PositionRadioGroup extends Component {
             }
             
           </FormGroup>
-          <FormHelperText>You can vote up to {position.maxNoOfCandidatesThatCanBeSelected} candidate(s).</FormHelperText>
+          <FormHelperText>You are allowed to vote up to {position.maxNoOfCandidatesThatCanBeSelected} candidate(s).</FormHelperText>
         </FormControl>
         
       </div>

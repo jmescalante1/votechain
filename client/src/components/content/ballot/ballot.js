@@ -22,11 +22,8 @@ class Ballot extends Component {
     this.handlePositionChange = this.handlePositionChange.bind(this)
   }
   
-  handlePositionChange(isAbstainCheck, candidateId, checked, position) {
-    
-    if(!isAbstainCheck){
-      this.props.handleBallotChange(candidateId, checked, position)
-    }   
+  handlePositionChange(candidateId, checked, position) { 
+    this.props.handleBallotChange(candidateId, checked, position)
   }
 
   render() {
