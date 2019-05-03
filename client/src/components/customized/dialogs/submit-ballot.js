@@ -52,8 +52,8 @@ class SubmitBallotDialog extends React.Component {
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-    // console.log(this.props.candidateKeyList)
-    // console.log(this.props.abstainKeyList)
+    console.log(this.props.candidateKeyList)
+    console.log(this.props.abstainKeyList)
 
     return (
       <Dialog

@@ -8,6 +8,7 @@ import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUs
 import Main from './components/main/main'
 import 'typeface-roboto'
 
+import Web3Error from './components/content/error/web3-error'
 import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, startElectionUI, stopElectionUI } from './actions/election'
@@ -219,7 +220,7 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-        <Main />
+        <Main/>
       </MuiThemeProvider>
     )
   }
@@ -227,7 +228,8 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   web3: state.web3.web3,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
+  web3Error: state.web3.web3Error
 });
 
 const mapDispatchToProps = {

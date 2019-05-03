@@ -61,41 +61,58 @@ class Header extends React.Component {
             <MenuIcon className={classes.menuIcon}/>
           </IconButton>
         
-        <Grid
-          container
-          direction='row'
-          alignItems='center'
-          justify='flex-start'
-          spacing={24}
-        >
-          <Grid item>
-            <Icon name='votechain' size={40} color='#FFFFFF'/>
-          </Grid>
-          
-          <Grid item>
-            <Typography className={classes.title} color='inherit' noWrap>
-              VoteChain
-            </Typography>
-          </Grid>
-        </Grid>
-          
-          <div className={classes.tabs}>
-            {this.props.headerTabs.map((props) => (
-              <Link 
-                key={props.label} 
-                to={props.path}
+          <Grid 
+            container
+            direction='row'
+            alignItems='center'
+            justify='space-between'  
+          >
+            <Grid item>
+              <Grid
+                container
+                direction='row'
+                alignItems='center'
+                justify='flex-start'
+                spacing={24}
               >
-                <IconButton
-                  onClick={() => this.props.handleSelectedMenu(props.label)}
-                  className={classNames(classes.tab, {
-                    [classes.tabSelected]: props.label === selectedMenu
-                  })}
-                >
-                  {props.icon}
-                </IconButton>
-              </Link>
-            ))}
-          </div>
+                <Grid item>
+                  <Icon name='votechain' size={40} color='#FFFFFF'/>
+                </Grid>
+                
+                <Grid item>
+                  <Typography className={classes.title} color='inherit' noWrap>
+                    VoteChain
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item>
+              <Grid
+                container
+                direction='row'
+                alignItems='center'
+                justify='flex-start'
+              >
+                {this.props.headerTabs.map((props) => (
+                  <Grid key={props.label} item>
+                    <Link 
+                      to={props.path}
+                    >
+                      <IconButton
+                        onClick={() => this.props.handleSelectedMenu(props.label)}
+                        className={classNames(classes.tab, {
+                          [classes.tabSelected]: props.label === selectedMenu
+                        })}
+                      >
+                        {props.icon}
+                      </IconButton>
+                    </Link>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     )

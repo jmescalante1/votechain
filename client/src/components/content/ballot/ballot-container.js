@@ -63,7 +63,7 @@ class ElectionViewContainer extends Component {
       } else {
         Object.keys(position.candidateIds).forEach((candidateId) => {
           if(position.candidateIds[candidateId]){
-            candidateKeyList.push(candidateId)
+            candidateKeyList.push(Number(candidateId))
           }
         })
       }

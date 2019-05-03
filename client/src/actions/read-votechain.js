@@ -162,15 +162,20 @@ export async function getVoter(voterKey, votechain) {
 
 export async function getVote(voteKey, votechain) {
   let response = await votechain.methods.voteList(voteKey).call()
- 
+  
+
   let vote = {}
 
   vote.id = Number(voteKey)
   vote.voterId = response.voterKey
 
   // get candidate name
-  let candidate = await votechain.methods.candidateList(response.candidateKey).call()
-  vote.candidateName = candidate.name
+  if(!(await votechain.methods.isAbstain(response.abstainKey).call())){
+    let candidate = await votechain.methods.candidateList(response.candidateKey).call()
+    vote.candidateName = candidate.name
+  } else {
+    vote.candidateName = 'Abstain'
+  }
 
   // get position name
   let position = await votechain.methods.positionList(response.positionKey).call()

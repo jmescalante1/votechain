@@ -12,7 +12,7 @@ const store = configureStore()
 ReactDOM.render ((
   <Provider store={store}>
     <ConnectedRouter history={history} >
-        <App />    
+        <App style={{minHeight: '100vh'}}/>    
     </ConnectedRouter>
   </Provider>
   

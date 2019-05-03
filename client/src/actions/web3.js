@@ -16,7 +16,7 @@ export function getWeb3() {
             try {
               console.log('(Modern dapp browsers) Injected web 3 detected.')
               await window.ethereum.enable(); // Request account access if needed
-          
+
               resolve(web3);
             } catch (error) {
               reject(error);

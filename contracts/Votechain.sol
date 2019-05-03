@@ -175,37 +175,37 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        // addElection('UP Manila Student Council Election');
-        // addElection('Codeninja Board Of Directors Election');
+        addElection('UP Manila Student Council Election');
+        addElection('Codeninja Board Of Directors Election');
 
-        // // for election1
-        // addPositionAt(1, 'Chairman', 1, false);
-        // addPartyAt(1, 'Great Party List'); // id 1
-        // addPartyAt(1, 'Normal Party List'); // id 2
+        // for election1
+        addPositionAt(1, 'Chairman', 1, false);
+        addPartyAt(1, 'Great Party List'); // id 1
+        addPartyAt(1, 'Normal Party List'); // id 2
 
-        // // for election2
-        // addPositionAt(2, 'CEO', 1, false);
-        // addPositionAt(2, 'CTO', 2, false);
-        // addPartyAt(2, 'Great Party List'); // id 3
-        // addPartyAt(2, 'Walastik Party List'); // id 4
+        // for election2
+        addPositionAt(2, 'CEO', 1, false);
+        addPositionAt(2, 'CTO', 2, true);
+        addPartyAt(2, 'Great Party List'); // id 3
+        addPartyAt(2, 'Walastik Party List'); // id 4
 
-        // // for election 1 position1
-        // addCandidateAt(1, 'Neil', 1); // Great party list
-        // addCandidateAt(1, 'Alee', 2); // Normal party list
-        // addCandidateAt(1, 'Bea', 0); // Independent
+        // for election 1 position1
+        addCandidateAt(1, 'Neil', 1); // Great party list
+        addCandidateAt(1, 'Alee', 2); // Normal party list
+        addCandidateAt(1, 'Bea', 0); // Independent
 
-        // // for election 2 position2
-        // addCandidateAt(2, 'Paulo', 3); // Great Party list
-        // addCandidateAt(2, 'Ben', 4); // Walastik Party list
-        // addCandidateAt(2, 'Guen', 0); // Independent
+        // for election 2 position2
+        addCandidateAt(2, 'Paulo', 3); // Great Party list
+        addCandidateAt(2, 'Ben', 4); // Walastik Party list
+        addCandidateAt(2, 'Guen', 0); // Independent
 
-        // // for election 2 position3
-        // addCandidateAt(3, 'JM', 3); // Great Party list
-        // addCandidateAt(3, 'Mike', 4); // Walastik Party list
-        // addCandidateAt(3, 'Alley', 0); // Independent
+        // for election 2 position3
+        addCandidateAt(3, 'JM', 3); // Great Party list
+        addCandidateAt(3, 'Mike', 4); // Walastik Party list
+        addCandidateAt(3, 'Alley', 0); // Independent
 
-        // addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
-        // addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
+        addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
@@ -379,6 +379,12 @@ contract Votechain {
 
         election.voterKeyIndexList[voterKey] = election.voterKeyList.push(voterKey).sub(1);
         emit AddVoterAt(electionKey, voterKey);
+    }
+
+    function addBulkVoterAt(uint256 electionKey, address[] memory voterKey, bytes32[] memory studentNo, bytes32[] memory name) public {
+        for(uint256 i = 0; i < voterKey.length; i++ ){
+            addVoterAt(electionKey, voterKey[i], studentNo[i], name[i]);
+        }
     }
 
     function addAbstainAt(uint256 positionKey) 
@@ -879,8 +885,6 @@ contract Votechain {
     function getVoteKeyOfElection(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {
         return electionList[electionKey].voteKeyList[index];
     }
-
-
 
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
