@@ -98,7 +98,7 @@ class AddAdminDialog extends React.Component {
             }}
             required
             fullWidth
-            type='string'
+            type='text'
             id='admin-key'
             label='Admin Key/Address'
             variant='outlined'
@@ -111,7 +111,7 @@ class AddAdminDialog extends React.Component {
             }}
             required
             fullWidth
-            type='string'
+            type='text'
             id='admin-name'
             label='Admin Name'
             variant='outlined'

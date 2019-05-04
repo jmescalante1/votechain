@@ -1,4 +1,4 @@
-import { getElection, getElectionDetailsForElectionView } from './read-votechain'
+import { getElection, getElectionDetails } from './read-votechain'
 
 export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
@@ -156,7 +156,7 @@ export function stopElectionUI(votechain, electionKey) {
 
 export function fetchElectionDetails(votechain, electionKey) {
   return async (dispatch) => {
-    let electionDetails = await getElectionDetailsForElectionView(votechain, electionKey)
+    let electionDetails = await getElectionDetails(votechain, electionKey)
 
     dispatch({
       type: FETCH_ELECTION_DETAILS,

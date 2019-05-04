@@ -10,7 +10,7 @@ import { ADD_ELECTION_VOTECHAIN, ADD_ELECTION_VOTECHAIN_ERROR, FETCH_ELECTION_LI
 const initialState = {
   electionList: [],
   addElectionError: '',
-  electionDetailsForElectionView: {}
+  electionDetails: {}
 }
 
 
@@ -136,7 +136,7 @@ export default function reducer(state = initialState, action) {
     case FETCH_ELECTION_DETAILS: {
       return {
         ...state,
-        electionDetailsForElectionView: action.payload.electionDetails
+        electionDetails: action.payload.electionDetails
       }
     }
 

@@ -48,7 +48,7 @@ export async function getElection(electionKey, votechain) {
   return election
 }
 
-export async function getElectionDetailsForElectionView(votechain, electionKey) {
+export async function getElectionDetails(votechain, electionKey) {
   let election = await getElection(electionKey, votechain)
 
   let noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()

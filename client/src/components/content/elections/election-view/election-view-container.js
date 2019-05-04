@@ -119,7 +119,7 @@ class ElectionViewContainer extends Component {
 
 const mapStateToProps = state => ({
   votechain: state.contract.votechain,
-  election: state.election.electionDetailsForElectionView,
+  election: state.election.electionDetails,
   voteList: state.vote.currentVoteList,
 });
 

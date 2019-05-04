@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { addElectionVotechain } from '../../../actions/election'
 
@@ -41,27 +42,79 @@ class AddElectionDialog extends React.Component {
     super(props)
 
     this.state = {
-      electionName: ''
+      electionTextField: {
+        value: '',
+        errorMessage: null,
+      },
+      hasError: false,
     }
 
     this.addElection = this.addElection.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.validateInput = this.validateInput.bind(this)
   }
+
   
   addElection() {
     const { handleClickCloseDialog, addElectionVotechain, account, votechain } = this.props
-    const { electionName } = this.state
+    const { electionTextField } = this.state
 
-    addElectionVotechain(account, votechain, electionName)
-    handleClickCloseDialog()
+    if(this.validateInput()){
+      addElectionVotechain(account, votechain, electionTextField.value)
+      handleClickCloseDialog()
+    }
+  }
+
+  validateInput(){
+    const { electionTextField } = this.state
+
+    if(FormValidator.isEmpty(electionTextField.value)){
+      this.setState( (prevState) => ({
+        electionTextField: {
+          ...prevState.electionTextField,
+          errorMessage: 'The election must have a name',
+          hasError: true
+        }
+      }))
+
+      return false
+    } else if (!FormValidator.validLength(electionTextField.value, 1, 32)) {
+      this.setState( (prevState) => ({
+        electionTextField: {
+          ...prevState.electionTextField,
+          errorMessage: 'The election name must contain 1 to 32 characters only',
+          hasError: true
+        }
+      }))
+
+      return false  
+    }
+    
+    this.setState( prevState => ({
+      hasError: false,
+      electionTextField: {
+        ...prevState.electionTextField,
+        errorMessage: null
+      }
+    }))
+
+    return true
   }
 
   onChange(event) {
-    this.setState({ electionName: event.target.value })
+    let value = event.target.value
+
+    this.setState((prevState) => ({
+      electionTextField: {
+        ...prevState.electionTextField,
+        value: value
+      }
+    }))
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { electionTextField } = this.state 
 
     return (
       <Dialog
@@ -85,11 +138,12 @@ class AddElectionDialog extends React.Component {
             }}
             required
             fullWidth={true}
-            type='string'
+            type='text'
             id='election-name'
             label='Election Name'
             variant='outlined'
             onChange={this.onChange}
+            errorMessage={electionTextField.errorMessage}
           />
         </DialogContent>
 
