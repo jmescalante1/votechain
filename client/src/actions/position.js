@@ -28,6 +28,7 @@ export function fetchCurrentPositionList(votechain, electionKey) {
 }
 
 export function addPositionVotechain(account, votechain, position) {
+  console.log(position)
   return async (dispatch) => {
     await votechain.methods.addPositionAt(position.electionKey, position.name, position.maxNoOfCandidatesThatCanBeSelected, position.hasAbstain).send({from: account})
     

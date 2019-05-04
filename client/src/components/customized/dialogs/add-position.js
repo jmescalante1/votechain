@@ -19,6 +19,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import CustomizedTextField from '../forms/textfield'
 import SubmitButton from '../buttons/submit'
 import CancelButton from '../buttons/cancel'
+import FormValidator from '../forms/form-validator'
 
 import { addPositionVotechain } from '../../../actions/position'
 
@@ -50,14 +51,23 @@ class AddPositionDialog extends Component {
     
     this.state = {
       hasAbstain: false,
-      positionName: '',
-      maxNoOfCandidatesThatCanBeSelected: 0,
+      maxNoCandidatesTextField: {
+        value: '',
+        errorMessage: null,
+      },
+      positionTextField: {
+        value: '',
+        errorMessage: null,
+      },
+      hasError: false,
     }
 
     this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
     this.onChangePositionName = this.onChangePositionName.bind(this)
     this.onChangeMaxNoOfCandidatesThatCanBeSelected = this.onChangeMaxNoOfCandidatesThatCanBeSelected.bind(this)
+    this.validateInput = this.validateInput.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.onEntered = this.onEntered.bind(this)
   }
 
   handleAbstainCheckboxChange(hasAbstain) {
@@ -65,36 +75,131 @@ class AddPositionDialog extends Component {
   }
 
   onChangePositionName(event) {
-    this.setState({ positionName: event.target.value })
+    const value = event.target.value
+
+    this.setState( prevState => ({ 
+      positionTextField: {
+        ...prevState.positionTextField,
+        value: value
+      }
+    }))
   }
 
   onChangeMaxNoOfCandidatesThatCanBeSelected(event) {
-    this.setState({ maxNoOfCandidatesThatCanBeSelected: event.target.value })
+    const value = event.target.value
+
+    this.setState( prevState => ({ 
+      maxNoCandidatesTextField: {
+        ...prevState.maxNoCandidatesTextField,
+        value: value
+      }
+    }))
   }
 
-  onSubmit() {
+  async validateInput() {
+    const { positionTextField, maxNoCandidatesTextField } = this.state
+
+    // initialize
+    await this.setState({ hasError: false })
+
+    // Position Textfield
+    if(FormValidator.isEmpty(positionTextField.value)){
+      await this.setState( (prevState) => ({
+        positionTextField: {
+          ...prevState.positionTextField,
+          errorMessage: 'The position must have a name',
+        },
+        hasError: true
+      }))
+    } else if (!FormValidator.validLength(positionTextField.value, 1, 32)) {
+      await this.setState( (prevState) => ({
+        positionTextField: {
+          ...prevState.positionTextField,
+          errorMessage: 'The position name must contain 1 to 32 characters only',
+        },
+        hasError: true
+      }))
+    } else {
+      await this.setState( prevState => ({
+        positionTextField: {
+          ...prevState.positionTextField,
+          errorMessage: null
+        },
+      }))
+    }
+
+    // max no of candidates text field
+    if(FormValidator.isEmpty(maxNoCandidatesTextField.value)){
+      await this.setState( (prevState) => ({
+        maxNoCandidatesTextField: {
+          ...prevState.maxNoCandidatesTextField,
+          errorMessage: 'Specify the maximum no of candidates that can be selected',
+        },
+        hasError: true
+      }))
+    } else if (!FormValidator.inRange(maxNoCandidatesTextField.value, 1)) {
+      await this.setState( (prevState) => ({
+        maxNoCandidatesTextField: {
+          ...prevState.maxNoCandidatesTextField,
+          errorMessage: 'The maximum no of candidates that can be elected must be at least 1',
+        },
+        hasError: true
+      }))
+    } else {
+      await this.setState( prevState => ({
+        maxNoCandidatesTextField: {
+          ...prevState.maxNoCandidatesTextField,
+          errorMessage: null
+        },
+      }))
+    }
+  }
+
+  async onEntered() {
+    this.setState( prevState => ({
+      positionTextField: {
+        ...prevState.positionTextField,
+        value: '',
+        errorMessage: null,
+      },
+      maxNoCandidatesTextField: {
+        ...prevState.maxNoCandidatesTextField,
+        value: '',
+        errorMessage: null,
+      }
+    }))
+  }
+
+  async onSubmit() {
     const { onClose, addPositionVotechain, votechain, account, electionId } = this.props
-    const { positionName, hasAbstain, maxNoOfCandidatesThatCanBeSelected } = this.state
+    const { positionTextField, hasAbstain, maxNoCandidatesTextField } = this.state
 
     let position = {
       electionKey: electionId,
-      name: positionName,
-      maxNoOfCandidatesThatCanBeSelected,
+      name: positionTextField.value,
+      maxNoOfCandidatesThatCanBeSelected: maxNoCandidatesTextField.value,
       hasAbstain,
     }
 
-    addPositionVotechain(account, votechain, position)
-    onClose()
+    await this.validateInput()
+
+    const { hasError } = this.state
+
+    if(!hasError){
+      addPositionVotechain(account, votechain, position)
+      onClose()
+    }
   }
 
   render() {
     const { classes, openDialog, onClose } = this.props
-    const { hasAbstain } = this.state
-
+    const { hasAbstain, positionTextField, maxNoCandidatesTextField } = this.state
+    
     return (
       <Dialog
         open={openDialog}
         onClose={onClose}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Add Position</Typography>
@@ -120,13 +225,14 @@ class AddPositionDialog extends Component {
             <Grid item className={classes.fullWidth}> 
               <CustomizedTextField 
                 id='add-position'
-                type='string'
+                type='text'
                 required
                 label='Position Name'
                 fullWidth
                 variant='outlined'
                 autoFocus
                 onChange={this.onChangePositionName}
+                errorMessage={positionTextField.errorMessage}
               /> 
             </Grid>
             
@@ -139,6 +245,7 @@ class AddPositionDialog extends Component {
                 fullWidth
                 variant='outlined'
                 onChange={this.onChangeMaxNoOfCandidatesThatCanBeSelected}
+                errorMessage={maxNoCandidatesTextField.errorMessage}
               /> 
             </Grid>
 
