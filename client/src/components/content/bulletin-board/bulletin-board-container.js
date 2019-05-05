@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import BulletinBoard from '../bulletin-board/bulletin-board'
-import BulletinBoardPDF from './bulletin-board-pdf'
-import Export from '../../export/export'
 
 class BulletinBoardContainer extends Component {
   constructor(){

@@ -120,7 +120,7 @@ class EditPartyDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, onClose, partyToBeEdited } = this.props
+    const { classes, openDialog, onClose } = this.props
     const { errors } = this.state
     
     return (

@@ -8,7 +8,6 @@ import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUs
 import Main from './components/main/main'
 import 'typeface-roboto'
 
-import Web3Error from './components/content/error/web3-error'
 import { getWeb3 } from './actions/web3'
 import { getVotechainContract } from './actions/contract'
 import { fetchElectionList, addElectionUI, editElectionUI, deleteElectionUI, startElectionUI, stopElectionUI } from './actions/election'

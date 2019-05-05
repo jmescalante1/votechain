@@ -77,7 +77,6 @@ class EditVoterDialog extends React.Component {
 
   async validateInputs(){
     const { fields } = this.state
-    const { web3, votechain, electionId } = this.props
     await this.refreshErrorState()
 
     let { errors } = this.state
