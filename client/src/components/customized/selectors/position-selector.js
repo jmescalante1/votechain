@@ -36,11 +36,11 @@ class PositionSelector extends React.Component {
           styles.border: error ? 
           'red' : styles.borderColor,
         
-        '&:hover': {
-          borderColor: state.isFocused ?
-            '#ddd' : error ?
-            '#ddd' : 'red'
-        }
+          '&:hover': {
+            borderColor: state.isFocused ?
+              '#ddd' : error ?
+              'red'  : '#ddd'
+          }
       }),
       menu: styles => ({
         ...styles,

@@ -50,20 +50,18 @@ class EditPositionDialog extends React.Component {
     super(props)
 
     this.state = {
-      maxNoCandidatesTextField: {
-        value: '',
-        error: null,
+      fields: {
+        hasAbstain: false,
       },
-      positionTextField: {
-        value: '',
-        error: null,
-      },
-      hasAbstain: props.positionToBeEdited.hasAbstain,
+      errors: {},
     }
 
-    this.onChangePositionName = this.onChangePositionName.bind(this)
-    this.onChangeMaxNoOfCandidatesThatCanBeSelected = this.onChangeMaxNoOfCandidatesThatCanBeSelected.bind(this)
-    this.handleAbstainCheckboxChange = this.handleAbstainCheckboxChange.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.initFieldState = this.initFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -89,122 +87,76 @@ class EditPositionDialog extends React.Component {
     }
   }
 
-  onChangePositionName(event) {
-    const value = event.target.value
-
-    this.setState( prevState => ({ 
-      positionTextField: {
-        ...prevState.positionTextField,
-        value: value,
-      }
-    }))
-  }
-
-  onChangeMaxNoOfCandidatesThatCanBeSelected(event) {
-    const value = event.target.value
-
-    this.setState( prevState => ({ 
-      maxNoCandidatesTextField: {
-        ...prevState.maxNoCandidatesTextField,
-        value: value,
-      }
-    }))
-  }
-
-  handleAbstainCheckboxChange(hasAbstain) {
-    this.setState({ hasAbstain })
-  }
-
-  async validateInput() {
-    const { positionTextField, maxNoCandidatesTextField } = this.state
-
-    // initialize
-    await this.setState({ hasError: false })
-
-    // Position Textfield
-    if(FormValidator.isEmpty(positionTextField.value)){
-      await this.setState( (prevState) => ({
-        positionTextField: {
-          ...prevState.positionTextField,
-          error: 'The position must have a name',
-        },
-        hasError: true
-      }))
-    } else if (!FormValidator.validLength(positionTextField.value, 1, 32)) {
-      await this.setState( (prevState) => ({
-        positionTextField: {
-          ...prevState.positionTextField,
-          error: 'The position name must contain 1 to 32 characters only',
-        },
-        hasError: true
-      }))
-    } else {
-      await this.setState( prevState => ({
-        positionTextField: {
-          ...prevState.positionTextField,
-          error: null
-        },
-      }))
-    }
-
-    // max no of candidates text field
-    if(FormValidator.isEmpty(maxNoCandidatesTextField.value)){
-      await this.setState( (prevState) => ({
-        maxNoCandidatesTextField: {
-          ...prevState.maxNoCandidatesTextField,
-          error: 'Specify the maximum no of candidates that can be selected',
-        },
-        hasError: true
-      }))
-    } else if (!FormValidator.inRange(maxNoCandidatesTextField.value, 1)) {
-      await this.setState( (prevState) => ({
-        maxNoCandidatesTextField: {
-          ...prevState.maxNoCandidatesTextField,
-          error: 'The maximum no of candidates that can be selected must be at least 1',
-        },
-        hasError: true
-      }))
-    } else {
-      await this.setState( prevState => ({
-        maxNoCandidatesTextField: {
-          ...prevState.maxNoCandidatesTextField,
-          error: null
-        },
-      }))
-    }
-  }
-
   async onEntered() {
-    this.setState( prevState => ({
-      positionTextField: {
-        ...prevState.positionTextField,
-        value: '',
-        error: null,
-      },
-      maxNoCandidatesTextField: {
-        ...prevState.maxNoCandidatesTextField,
-        value: '',
-        error: null,
+    await this.refreshErrorState()
+    await this.initFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async initFieldState() {
+    await this.setState({ 
+      fields: {
+        hasAbstain: false
       }
-    }))
+    })
+  }
+  
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let positionName = fields['positionName']
+
+    if(FormValidator.isEmpty(positionName)){
+      errors['positionName'] = 'The position name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(positionName, 1, 32)) {
+      errors['positionName'] = 'The position name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+
+    let maxNoOfCandidates = fields['maxNoOfCandidates']
+
+    if(FormValidator.isEmpty(maxNoOfCandidates)){
+      errors['maxNoOfCandidates'] = 'This should not be empty'
+      noOfErrors++
+    } else if(!FormValidator.inRange(maxNoOfCandidates, 1)){
+      errors['maxNoOfCandidates'] = 'The max no of candidates that can be selected must be at least 1'
+      noOfErrors++
+    }
+    
+    this.setState({ errors })
+
+    return noOfErrors
   }
 
   async onSubmit() {
     const { onClose, editPositionVotechain, votechain, account, positionToBeEdited } = this.props
-    const { positionTextField, hasAbstain, maxNoCandidatesTextField } = this.state
+    const { fields } = this.state
   
     let editedPosition = {
       positionKey: positionToBeEdited.id,
-      name: positionTextField.value,
-      maxNoOfCandidatesThatCanBeSelected: maxNoCandidatesTextField.value,
-      hasAbstain,
+      name: fields['positionName'],
+      maxNoOfCandidatesThatCanBeSelected: fields['maxNoOfCandidates'],
+      hasAbstain: fields['hasAbstain'],
     }
 
-    await this.validateInput()
+    let noOfErrors = await this.validateInputs()
 
-    const { hasError } = this.state
-
-    if(!hasError){
+    if(noOfErrors === 0){
       editPositionVotechain(account, votechain, editedPosition)
       onClose()
     }
@@ -212,12 +164,13 @@ class EditPositionDialog extends React.Component {
 
   render() {
     const { classes, openDialog, onClose, positionToBeEdited } = this.props
-    const { hasAbstain, positionTextField, maxNoCandidatesTextField } = this.state
+    const { fields, errors } = this.state
     
     return (
       <Dialog
         open={openDialog}
         onClose={onClose}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Position</Typography>
@@ -226,7 +179,6 @@ class EditPositionDialog extends React.Component {
         <DialogContent
           className={classes.content}
         >
-          
           <Grid 
             container
             direction='column'
@@ -250,8 +202,8 @@ class EditPositionDialog extends React.Component {
                 variant='outlined'
                 autoFocus
                 defaultValue={positionToBeEdited.name}
-                onChange={this.onChangePositionName}
-                error={positionTextField.error}
+                onChange={(event) => this.handleFieldChange('positionName', event.target.value)}
+                error={errors['positionName']}
 
               /> 
             </Grid>
@@ -265,8 +217,8 @@ class EditPositionDialog extends React.Component {
                 fullWidth
                 variant='outlined'
                 defaultValue={positionToBeEdited.maxNoOfCandidatesThatCanBeSelected}
-                onChange={this.onChangeMaxNoOfCandidatesThatCanBeSelected}
-                error={maxNoCandidatesTextField.error}
+                onChange={(event) => this.handleFieldChange('maxNoOfCandidates', event.target.value)}
+                error={errors['maxNoOfCandidates']}
               /> 
             </Grid>
 
@@ -302,14 +254,14 @@ class EditPositionDialog extends React.Component {
                       >  
                         <FormControlLabel
                           control={
-                            <Checkbox checked={hasAbstain} onChange={() => this.handleAbstainCheckboxChange(true)} value='Yes' />
+                            <Checkbox checked={fields['hasAbstain']} onChange={() => this.handleFieldChange('hasAbstain', true)} value='Yes' />
                           }
                           label="Yes"
                         />
 
                         <FormControlLabel
                           control={
-                            <Checkbox checked={!hasAbstain} onChange={() => this.handleAbstainCheckboxChange(false)} value='No' />
+                            <Checkbox checked={!fields['hasAbstain']} onChange={() => this.handleFieldChange('hasAbstain', false)} value='No' />
                           }
                           label="No"
                         />

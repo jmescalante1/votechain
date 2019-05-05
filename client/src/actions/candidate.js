@@ -65,7 +65,7 @@ export function addCandidateUI(votechain, positionKey, candidateKey) {
 
 export function editCandidateVotechain(account, votechain, candidate){
   return async (dispatch) => {
-    await votechain.methods.updateCandidate(candidate.candidateKey, candidate.name).send({from: account})
+    await votechain.methods.updateCandidate(candidate.candidateKey, candidate.name, candidate.partyKey).send({from: account})
     
     dispatch( {
       type: EDIT_CANDIDATE_VOTECHAIN

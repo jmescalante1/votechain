@@ -11,9 +11,11 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
+import PartySelector from '../selectors/party-selector'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { editCandidateVotechain } from '../../../actions/candidate'
 
@@ -33,47 +35,109 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+  },
+  selector: {
+    width: '100%',
+    marginTop: 20,
   }
 })
 
 class EditCandidateDialog extends React.Component {
   constructor(props) {
     super(props)
-
+    
     this.state = {
-      candidateName: ''
+      fields: {},
+      errors: {},
+    }
+    
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this) 
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
+  }
+
+  handleFieldChange(field, value) {
+    let{ fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs() {
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let partyId = fields['partyId']
+
+    if(FormValidator.isEmpty(partyId)){
+      errors['partyId'] = 'A party must be selected'
+      noOfErrors++
     }
 
-    this.editCandidate = this.editCandidate.bind(this)
-    this.onChangeCandidateName = this.onChangeCandidateName.bind(this)
+    let candidateName = fields['candidateName']
+
+    console.log(candidateName)
+    
+    if(FormValidator.isEmpty(candidateName)) {
+      errors['candidateName'] = 'The candidate name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(candidateName, 1, 32)) {
+      errors['candidateName'] = 'The candidate name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+
+    this.setState({ errors })
+
+    return noOfErrors
   }
-  
-  editCandidate() {
+
+  async onSubmit() {
     const { editCandidateVotechain, account, votechain, handleClickCloseDialog, candidateToBeEdited } = this.props
-    const { candidateName } = this.state
+    const { fields } = this.state
 
     let candidate = {
       candidateKey: candidateToBeEdited.id,
-      name: candidateName
+      name: fields['candidateName'],
+      partyKey: fields['partyId']
     }
 
-    // console.log(candidate)
-
-    editCandidateVotechain(account, votechain, candidate)
-    handleClickCloseDialog()
-  }
-
-  onChangeCandidateName(event) {
-    this.setState({ candidateName: event.target.value })
+    let noOfErrors = await this.validateInputs()
+    
+    if(noOfErrors === 0) {
+      editCandidateVotechain(account, votechain, candidate)
+      handleClickCloseDialog()
+    }
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, currentPartyList } = this.props
+    const { errors, fields } = this.state
   
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Candidate</Typography>
@@ -86,17 +150,34 @@ class EditCandidateDialog extends React.Component {
             Modify the fields below and click submit to apply changes.
           </DialogContentText>
 
+          <PartySelector 
+            classes={{
+              root: classes.selector
+            }}
+            width='85%'
+            handlePartySelectChange={(option) => {
+              if(option)
+                this.handleFieldChange('partyId', option.value)
+              else 
+                this.handleFieldChange('partyId', null)
+            }}
+            partyList={currentPartyList}
+            selectedPartyId={fields['partyId']}
+            error={errors['partyId']}
+          />
+
           <CustomizedTextField
             classes={{
               root: classes.textField
             }}
             required
-            fullWidth={true}
-            type='string'
-            id='candidate-name'
+            fullWidth
+            type='text'
+            id='candidateName'
             label='Candidate Name'
             variant='outlined'
-            onChange={this.onChangeCandidateName}
+            onChange={(event) => this.handleFieldChange('candidateName', event.target.value)}
+            error={errors['candidateName']}
           />
         </DialogContent>
 
@@ -109,7 +190,7 @@ class EditCandidateDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.editCandidate} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
@@ -125,7 +206,8 @@ EditCandidateDialog.propTypes = {
 
 const mapStateToProps = state => ({
   account: state.account.account,
-  votechain: state.contract.votechain
+  votechain: state.contract.votechain,
+  currentPartyList: state.candidate.currentPartyList,
 });
 
 const mapDispatchToProps = {

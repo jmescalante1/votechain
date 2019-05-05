@@ -44,7 +44,7 @@ class PartySelector extends React.Component {
         '&:hover': {
           borderColor: state.isFocused ?
             '#ddd' : error ?
-            '#ddd' : 'red'
+            'red'  : 'black'
         }
       }),
       menu: styles => ({

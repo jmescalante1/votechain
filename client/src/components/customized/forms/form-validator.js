@@ -16,21 +16,18 @@ class FormValidator {
   }
 
   static validLength(input, min, max) {
-    return this.inRange(input.length, min, max)
+    return FormValidator.inRange(input.length, min, max)
   }
 
   static inRange(value, min, max){
+    if(value < min && !max){
+      return false
+    }
+
     if(value < min || value > max){
       return false
     }
 
-    return true
-  }
-
-  static inRange(value, min) {
-    if(value < min){
-      return false
-    }
     return true
   }
 }
