@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { editVoterVotechain } from '../../../actions/voter'
 
@@ -41,44 +42,99 @@ class EditVoterDialog extends React.Component {
     super(props)
 
     this.state = {
-      voterName: '',
-      studentNo: ''
+      fields: {},
+      errors: {},
     }
 
-    this.editVoter = this.editVoter.bind(this)
-    this.onChangeVoterName = this.onChangeVoterName.bind(this)
-    this.onChangeStudentNo = this.onChangeStudentNo.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
   }
   
-  editVoter() {
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    const { web3, votechain, electionId } = this.props
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let voterName = fields['voterName']
+
+    if(FormValidator.isEmpty(voterName)){
+      errors['voterName'] = 'The voter name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(voterName, 1, 32)) {
+      errors['voterName'] = 'The voter name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+ 
+    let studentNo = fields['studentNo']
+
+    if(FormValidator.isEmpty(studentNo)){
+      errors['studentNo'] = 'The student no must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(studentNo, 1, 32)) {
+      errors['studentNo'] = 'The student no must contain 1 - 32 characters only'
+      noOfErrors++
+    }   
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+  
+  async onSubmit() {
     const { editVoterVotechain, account, votechain, handleClickCloseDialog, voterToBeEdited } = this.props
-    const { voterName, studentNo } = this.state
+    const { fields } = this.state
 
     let voter = {
       voterKey: voterToBeEdited.id,
-      name: voterName,
-      studentNo
+      name: fields['voterName'],
+      studentNo: fields['studentNo'],
     }
 
-    editVoterVotechain(account, votechain, voter)
-    handleClickCloseDialog()
-  }
+    let noOfErrors = await this.validateInputs()
 
-  onChangeVoterName(event) {
-    this.setState({ voterName: event.target.value })
-  }
-
-  onChangeStudentNo(event){
-    this.setState({ studentNo: event.target.value })
+    if(noOfErrors === 0){
+      editVoterVotechain(account, votechain, voter)
+      handleClickCloseDialog()  
+    }
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-  
+    const { errors } = this.state
+
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Voter</Typography>
@@ -101,7 +157,8 @@ class EditVoterDialog extends React.Component {
             id='voter-name'
             label='Voter Name'
             variant='outlined'
-            onChange={this.onChangeVoterName}
+            onChange={(event) => this.handleFieldChange('voterName', event.target.value)}
+            error={errors['voterName']}
           />
 
           <CustomizedTextField
@@ -114,7 +171,8 @@ class EditVoterDialog extends React.Component {
             id='student-no'
             label="Voter's Student Number"
             variant='outlined'
-            onChange={this.onChangeStudentNo}
+            onChange={(event) => this.handleFieldChange('studentNo', event.target.value)}
+            error={errors['studentNo']}
           />
         </DialogContent>
 
@@ -127,7 +185,7 @@ class EditVoterDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.editVoter} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
