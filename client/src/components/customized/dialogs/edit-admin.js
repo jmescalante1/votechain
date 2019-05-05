@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { editAdminVotechain } from '../../../actions/admin'
 
@@ -41,37 +42,89 @@ class EditAdminDialog extends React.Component {
     super(props)
 
     this.state = {
-      adminName: '',
+      fields: {},
+      errors: {},
     }
 
-    this.editAdmin = this.editAdmin.bind(this)
-    this.onChangeAdminName = this.onChangeAdminName.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
   }
   
-  editAdmin() {
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let adminName = fields['adminName']
+
+    if(FormValidator.isEmpty(adminName)){
+      errors['adminName'] = 'The admin name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(adminName, 1, 32)) {
+      errors['adminName'] = 'The admin name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+    
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+  
+  async onSubmit() {
     const { editAdminVotechain, account, votechain, handleClickCloseDialog, adminToBeEdited } = this.props
-    const { adminName } = this.state
+    const { fields } = this.state
 
     let admin = {
       adminKey: adminToBeEdited.id,
-      name: adminName,
+      name: fields['adminName'],
     }
 
-    editAdminVotechain(account, votechain, admin)
-    handleClickCloseDialog()
-  }
+    let noOfErrors = await this.validateInputs()
 
-  onChangeAdminName(event) {
-    this.setState({ adminName: event.target.value })
+    if(noOfErrors === 0){
+      editAdminVotechain(account, votechain, admin)
+      handleClickCloseDialog()
+    }
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-  
+    const { errors } = this.state
+    console.log(errors)
+
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Admin</Typography>
@@ -90,11 +143,12 @@ class EditAdminDialog extends React.Component {
             }}
             required
             fullWidth={true}
-            type='string'
-            id='admin-name'
+            type='text'
+            id='adminName'
             label='Admin Name'
             variant='outlined'
-            onChange={this.onChangeAdminName}
+            onChange={(event) => this.handleFieldChange('adminName', event.target.value)}
+            error={errors['adminName']}
           />
         </DialogContent>
 
@@ -107,7 +161,7 @@ class EditAdminDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.editAdmin} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>
