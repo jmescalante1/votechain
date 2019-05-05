@@ -94,14 +94,11 @@ class StartElectionDialog extends React.Component {
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
     const { validElection, hasValidated } = this.state
-    console.log(hasValidated)
 
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
-        fullWidth
-        maxWidth='sm'
         onEntered={this.onEntered}
       >
         {!hasValidated ? '' :

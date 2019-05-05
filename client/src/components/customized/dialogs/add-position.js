@@ -53,11 +53,11 @@ class AddPositionDialog extends Component {
       hasAbstain: false,
       maxNoCandidatesTextField: {
         value: '',
-        errorMessage: null,
+        error: null,
       },
       positionTextField: {
         value: '',
-        errorMessage: null,
+        error: null,
       },
       hasError: false,
     }
@@ -107,7 +107,7 @@ class AddPositionDialog extends Component {
       await this.setState( (prevState) => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: 'The position must have a name',
+          error: 'The position must have a name',
         },
         hasError: true
       }))
@@ -115,7 +115,7 @@ class AddPositionDialog extends Component {
       await this.setState( (prevState) => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: 'The position name must contain 1 to 32 characters only',
+          error: 'The position name must contain 1 to 32 characters only',
         },
         hasError: true
       }))
@@ -123,7 +123,7 @@ class AddPositionDialog extends Component {
       await this.setState( prevState => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: null
+          error: null
         },
       }))
     }
@@ -133,7 +133,7 @@ class AddPositionDialog extends Component {
       await this.setState( (prevState) => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: 'Specify the maximum no of candidates that can be selected',
+          error: 'Specify the maximum no of candidates that can be selected',
         },
         hasError: true
       }))
@@ -141,7 +141,7 @@ class AddPositionDialog extends Component {
       await this.setState( (prevState) => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: 'The maximum no of candidates that can be elected must be at least 1',
+          error: 'The maximum no of candidates that can be elected must be at least 1',
         },
         hasError: true
       }))
@@ -149,7 +149,7 @@ class AddPositionDialog extends Component {
       await this.setState( prevState => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: null
+          error: null
         },
       }))
     }
@@ -160,12 +160,12 @@ class AddPositionDialog extends Component {
       positionTextField: {
         ...prevState.positionTextField,
         value: '',
-        errorMessage: null,
+        error: null,
       },
       maxNoCandidatesTextField: {
         ...prevState.maxNoCandidatesTextField,
         value: '',
-        errorMessage: null,
+        error: null,
       }
     }))
   }
@@ -232,7 +232,7 @@ class AddPositionDialog extends Component {
                 variant='outlined'
                 autoFocus
                 onChange={this.onChangePositionName}
-                errorMessage={positionTextField.errorMessage}
+                error={positionTextField.error}
               /> 
             </Grid>
             
@@ -245,7 +245,7 @@ class AddPositionDialog extends Component {
                 fullWidth
                 variant='outlined'
                 onChange={this.onChangeMaxNoOfCandidatesThatCanBeSelected}
-                errorMessage={maxNoCandidatesTextField.errorMessage}
+                error={maxNoCandidatesTextField.error}
               /> 
             </Grid>
 

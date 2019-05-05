@@ -42,82 +42,83 @@ class EditElectionDialog extends React.Component {
     super(props)
 
     this.state = {
-      electionTextField: {
-        value: '',
-        errorMessage: null,
-      }
+      fields: {},
+      errors: {},
     }
 
-    this.editElection = this.editElection.bind(this)
-    this.onChange = this.onChange.bind(this)
-    this.validateInput = this.validateInput.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
   }
   
-  editElection() {
-    const { editElectionVotechain, account, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
-    const { electionTextField } = this.state
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let electionName = fields['electionName']
+
+    if(FormValidator.isEmpty(electionName)){
+      errors['electionName'] = 'The election name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(electionName, 1, 32)) {
+      errors['electionName'] = 'The election name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
     
-    if(this.validateInput()){
-      editElectionVotechain(account, votechain, {id: idOfElectionToBeEdited, name: electionTextField.value})
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+
+  async onSubmit() {
+    const { editElectionVotechain, account, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
+    const { fields } = this.state
+    
+    let noOfErrors = await this.validateInputs()
+    
+    if(noOfErrors === 0){
+      editElectionVotechain(account, votechain, {id: idOfElectionToBeEdited, name: fields['electionName']})
       handleClickCloseDialog()
     }
   }
 
-  onChange(event) {
-    let value = event.target.value
-    
-    this.setState( prevState => ({ 
-      electionTextField: {
-        ...prevState.electionTextField,
-        value: value
-      }
-    }))
-  }
-
-  validateInput(){
-    const { electionTextField } = this.state
-
-    if(FormValidator.isEmpty(electionTextField.value)){
-      this.setState( (prevState) => ({
-        electionTextField: {
-          ...prevState.electionTextField,
-          errorMessage: 'The election must have a name',
-          hasError: true
-        }
-      }))
-
-      return false
-    } else if (!FormValidator.validLength(electionTextField.value, 1, 32)) {
-      this.setState( (prevState) => ({
-        electionTextField: {
-          ...prevState.electionTextField,
-          errorMessage: 'The election name must contain 1 to 32 characters only',
-          hasError: true
-        }
-      }))
-
-      return false  
-    }
-    
-    this.setState( prevState => ({
-      hasError: false,
-      electionTextField: {
-        ...prevState.electionTextField,
-        errorMessage: null
-      }
-    }))
-
-    return true
-  }
-
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-    const { electionTextField } = this.state
+    const { errors } = this.state
   
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Election</Typography>
@@ -137,11 +138,11 @@ class EditElectionDialog extends React.Component {
             required
             fullWidth={true}
             type='text'
-            id='election-name'
+            id='electionName'
             label='Election Name'
             variant='outlined'
-            onChange={this.onChange}
-            errorMessage={electionTextField.errorMessage}
+            onChange={(event) => this.handleFieldChange('electionName', event.target.value)}
+            error={errors['electionName']}
           />
         </DialogContent>
 
@@ -154,7 +155,7 @@ class EditElectionDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.editElection} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>

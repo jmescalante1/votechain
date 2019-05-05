@@ -16,7 +16,7 @@ const styles = theme => ({
 
 class PartySelector extends React.Component {
   render(){
-    const { classes, fontSize, partyList, handlePartySelectChange, width } = this.props
+    const { classes, fontSize, partyList, handlePartySelectChange, width, error } = this.props
     let calculatedWidth = width ? width : '60%'
 
     let options = partyList.map((party) => {
@@ -32,11 +32,20 @@ class PartySelector extends React.Component {
     })
 
     const selectStyles = {
-      control: styles => ({
+      control: (styles, state) => ({
         ...styles, 
         backgroundColor: '#fafafa',
         width: '100%',
         fontSize: fontSize,
+        borderColor: state.isFocused ? 
+          styles.border: error ? 
+          'red' : styles.borderColor,
+        
+        '&:hover': {
+          borderColor: state.isFocused ?
+            '#ddd' : error ?
+            '#ddd' : 'red'
+        }
       }),
       menu: styles => ({
         ...styles,
@@ -59,8 +68,8 @@ class PartySelector extends React.Component {
             selectStyles={selectStyles}
             options={options}
             onChange={handlePartySelectChange}
-            placeholder={<Typography style={{fontSize: fontSize}}>Select</Typography>}
-            label={<Typography style={{fontSize: fontSize}}>Party</Typography>}
+            placeholder={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>{error ? error : 'Select'}</Typography>}
+            label={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>Party</Typography>}
             isClearable={false}
           />
         </Grid>

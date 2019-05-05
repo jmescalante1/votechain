@@ -1,15 +1,11 @@
 class FormValidator {
   static isEmpty(input) {
-    if((typeof input) === 'number'){
-      if(input === undefined || input === null) {   
-          return true
-      }
 
-      return false
-    }
+    if(input === undefined || input === null)
+      return true
 
     if((typeof input) === 'string'){
-      if(input.trim().length === 0 || input === undefined || input === null){
+      if(input.trim().length === 0){
         return true
       }
 

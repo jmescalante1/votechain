@@ -82,13 +82,13 @@ class CustomizedTextField extends React.Component {
   
 
   render() {
-    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus, onChange, errorMessage } = this.props
+    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus, onChange, error } = this.props
 
     // const { errorHelperText, hasError } = this.state
 
     return(
       <TextField
-        error={Boolean(errorMessage)}
+        error={Boolean(error)}
         className={classes.root}
         type={type}
         autoFocus={autoFocus}
@@ -116,7 +116,7 @@ class CustomizedTextField extends React.Component {
           }
         }}
         
-        helperText={errorMessage}
+        helperText={error}
         onChange={this.onChange}
       />
     )
@@ -137,7 +137,7 @@ CustomizedTextField.propTypes = {
   onChange: PropTypes.func,
   helperText: PropTypes.string,
   formValidator: PropTypes.object ,
-  errorMessage: PropTypes.string,
+  error: PropTypes.string,
 }
 
 export default withStyles(styles)(CustomizedTextField)

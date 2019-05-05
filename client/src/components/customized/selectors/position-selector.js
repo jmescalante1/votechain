@@ -16,7 +16,7 @@ const styles = theme => ({
 
 class PositionSelector extends React.Component {
   render(){
-    const { classes, fontSize, positionList, handlePositionSelectChange, width } = this.props
+    const { classes, fontSize, positionList, handlePositionSelectChange, width, error } = this.props
     let calculatedWidth = width ? width : '60%'
 
     const options = positionList.map((position) => {
@@ -27,11 +27,20 @@ class PositionSelector extends React.Component {
     })
 
     const selectStyles = {
-      control: styles => ({
+      control: (styles, state) => ({
         ...styles, 
         backgroundColor: '#fafafa',
         width: '100%',
         fontSize: fontSize,
+        borderColor: state.isFocused ? 
+          styles.border: error ? 
+          'red' : styles.borderColor,
+        
+        '&:hover': {
+          borderColor: state.isFocused ?
+            '#ddd' : error ?
+            '#ddd' : 'red'
+        }
       }),
       menu: styles => ({
         ...styles,
@@ -54,8 +63,8 @@ class PositionSelector extends React.Component {
             selectStyles={selectStyles}
             options={options}
             onChange={handlePositionSelectChange}
-            placeholder={<Typography style={{fontSize: fontSize}}>Select</Typography>}
-            label={<Typography style={{fontSize: fontSize}}>Position</Typography>}
+            placeholder={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>{error ? error : 'Select'}</Typography>}
+            label={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>Position</Typography>}
             isClearable={false}
           />
         </Grid>

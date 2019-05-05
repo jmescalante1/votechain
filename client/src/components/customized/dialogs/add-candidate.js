@@ -16,6 +16,7 @@ import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
 import PositionSelector from '../selectors/position-selector'
 import PartySelector from '../selectors/party-selector'
+import FormValidator from '../forms/form-validator'
 
 import { addCandidateVotechain } from '../../../actions/candidate'
 
@@ -47,59 +48,102 @@ class AddCandidateDialog extends React.Component {
     super(props)
     
     this.state = {
-      selectedPositionId: '',
-      candidateName: '',
-      selectedPartyId: 0,
+      fields: {},
+      errors: {},
+    }
+    
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this) 
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
+  }
+
+  handleFieldChange(field, value) {
+    let{ fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs() {
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let positionId = fields['positionId']
+
+    if(FormValidator.isEmpty(positionId)){
+      errors['positionId'] = 'A position must be selected'
+      noOfErrors++
+    } 
+
+    let partyId = fields['partyId']
+
+    if(FormValidator.isEmpty(partyId)){
+      errors['partyId'] = 'A party must be selected'
+      noOfErrors++
     }
 
-    this.handlePositionSelectChange = this.handlePositionSelectChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-    this.onChangeCandidateName = this.onChangeCandidateName.bind(this)
-    this.handlePartySelectChange = this.handlePartySelectChange.bind(this)
-  }
-
-  handlePositionSelectChange(option) {
-    if(option){
-      this.setState({ selectedPositionId: option.value })
-    } else {
-      this.setState({ selectedPositionId: ''})
+    let candidateName = fields['candidateName']
+    
+    if(FormValidator.isEmpty(candidateName)) {
+      errors['candidateName'] = 'The candidate name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(candidateName, 1, 32)) {
+      errors['candidateName'] = 'The candidate name must contain 1 - 32 characters only'
+      noOfErrors++
     }
+
+    this.setState({ errors })
+
+    return noOfErrors
   }
 
-  handlePartySelectChange(option) {
-    if(option){
-      this.setState({ selectedPartyId: option.value })
-    } else {
-      this.setState({ selectedPartyId: 0})
-    }
-  }
-
-  onChangeCandidateName(event) {
-    this.setState({ candidateName: event.target.value })
-  }
-
-  onSubmit() {
+  async onSubmit() {
     const { handleClickCloseDialog, addCandidateVotechain, votechain, account } = this.props
-    const { candidateName, selectedPositionId, selectedPartyId } = this.state
+    const { fields } = this.state
 
     let candidate = {
-      positionKey: selectedPositionId,
-      name: candidateName,
-      partyKey: selectedPartyId,
+      positionKey: fields['positionId'],
+      name: fields['candidateName'],
+      partyKey: fields['partyId'],
     }
 
-    addCandidateVotechain(account, votechain, candidate)
-    handleClickCloseDialog()
+    let noOfErrors = await this.validateInputs()
+    
+    if(noOfErrors === 0) {
+      addCandidateVotechain(account, votechain, candidate)
+      handleClickCloseDialog()
+    }
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog, currentPositionList, currentPartyList } = this.props
-    const { selectedPositionId, selectedPartyId } = this.state
+    const { fields, errors } = this.state
 
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Add New Candidate</Typography>
@@ -117,9 +161,15 @@ class AddCandidateDialog extends React.Component {
               root: classes.selector
             }}
             width='85%'
-            handlePositionSelectChange={this.handlePositionSelectChange}
+            handlePositionSelectChange={(option) => {
+              if(option)
+                this.handleFieldChange('positionId', option.value)
+              else 
+                this.handleFieldChange('positionId', null)
+            }}
             positionList={currentPositionList}
-            selectedPositionId={selectedPositionId}
+            selectedPositionId={fields['positionId']}
+            error={errors['positionId']}
           />
 
           <PartySelector 
@@ -127,9 +177,15 @@ class AddCandidateDialog extends React.Component {
               root: classes.selector
             }}
             width='85%'
-            handlePartySelectChange={this.handlePartySelectChange}
+            handlePartySelectChange={(option) => {
+              if(option)
+                this.handleFieldChange('partyId', option.value)
+              else 
+                this.handleFieldChange('partyId', null)
+            }}
             partyList={currentPartyList}
-            selectedPartyId={selectedPartyId}
+            selectedPartyId={fields['partyId']}
+            error={errors['partyId']}
           />
 
           <CustomizedTextField
@@ -138,11 +194,12 @@ class AddCandidateDialog extends React.Component {
             }}
             required
             fullWidth
-            type='string'
-            id='candidate-name'
+            type='text'
+            id='candidateName'
             label='Candidate Name'
             variant='outlined'
-            onChange={this.onChangeCandidateName}
+            onChange={(event) => this.handleFieldChange('candidateName', event.target.value)}
+            error={errors['candidateName']}
           />
         </DialogContent>
 

@@ -52,11 +52,11 @@ class EditPositionDialog extends React.Component {
     this.state = {
       maxNoCandidatesTextField: {
         value: '',
-        errorMessage: null,
+        error: null,
       },
       positionTextField: {
         value: '',
-        errorMessage: null,
+        error: null,
       },
       hasAbstain: props.positionToBeEdited.hasAbstain,
     }
@@ -126,7 +126,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( (prevState) => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: 'The position must have a name',
+          error: 'The position must have a name',
         },
         hasError: true
       }))
@@ -134,7 +134,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( (prevState) => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: 'The position name must contain 1 to 32 characters only',
+          error: 'The position name must contain 1 to 32 characters only',
         },
         hasError: true
       }))
@@ -142,7 +142,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( prevState => ({
         positionTextField: {
           ...prevState.positionTextField,
-          errorMessage: null
+          error: null
         },
       }))
     }
@@ -152,7 +152,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( (prevState) => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: 'Specify the maximum no of candidates that can be selected',
+          error: 'Specify the maximum no of candidates that can be selected',
         },
         hasError: true
       }))
@@ -160,7 +160,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( (prevState) => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: 'The maximum no of candidates that can be selected must be at least 1',
+          error: 'The maximum no of candidates that can be selected must be at least 1',
         },
         hasError: true
       }))
@@ -168,7 +168,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( prevState => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: null
+          error: null
         },
       }))
     }
@@ -179,12 +179,12 @@ class EditPositionDialog extends React.Component {
       positionTextField: {
         ...prevState.positionTextField,
         value: '',
-        errorMessage: null,
+        error: null,
       },
       maxNoCandidatesTextField: {
         ...prevState.maxNoCandidatesTextField,
         value: '',
-        errorMessage: null,
+        error: null,
       }
     }))
   }
@@ -251,7 +251,7 @@ class EditPositionDialog extends React.Component {
                 autoFocus
                 defaultValue={positionToBeEdited.name}
                 onChange={this.onChangePositionName}
-                errorMessage={positionTextField.errorMessage}
+                error={positionTextField.error}
 
               /> 
             </Grid>
@@ -266,7 +266,7 @@ class EditPositionDialog extends React.Component {
                 variant='outlined'
                 defaultValue={positionToBeEdited.maxNoOfCandidatesThatCanBeSelected}
                 onChange={this.onChangeMaxNoOfCandidatesThatCanBeSelected}
-                errorMessage={maxNoCandidatesTextField.errorMessage}
+                error={maxNoCandidatesTextField.error}
               /> 
             </Grid>
 
