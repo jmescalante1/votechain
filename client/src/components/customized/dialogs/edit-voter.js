@@ -153,7 +153,7 @@ class EditVoterDialog extends React.Component {
             }}
             required
             fullWidth={true}
-            type='string'
+            type='text'
             id='voter-name'
             label='Voter Name'
             variant='outlined'
@@ -167,7 +167,7 @@ class EditVoterDialog extends React.Component {
             }}
             required
             fullWidth={true}
-            type='string'
+            type='text'
             id='student-no'
             label="Voter's Student Number"
             variant='outlined'
