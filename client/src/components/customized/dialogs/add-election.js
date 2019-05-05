@@ -103,7 +103,6 @@ class AddElectionDialog extends React.Component {
     const { fields } = this.state
 
     let noOfErrors = await this.validateInputs()
-    console.log(noOfErrors)
 
     if(noOfErrors === 0){
       addElectionVotechain(account, votechain, fields['electionName'])

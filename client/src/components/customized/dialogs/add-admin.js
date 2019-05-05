@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { addAdminVotechain } from '../../../actions/admin'
 
@@ -44,44 +45,106 @@ class AddAdminDialog extends React.Component {
     super(props)
 
     this.state = {
-      adminName: '',
-      adminKey: '',
+      fields: {},
+      errors: {},
     }
 
-    this.onChangeAdminName = this.onChangeAdminName.bind(this)
-    this.onChangeAdminKey = this.onChangeAdminKey.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+
   }
 
-  onChangeAdminName(event) {
-    this.setState({ adminName: event.target.value })
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
   }
 
-  onChangeAdminKey(event) {
-    this.setState({ adminKey: event.target.value })
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
   }
 
-  onSubmit() {
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
+  }
+  
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    const { web3, votechain } = this.props
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let adminKey = fields['adminKey']
+
+    if(!web3.utils.isAddress(adminKey)){
+      errors['adminKey'] = 'Invalid account address'
+      noOfErrors++
+    } else if ((await votechain.methods.isVoter(adminKey).call())) {
+      errors['adminKey'] = 'Already registered as a voter'
+      noOfErrors++;
+    } else if ((await votechain.methods.isOfficial(adminKey).call())) {
+      errors['adminKey'] = 'Already registered as an official'
+      noOfErrors++;
+    } else if ((await votechain.methods.isAdmin(adminKey).call())) {
+      errors['adminKey'] = 'Already registered as an admin'
+      noOfErrors++;
+    }
+
+    let adminName = fields['adminName']
+
+    if(FormValidator.isEmpty(adminName)){
+      errors['adminName'] = 'The admin name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(adminName, 1, 32)) {
+      errors['adminName'] = 'The admin name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+    
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+
+  async onSubmit() {
     const { handleClickCloseDialog, addAdminVotechain, votechain, account } = this.props
-    const { adminName, adminKey } = this.state
+    const { fields } = this.state
 
     let admin = {
-      adminKey,
-      name: adminName,
+      adminKey: fields['adminKey'],
+      name: fields['adminName'],
     }
 
-    addAdminVotechain(account, votechain, admin)
-    handleClickCloseDialog()
+    let noOfErrors = await this.validateInputs()
+
+    if(noOfErrors === 0){
+      addAdminVotechain(account, votechain, admin)
+      handleClickCloseDialog()
+    }
   }
   
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { errors } = this.state
 
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Add New Admin</Typography>
@@ -102,7 +165,8 @@ class AddAdminDialog extends React.Component {
             id='admin-key'
             label='Admin Key/Address'
             variant='outlined'
-            onChange={this.onChangeAdminKey}
+            onChange={(event) => this.handleFieldChange('adminKey', event.target.value)}
+            error={errors['adminKey']}
           />
 
           <CustomizedTextField
@@ -115,7 +179,8 @@ class AddAdminDialog extends React.Component {
             id='admin-name'
             label='Admin Name'
             variant='outlined'
-            onChange={this.onChangeAdminName}
+            onChange={(event) => this.handleFieldChange('adminName', event.target.value)}
+            error={errors['adminName']}
           />
         </DialogContent>
 
@@ -144,6 +209,7 @@ AddAdminDialog.propTypes = {
 const mapStateToProps = state => ({
   account: state.account.account,
   votechain: state.contract.votechain,
+  web3: state.web3.web3
 })
 
 const mapDispatchToProps = {
