@@ -95,8 +95,6 @@ class EditCandidateDialog extends React.Component {
     }
 
     let candidateName = fields['candidateName']
-
-    console.log(candidateName)
     
     if(FormValidator.isEmpty(candidateName)) {
       errors['candidateName'] = 'The candidate name must not be empty'
