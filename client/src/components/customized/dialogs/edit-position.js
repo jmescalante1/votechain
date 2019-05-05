@@ -160,7 +160,7 @@ class EditPositionDialog extends React.Component {
       await this.setState( (prevState) => ({
         maxNoCandidatesTextField: {
           ...prevState.maxNoCandidatesTextField,
-          errorMessage: 'The maximum no of candidates that can be elected must be at least 1',
+          errorMessage: 'The maximum no of candidates that can be selected must be at least 1',
         },
         hasError: true
       }))
