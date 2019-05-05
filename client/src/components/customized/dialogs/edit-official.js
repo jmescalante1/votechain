@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { editOfficialVotechain } from '../../../actions/official'
 
@@ -41,37 +42,88 @@ class EditOfficialDialog extends React.Component {
     super(props)
 
     this.state = {
-      officialName: '',
+      fields: {},
+      errors: {},
     }
 
-    this.editOfficial = this.editOfficial.bind(this)
-    this.onChangeOfficialName = this.onChangeOfficialName.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+
+  }
+
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
+  }
+
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
+  }
+
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
   }
   
-  editOfficial() {
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let officialName = fields['officialName']
+
+    if(FormValidator.isEmpty(officialName)){
+      errors['officialName'] = 'The official name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(officialName, 1, 32)) {
+      errors['officialName'] = 'The official name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+    
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+  
+  async onSubmit() {
     const { editOfficialVotechain, account, votechain, handleClickCloseDialog, officialToBeEdited } = this.props
-    const { officialName } = this.state
+    const { fields } = this.state
 
     let official = {
       officialKey: officialToBeEdited.id,
-      name: officialName,
+      name: fields['officialName'],
     }
 
-    editOfficialVotechain(account, votechain, official)
-    handleClickCloseDialog()
-  }
+    let noOfErrors = await this.validateInputs()
 
-  onChangeOfficialName(event) {
-    this.setState({ officialName: event.target.value })
+    if(noOfErrors === 0){
+      editOfficialVotechain(account, votechain, official)
+      handleClickCloseDialog()
+    }
   }
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-  
+    const { errors } = this.state
+
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Edit Official</Typography>
@@ -90,11 +142,12 @@ class EditOfficialDialog extends React.Component {
             }}
             required
             fullWidth={true}
-            type='string'
+            type='text'
             id='official-name'
             label='Official Name'
             variant='outlined'
-            onChange={this.onChangeOfficialName}
+            onChange={(event) => this.handleFieldChange('officialName', event.target.value)}
+            error={errors['officialName']}
           />
         </DialogContent>
 
@@ -107,7 +160,7 @@ class EditOfficialDialog extends React.Component {
           >
             <Grid item><CancelButton onClick={handleClickCloseDialog} /></Grid>
 
-            <Grid item><SubmitButton onClick={this.editOfficial} /></Grid>
+            <Grid item><SubmitButton onClick={this.onSubmit} /></Grid>
           </Grid>
         </DialogActions>
       </Dialog>

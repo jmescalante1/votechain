@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
+import FormValidator from '../forms/form-validator'
 
 import { addOfficialVotechain } from '../../../actions/official'
 
@@ -44,44 +45,107 @@ class AddOfficialDialog extends React.Component {
     super(props)
 
     this.state = {
-      officialName: '',
-      officialKey: '',
+      fields: {},
+      errors: {},
     }
 
-    this.onChangeOfficialName = this.onChangeOfficialName.bind(this)
-    this.onChangeOfficialKey = this.onChangeOfficialKey.bind(this)
+    this.onEntered = this.onEntered.bind(this)
+    this.refreshErrorState = this.refreshErrorState.bind(this)
+    this.refreshFieldState = this.refreshFieldState.bind(this)
+
+    this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+
   }
 
-  onChangeOfficialName(event) {
-    this.setState({ officialName: event.target.value })
+  async onEntered() {
+    await this.refreshErrorState()
+    await this.refreshFieldState()
   }
 
-  onChangeOfficialKey(event) {
-    this.setState({ officialKey: event.target.value })
+  async refreshErrorState() {
+    await this.setState({ errors: {} })
   }
 
-  onSubmit() {
+  async refreshFieldState() {
+    await this.setState({ fields: {} })
+  }
+  
+  handleFieldChange(field, value) {
+    let { fields } = this.state
+    fields[field] = value
+    this.setState( fields )
+  }
+
+  async validateInputs(){
+    const { fields } = this.state
+    const { votechain, web3 } = this.props
+    await this.refreshErrorState()
+
+    let { errors } = this.state
+
+    let noOfErrors = 0
+
+    let officialKey = fields['officialKey']
+
+    if(!web3.utils.isAddress(officialKey)){
+      errors['officialKey'] = 'Invalid account address'
+      noOfErrors++
+    } else if ((await votechain.methods.isVoter(officialKey).call())) {
+      errors['officialKey'] = 'Already registered as a voter'
+      noOfErrors++;
+    } else if ((await votechain.methods.isOfficial(officialKey).call())) {
+      errors['officialKey'] = 'Already registered as an official'
+      noOfErrors++;
+    } else if ((await votechain.methods.isAdmin(officialKey).call())) {
+      errors['officialKey'] = 'Already registered as an admin'
+      noOfErrors++;
+    }
+
+    let officialName = fields['officialName']
+
+    if(FormValidator.isEmpty(officialName)){
+      errors['officialName'] = 'The official name must not be empty'
+      noOfErrors++
+    } else if (!FormValidator.validLength(officialName, 1, 32)) {
+      errors['officialName'] = 'The official name must contain 1 - 32 characters only'
+      noOfErrors++
+    }
+    
+    this.setState({ errors })
+
+    return noOfErrors
+  }
+  
+
+  async onSubmit() {
     const { handleClickCloseDialog, addOfficialVotechain, votechain, account } = this.props
-    const { officialName, officialKey } = this.state
+    const { fields } = this.state
 
     let official = {
-      officialKey,
-      name: officialName,
+      officialKey: fields['officialKey'],
+      name: fields['officialName'],
     }
 
-    addOfficialVotechain(account, votechain, official)
-    handleClickCloseDialog()
+    let noOfErrors = await this.validateInputs()
+
+    if(noOfErrors === 0){
+      addOfficialVotechain(account, votechain, official)
+      handleClickCloseDialog()
+    }
   }
   
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { errors } = this.state
 
     return (
       <Dialog
         open={openDialog}
         onClose={handleClickCloseDialog}
+        onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
           <Typography className={classes.label}>Add New Official</Typography>
@@ -98,11 +162,12 @@ class AddOfficialDialog extends React.Component {
             }}
             required
             fullWidth
-            type='string'
+            type='text'
             id='official-key'
             label='Official Key/Address'
             variant='outlined'
-            onChange={this.onChangeOfficialKey}
+            onChange={(event) => this.handleFieldChange('officialKey', event.target.value)}
+            error={errors['officialKey']}
           />
 
           <CustomizedTextField
@@ -111,11 +176,12 @@ class AddOfficialDialog extends React.Component {
             }}
             required
             fullWidth
-            type='string'
+            type='text'
             id='official-name'
             label='Official Name'
             variant='outlined'
-            onChange={this.onChangeOfficialName}
+            onChange={(event) => this.handleFieldChange('officialName', event.target.value)}
+            error={errors['officialName']}
           />
         </DialogContent>
 
@@ -144,6 +210,7 @@ AddOfficialDialog.propTypes = {
 const mapStateToProps = state => ({
   account: state.account.account,
   votechain: state.contract.votechain,
+  web3: state.web3.web3
 })
 
 const mapDispatchToProps = {

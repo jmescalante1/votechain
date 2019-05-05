@@ -118,7 +118,6 @@ class EditAdminDialog extends React.Component {
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
     const { errors } = this.state
-    console.log(errors)
 
     return (
       <Dialog
