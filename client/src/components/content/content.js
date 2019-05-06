@@ -5,6 +5,8 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { headerTabs } from '../layout/header/header-tabs'
 import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
 import { sidebarSecondaryOptions } from '../layout/sidebar/sidebar-options'
+import ProtectedRoute from '../../routes/protected'
+import Roles from '../../roles/roles'
 
 import electionView from '../content/elections/election-view/election-view-route'
 import ballotRoute from '../content/ballot/ballot-route'
@@ -37,14 +39,18 @@ class Content extends React.Component {
           {headerTabs.map((props) => (
             <Route exact key={props.label} path={props.path} render={() => props.component} />
           ))}
+          
           {sidebarMainOptions.map((props) => (
-            <Route exact key={props.label} path={props.path} render={() => props.component} />
+            <ProtectedRoute exact key={props.label} roles={props.roles} path={props.path} component={props.component} />
           ))}
           {sidebarSecondaryOptions.map((props) => (
-            <Route exact key={props.label} path={props.path} render={() => props.component} />
+            <ProtectedRoute exact key={props.label} roles={props.roles} path={props.path} component={props.component} />
           ))}
+          
           <Route exact key={electionView.label} path={electionView.path} render={(props) => <ElectionViewContainer location={this.props.location} {...props}/>} />
+          
           <Route exact key={ballotRoute.label} path={ballotRoute.path} render={(props) => <BallotContainer location={this.props.location} {...props}/>} />
+          
           <Redirect to='/home' />
         </Switch>
       </main>

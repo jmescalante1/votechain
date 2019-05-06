@@ -5,6 +5,7 @@ import { getAccountDetails } from '../../../actions/account'
 
 import ProfileCard from './profile-card'
 import EditProfileDialog from '../../customized/dialogs/edit-profile'
+import Roles from '../../../roles/roles'
 
 class Profile extends React.Component {
   constructor(props) {
@@ -34,10 +35,12 @@ class Profile extends React.Component {
           profile={profile} 
           handleOpenEditProfileDialog={this.handleOpenEditProfileDialog}
         />
-       <EditProfileDialog 
-          openDialog={openEditProfileDialog}
-          handleClickCloseDialog={this.handleCloseEditProfileDialog}
-        />
+        {profile.role !== Roles.publicUser ? 
+          <EditProfileDialog 
+            openDialog={openEditProfileDialog}
+            handleClickCloseDialog={this.handleCloseEditProfileDialog}
+          /> : null
+        }
       </div>
     )
   }

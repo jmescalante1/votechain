@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from "react-redux"
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
@@ -6,6 +6,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
 
 import Main from './components/main/main'
+import Loader from './components/customized/progress-bars/loader'
+import Web3Error from './components/content/error/web3-error'
+import AccountError from './components/content/error/account-error'
+
 import 'typeface-roboto'
 
 import { getWeb3 } from './actions/web3'
@@ -43,7 +47,25 @@ const theme = createMuiTheme({
 })
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      loading: true,
+      noAccounts: false,
+    }
+
+    this.setLoading = this.setLoading.bind(this)
+  }
+
+  setLoading(loading) {
+    this.setState({ loading })
+  }
+  
+
   async componentDidMount() {
+    this.setLoading(true)
+
     const { getWeb3 } = this.props
     await getWeb3() // save the web3 to redux store
     
@@ -65,7 +87,7 @@ class App extends React.Component {
         , startElectionUI, stopElectionUI
         , addOfficialUI, editOfficialUI, deleteOfficialUI
         , addAdminUI, editAdminUI, deleteAdminUI
-        , setAccount, getAccountDetails } = this.props
+        } = this.props
 
       // Setup solidity event listeners
       votechain.events.allEvents({fromBlock: 'latest'}, async(error, result) => {
@@ -196,31 +218,61 @@ class App extends React.Component {
         }
       })
 
-      window.ethereum.on('accountsChanged', (accounts) => {
-        setAccount(web3, accounts[0])
-        getAccountDetails(votechain, accounts[0])
-      })
-      
-      // set account
+      // set up account
       const accounts = await web3.eth.getAccounts()
-      setAccount(web3, accounts[0])
-      getAccountDetails(votechain, accounts[0])
 
-      // fetch global data
-      const { fetchElectionList, fetchAdminList, fetchOfficialList } = this.props
+      if(accounts && accounts[0]){
+        const { setAccount, getAccountDetails } = this.props
+        this.setState({ noAccounts: false })
       
-      fetchElectionList(votechain)
-      fetchAdminList(votechain)
-      fetchOfficialList(votechain)
+        await setAccount(web3, accounts[0])
+        await getAccountDetails(votechain, accounts[0])
+
+        // fetch global data
+        const { fetchElectionList, fetchAdminList, fetchOfficialList } = this.props
+        
+        await fetchElectionList(votechain)
+        await fetchAdminList(votechain)
+        await fetchOfficialList(votechain)
+      }
+
+      else {
+        this.setState({ noAccounts: true })
+      }
+
+      window.ethereum.on('accountsChanged', async (accounts) => {
+        console.log(accounts)
+        if(accounts && accounts[0]){
+          this.setState({ noAccounts: false })
+        }
+        else {
+          this.setState({ noAccounts: true })
+        } 
+      })
     }
-    
+
+    this.setLoading(false)
   }
 
   render() {
+    const { loading, noAccounts } = this.state
+    const { web3Error } = this.props
+
+    console.log(noAccounts)
+
     return (
-      <MuiThemeProvider theme={theme}>
-        <Main/>
-      </MuiThemeProvider>
+      <Fragment>
+        {loading
+          ? <Loader /> 
+          : web3Error 
+          ? <Web3Error error={web3Error}/> 
+          : noAccounts
+          ? <AccountError error='No accounts are logged in' />
+          : <MuiThemeProvider theme={theme}>
+              <Main/>
+            </MuiThemeProvider>
+        }
+      </Fragment>
     )
   }
 }
@@ -276,27 +328,4 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
-// import React from 'react'
-// import { PDFDownloadLink , Document, Page, View, Text } from '@react-pdf/renderer'
 
-// const MyDoc = () => (
-//   <Document>
-//     <Page
-//       wrap={true}
-//     >
-//       <View>
-//         <Text>sdfdsf</Text>
-//       </View>
-//     </Page>
-//   </Document>
-// )
-
-// const App = () => (
-//   <div>
-//     <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
-//       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-//     </PDFDownloadLink>
-//   </div>
-// )
-
-// export default App

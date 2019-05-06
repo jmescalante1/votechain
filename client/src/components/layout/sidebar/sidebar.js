@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import Drawer from '@material-ui/core/Drawer'
 import { withStyles } from '@material-ui/core/styles'
@@ -11,6 +12,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+
+import Icon from '../../customized/icons/icon'
 
 const drawerWidth = 240;
 
@@ -86,20 +90,23 @@ const styles = theme => ({
   },
   listItem: {
     '&:focus': {
-      backgroundColor: '#006064'
+      backgroundColor: theme.palette.highlight.main
     }
   },
   listItemSelected: {
-    backgroundColor: '#006064'
+    backgroundColor: theme.palette.highlight.main
   },
   noTextDecoration: {
     textDecoration: 'none'
+  },
+  sidebarHeader: {
+    marginTop: theme.spacing.unit * 3
   }
 })
 
 class SideBar extends React.Component {
   render() {
-    const { classes, openDrawer, selectedMenu } = this.props
+    const { classes, openDrawer, selectedMenu, userRole } = this.props
 
     return(
       <Drawer
@@ -116,28 +123,44 @@ class SideBar extends React.Component {
         }}
         open={openDrawer}
       >
+        {openDrawer && 
+          <Grid
+            className={classes.sidebarHeader}
+            container
+            direction='column'
+            alignItems='center'
+            justify='center'
+          >
+            <Grid item><Icon name='votechain' size={50} color='#FFFFFF'/> </Grid>
+            <Grid item><Typography style={{fontSize: 20, fontWeight: 'bold', color: '#fafafa'}}>VoteChain</Typography></Grid>
+          </Grid>
+        }
+        
         <List className={classes.list}>
           {this.props.sidebarMainOptions.map((props) => (
-            <Link
-              key={props.label}
-              to={props.path}
-              className={classes.noTextDecoration}
-            >
-              <MenuItem 
-                button  
-                onClick={() => this.props.handleSelectedMenu(props.label)}
-                className={classNames(classes.listItem, {
-                  [classes.listItemSelected]: props.label === selectedMenu
-                })}
-              >
-                <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
-                
-                <ListItemText 
-                  disableTypography 
-                  primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
-                />
-              </MenuItem>
-            </Link>
+            <div key={props.label}>
+              {props.roles.includes(userRole) &&
+                <Link
+                  to={props.path}
+                  className={classes.noTextDecoration}
+                >
+                  <MenuItem 
+                    button  
+                    onClick={() => this.props.handleSelectedMenu(props.label)}
+                    className={classNames(classes.listItem, {
+                      [classes.listItemSelected]: props.label === selectedMenu
+                    })}
+                  >
+                    <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
+                    
+                    <ListItemText 
+                      disableTypography 
+                      primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
+                    />
+                  </MenuItem>
+                </Link>
+              }
+            </div>
           ))}
         </List>
 
@@ -145,31 +168,42 @@ class SideBar extends React.Component {
         
         <List className={classes.list}>
           {this.props.sidebarSecondaryOptions.map((props) => (
-            <Link 
-              key={props.label}
-              to={props.path}
-              className={classes.noTextDecoration}
-            >
-              <MenuItem 
-                button 
-                onClick={() => this.props.handleSelectedMenu(props.label)} 
-                className={classNames(classes.listItem, {
-                  [classes.listItemSelected]: props.label === selectedMenu
-                })} 
-              >
-                <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
-                
-                <ListItemText 
-                  disableTypography 
-                  primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
-                />
-              </MenuItem>
-            </Link>
+            <div key={props.label}>
+              {props.roles.includes(userRole) && 
+                <Link 
+                  to={props.path}
+                  className={classes.noTextDecoration}
+                >
+                  <MenuItem 
+                    button 
+                    onClick={() => this.props.handleSelectedMenu(props.label)} 
+                    className={classNames(classes.listItem, {
+                      [classes.listItemSelected]: props.label === selectedMenu
+                    })} 
+                  >
+                    <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
+                    
+                    <ListItemText 
+                      disableTypography 
+                      primary={<Typography style={{fontSize: 15, fontWeight: 'bold', color: '#fafafa'}}>{props.label}</Typography>} 
+                    />
+                  </MenuItem>
+                </Link>
+              }
+            </div>
           ))}
         </List>
       </Drawer>
     )
   }
+}
+
+const mapStateToProps = state => ({
+  userRole: state.account.profile.role
+})
+
+const mapDispatchToProps = {
+
 }
 
 SideBar.propTypes = {
@@ -180,4 +214,4 @@ SideBar.propTypes = {
   sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)
 }
 
-export default withStyles(styles, { withTheme: true })(SideBar)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SideBar))

@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 
+import Roles from '../../../roles/roles'
+
 import EditButton from '../../customized/buttons/edit'
 
 const styles = theme => ({
@@ -99,14 +101,16 @@ class ProfileCard extends Component {
               <Typography className={classes.title}>User Profile</Typography>
             </Grid>
 
-            <Grid item>
-              <EditButton 
-                tooltipTitle='Edit account details'
-                placement='right'
-                iconSize={32}
-                onClick={handleOpenEditProfileDialog}
-              />
-            </Grid>
+            {profile.role !== Roles.publicUser ? 
+              <Grid item>
+                <EditButton 
+                  tooltipTitle='Edit account details'
+                  placement='right'
+                  iconSize={32}
+                  onClick={handleOpenEditProfileDialog}
+                />
+              </Grid> : null
+            }
           </Grid>
 
           <Divider className={classes.dividerBlack}/>

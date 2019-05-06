@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import classNames from 'classnames'
+import PropTypes from 'prop-types'
 
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import Icon from '../../customized/icons/icon'
 
-
 const styles = theme => ({
   outer: {
     display: 'table',
-    position: 'relative',
+    position: 'absolute',
     top: 0,
     left: 0,
     height: '100%',
@@ -29,7 +26,6 @@ const styles = theme => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '1000px',
-    // backgroundColor: 'grey'
   },
   title: {
     fontSize: 40,
@@ -42,9 +38,7 @@ const styles = theme => ({
   },
   greetings: {
     fontSize: 30,
-    // backgroundColor: 'black',
     marginTop: theme.spacing.unit * 9,
-    // marginTop: theme.spacing.unit * 5
   },
   description: {
     color: '#424242',
@@ -59,10 +53,10 @@ const styles = theme => ({
   }
 })
 
-class Home extends Component {
+class AccountError extends Component {
 
   render() {
-    const { classes } = this.props
+    const { error, classes } = this.props
 
     return (
       <div className={classes.outer}>
@@ -86,12 +80,12 @@ class Home extends Component {
                 </Grid>
 
                 <Grid item>
-                  <Typography className={classes.title}>VoteChain</Typography>
+                  <Typography className={classes.title}>Oh no!</Typography>
                 </Grid>
               </Grid>
 
               <Grid item>
-                <Typography className={classes.subtitle}>Experience the future of voting</Typography>
+                <Typography className={classes.subtitle}></Typography>
               </Grid>
             </Grid>
           </div>
@@ -102,38 +96,28 @@ class Home extends Component {
               direction='column'
               justify='center'
               alignItems='flex-start'
+              spacing={40}
             >
               <Grid item>
                 <Typography className={classes.description}>
-                  In VoteChain, security is our top priority. Your votes are practically impossible to be altered and removed by a malicious attacker. You can
-                  always verify that your votes are counted and the election results are correct. We achieved this by utilizing blockchain technology, a modern technology
-                  that guarantees integrity, authenticity, and transparency of any digital   transactions.
+                  Please logged in using your metamask to continue accessing the site. Thank you!
                 </Typography>
               </Grid>
-
-              <Grid item className={classes.section}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  className={classNames(classes.button)}
-                >
-                  Let's get started!
-                </Button>
+              <Grid item>
+                <Typography className={classes.description}>
+                  If you are finished doing the steps above, kindly <a href='' onClick={() => window.location.reload()}> refresh </a> the page.
+                </Typography>
               </Grid>
-            </Grid>
+            </Grid> 
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({
-  profile: state.account.profile
-})
-
-const mapDispatchToProps = {
-
+AccountError.propTypes = {
+  error: PropTypes.string.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Home))
+export default withStyles(styles)(AccountError)

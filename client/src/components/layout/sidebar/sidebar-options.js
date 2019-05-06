@@ -15,6 +15,7 @@ import BulletinBoardContainer from '../../content/bulletin-board/bulletin-board-
 
 import AdminContainer from '../../content/admin/admin-container'
 import OfficialContainer from '../../content/officials/official-container'
+import Roles from '../../../roles/roles'
 
 const style = {
   width: 30,
@@ -26,44 +27,50 @@ export const sidebarMainOptions = [
     label: 'Elections',
     icon: <ElectionIcon style={style}/>,
     path: '/elections',
-    component: <ElectionContainer />
-
+    component: ElectionContainer,
+    roles: [Roles.admin, Roles.official]
   },
   {
     label: 'Positions',
     icon: <FontAwesomeIcon style={style} icon='clipboard-list' />,
     path: '/positions',
-    component: <PositionContainer />
+    component: PositionContainer,
+    roles: [Roles.admin, Roles.official]
   },
   {
     label: 'Parties',
     icon: <FontAwesomeIcon style={style} icon='users' />,
     path: '/parties',
-    component: <PartyContainer />
+    component: PartyContainer,
+    roles: [Roles.admin, Roles.official]
   },
   {
     label: 'Candidates',
     icon: <FontAwesomeIcon style={style} icon='address-card' />,
     path: '/candidates',
-    component: <CandidateContainer />
+    component: CandidateContainer,
+    roles: [Roles.admin, Roles.official]
   },
   {
     label: 'Voters',
     icon: <FontAwesomeIcon style={style} icon='person-booth' />,
     path: '/voters',
-    component: <VoterContainer />
+    component: VoterContainer,
+    roles: [Roles.admin, Roles.official]
   },
   {
     label: 'Bulletin Board',
     icon: <BulletinBoardIcon style={style} />,
     path: '/bulletin-board',
-    component: <BulletinBoardContainer />
+    component: BulletinBoardContainer,
+    roles: [Roles.admin, Roles.official, Roles.voter, Roles.publicUser]
   },
   {
     label: 'Results',
     icon: <ResultIcon style={style} />,
     path: '/results',
-    component: <ResultContainer />
+    component: ResultContainer,
+    roles: [Roles.admin, Roles.official, Roles.voter, Roles.publicUser]
   }
 ]
 
@@ -72,12 +79,14 @@ export const sidebarSecondaryOptions = [
     label: 'Admin',
     icon: <FontAwesomeIcon style={style} icon='user-tie' />,
     path: '/admin',
-    component: <AdminContainer />
+    component: AdminContainer,
+    roles: [Roles.admin]
   },
   {
     label: 'Officials',
     icon: <FontAwesomeIcon style={style} icon='user-cog' />,
     path: '/officials',
-    component: <OfficialContainer />
+    component: OfficialContainer,
+    roles: [Roles.admin]
   }
 ]

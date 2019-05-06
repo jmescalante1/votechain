@@ -26,6 +26,8 @@ export function getWeb3() {
             const web3 = window.web3; // Use Mist/MetaMask's provider.
             console.log("(Legacy dapp browsers) Injected web3 detected.");
             resolve(web3);
+          } else {
+            reject('No metamask installed')
           }
           // else {
           //   const provider = new Web3.providers.HttpProvider(
