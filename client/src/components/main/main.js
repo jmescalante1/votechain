@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react'
 
-import Routes from '../routes/routes'
+import LayoutContainer from '../layout/layout-container'
 
 class Main extends React.Component {
   render() {
     return(
       <Fragment>
-        <Routes />
+        <LayoutContainer />
       </Fragment>
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import { headerTabs } from '../layout/header/header-tabs'
 import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
@@ -35,16 +35,17 @@ class Content extends React.Component {
         <div className={classes.toolbar} />
         <Switch>
           {headerTabs.map((props) => (
-            <Route key={props.label} path={props.path} render={() => props.component} />
+            <Route exact key={props.label} path={props.path} render={() => props.component} />
           ))}
           {sidebarMainOptions.map((props) => (
-            <Route key={props.label} path={props.path} render={() => props.component} />
+            <Route exact key={props.label} path={props.path} render={() => props.component} />
           ))}
           {sidebarSecondaryOptions.map((props) => (
-            <Route key={props.label} path={props.path} render={() => props.component} />
+            <Route exact key={props.label} path={props.path} render={() => props.component} />
           ))}
-          <Route key={electionView.label} path={electionView.path} render={(props) => <ElectionViewContainer location={this.props.location} {...props}/>} />
-          <Route key={ballotRoute.label} path={ballotRoute.path} render={(props) => <BallotContainer location={this.props.location} {...props}/>} />
+          <Route exact key={electionView.label} path={electionView.path} render={(props) => <ElectionViewContainer location={this.props.location} {...props}/>} />
+          <Route exact key={ballotRoute.label} path={ballotRoute.path} render={(props) => <BallotContainer location={this.props.location} {...props}/>} />
+          <Redirect to='/home' />
         </Switch>
       </main>
     )

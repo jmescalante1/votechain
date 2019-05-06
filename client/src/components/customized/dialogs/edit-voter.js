@@ -53,7 +53,6 @@ class EditVoterDialog extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.validateInputs = this.validateInputs.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-
   }
 
   async onEntered() {
