@@ -15,12 +15,12 @@ export const headerTabs = [
     label: 'Home',
     icon: <HomeIcon style={style} />,
     path: '/home',
-    component: <Home />
+    component: Home 
   },
   {
     label: 'Profile',
     icon: <AccountCircle style={style} />,
     path: '/profile',
-    component: <Profile />
+    component: Profile
   },
 ]

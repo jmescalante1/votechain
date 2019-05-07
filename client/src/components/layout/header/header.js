@@ -13,7 +13,6 @@ import MenuIcon from '@material-ui/icons/Menu'
 
 import Icon from '../../customized/icons/icon'
 
-
 const styles = theme => ({
   appBar: {
     backgroundColor: '#263238',

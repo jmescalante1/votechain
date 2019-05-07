@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from "react-redux"
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { withRouter } from 'react-router-dom'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAddressCard, faClipboardList, faUsers, faPersonBooth, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
@@ -61,7 +62,6 @@ class App extends React.Component {
   setLoading(loading) {
     this.setState({ loading })
   }
-  
 
   async componentDidMount() {
     this.setLoading(true)
@@ -241,9 +241,19 @@ class App extends React.Component {
       }
 
       window.ethereum.on('accountsChanged', async (accounts) => {
-        console.log(accounts)
         if(accounts && accounts[0]){
+          const { setAccount, getAccountDetails } = this.props
           this.setState({ noAccounts: false })
+        
+          await setAccount(web3, accounts[0])
+          await getAccountDetails(votechain, accounts[0])
+
+          // fetch global data
+          const { fetchElectionList, fetchAdminList, fetchOfficialList } = this.props
+          
+          await fetchElectionList(votechain)
+          await fetchAdminList(votechain)
+          await fetchOfficialList(votechain)
         }
         else {
           this.setState({ noAccounts: true })
@@ -257,9 +267,7 @@ class App extends React.Component {
   render() {
     const { loading, noAccounts } = this.state
     const { web3Error } = this.props
-
-    console.log(noAccounts)
-
+    console.log('test')
     return (
       <Fragment>
         {loading
@@ -326,6 +334,6 @@ const mapDispatchToProps = {
   getAccountDetails
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
 
 

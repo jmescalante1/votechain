@@ -9,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Icon from '../../customized/icons/icon'
 
-
 const styles = theme => ({
   outer: {
     display: 'table',
