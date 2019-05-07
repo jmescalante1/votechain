@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
+import  { Router } from 'react-router-dom'
 import configureStore, { history } from './configureStore'
 
 import React from 'react';
@@ -12,7 +13,7 @@ const store = configureStore()
 ReactDOM.render ((
   <Provider store={store}>
     <ConnectedRouter history={history} >
-        <App style={{minHeight: '100vh'}}/>    
+      <App />    
     </ConnectedRouter>
   </Provider>
   

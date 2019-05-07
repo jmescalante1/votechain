@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
-import { headerTabs } from '../components/layout/header/header-tabs'
 
 class ProtectedRoute extends Component {
   constructor(props) {

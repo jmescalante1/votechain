@@ -6,7 +6,6 @@ import { headerTabs } from '../layout/header/header-tabs'
 import { sidebarMainOptions } from '../layout/sidebar/sidebar-options'
 import { sidebarSecondaryOptions } from '../layout/sidebar/sidebar-options'
 import ProtectedRoute from '../../routes/protected'
-import Roles from '../../roles/roles'
 
 import electionView from '../content/elections/election-view/election-view-route'
 import ballotRoute from '../content/ballot/ballot-route'
@@ -31,13 +30,12 @@ const styles = theme => ({
 class Content extends React.Component {
   render() {
     const { classes } = this.props
-
     return(
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
           {headerTabs.map((props) => (
-            <Route exact key={props.label} path={props.path} render={() => props.component} />
+            <Route exact key={props.label} path={props.path} render={(renderProps) => <props.component location={this.props.location} {...renderProps}/>} />
           ))}
           
           {sidebarMainOptions.map((props) => (
@@ -57,5 +55,6 @@ class Content extends React.Component {
     )
   }
 }
+
 
 export default withStyles(styles, { withTheme: true})(Content)
