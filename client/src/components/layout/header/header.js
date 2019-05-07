@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
+
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -8,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
+
 
 import MenuIcon from '@material-ui/icons/Menu'
 
@@ -44,7 +47,7 @@ const styles = theme => ({
 
 class Header extends React.Component {
   render() {
-    const { classes, selectedMenu } = this.props
+    const { classes, location } = this.props
 
     return(
       <AppBar
@@ -99,9 +102,8 @@ class Header extends React.Component {
                       to={props.path}
                     >
                       <IconButton
-                        onClick={() => this.props.handleSelectedMenu(props.label)}
                         className={classNames(classes.tab, {
-                          [classes.tabSelected]: props.label === selectedMenu
+                          [classes.tabSelected]: props.path === location.pathname
                         })}
                       >
                         {props.icon}
@@ -118,10 +120,17 @@ class Header extends React.Component {
   }
 }
 
-Header.propTypes = {
-  handleDrawerToggle: PropTypes.func.isRequired,
-  handleSelectedMenu: PropTypes.func.isRequired,
-  selectedMenu: PropTypes.string.isRequired
+const mapStateToProps = state => ({
+  location: state.router.location
+})
+
+const mapDispatchToProps = {
+
 }
 
-export default withStyles(styles, { withTheme: true })(Header)
+Header.propTypes = {
+  handleDrawerToggle: PropTypes.func.isRequired,
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Header))

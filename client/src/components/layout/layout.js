@@ -24,16 +24,12 @@ class Layout extends React.Component {
         <Header 
           handleDrawerToggle={this.props.handleDrawerToggle}
           headerTabs={this.props.headerTabs}
-          handleSelectedMenu={this.props.handleSelectedMenu}
-          selectedMenu={this.props.selectedMenu}
         />
         <Divider />
         <SideBar 
           openDrawer={this.props.openDrawer} 
           sidebarMainOptions={this.props.sidebarMainOptions}
           sidebarSecondaryOptions={this.props.sidebarSecondaryOptions}
-          handleSelectedMenu={this.props.handleSelectedMenu}
-          selectedMenu={this.props.selectedMenu}
         />
         <ContentContainer />
       </div>

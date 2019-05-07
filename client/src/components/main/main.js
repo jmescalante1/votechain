@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react'
+import { Route } from 'react-router-dom'
 
 import LayoutContainer from '../layout/layout-container'
 
 class Main extends React.Component {
   render() {
     return(
-      <Fragment>
-        <LayoutContainer />
-      </Fragment>
+      <Route path='/' render={() => <LayoutContainer />} />
     )
   }
 }

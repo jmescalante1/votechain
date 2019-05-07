@@ -88,13 +88,12 @@ const styles = theme => ({
   list: {
     width: '100%',
   },
-  listItem: {
+
+  listItemSelected: {
+    backgroundColor: theme.palette.highlight.main,
     '&:focus': {
       backgroundColor: theme.palette.highlight.main
     }
-  },
-  listItemSelected: {
-    backgroundColor: theme.palette.highlight.main
   },
   noTextDecoration: {
     textDecoration: 'none'
@@ -106,7 +105,7 @@ const styles = theme => ({
 
 class SideBar extends React.Component {
   render() {
-    const { classes, openDrawer, selectedMenu, userRole } = this.props
+    const { classes, openDrawer, userRole, location } = this.props
 
     return(
       <Drawer
@@ -146,9 +145,8 @@ class SideBar extends React.Component {
                 >
                   <MenuItem 
                     button  
-                    onClick={() => this.props.handleSelectedMenu(props.label)}
                     className={classNames(classes.listItem, {
-                      [classes.listItemSelected]: props.label === selectedMenu
+                      [classes.listItemSelected]: props.path === location.pathname
                     })}
                   >
                     <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
@@ -176,9 +174,8 @@ class SideBar extends React.Component {
                 >
                   <MenuItem 
                     button 
-                    onClick={() => this.props.handleSelectedMenu(props.label)} 
                     className={classNames(classes.listItem, {
-                      [classes.listItemSelected]: props.label === selectedMenu
+                      [classes.listItemSelected]: props.path === location.pathname
                     })} 
                   >
                     <ListItemIcon style={{fontSize: 15, color: '#fafafa'}}>{props.icon}</ListItemIcon>
@@ -199,7 +196,8 @@ class SideBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  userRole: state.account.profile.role
+  userRole: state.account.profile.role,
+  location: state.router.location,
 })
 
 const mapDispatchToProps = {
@@ -208,8 +206,6 @@ const mapDispatchToProps = {
 
 SideBar.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
-  handleSelectedMenu: PropTypes.func.isRequired,
-  selectedMenu: PropTypes.string.isRequired,
   sidebarMainOptions: PropTypes.arrayOf(PropTypes.object),
   sidebarSecondaryOptions: PropTypes.arrayOf(PropTypes.object)
 }
