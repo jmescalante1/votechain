@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -46,7 +45,14 @@ const styles = theme => ({
     textIndent: '0.5in' 
   },
   button: {
-    margin: theme.spacing.unit
+    background: 'none!important',
+    border: 'none', 
+    padding:' 0!important',
+    fontSize: 'inherit',
+    fontFamily: 'arial,sans-serif', /*input has OS specific font-family*/
+    color: '#551A8B', 
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
   section: {
     marginTop: theme.spacing.unit * 5
@@ -54,9 +60,19 @@ const styles = theme => ({
 })
 
 class AccountError extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.refreshPage = this.refreshPage.bind(this)
+  }
+
+  refreshPage() {
+    window.location.reload()
+  }
+  
 
   render() {
-    const { error, classes } = this.props
+    const { classes } = this.props
 
     return (
       <div className={classes.outer}>
@@ -105,7 +121,7 @@ class AccountError extends Component {
               </Grid>
               <Grid item>
                 <Typography className={classes.description}>
-                  If you are finished doing the steps above, kindly <a href='' onClick={() => window.location.reload()}> refresh </a> the page.
+                  If you are finished doing the steps above, kindly <button className={classes.button} onClick={this.refreshPage}> refresh </button> the page.
                 </Typography>
               </Grid>
             </Grid> 
@@ -117,7 +133,6 @@ class AccountError extends Component {
 }
 
 AccountError.propTypes = {
-  error: PropTypes.string.isRequired
 }
 
 export default withStyles(styles)(AccountError)

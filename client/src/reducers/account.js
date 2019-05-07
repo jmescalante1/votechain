@@ -4,7 +4,7 @@ import { EDIT_OFFICIAL_UI } from '../actions/official'
 import { EDIT_VOTER_UI } from '../actions/voter'
 
 const initialState = {
-  account: '',
+  account: null,
   profile: {},
 }
 

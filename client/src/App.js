@@ -57,28 +57,30 @@ class App extends React.Component {
     }
 
     this.setLoading = this.setLoading.bind(this)
+    this.setupEventListeners = this.setupEventListeners.bind(this)
+    this.setupAccount = this.setupAccount.bind(this)
+    this.fetchInitialGlobalData = this.fetchInitialGlobalData.bind(this)
+    this.fetchInitialDataByUser = this.fetchInitialDataByUser.bind(this)
   }
 
   setLoading(loading) {
     this.setState({ loading })
   }
 
-  async componentDidMount() {
-    this.setLoading(true)
-
+  async setupWeb3() {
     const { getWeb3 } = this.props
     await getWeb3() // save the web3 to redux store
-    
-    const { web3 } = this.props
-    
+  }
+
+  async setupVotechain(web3) {
     if(web3) {
       const { getVotechainContract } = this.props
       await getVotechainContract(web3) // save the votechain contract to redux store
     }
+  }
 
-    const { votechain } = this.props
-
-    if(votechain) {
+  setupEventListeners(votechain, web3) {
+    if(votechain && web3){
       const { addElectionUI, editElectionUI, deleteElectionUI
         , addPositionUI, editPositionUI, deletePositionUI
         , addCandidateUI, editCandidateUI, deleteCandidateUI
@@ -218,49 +220,58 @@ class App extends React.Component {
         }
       })
 
-      // set up account
+      window.ethereum.on('accountsChanged', async (accounts) => {
+        await this.setupAccount(votechain, web3)
+        await this.fetchInitialDataByUser(votechain, accounts[0])
+      })
+    }
+  }
+
+  async setupAccount(votechain, web3){
+    if(votechain && web3){
       const accounts = await web3.eth.getAccounts()
 
       if(accounts && accounts[0]){
-        const { setAccount, getAccountDetails } = this.props
-        this.setState({ noAccounts: false })
-      
-        await setAccount(web3, accounts[0])
-        await getAccountDetails(votechain, accounts[0])
-
-        // fetch global data
-        const { fetchElectionList, fetchAdminList, fetchOfficialList } = this.props
+        let currentAccount = accounts[0]
         
-        await fetchElectionList(votechain)
-        await fetchAdminList(votechain)
-        await fetchOfficialList(votechain)
-      }
+        const { setAccount, getAccountDetails } = this.props
+        await setAccount(web3, currentAccount)
+        await getAccountDetails(votechain, currentAccount)
 
-      else {
+        this.setState({ noAccounts: false })
+      } else {
         this.setState({ noAccounts: true })
       }
-
-      window.ethereum.on('accountsChanged', async (accounts) => {
-        if(accounts && accounts[0]){
-          const { setAccount, getAccountDetails } = this.props
-          this.setState({ noAccounts: false })
-        
-          await setAccount(web3, accounts[0])
-          await getAccountDetails(votechain, accounts[0])
-
-          // fetch global data
-          const { fetchElectionList, fetchAdminList, fetchOfficialList } = this.props
-          
-          await fetchElectionList(votechain)
-          await fetchAdminList(votechain)
-          await fetchOfficialList(votechain)
-        }
-        else {
-          this.setState({ noAccounts: true })
-        } 
-      })
     }
+  }
 
+  async fetchInitialGlobalData(votechain) {
+    if(votechain){
+      const { fetchAdminList, fetchOfficialList } = this.props
+            
+      await fetchAdminList(votechain)
+      await fetchOfficialList(votechain)
+    }
+  }
+
+  async fetchInitialDataByUser(votechain, account){
+    if(votechain && account){
+      const { fetchElectionList } = this.props 
+      await fetchElectionList(votechain)
+    }
+  }
+  
+
+  async componentDidMount() {
+    this.setLoading(true)
+  
+    await this.setupWeb3()
+    await this.setupVotechain(this.props.web3)
+    await this.setupEventListeners(this.props.votechain, this.props.web3)
+    await this.setupAccount(this.props.votechain, this.props.web3)
+    await this.fetchInitialDataByUser(this.props.votechain, this.props.account)
+    await this.fetchInitialGlobalData(this.props.votechain)
+  
     this.setLoading(false)
   }
 
@@ -272,9 +283,9 @@ class App extends React.Component {
         {loading
           ? <Loader /> 
           : web3Error 
-          ? <Web3Error error={web3Error}/> 
+          ? <Web3Error/> 
           : noAccounts
-          ? <AccountError error='No accounts are logged in' />
+          ? <AccountError/>
           : <MuiThemeProvider theme={theme}>
               <Main/>
             </MuiThemeProvider>
@@ -287,7 +298,8 @@ class App extends React.Component {
 const mapStateToProps = state => ({
   web3: state.web3.web3,
   votechain: state.contract.votechain,
-  web3Error: state.web3.web3Error
+  web3Error: state.web3.web3Error,
+  account: state.account.account
 });
 
 const mapDispatchToProps = {

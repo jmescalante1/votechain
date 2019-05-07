@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -46,7 +45,14 @@ const styles = theme => ({
     textIndent: '0.5in' 
   },
   button: {
-    margin: theme.spacing.unit
+    background: 'none!important',
+    border: 'none', 
+    padding:' 0!important',
+    fontSize: 'inherit',
+    fontFamily: 'arial,sans-serif', /*input has OS specific font-family*/
+    color: '#551A8B', 
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
   section: {
     marginTop: theme.spacing.unit * 5
@@ -54,9 +60,19 @@ const styles = theme => ({
 })
 
 class Web3Error extends Component {
+  constructor(props) {
+    super(props)
+    
+    this.refreshPage = this.refreshPage.bind(this)
+  }
+
+  refreshPage() {
+    window.location.reload()
+  }
+  
 
   render() {
-    const { error, classes } = this.props
+    const { classes } = this.props
 
     return (
       <div className={classes.outer}>
@@ -107,12 +123,12 @@ class Web3Error extends Component {
               </Grid>
               <Grid item>
                 <Typography className={classes.description}>
-                  If you are finished doing the steps above, kindly <a href='' onClick={() => window.location.reload()}> refresh </a> the page.
+                  If you are finished doing the steps above, kindly <button className={classes.button} onClick={this.refreshPage}> refresh </button> the page.
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography className={classes.description}>
-                  Perhaps, you rejected the website to connect. If you changed your mind, kindly <a href='' onClick={() => window.location.reload()}> refresh </a> the page and 
+                  Perhaps, you rejected the website to connect. If you changed your mind, kindly <button className={classes.button} onClick={this.refreshPage}> refresh </button> the page and 
                   metamask will prompt again to ask you to connect.
                 </Typography>
               </Grid>
@@ -120,12 +136,12 @@ class Web3Error extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
 Web3Error.propTypes = {
-  error: PropTypes.isRequired
+  
 }
 
 export default withStyles(styles)(Web3Error)
