@@ -267,7 +267,7 @@ class App extends React.Component {
   render() {
     const { loading, noAccounts } = this.state
     const { web3Error } = this.props
-
+    console.log('test')
     return (
       <Fragment>
         {loading
