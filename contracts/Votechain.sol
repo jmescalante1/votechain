@@ -381,11 +381,11 @@ contract Votechain {
         emit AddVoterAt(electionKey, voterKey);
     }
 
-    // function addBulkVoterAt(uint256 electionKey, address[] memory voterKey, bytes32[] memory studentNo, bytes32[] memory name) public {
-    //     for(uint256 i = 0; i < voterKey.length; i++ ){
-    //         addVoterAt(electionKey, voterKey[i], studentNo[i], name[i]);
-    //     }
-    // }
+    function bulkAddVoterAt(uint256 electionKey, address[] memory voterKey) public {
+        for(uint256 i = 0; i < voterKey.length; i++ ){
+            addVoterAt(electionKey, voterKey[i], '', '');
+        }
+    }
 
     function addAbstainAt(uint256 positionKey) 
         public 

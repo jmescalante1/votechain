@@ -14,6 +14,7 @@ class VoterTableContainer extends Component {
     super()
     
     this.state = {
+      openUploadVoterDialog: false,
       openAddVoterDialog: false,
       openEditVoterDialog: false,
       openDeleteVoterDialog: false,
@@ -21,7 +22,10 @@ class VoterTableContainer extends Component {
       voterToBeEdited: {},
       voterToBeDeleted: {}
     }
-
+    
+    this.handleCloseUploadVoterDialog = this.handleCloseUploadVoterDialog.bind(this)
+    this.handleOpenUploadVoterDialog = this.handleOpenUploadVoterDialog.bind(this)
+  
     this.handleCloseAddVoterDialog = this.handleCloseAddVoterDialog.bind(this)
     this.handleOpenAddVoterDialog = this.handleOpenAddVoterDialog.bind(this)
   
@@ -37,6 +41,14 @@ class VoterTableContainer extends Component {
       const {votechain, fetchCurrentVoterList, electionId } = this.props
       fetchCurrentVoterList(votechain, electionId)
     }
+  }
+
+  handleOpenUploadVoterDialog() {
+    this.setState({ openUploadVoterDialog: true})
+  }
+
+  handleCloseUploadVoterDialog() {
+    this.setState({ openUploadVoterDialog: false})
   }
   
   handleCloseAddVoterDialog() {
@@ -70,7 +82,7 @@ class VoterTableContainer extends Component {
   }
 
   render() {
-    const { openAddVoterDialog, openEditVoterDialog, voterToBeEdited, openDeleteVoterDialog, voterToBeDeleted } = this.state
+    const { openUploadVoterDialog, openAddVoterDialog, openEditVoterDialog, voterToBeEdited, openDeleteVoterDialog, voterToBeDeleted } = this.state
     const { voterList, electionId } = this.props
 
     const headers = [
@@ -90,6 +102,10 @@ class VoterTableContainer extends Component {
           openAddVoterDialog={openAddVoterDialog}
           handleOpenAddVoterDialog={this.handleOpenAddVoterDialog}
           handleCloseAddVoterDialog={this.handleCloseAddVoterDialog}
+
+          openUploadVoterDialog={openUploadVoterDialog}
+          handleOpenUploadVoterDialog={this.handleOpenUploadVoterDialog}
+          handleCloseUploadVoterDialog={this.handleCloseUploadVoterDialog}
 
           handleOpenEditVoterDialog={this.handleOpenEditVoterDialog}
           handleOpenDeleteVoterDialog={this.handleOpenDeleteVoterDialog}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -8,11 +8,13 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
 import AddCircle from '@material-ui/icons/AddCircle'
+import FolderShared from '@material-ui/icons/FolderShared'
 
 import TableContainer from '../../customized/tables/table-container'
 import EditButton from '../../customized/buttons/edit'
 import DeleteButton from '../../customized/buttons/delete'
 import AddVoterDialog from '../../customized/dialogs/add-voter'
+import UploadVoterDialog from '../../customized/dialogs/upload-voter'
 
 const styles = theme => ({
   actionIcon:{
@@ -78,33 +80,54 @@ class VoterTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddVoterDialog } = this.props
+    const { classes, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
 
     return (
-      <Tooltip title='Add new voter(s)'>
-        <Fab 
-          size='large' 
-          variant='extended' 
-          className={classes.fab}
-          onClick={handleOpenAddVoterDialog}
-        >
-          <AddCircle className={classes.actionIcon} />
-          Add Voter
-        </Fab>
-      </Tooltip>
+      <Fragment>
+        <Tooltip title="Upload voter's list">
+          <Fab 
+            size='large' 
+            variant='extended' 
+            className={classes.fab}
+            onClick={handleOpenUploadVoterDialog}
+          >
+            <FolderShared className={classes.actionIcon} />
+            Bulk Upload 
+          </Fab>
+        </Tooltip>
+        <Tooltip title='Add new voter(s)'>
+          <Fab 
+            size='large' 
+            variant='extended' 
+            className={classes.fab}
+            onClick={handleOpenAddVoterDialog}
+          >
+            <AddCircle className={classes.actionIcon} />
+            Add Voter
+          </Fab>
+        </Tooltip>
+      </Fragment>
     )
   }
 
   createTableDialogs(){
     const { openAddVoterDialog, handleCloseAddVoterDialog } = this.props
+    const { openUploadVoterDialog, handleCloseUploadVoterDialog } = this.props
     const { electionId } = this.props
 
     return (
-      <AddVoterDialog 
-        openDialog={openAddVoterDialog}
-        handleClickCloseDialog={handleCloseAddVoterDialog}
-        electionId={electionId}
-      />
+      <Fragment>
+        <UploadVoterDialog 
+          openDialog={openUploadVoterDialog}
+          handleClickCloseDialog={handleCloseUploadVoterDialog}
+          electionId={electionId}
+        />
+        <AddVoterDialog 
+          openDialog={openAddVoterDialog}
+          handleClickCloseDialog={handleCloseAddVoterDialog}
+          electionId={electionId}
+        />
+      </Fragment>
     )
   }
   
@@ -147,6 +170,10 @@ VoterTable.propTypes = {
   openAddVoterDialog: PropTypes.bool.isRequired,
   handleOpenAddVoterDialog: PropTypes.func.isRequired,
   handleCloseAddVoterDialog: PropTypes.func.isRequired,
+
+  openUploadVoterDialog: PropTypes.bool.isRequired,
+  handleOpenUploadVoterDialog: PropTypes.func.isRequired,
+  handleCloseUploadVoterDialog: PropTypes.func.isRequired,
   
   electionId: PropTypes.number,
 

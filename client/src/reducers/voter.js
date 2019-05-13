@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
 
-import { FETCH_CURRENT_VOTER_LIST, ADD_VOTER_VOTECHAIN, ADD_VOTER_UI 
+import { FETCH_CURRENT_VOTER_LIST, ADD_VOTER_VOTECHAIN, BULK_ADD_VOTER_VOTECHAIN, ADD_VOTER_UI 
 , EDIT_VOTER_VOTECHAIN, EDIT_VOTER_UI, DELETE_VOTER_VOTECHAIN
 , DELETE_VOTER_UI } from '../actions/voter'
 
@@ -24,6 +24,12 @@ export default function reducer(state = initialState, action) {
     case ADD_VOTER_VOTECHAIN: {
       return {
         ...state,
+      }
+    }
+
+    case BULK_ADD_VOTER_VOTECHAIN: {
+      return {
+        ...state
       }
     }
 

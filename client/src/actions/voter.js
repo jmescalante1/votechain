@@ -2,6 +2,7 @@ import { getVoter } from './read-votechain'
 
 export const FETCH_CURRENT_VOTER_LIST = 'FETCH_CURRENT_VOTER_LIST'
 export const ADD_VOTER_VOTECHAIN = 'ADD_VOTER_VOTECHAIN'
+export const BULK_ADD_VOTER_VOTECHAIN  = 'BULK_ADD_VOTER_VOTECHAIN'
 export const ADD_VOTER_UI = 'ADD_VOTER_UI'
 export const EDIT_VOTER_VOTECHAIN = 'EDIT_VOTER_VOTECHAIN'
 export const EDIT_VOTER_UI = 'EDIT_VOTER_UI'
@@ -33,6 +34,16 @@ export function addVoterVotechain(account, votechain, voter) {
     
     dispatch( {
       type: ADD_VOTER_VOTECHAIN
+    })
+  }
+}
+
+export function bulkAddVoterVotechain(account, votechain, electionKey, voterKeys) {
+  return async (dispatch) => {
+    await votechain.methods.bulkAddVoterAt(electionKey, voterKeys).send({from: account})
+
+    dispatch({
+      type: BULK_ADD_VOTER_VOTECHAIN
     })
   }
 }
