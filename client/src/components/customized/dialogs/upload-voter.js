@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Papa from 'papaparse'
 import classNames from 'classnames'
+import cloneDeep from 'lodash/cloneDeep'
 
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
@@ -16,7 +17,6 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import UploadButton from '../buttons/upload'
-import FormValidator from '../forms/form-validator'
 
 import { bulkAddVoterVotechain } from '../../../actions/voter'
 
@@ -70,6 +70,8 @@ class UploadVoterDialog extends React.Component {
     this.displayErrorHeaders = this.displayErrorHeaders.bind(this)
     this.displayErrorContents = this.displayErrorContents.bind(this)
     this.displayErrors = this.displayErrors.bind(this)
+
+    this.getDuplicates = this.getDuplicates.bind(this)
   }
 
   async onEntered() {
@@ -87,37 +89,76 @@ class UploadVoterDialog extends React.Component {
     const { votechain, web3, electionId } = this.props
 
     let errors = []
+    let occurrence = {}
 
-    for(let i = 0; i < voterKeys.length; i++){
+    for(let row = 0; row < voterKeys.length; row++){
       let error = {}
-      let voterKey = voterKeys[i]
+      let voterKey = voterKeys[row]
+
+      if(!occurrence[voterKey]){
+        occurrence[voterKey] = [row + 1]
+      } else {
+        occurrence[voterKey].push(row + 1)
+      }
 
       if(!web3.utils.isAddress(voterKey)){
         error.type = 'Invalid address'
-        error.row = i + 1
-        error.address = voterKey
+        error.row = row + 1
+        error.voterKey = voterKey
         errors.push(error)
       } else if ((await votechain.methods.isVoterAt(electionId, voterKey).call())) {
         error.type = 'Already registered as voter'
-        error.row = i + 1
-        error.address = voterKey
+        error.row = row + 1
+        error.voterKey = voterKey
         errors.push(error)
       } else if ((await votechain.methods.isOfficial(voterKey).call())) {
         error.type = 'Already registered as official'
-        error.row = i + 1
-        error.address = voterKey
+        error.row = row + 1
+        error.voterKey = voterKey
         errors.push(error)
       } else if ((await votechain.methods.isAdmin(voterKey).call())) {
         error.type = 'Already registered as admin'
-        error.row = i + 1
-        error.address = voterKey
+        error.row = row + 1
+        error.voterKey = voterKey
         errors.push(error)
       }
+    }
+
+    console.log(occurrence)
+    let duplicates = this.getDuplicates(occurrence)
+
+    if(duplicates.length > 0){
+      duplicates.forEach((duplicate) => {
+        let error = {
+          type: 'Account Address Duplication',
+          voterKey: duplicate.voterKey,
+          rows: duplicate.rows
+        }
+        
+        errors.push(error)
+      })
     }
 
     await this.setState({ errors })
 
     return errors.length
+  }
+
+  getDuplicates(occurrence) {
+    let duplicates = []
+    
+    Object.keys(occurrence).forEach((voterKey) => {
+      if(occurrence[voterKey].length > 1) {
+        let duplicate = {
+          voterKey,
+          rows: cloneDeep(occurrence[voterKey])
+        }
+
+        duplicates.push(duplicate)
+      }
+    })
+
+    return duplicates
   }
 
   async getVotersFromCSV(file) {
@@ -131,7 +172,7 @@ class UploadVoterDialog extends React.Component {
 
     let result = await Papa.parsePromise(file)
     
-    result.data.map((row) => {
+    result.data.forEach((row) => {
       voters.push(row[0])
     })
      
@@ -175,7 +216,7 @@ class UploadVoterDialog extends React.Component {
         <Grid item>
           <Typography className={classNames(classes.error, classes.section)}>
             This file cannot be submitted due to its {noOfErrors} invalid records.
-            Please fix its records, upload the file again and click submit to proceed.
+            Please fix this file and upload it again.
           </Typography>
         </Grid>
 
@@ -209,11 +250,11 @@ class UploadVoterDialog extends React.Component {
         justify='center'
         spacing={24}
       >
-        {errors.map((error) => {
+        {errors.map((error, index) => {
           return (
             <Grid item
               className={classes.fullWidth}
-              key={error.row}
+              key={index}
             >
               <Grid 
                 container
@@ -226,8 +267,17 @@ class UploadVoterDialog extends React.Component {
                     {error.type}
                   </Typography>
                 </Grid>
-                <Grid item xs={2}><Typography className={classes.errorContent}>{error.row}</Typography></Grid>
-                <Grid item xs={5}><Typography className={classes.errorContent}>{error.address}</Typography></Grid>
+
+                <Grid item xs={2}>
+                  <Typography className={classes.errorContent}>
+                    {error.type === 'Account Address Duplication'  
+                      ? error.rows.toString() 
+                      : error.row
+                    }
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={5}><Typography className={classes.errorContent}>{error.voterKey}</Typography></Grid>
               </Grid>
             </Grid>
          )
@@ -251,7 +301,7 @@ class UploadVoterDialog extends React.Component {
 
   render() {
     const { classes, openDialog, handleClickCloseDialog } = this.props
-    const { errors, file, noOfErrors } = this.state
+    const { file, noOfErrors } = this.state
 
     return (
       <Dialog

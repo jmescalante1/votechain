@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import Button from '@material-ui/core/Button'
 
 import Done from '@material-ui/icons/Done'
 
