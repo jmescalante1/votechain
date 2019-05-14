@@ -124,7 +124,6 @@ class UploadVoterDialog extends React.Component {
       }
     }
 
-    console.log(occurrence)
     let duplicates = this.getDuplicates(occurrence)
 
     if(duplicates.length > 0){

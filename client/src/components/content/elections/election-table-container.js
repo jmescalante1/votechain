@@ -44,12 +44,6 @@ class ElectionTableContainer extends Component {
 
   }
 
-  componentDidMount(){
-    const { fetchElectionList, votechain } = this.props
-    if(votechain)
-      fetchElectionList(votechain)
-  }
-
   handleOpenAddElectionDialog() {
     this.setState({ openAddElectionDialog: true })
   }

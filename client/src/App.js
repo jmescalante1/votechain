@@ -255,9 +255,10 @@ class App extends React.Component {
   }
 
   async fetchInitialDataByUser(votechain, account){
+    console.log(account)
     if(votechain && account){
       const { fetchElectionList } = this.props 
-      await fetchElectionList(votechain)
+      await fetchElectionList(votechain, account)
     }
   }
   

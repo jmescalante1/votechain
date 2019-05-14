@@ -50,10 +50,11 @@ export function addElectionUI(votechain, electionKey){
   }
 }
 
-export function fetchElectionList(votechain) {
+export function fetchElectionList(votechain, account) {
   return async (dispatch) => {
     const noOfElections = await votechain.methods.getNoOfElections().call()
  
+    console.log(account)
     let electionList = []
 
     for(let i = 0; i < noOfElections; i++){

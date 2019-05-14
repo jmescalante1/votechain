@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ElectionIcon from '@material-ui/icons/HowToVote'
+import VoteIcon from '@material-ui/icons/HowToVote'
 
 import ResultIcon from '@material-ui/icons/Poll'
 import BulletinBoardIcon from '@material-ui/icons/Dashboard'
@@ -12,6 +13,7 @@ import CandidateContainer from '../../content/candidates/candidate-container'
 import VoterContainer from '../../content/voters/voter-container'
 import ResultContainer from '../../content/results/result-container'
 import BulletinBoardContainer from '../../content/bulletin-board/bulletin-board-container'
+import VoteContainer from '../../content/votes/vote-container'
 
 import AdminContainer from '../../content/admin/admin-container'
 import OfficialContainer from '../../content/officials/official-container'
@@ -59,6 +61,13 @@ export const sidebarMainOptions = [
     roles: [Roles.admin, Roles.official]
   },
   {
+    label: 'Vote',
+    icon: <VoteIcon style={style} />,
+    path: '/vote',
+    component: VoteContainer,
+    roles: [Roles.voter]
+  },
+  {
     label: 'Bulletin Board',
     icon: <BulletinBoardIcon style={style} />,
     path: '/bulletin-board',
@@ -71,7 +80,7 @@ export const sidebarMainOptions = [
     path: '/results',
     component: ResultContainer,
     roles: [Roles.admin, Roles.official, Roles.voter, Roles.publicUser]
-  }
+  },
 ]
 
 export const sidebarSecondaryOptions = [
