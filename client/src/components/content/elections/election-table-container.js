@@ -104,7 +104,7 @@ class ElectionTableContainer extends Component {
 
 
     const headers = [
-      {id: 'id', label: 'Election Key'},
+      {id: 'id', label: 'Election ID'},
       {id: 'name', label: 'Name'},
       {id: 'status', label: 'Status'},
       {id: 'action', label: 'Action'},

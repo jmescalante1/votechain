@@ -94,7 +94,7 @@ class EditProfileDialog extends React.Component {
             defaultValue={profile.name}
             required
             fullWidth={true}
-            type='string'
+            type='text'
             id='profile-name'
             label='Your display Name'
             variant='outlined'

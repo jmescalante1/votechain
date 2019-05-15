@@ -1,16 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   headerLabel: {
     color: '#006064',
-    fontSize: 17
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   tableSortIcon: {
     color: '#006064'
@@ -53,9 +56,9 @@ class CustomizedTableHeader extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(header.id)}
                   >
-                    <div className={classes.headerLabel}>
+                    <Typography className={classes.headerLabel}>
                       {header.label}
-                    </div>
+                    </Typography>
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>

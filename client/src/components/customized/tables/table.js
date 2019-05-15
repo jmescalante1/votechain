@@ -6,6 +6,7 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
+import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 
 import TableHeader from '../tables/table-header'
@@ -28,6 +29,9 @@ const styles = theme => ({
   },
   tablePaginationSelectIcon: {
     color: 'red'
+  },
+  cell: {
+    fontSize: 15,
   }
 })
 
@@ -94,7 +98,15 @@ class CustomizedTable extends Component {
                     <TableRow style={{height: rowHeight}} hover tabIndex={-1} key={row.id}>
                       {Object.keys(row).map(key => { 
                         return (  
-                          <TableCell key={key} align='left'>{row[key]}</TableCell>
+                          <TableCell key={key} align='left'>
+                            {(typeof row[key]) === 'string' ? 
+                              <Typography className={classes.cell}>
+                                {row[key]}
+                              </Typography>
+                              :
+                              row[key]
+                          }
+                          </TableCell>
                         )
                       })}    
                     </TableRow>
