@@ -13,8 +13,8 @@ import Grid from '@material-ui/core/Grid'
 
 import Loader from '../progress-bars/loader'
 
-import NoButton from '../buttons/no'
-import YesButton from '../buttons/yes'
+// import CancelButton from '../buttons/cancel'
+import SubmitButton from '../buttons/submit'
 import BackButton from '../buttons/back'
 
 import { castBulkVoteVotechain } from '../../../actions/ballot'
@@ -37,7 +37,21 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 2,
   },
   errorText: {
-    color: theme.palette.error.main
+    color: theme.palette.error.main,
+    fontSize: 16
+  },
+  dialogContentText: {
+    fontSize: 16
+  },
+  section: {
+    marginTop: theme.spacing.unit * 2
+  },
+  columnTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  candidateName: {
+    color: '#9e9e9e'
   }
 })
 
@@ -57,6 +71,7 @@ class SubmitBallotDialog extends React.Component {
     this.onExited = this.onExited.bind(this)
 
     this.getCandidateIds = this.getCandidateIds.bind(this)
+    this.getVotedCandidatesOf = this.getVotedCandidatesOf.bind(this)
   }
 
   submitBallot() {
@@ -97,6 +112,23 @@ class SubmitBallotDialog extends React.Component {
     return candidateIds
   }
 
+  getVotedCandidatesOf(position) {
+    const { candidateKeyList, abstainKeyList } = this.props
+    let votedCandidates = []
+    
+    if(abstainKeyList.includes(position.abstainId)){
+      votedCandidates.push('Abstain')
+    } else {
+      position.candidateList.forEach((candidate) => {
+        if(candidateKeyList.includes(candidate.id)) {
+          votedCandidates.push(candidate.name)
+        }
+      })
+    }
+
+    return votedCandidates
+  }
+
   validateVotes() {
     const { election, candidateKeyList, abstainKeyList } = this.props
     
@@ -126,9 +158,10 @@ class SubmitBallotDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog , election} = this.props
     const { errors, loading } = this.state
     const hasError = errors.length > 0 ? true : false
+    console.log(election)
 
     return (
       <Dialog
@@ -137,7 +170,7 @@ class SubmitBallotDialog extends React.Component {
         onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Submit Ballot</Typography>
+          <Typography className={classes.label}>Review Ballot</Typography>
         </DialogTitle>
         
         <DialogContent 
@@ -151,13 +184,13 @@ class SubmitBallotDialog extends React.Component {
                   if(error.type === 'unselectedPosition'){
                     return ( 
                       <div key={index}>
-                        <div key={index} className={classes.errorText}>
+                        <Typography key={index} className={classes.errorText}>
                           You have not voted yet for the following positions: 
-                        </div>
+                        </Typography>
 
-                        {error.unselectedPositions.map((unselectedPosition) => {
+                        {error.unselectedPositions.map((unselectedPosition, index) => {
                           return (
-                            <div className={classes.errorText} key={unselectedPosition.id}>{unselectedPosition.name}</div>
+                            <Typography className={classes.errorText} key={unselectedPosition.id}>{'(' + (index + 1) + ') ' + unselectedPosition.name}</Typography>
                           )
                         })}
                       </div>
@@ -168,9 +201,60 @@ class SubmitBallotDialog extends React.Component {
                 })}
                 
               </div>     
-            : <DialogContentText>
-                Are you sure you want to submit this ballot? You can only vote once. Please review your ballot.
-              </DialogContentText>
+            : <div>
+                <Typography className={classes.dialogContentText}>Are you sure you want to submit your votes? You can only submit once. Please review your votes.</Typography>
+                
+                <Grid
+                  className={classes.section}
+                  container
+                  direction='column'
+                  alignItems='flex-start'
+                  justify='center'
+                >
+                  <Grid
+                    container
+                    direction='row'
+                    alignItems='center'
+                    justify='flex-start'
+                  >
+                    <Grid item xs={6}><Typography className={classes.columnTitle}>Positions</Typography></Grid>
+                    <Grid item xs={6}><Typography className={classes.columnTitle}>Candidates</Typography></Grid>
+                  </Grid>
+
+                  {election.positionList.map((position) => {
+                    let getVotedCandidates = this.getVotedCandidatesOf(position)
+                    
+                    return(
+                      <Grid
+                        key={position.id}
+                        container
+                        direction='row'
+                        alignItems='center'
+                        justify='flex-start'
+                      >
+                        <Grid item xs={6}><Typography>{position.name}</Typography></Grid>
+                        
+                        <Grid item xs={6}>
+                          <Grid
+                            container
+                            direction='row'
+                            alignItems='center'
+                            justify='flex-start'
+                          >
+                            {getVotedCandidates.map((candidateName, index) => {
+                              return(
+                                <Grid key={index} item>
+                                  <Typography className={classes.candidateName} >{candidateName}{index !== getVotedCandidates.length - 1 ? ', ' : ''}</Typography>
+                                </Grid>
+                              )
+                            })}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    )
+                  })}
+                </Grid>
+              </div>
           } 
         </DialogContent>
 
@@ -191,9 +275,9 @@ class SubmitBallotDialog extends React.Component {
               alignItems='center'
               justify='space-between'
             >
-              <Grid item><YesButton onClick={this.submitBallot} /></Grid>
-              
-              <Grid item><NoButton onClick={handleClickCloseDialog} /></Grid>
+              <Grid item><BackButton onClick={handleClickCloseDialog} /></Grid>
+                
+              <Grid item><SubmitButton onClick={this.submitBallot} /></Grid>
             </Grid>
           }
         </DialogActions>}
