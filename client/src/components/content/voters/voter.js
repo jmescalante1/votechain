@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, withTheme } from '@material-ui/core/styles'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
 import VoterTableContainer from './voter-table-container'
+import Spacer from '../../customized/layout/spacer'
 
 const styles = theme => ({
   electionSelector: {
-    marginTop: theme.spacing.unit * 4,
-    margin: 'auto',
-    width: '90%'
-  }
+    width: '100%'
+  },
 })
 
 class Voter extends Component {
 
   render() {
-    const { classes, electionId, handleElectionSelectChange, electionList } = this.props
+    const { classes, electionId, handleElectionSelectChange, electionList, theme } = this.props
     
     return (
       <div>
@@ -30,6 +29,8 @@ class Voter extends Component {
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
         />
+
+        <Spacer width='100%' height={theme.spacing.unit * 4}/>
 
         <VoterTableContainer 
           electionId={electionId}
@@ -47,4 +48,4 @@ Voter.propTypes = {
   electionList: PropTypes.array.isRequired,
 }
 
-export default withStyles(styles)(Voter)
+export default withTheme()(withStyles(styles)(Voter))

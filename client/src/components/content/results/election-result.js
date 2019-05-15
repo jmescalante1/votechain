@@ -12,9 +12,8 @@ import ResultPDF from './result-pdf'
 import PositionResult from './position-result'
 
 const styles = theme => ({
-  root: {
-    margin: theme.spacing.unit * 2
-  },
+  root: {},
+  
   positionName: {
     fontSize: 25,
     color: '#212121',

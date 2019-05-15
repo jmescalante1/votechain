@@ -1,21 +1,37 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
+import { withStyles, withTheme } from '@material-ui/core/styles'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
 import ElectionResult from './election-result'
+import Spacer from '../../customized/layout/spacer'
+
+const styles = theme => ({
+  electionSelector: {
+    width: '100%'
+  },
+})
 
 class Result extends Component {
 
   render() {
-    const { electionId, finishedElectionList, handleElectionSelectChange, currentFinishedElection } = this.props
+    const { classes, theme, electionId, finishedElectionList, handleElectionSelectChange, currentFinishedElection } = this.props
     return (
       <div>
         <ElectionSelector 
+          classes={{
+            root: classes.electionSelector
+          }}
+
+          fontSize={18}
           electionId={electionId}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={finishedElectionList}
         />
+      
+        <Spacer width='100%' height={theme.spacing.unit * 4}/>
+
         {!isEmpty(currentFinishedElection) &&
           <ElectionResult 
             currentFinishedElection={currentFinishedElection}
@@ -53,4 +69,4 @@ Result.propTypes = {
   }).isRequired,
 }
 
-export default Result
+export default withTheme()(withStyles(styles)(Result))

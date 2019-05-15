@@ -10,7 +10,6 @@ const styles = theme => ({
     height: theme.spacing.unit * 8,
     display: 'flex',
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   title: {
     marginLeft: theme.spacing.unit * 2,

@@ -16,8 +16,6 @@ import TablePagination from '../tables/table-pagination/table-pagination'
 const styles = theme => ({
   root: {
     width: '100%',
-    margin: 'auto',
-    marginTop: theme.spacing.unit * 4,
   },
   table: {
     minWidth: 1020
