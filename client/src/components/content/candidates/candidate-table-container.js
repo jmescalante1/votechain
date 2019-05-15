@@ -73,7 +73,7 @@ class CandidateTableContainer extends Component {
     const { currentCandidateList } = this.props
 
     const headers = [
-      {id: 'id', label: 'ID'},
+      {id: 'id', label: 'Candidate ID'},
       {id: 'name', label: 'Name'},
       {id: 'positionName', label: 'Position'},
       {id: 'partyName', label: 'Party'},

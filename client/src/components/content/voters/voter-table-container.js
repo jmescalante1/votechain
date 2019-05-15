@@ -86,7 +86,7 @@ class VoterTableContainer extends Component {
     const { voterList, electionId } = this.props
 
     const headers = [
-      {id: 'id', label: 'Voter Address'},
+      {id: 'id', label: 'Voter ID'},
       {id: 'name', label: 'Name'},
       {id: 'studentNo', label: 'Student Number'},
       {id: 'actions', label: 'Actions'}

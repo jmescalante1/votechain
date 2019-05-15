@@ -72,7 +72,7 @@ class OfficialTableContainer extends Component {
     const { officialList } = this.props
 
     const headers = [
-      {id: 'id', label: 'Official Address'},
+      {id: 'id', label: 'Official ID'},
       {id: 'name', label: 'Name'},
       {id: 'actions', label: 'Actions'}
     ]

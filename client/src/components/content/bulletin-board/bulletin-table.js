@@ -89,7 +89,7 @@ class BulletinTable extends Component {
     const tableTools = this.createTableTools()
 
     const headers = [
-      {id: 'id', label: 'Alias'},
+      {id: 'id', label: 'Voter ID'},
       {id: 'actions', label: 'Actions'}
     ]
 

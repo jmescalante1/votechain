@@ -106,7 +106,7 @@ class AddAdminDialog extends React.Component {
     let adminName = fields['adminName']
 
     if(FormValidator.isEmpty(adminName)){
-      errors['adminName'] = 'The admin name must not be empty'
+      errors['adminName'] = 'The admin name cannot be empty'
       noOfErrors++
     } else if (!FormValidator.validLength(adminName, 1, 32)) {
       errors['adminName'] = 'The admin name must contain 1 - 32 characters only'

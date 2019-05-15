@@ -72,7 +72,7 @@ class AdminTableContainer extends Component {
     const { adminList } = this.props
 
     const headers = [
-      {id: 'id', label: 'Admin Address'},
+      {id: 'id', label: 'Admin ID'},
       {id: 'name', label: 'Name'},
       {id: 'actions', label: 'Actions'}
     ]

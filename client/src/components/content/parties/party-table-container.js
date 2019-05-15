@@ -73,7 +73,7 @@ class PartyTableContainer extends Component {
     const { partyList, electionId } = this.props
 
     const headers = [
-      {id: 'id', label: 'ID'},
+      {id: 'id', label: 'Party ID'},
       {id: 'name', label: 'Name'},
       {id: 'actions', label: 'Actions'}
     ]
