@@ -18,6 +18,7 @@ class PositionResult extends Component {
             />
           )
         })}
+        {position.hasAbstain && 'Abstain: ' + position.abstain.noOfVotesReceived}
       </div>
     );
   }

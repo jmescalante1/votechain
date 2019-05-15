@@ -278,6 +278,9 @@ contract Votechain {
 
         // insert the key of the casted vote to the voteKeyList of the election
         electionList[position.electionKey].voteKeyList.push(voteKey);
+
+        // insert the key of the casted vote to the voteKeyList of the abstain
+        abstainList[abstainKey].voteKeyList.push(voteKey);
     }
 
     function bulkVote(uint256[] memory candidateKeys, uint256[] memory abstainKeys) public {
@@ -872,6 +875,10 @@ contract Votechain {
 
     function getNoOfVotesReceivedBy(uint256 candidateKey) public view candidateKeyExists(candidateKey) returns (uint256) {
         return candidateList[candidateKey].voteKeyList.length;
+    }
+
+    function getNoOfVotesReceivedByAbstain(uint256 abstainKey) public view abstainKeyExists(abstainKey) returns (uint256) {
+        return abstainList[abstainKey].voteKeyList.length;
     }
 
     function getPositionKeyAt(uint256 electionKey, uint256 index) public view electionKeyExists(electionKey) returns(uint256) {

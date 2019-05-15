@@ -24,6 +24,14 @@ export function fetchFinishedElectionResult(votechain, electionKey) {
         candidate.noOfVotesReceived = Number(await votechain.methods.getNoOfVotesReceivedBy(candidateKey).call())
         candidateList.push(candidate)
       }
+    
+      if(position.hasAbstain && (await votechain.methods.isAbstainAt(positionKey, position.abstainId).call())){
+        let abstain = {
+          noOfVotesReceived: Number(await votechain.methods.getNoOfVotesReceivedByAbstain(position.abstainId).call())
+        }
+        
+        position.abstain = abstain
+      }
 
       position.candidateList = candidateList
       positionList.push(position)

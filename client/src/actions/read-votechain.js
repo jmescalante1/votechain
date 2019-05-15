@@ -163,7 +163,6 @@ export async function getVoter(voterKey, votechain) {
 export async function getVote(voteKey, votechain) {
   let response = await votechain.methods.voteList(voteKey).call()
   
-
   let vote = {}
 
   vote.id = Number(voteKey)
