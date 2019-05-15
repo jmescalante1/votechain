@@ -6,14 +6,12 @@ import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
 import Loader from '../progress-bars/loader'
 
-// import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import BackButton from '../buttons/back'
 
