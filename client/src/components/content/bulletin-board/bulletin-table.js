@@ -5,7 +5,7 @@ import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core/styles'
 
-import AddCircle from '@material-ui/icons/AddCircle'
+import Launch from '@material-ui/icons/Launch'
 
 import TableContainer from '../../customized/tables/table-container'
 import ViewButton from '../../customized/buttons/view'
@@ -15,7 +15,7 @@ import Export from '../../export/export'
 
 const styles = theme => ({
   actionIcon:{
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
     color: '#006064'
   },
   fab: {
@@ -51,14 +51,14 @@ class BulletinTable extends Component {
           />
         }
       >
-        <Tooltip title='Export Bulletin Board'>
+        <Tooltip title='Export bulletin board'>
           <Fab 
             size='large' 
             variant='extended' 
             className={classes.fab}
           >
-            <AddCircle className={classes.actionIcon} />
             Export
+            <Launch className={classes.actionIcon} />
           </Fab>
         </Tooltip>
       </Export>

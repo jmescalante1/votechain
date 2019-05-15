@@ -4,9 +4,6 @@ import isEmpty from 'lodash/isEmpty'
 
 import ElectionSelector from '../../customized/selectors/election-selector'
 import ElectionResult from './election-result'
-import ResultPDF from './result-pdf'
-import Export from '../../export/export'
-
 
 class Result extends Component {
 
@@ -20,15 +17,9 @@ class Result extends Component {
           electionList={finishedElectionList}
         />
         {!isEmpty(currentFinishedElection) &&
-          <div>
-            <ElectionResult 
-              currentFinishedElection={currentFinishedElection}
-            />
-            <Export 
-              document={<ResultPDF currentFinishedElection={currentFinishedElection}/>}
-              fileName='Election Results.pdf'
-            />
-          </div>
+          <ElectionResult 
+            currentFinishedElection={currentFinishedElection}
+          />
         }
       </div>
     )

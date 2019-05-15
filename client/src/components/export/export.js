@@ -6,12 +6,12 @@ import ExportButton from '../customized/buttons/export'
 
 class Export extends Component {
   render() {
-    const { document, fileName, children } = this.props
+    const { document, fileName, children, color } = this.props
 
     return (
       <div>
         <PDFDownloadLink style={{textDecoration: 'none'}} document={document} fileName={fileName}>
-          {children ? children: <ExportButton />}
+          {children ? children: <ExportButton color={color} />}
         </PDFDownloadLink>
       </div>
     )

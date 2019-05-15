@@ -3,36 +3,41 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
+import Tooltip from '@material-ui/core/Tooltip'
 
-import SaveAlt from '@material-ui/icons/SaveAlt'
+import Launch from '@material-ui/icons/Launch'
 
 const styles = theme => ({
-  button: {
-    color: '#fafafa',
-    backgroundColor: '#1a237e',
-    '&:hover': {
-      backgroundColor: '#3f51b5'
-    }
-  },
-  label: {
+  actionIcon:{
     marginLeft: theme.spacing.unit,
+    color: '#006064'
   },
+  fab: {
+    margin: theme.spacing.unit,
+    backgroundColor: '#ffffff',
+    color: '#006064'
+  }, 
 })
 
 class ExportButton extends React.Component {
   render(){
-    const { onClick, classes, size } = this.props
+    const { onClick, classes, size, color } = this.props
 
     return(
-      <Fab
-        size={size}
-        variant='extended' 
-        onClick={onClick} 
-        className={classes.button}
-      >
-        <SaveAlt />
-        <div className={classes.label}>Export</div>
-      </Fab>
+      <Tooltip title='Export election result'>
+        <Fab
+          size={size}
+          variant='extended' 
+          onClick={onClick} 
+          className={classes.fab}
+          style={{color: color ? color : '#006064'}}
+        >
+          Export
+          <Launch className={classes.actionIcon}
+            style={{color: color ? color : '#006064'}}
+          />
+        </Fab>
+      </Tooltip>
     )
   }
 }

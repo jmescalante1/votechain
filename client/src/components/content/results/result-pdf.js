@@ -118,6 +118,14 @@ class ResultPDF extends Component {
                       </View>
                     )
                   })}
+                  {position.hasAbstain && 
+                    <View style={styles.row}>
+                      <Text style={styles.cell}>Abstain</Text>
+                      <Text style={styles.cell}>{position.abstain.noOfVotesReceived}</Text>
+                      <Text style={styles.cell}>-</Text>
+                    </View>
+                    
+                  }
                 </View>
               </View>
             )
