@@ -255,7 +255,7 @@ contract Votechain {
     }
 
     function castAbstain(uint256 abstainKey) 
-        public
+        private
         abstainKeyExists(abstainKey)
         hasStarted(positionList[abstainList[abstainKey].positionKey].electionKey)
         onlyVoterAt(positionList[abstainList[abstainKey].positionKey].electionKey) 

@@ -24,18 +24,22 @@ class VoteContainer extends Component {
 
   render() {
     const { electionId } = this.state 
+    const { electionList } = this.props
   
     return (
-      <Vote 
-        electionId={electionId}
-        handleElectionSelectChange={this.handleElectionSelectChange}
-      />
+      <div>
+        <Vote 
+          electionId={electionId}
+          handleElectionSelectChange={this.handleElectionSelectChange}
+          electionList={electionList}
+        />
+      </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-
+  electionList: state.election.electionList
 })
 
 const mapDispatchToProps = {

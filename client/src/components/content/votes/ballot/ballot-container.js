@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
+import PropTypes from 'prop-types'
 
 import Ballot from './ballot'
-import SubmitBallotDialog from '../../customized/dialogs/submit-ballot'
+import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
 
-import { fetchElection } from '../../../actions/ballot'
+import { fetchElection } from '../../../../actions/ballot'
 
-class BallotViewContainer extends Component {
+class BallotContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -28,29 +28,85 @@ class BallotViewContainer extends Component {
       openSubmitBallotDialog: false,
       candidateKeyList: [],
       abstainKeyList: [],
+      errors: {}
     }
     
-    this.handleBallotChange = this.handleBallotChange.bind(this)
-    this.handleAbstainCheck = this.handleAbstainCheck.bind(this)
+    this.initPositionState = this.initPositionState.bind(this)
+
+    this.handleSelectCandidate = this.handleSelectCandidate.bind(this)
+    this.handleSelectAbstain = this.handleSelectAbstain.bind(this)
    
-    this.handleCloseSubmitDialog = this.handleCloseSubmitDialog.bind(this)
     this.handleOpenSubmitDialog = this.handleOpenSubmitDialog.bind(this)
+    this.handleCloseSubmitDialog = this.handleCloseSubmitDialog.bind(this)
+
   }
 
   componentDidMount() {
-    if(this.props.location.params) {
-      const {votechain, fetchElection, location } = this.props
-      const electionId = location.params.election.id
-     
+    const {votechain, fetchElection, electionId } = this.props
+    if(electionId)
+      fetchElection(votechain, electionId)
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.electionId !== this.props.electionId) {
+      const { votechain, electionId, fetchElection } = this.props
       fetchElection(votechain, electionId)
     }
   }
 
-  handleCloseSubmitDialog() {
-    this.setState({ openSubmitBallotDialog: false })
+  async initPositionState(positionId) {
+    let noOfChecks = 0;
+    let candidateIds = {}
+    let isAbstain = false
+    let positionState = {candidateIds, noOfChecks, isAbstain}
+    
+    await this.setState(prevState => ({
+      positionList: {
+        ...prevState.positionList,
+        [positionId]: positionState
+      }
+    }))
   }
 
-  handleOpenSubmitDialog() {
+  async handleSelectAbstain(id, checked, position) {
+    if(!this.state.positionList[position.id]){
+      await this.initPositionState(position.id)
+    }
+
+    await this.setState(prevState => ({
+      positionList: {
+        ...prevState.positionList,
+        [position.id]: {
+          ...prevState.positionList[position.id],
+          isAbstain: checked,
+          abstainId: id
+        }
+      }
+    }))
+  }
+  
+  async handleSelectCandidate(candidateId, checked, position) {
+    if(!this.state.positionList[position.id]){
+      await this.initPositionState(position.id)
+    }
+
+    if(this.state.positionList[position.id].noOfChecks < Number(position.maxNoOfCandidatesThatCanBeSelected) || !checked){
+      let positionListClone = cloneDeep(this.state.positionList)
+      positionListClone[position.id].candidateIds[candidateId] = checked
+
+      if(checked){
+        positionListClone[position.id].noOfChecks++
+      } else {
+        positionListClone[position.id].noOfChecks--
+      }
+
+      await this.setState({
+        positionList: positionListClone
+      })
+    }
+  }
+
+  async handleOpenSubmitDialog() {
     const { positionList } = this.state 
     let candidateKeyList = []
     let abstainKeyList = []
@@ -69,92 +125,39 @@ class BallotViewContainer extends Component {
       }
     })
 
-    this.setState({ 
+    await this.setState({ 
       candidateKeyList,
       abstainKeyList,
       openSubmitBallotDialog: true 
     })
   }
-
-  async handleAbstainCheck(id, checked, position) {
-    if(!this.state.positionList[position.id]){
-      let noOfChecks = 0;
-      let candidateIds = {}
-      let isAbstain = false
-      let positionState = {candidateIds, noOfChecks, isAbstain}
-      
-      await this.setState(prevState => ({
-        positionList: {
-          ...prevState.positionList,
-          [position.id]: positionState
-        }
-      }))
-    }
-
-    await this.setState(prevState => ({
-      positionList: {
-        ...prevState.positionList,
-        [position.id]: {
-          ...prevState.positionList[position.id],
-          isAbstain: checked,
-          abstainId: id
-        }
-      }
-    }))
-  }
   
-  async handleBallotChange(candidateId, checked, position) {
-    if(!this.state.positionList[position.id]){
-      let noOfChecks = 0;
-      let candidateIds = {}
-      let isAbstain = false
-      let positionState = {candidateIds, noOfChecks, isAbstain}
-      
-      await this.setState(prevState => ({
-        positionList: {
-          ...prevState.positionList,
-          [position.id]: positionState
-        }
-      }))
-    }
-
-    if(this.state.positionList[position.id].noOfChecks < Number(position.maxNoOfCandidatesThatCanBeSelected) || !checked){
-      let positionListClone = cloneDeep(this.state.positionList)
-      positionListClone[position.id].candidateIds[candidateId] = checked
-
-      if(checked){
-        positionListClone[position.id].noOfChecks++
-      } else {
-        positionListClone[position.id].noOfChecks--
-      }
-
-      await this.setState({
-        positionList: positionListClone
-      })
-    }
+  handleCloseSubmitDialog() {
+    this.setState({ openSubmitBallotDialog: false })
   }
-  
+
   render() {  
-    if(!this.props.location.params){
-      return <Redirect to='/elections' />
-    }
-    
     const { election } = this.props
     const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList } = this.state
-
+    
     return (
       <div>
         {!isEmpty(election) ?   
           <div>
             <Ballot 
+              margin={{
+                marginTop: 40 
+              }}
               election={election}
               positionListState={positionList}
-              handleBallotChange={this.handleBallotChange}
-              handleAbstainCheck={this.handleAbstainCheck}
+              handleSelectCandidate={this.handleSelectCandidate}
+              handleSelectAbstain={this.handleSelectAbstain}
 
               handleOpenSubmitDialog={this.handleOpenSubmitDialog}
             />
             <SubmitBallotDialog 
+              election={election}
+
               openDialog={openSubmitBallotDialog}
               handleClickCloseDialog={this.handleCloseSubmitDialog}
               candidateKeyList={candidateKeyList}
@@ -167,6 +170,10 @@ class BallotViewContainer extends Component {
   }
 }
 
+BallotContainer.propTypes = {
+  electionId: PropTypes.number
+}
+
 const mapStateToProps = state => ({
   votechain: state.contract.votechain,
   election: state.ballot.election,
@@ -176,4 +183,4 @@ const mapDispatchToProps = {
   fetchElection,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BallotViewContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(BallotContainer)

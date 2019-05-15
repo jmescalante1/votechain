@@ -6,15 +6,16 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#64b5f6',
-    height: theme.spacing.unit * 6,
+    backgroundColor: '#212121',
+    height: theme.spacing.unit * 8,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
-
   title: {
+    marginLeft: theme.spacing.unit * 2,
     fontWeight: 'bold',
+    color: '#f5f5f5'
   }
 })
 

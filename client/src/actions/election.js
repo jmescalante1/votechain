@@ -1,4 +1,4 @@
-import { getElection, getElectionDetails } from './read-votechain'
+import { getElection, getElectionDetails, getRole } from './read-votechain'
 
 export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
@@ -52,16 +52,30 @@ export function addElectionUI(votechain, electionKey){
 
 export function fetchElectionList(votechain, account) {
   return async (dispatch) => {
-    const noOfElections = await votechain.methods.getNoOfElections().call()
- 
-    console.log(account)
     let electionList = []
 
-    for(let i = 0; i < noOfElections; i++){
-      let electionKey = await votechain.methods.electionKeyList(i).call()
-      let election = await getElection(electionKey, votechain)
+    let role = await getRole(votechain, account)
 
-      electionList.push(election)
+    if(role === 'Administrator' || role === 'Official'){
+      const noOfElections = await votechain.methods.getNoOfElections().call()
+  
+      for(let i = 0; i < noOfElections; i++){
+        let electionKey = await votechain.methods.electionKeyList(i).call()
+        let election = await getElection(electionKey, votechain)
+
+        electionList.push(election)
+      }
+    } else if (role === 'Voter') {
+      const noOfElections = await votechain.methods.getNoOfElections().call()
+  
+      for(let i = 0; i < noOfElections; i++){
+        let electionKey = await votechain.methods.electionKeyList(i).call()
+        
+        if((await votechain.methods.isVoterAt(electionKey, account).call())) {
+          let election = await getElection(electionKey, votechain)
+          electionList.push(election)
+        }
+      }
     }
 
     dispatch({
