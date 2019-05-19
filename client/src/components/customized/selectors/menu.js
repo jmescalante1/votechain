@@ -38,10 +38,10 @@ class CustomizedMenu extends React.Component {
     this.setState({ anchorEl: null })
   }
 
-  onSelectChange(option) {
+  onSelectChange(selected) {
     const { onSelectChange } = this.props
     
-    onSelectChange(option)
+    onSelectChange(selected)
     this.handleClose()
   }
 
@@ -65,7 +65,7 @@ class CustomizedMenu extends React.Component {
         >
           {options.map((option, index) => {
             return ( 
-              <MenuItem onClick={() => this.onSelectChange(option)} key={index}>{option}</MenuItem>
+              <MenuItem onClick={() => this.onSelectChange(option)} key={index}>{option.label}</MenuItem>
             )
           })}
         </Menu>

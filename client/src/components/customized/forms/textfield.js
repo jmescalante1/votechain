@@ -33,7 +33,7 @@ const styles = theme => ({
 
 class CustomizedTextField extends React.Component {
   render() {
-    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus, onChange, error } = this.props
+    const { classes, id, variant, label, defaultValue, type, fullWidth, required, autoFocus, onChange, error, startAdornment } = this.props
 
     return(
       <TextField
@@ -54,7 +54,8 @@ class CustomizedTextField extends React.Component {
             focused: classes.cssFocused,
             notchedOutline: classes.notchedOutline,
             error: classes.cssOutlinedInputError
-          }
+          },
+          startAdornment: startAdornment
         }}
         
         InputLabelProps={{
@@ -76,7 +77,7 @@ CustomizedTextField.propTypes = {
   classes: PropTypes.object.isRequired,
 
   variant: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   id: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['number', 'text']).isRequired,
 

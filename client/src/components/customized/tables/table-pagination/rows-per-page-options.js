@@ -17,8 +17,27 @@ const styles = theme => ({
 })
 
 class RowsPerPageOptions extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.onChangeRowsPerPage = this.onChangeRowsPerPage.bind(this)
+  }
+  
+  onChangeRowsPerPage(option) {
+    const { onChangeRowsPerPage } = this.props
+
+    onChangeRowsPerPage(option.id)
+  }
+
   render() {
-    const { classes, label, options, onChangeRowsPerPage, rowsPerPage } = this.props
+    const { classes, label, options, rowsPerPage } = this.props
+    
+    const optionObjectList = options.map(option => {
+      return {
+        id: option,
+        label: option,
+      }
+    })
 
     return (
       <Grid 
@@ -34,8 +53,8 @@ class RowsPerPageOptions extends Component {
         <Grid item> 
           <Menu 
             label={rowsPerPage}
-            options={options}
-            onSelectChange={onChangeRowsPerPage}
+            options={optionObjectList}
+            onSelectChange={this.onChangeRowsPerPage}
             classes={{
               button: classes.menuButton
             }}

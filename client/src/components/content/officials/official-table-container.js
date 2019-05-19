@@ -72,8 +72,8 @@ class OfficialTableContainer extends Component {
     const { officialList } = this.props
 
     const headers = [
-      {id: 'id', label: 'Official ID'},
-      {id: 'name', label: 'Name'},
+      {id: 'id', label: 'Official ID', searchable: true},
+      {id: 'name', label: 'Name', searchable: true},
       {id: 'actions', label: 'Actions'}
     ]
 

@@ -11,7 +11,10 @@ class TableContainer extends Component {
       order: props.defaultOrder,
       orderBy: props.defaultOrderBy,
       page: 0,
-      rowsPerPage: props.defaultRowsPerPage
+      rowsPerPage: props.defaultRowsPerPage,
+
+      query: '',
+      searchBy: 'All',
     }
 
     this.handleRequestSort = this.handleRequestSort.bind(this)
@@ -20,6 +23,67 @@ class TableContainer extends Component {
     this.stableSort = this.stableSort.bind(this)
     this.desc = this.desc.bind(this)
     this.getSorting = this.getSorting.bind(this)
+
+    this.getSearchResult = this.getSearchResult.bind(this)
+    this.handleQueryChange = this.handleQueryChange.bind(this)
+    this.getSearchableColumnList = this.getSearchableColumnList.bind(this)
+    this.handleSearchByChange = this.handleSearchByChange.bind(this)
+  }
+
+  getSearchResult() {
+    const { query, searchBy } = this.state
+    const { data } = this.props
+
+    if(query.trim().length === 0){
+      return data
+    }
+   
+    if(searchBy === 'All') {
+      return data.filter(row => {
+        let keys = Object.keys(row)
+        
+        for(let i = 0; i < keys.length; i++){
+          if(row[keys[i]].toString().toLowerCase().includes(query)){
+            return true
+          }
+        }
+  
+        return false
+      })
+    }
+
+    
+    return data.filter(row => row[searchBy].toString().toLowerCase().includes(query))
+  }
+
+  getSearchableColumnList() {
+    const { headers } = this.props
+
+    const searchableColumnList = []
+
+    searchableColumnList.push({
+      id: 'All',
+      label: 'All'
+    })
+
+    headers.forEach(header => {
+      if(header.searchable){
+        searchableColumnList.push({
+          id: header.id,
+          label: header.label,
+        })
+      }
+    })
+
+    return searchableColumnList
+  }
+
+  handleSearchByChange(option) {
+    this.setState({ searchBy: option.id })
+  }
+
+  handleQueryChange(event) {
+    this.setState({ query: event.target.value.toLowerCase() })
   }
 
   handleRequestSort(event, property) {
@@ -70,30 +134,39 @@ class TableContainer extends Component {
 
   render() {
     const { order, orderBy, rowsPerPage, page } = this.state
-    const { headers, data, rowsPerPageOptions, tableTools, tableDialogs, tableName, rowHeight } = this.props
+    const { headers, rowsPerPageOptions, tableTools, tableDialogs, tableName, rowHeight } = this.props
    
+    const searchableColumnList = this.getSearchableColumnList()
+
     return (
-      <Table
-        tableName={tableName}
-        data={data}
-        headers={headers}
-        order={order}
-        orderBy={orderBy}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        rowsPerPageOptions={rowsPerPageOptions}
+      <div>
+        <Table
+          tableName={tableName}
+          data={this.getSearchResult()}
+          headers={headers}
+          order={order}
+          orderBy={orderBy}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          rowsPerPageOptions={rowsPerPageOptions}
 
-        tableTools={tableTools}
-        tableDialogs={tableDialogs}
+          handleQueryChange={this.handleQueryChange}
+          searchableColumnList={searchableColumnList}
+          handleSearchByChange={this.handleSearchByChange}
+          
 
-        handleRequestSort={this.handleRequestSort}
-        handleChangePage={this.handleChangePage}
-        handleChangeRowsPerPage={this.handleChangeRowsPerPage}
-        stableSort={this.stableSort}
-        getSorting={this.getSorting}
+          tableTools={tableTools}
+          tableDialogs={tableDialogs}
 
-        rowHeight={rowHeight}
-      />  
+          handleRequestSort={this.handleRequestSort}
+          handleChangePage={this.handleChangePage}
+          handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+          stableSort={this.stableSort}
+          getSorting={this.getSorting}
+
+          rowHeight={rowHeight}
+        />  
+      </div>
     )
   }
 }

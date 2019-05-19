@@ -73,9 +73,9 @@ class PositionTableContainer extends Component {
     const { positionList, electionId } = this.props
 
     const headers = [
-      {id: 'id', label: 'Position ID'},
-      {id: 'name', label: 'Name'},
-      {id: 'maxNoOfCandidatesThatCanBeSelected', label: 'Max No. of Candidates to be Elected'},
+      {id: 'id', label: 'Position ID', searchable: true},
+      {id: 'name', label: 'Name', searchable: true},
+      {id: 'maxNoOfCandidatesThatCanBeSelected', label: 'Max No. of Candidates to be Elected', searchable: true},
       {id: 'hasAbstain', label: 'Voters can abstain'},
       {id: 'actions', label: 'Actions'}
     ]

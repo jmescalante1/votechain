@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, withTheme } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -13,6 +13,7 @@ import TableHeader from '../tables/table-header'
 import TableToolbar from '../tables/table-toolbar'
 
 import TablePagination from '../tables/table-pagination/table-pagination'
+
 
 const styles = theme => ({
   root: {
@@ -65,11 +66,13 @@ class CustomizedTable extends Component {
 
     return emptyRows
   }
-  
+
   render() {
-    const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName } = this.props
+    const { classes, data, headers, order, orderBy, rowsPerPage, page, rowsPerPageOptions, tableTools, tableDialogs, tableName, searchableColumnList } = this.props
     const { handleRequestSort, handleChangePage, handleChangeRowsPerPage, stableSort, getSorting } = this.props
+    const { handleQueryChange, handleSearchByChange } = this.props
     const { rowHeight } = this.props
+
     const sortedData = stableSort(data, getSorting(order, orderBy))
   
     const noOfEmptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
@@ -79,6 +82,10 @@ class CustomizedTable extends Component {
         <TableToolbar 
           tableTools={tableTools}
           tableName={tableName}
+
+          handleQueryChange={handleQueryChange}
+          searchableColumnList={searchableColumnList}
+          handleSearchByChange={handleSearchByChange}
         />
           
         <div className={classes.tableWrapper}>
@@ -137,7 +144,6 @@ class CustomizedTable extends Component {
           onChangeRowsPerPage={handleChangeRowsPerPage}
           onChangePage={handleChangePage}
         />
-
       </Paper>
     )
   }
@@ -157,6 +163,13 @@ CustomizedTable.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
 
+  handleQueryChange: PropTypes.func.isRequired,
+  searchableColumnList: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  })).isRequired,
+  handleSearchByChange: PropTypes.func.isRequired,
+
   handleRequestSort: PropTypes.func.isRequired,
   handleChangePage: PropTypes.func.isRequired,
   handleChangeRowsPerPage: PropTypes.func.isRequired,
@@ -165,4 +178,4 @@ CustomizedTable.propTypes = {
   rowHeight: PropTypes.number
 }
 
-export default withStyles(styles)(CustomizedTable)
+export default withTheme()(withStyles(styles)(CustomizedTable))

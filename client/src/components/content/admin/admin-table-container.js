@@ -72,8 +72,8 @@ class AdminTableContainer extends Component {
     const { adminList } = this.props
 
     const headers = [
-      {id: 'id', label: 'Admin ID'},
-      {id: 'name', label: 'Name'},
+      {id: 'id', label: 'Admin ID', searchable: true},
+      {id: 'name', label: 'Name', searchable: true},
       {id: 'actions', label: 'Actions'}
     ]
 

@@ -19,6 +19,7 @@ const styles = theme => ({
 })
 
 class TablePagination extends Component {
+
   render() {
     const { classes, rowsPerPageDisplayLabel, rowsPerPage, rowsPerPageOptions, onChangeRowsPerPage, count, page, onChangePage } = this.props
 
