@@ -97,9 +97,14 @@ class EditPositionDialog extends React.Component {
   }
 
   async initFieldState() {
+    const { positionToBeEdited } = this.props
+    console.log(positionToBeEdited)
+
     await this.setState({ 
       fields: {
-        hasAbstain: false
+        hasAbstain: positionToBeEdited.hasAbstain,
+        positionName: positionToBeEdited.name,
+        maxNoOfCandidates: positionToBeEdited.maxNoOfCandidatesThatCanBeSelected
       }
     })
   }
