@@ -109,11 +109,15 @@ class PositionTable extends Component {
   createTableDialogs(){
     const { openAddPositionDialog, handleCloseAddPositionDialog, election } = this.props
 
+    if(!election){
+      return null
+    }
+    
     return (
       <AddPositionDialog 
         openDialog={openAddPositionDialog}
         onClose={handleCloseAddPositionDialog}
-        electionId={election ? election.id : null}
+        electionId={election.id}
       />
     )
   }
