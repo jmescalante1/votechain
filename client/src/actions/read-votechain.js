@@ -137,12 +137,14 @@ export async function getCandidate(candidateKey, votechain) {
   let position = await getRawPosition(response.positionKey, votechain)
 
   candidate.positionName = position.name
+  candidate.partyId = Number(response.partyKey)
 
   if((await votechain.methods.isParty(response.partyKey).call())){
     let party = await getRawParty(Number(response.partyKey), votechain)
 
     candidate.partyName = party.name
   } else {
+
     candidate.partyName = 'Independent'
   }
   

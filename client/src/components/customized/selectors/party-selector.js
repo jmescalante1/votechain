@@ -16,7 +16,7 @@ const styles = theme => ({
 
 class PartySelector extends React.Component {
   render(){
-    const { classes, fontSize, partyList, handlePartySelectChange, width, error } = this.props
+    const { classes, fontSize, partyList, handlePartySelectChange, width, error, placeholder} = this.props
     let calculatedWidth = width ? width : '60%'
 
     let options = partyList.map((party) => {
@@ -68,7 +68,7 @@ class PartySelector extends React.Component {
             selectStyles={selectStyles}
             options={options}
             onChange={handlePartySelectChange}
-            placeholder={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>{error ? error : 'Select'}</Typography>}
+            placeholder={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>{error ? error : placeholder ? placeholder : 'Select'}</Typography>}
             label={<Typography style={{color: error ? 'red' : null, fontSize: fontSize}}>Party</Typography>}
             isClearable={false}
           />
@@ -83,7 +83,8 @@ PartySelector.propTypes = {
 
   handlePartySelectChange: PropTypes.func.isRequired,
   partyList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  width: PropTypes.string
+  width: PropTypes.string,
+  placeholder: PropTypes.string
 }
 
 export default withStyles(styles)(PartySelector)

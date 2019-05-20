@@ -98,7 +98,6 @@ class EditPositionDialog extends React.Component {
 
   async initFieldState() {
     const { positionToBeEdited } = this.props
-    console.log(positionToBeEdited)
 
     await this.setState({ 
       fields: {

@@ -53,7 +53,7 @@ class EditCandidateDialog extends React.Component {
     
     this.onEntered = this.onEntered.bind(this)
     this.refreshErrorState = this.refreshErrorState.bind(this)
-    this.refreshFieldState = this.refreshFieldState.bind(this)
+    this.initFieldState = this.initFieldState.bind(this)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.validateInputs = this.validateInputs.bind(this)
@@ -62,15 +62,23 @@ class EditCandidateDialog extends React.Component {
 
   async onEntered() {
     await this.refreshErrorState()
-    await this.refreshFieldState()
+    await this.initFieldState()
   }
 
   async refreshErrorState() {
     await this.setState({ errors: {} })
   }
 
-  async refreshFieldState() {
-    await this.setState({ fields: {} })
+  async initFieldState() {
+    const { candidateToBeEdited } = this.props
+    console.log(candidateToBeEdited)
+
+    await this.setState({ 
+      fields: {
+        partyId: candidateToBeEdited.partyId,
+        candidateName: candidateToBeEdited.name
+      } 
+    })
   }
 
   handleFieldChange(field, value) {
@@ -128,7 +136,7 @@ class EditCandidateDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog, currentPartyList } = this.props
+    const { classes, openDialog, handleClickCloseDialog, currentPartyList, candidateToBeEdited } = this.props
     const { errors, fields } = this.state
   
     return (
@@ -160,7 +168,7 @@ class EditCandidateDialog extends React.Component {
                 this.handleFieldChange('partyId', null)
             }}
             partyList={currentPartyList}
-            selectedPartyId={fields['partyId']}
+            placeholder={candidateToBeEdited.partyName}
             error={errors['partyId']}
           />
 
@@ -173,6 +181,7 @@ class EditCandidateDialog extends React.Component {
             type='text'
             id='candidateName'
             label='Candidate Name'
+            defaultValue={candidateToBeEdited.name}
             variant='outlined'
             onChange={(event) => this.handleFieldChange('candidateName', event.target.value)}
             error={errors['candidateName']}
