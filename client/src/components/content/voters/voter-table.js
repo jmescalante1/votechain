@@ -80,9 +80,9 @@ class VoterTable extends Component {
   }
   
   createTableTools(){
-    const { classes, electionId, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
+    const { classes, election, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
 
-    if(!electionId){
+    if(!election){
       return null
     }
 
@@ -117,19 +117,23 @@ class VoterTable extends Component {
   createTableDialogs(){
     const { openAddVoterDialog, handleCloseAddVoterDialog } = this.props
     const { openUploadVoterDialog, handleCloseUploadVoterDialog } = this.props
-    const { electionId } = this.props
+    const { election } = this.props
+
+    if(!election){
+      return null
+    }
 
     return (
       <Fragment>
         <UploadVoterDialog 
           openDialog={openUploadVoterDialog}
           handleClickCloseDialog={handleCloseUploadVoterDialog}
-          electionId={electionId}
+          electionId={election.id}
         />
         <AddVoterDialog 
           openDialog={openAddVoterDialog}
           handleClickCloseDialog={handleCloseAddVoterDialog}
-          electionId={electionId}
+          electionId={election.id}
         />
       </Fragment>
     )
@@ -179,7 +183,7 @@ VoterTable.propTypes = {
   handleOpenUploadVoterDialog: PropTypes.func.isRequired,
   handleCloseUploadVoterDialog: PropTypes.func.isRequired,
   
-  electionId: PropTypes.number,
+  election: PropTypes.object,
 
   handleOpenEditVoterDialog: PropTypes.func.isRequired,
   handleOpenDeleteVoterDialog: PropTypes.func.isRequired,

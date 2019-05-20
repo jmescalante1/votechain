@@ -8,7 +8,7 @@ class VoterContainer extends React.Component {
     super()
 
     this.state = {
-      electionId: null,
+      election: null,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -16,19 +16,19 @@ class VoterContainer extends React.Component {
 
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ electionId: option.value })
+      this.setState({ election: option.value })
     } else {
-      this.setState({ electionId: null })
+      this.setState({ election: null })
     }
   }
 
   render() {
-    const { electionId } = this.state
+    const { election } = this.state
     const { electionList } = this.props
 
     return(
       <Voter 
-        electionId={electionId}
+        election={election}
         handleElectionSelectChange={this.handleElectionSelectChange}
         electionList={electionList}
       />

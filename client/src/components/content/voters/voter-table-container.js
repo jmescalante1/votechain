@@ -37,9 +37,9 @@ class VoterTableContainer extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    if(this.props.electionId !== prevProps.electionId) {
-      const {votechain, fetchCurrentVoterList, electionId } = this.props
-      fetchCurrentVoterList(votechain, electionId)
+    if(this.props.election !== prevProps.election) {
+      const {votechain, fetchCurrentVoterList, election } = this.props
+      fetchCurrentVoterList(votechain, election.id)
     }
   }
 
@@ -83,7 +83,7 @@ class VoterTableContainer extends Component {
 
   render() {
     const { openUploadVoterDialog, openAddVoterDialog, openEditVoterDialog, voterToBeEdited, openDeleteVoterDialog, voterToBeDeleted } = this.state
-    const { voterList, electionId } = this.props
+    const { voterList, election } = this.props
 
     const headers = [
       {id: 'id', label: 'Voter ID', searchable: true},
@@ -95,7 +95,7 @@ class VoterTableContainer extends Component {
     return (
       <Fragment>
         <VoterTable 
-          electionId={electionId}
+          election={election}
           headers={headers}
           voterList={voterList}
 
@@ -111,25 +111,29 @@ class VoterTableContainer extends Component {
           handleOpenDeleteVoterDialog={this.handleOpenDeleteVoterDialog}
         />
         
-        <EditVoterDialog 
-          openDialog={openEditVoterDialog}
-          handleClickCloseDialog={this.handleCloseEditVoterDialog}
-          voterToBeEdited={voterToBeEdited}
-        />
+        {election &&
+          <>
+            <EditVoterDialog 
+              openDialog={openEditVoterDialog}
+              handleClickCloseDialog={this.handleCloseEditVoterDialog}
+              voterToBeEdited={voterToBeEdited}
+            />
 
-        <DeleteVoterDialog 
-          openDialog={openDeleteVoterDialog}
-          handleClickCloseDialog={this.handleCloseDeleteVoterDialog}
-          voterToBeDeleted={voterToBeDeleted}
-          electionId={electionId}
-        />
+            <DeleteVoterDialog 
+              openDialog={openDeleteVoterDialog}
+              handleClickCloseDialog={this.handleCloseDeleteVoterDialog}
+              voterToBeDeleted={voterToBeDeleted}
+              electionId={election.id}
+            />
+          </>
+        }
       </Fragment>
     )
   }
 }
 
 VoterTableContainer.propTypes = {
-  electionId: PropTypes.number,
+  election: PropTypes.object,
   
 }
 
