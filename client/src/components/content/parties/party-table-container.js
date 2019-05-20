@@ -32,9 +32,9 @@ class PartyTableContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.electionId !== prevProps.electionId) {
-      const {votechain, fetchCurrentPartyList, electionId } = this.props
-      fetchCurrentPartyList(votechain, electionId)
+    if(this.props.election !== prevProps.election) {
+      const {votechain, fetchCurrentPartyList, election } = this.props
+      fetchCurrentPartyList(votechain, election.id)
     }
   }
   
@@ -70,7 +70,7 @@ class PartyTableContainer extends Component {
 
   render() {
     const { openAddPartyDialog, openEditPartyDialog, partyToBeEdited, partyToBeDeleted, openDeletePartyDialog } = this.state
-    const { partyList, electionId } = this.props
+    const { partyList, election } = this.props
 
     const headers = [
       {id: 'id', label: 'Party ID', searchable: true},
@@ -81,7 +81,7 @@ class PartyTableContainer extends Component {
     return (
       <Fragment>
         <PartyTable 
-          electionId={electionId}
+          election={election}
           headers={headers}
           partyList={partyList}
 
@@ -108,7 +108,7 @@ class PartyTableContainer extends Component {
 }
 
 PartyTableContainer.propTypes = {
-  electionId: PropTypes.number,
+  election: PropTypes.object,
 }
 
 const mapStateToProps = state => ({

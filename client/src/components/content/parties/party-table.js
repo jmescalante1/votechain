@@ -83,9 +83,9 @@ class PartyTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddPartyDialog, electionId } = this.props
+    const { classes, handleOpenAddPartyDialog, election } = this.props
 
-    if(!electionId){
+    if(!election){
       return null
     }
 
@@ -105,13 +105,17 @@ class PartyTable extends Component {
   }
 
   createTableDialogs(){
-    const { openAddPartyDialog, handleCloseAddPartyDialog, electionId } = this.props
+    const { openAddPartyDialog, handleCloseAddPartyDialog, election } = this.props
+
+    if(!election) {
+      return null
+    }
 
     return (
       <AddPartyDialog 
         openDialog={openAddPartyDialog}
         onClose={handleCloseAddPartyDialog}
-        electionId={electionId}
+        electionId={election.id}
       />
     )
   }
@@ -155,7 +159,7 @@ PartyTable.propTypes = {
   openAddPartyDialog: PropTypes.bool.isRequired,
   handleOpenAddPartyDialog: PropTypes.func.isRequired,
   handleCloseAddPartyDialog: PropTypes.func.isRequired,
-  electionId: PropTypes.number,
+  election: PropTypes.object,
 
   handleOpenEditPartyDialog: PropTypes.func.isRequired,
   handleOpenDeletePartyDialog: PropTypes.func.isRequired,
