@@ -15,7 +15,7 @@ const styles = theme => ({
 class Candidate extends Component {
 
   render() {
-    const { classes, electionId, handleElectionSelectChange, electionList, theme } = this.props
+    const { classes, election, handleElectionSelectChange, electionList, theme } = this.props
     
     return (
       <div>
@@ -25,7 +25,7 @@ class Candidate extends Component {
           }}
 
           fontSize={18}
-          electionId={electionId}
+          election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
         />
@@ -33,7 +33,7 @@ class Candidate extends Component {
         <Spacer width='100%' height={theme.spacing.unit * 4}/>
 
         <CandidateTableContainer 
-          electionId={electionId}
+          election={election}
         />
       </div>
     )
@@ -43,7 +43,7 @@ class Candidate extends Component {
 Candidate.propTypes = {
   classes: PropTypes.object.isRequired,
   
-  electionId: PropTypes.number,
+  election: PropTypes.object,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }

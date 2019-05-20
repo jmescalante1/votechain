@@ -85,9 +85,9 @@ class CandidateTable extends Component {
   }
   
   createTableTools(){
-    const { classes, electionId, handleOpenAddCandidateDialog } = this.props
+    const { classes, election, handleOpenAddCandidateDialog } = this.props
 
-    if(!electionId){
+    if(!election){
       return null
     }
 
@@ -107,7 +107,11 @@ class CandidateTable extends Component {
   }
 
   createTableDialogs(){
-    const { openAddCandidateDialog, handleCloseAddCandidateDialog } = this.props
+    const { openAddCandidateDialog, handleCloseAddCandidateDialog, election } = this.props
+
+    if(!election){
+      return null
+    }
 
     return (
       <AddCandidateDialog 
@@ -151,6 +155,7 @@ CandidateTable.propTypes = {
   })).isRequired,
 
   candidateList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  election: PropTypes.object,
 
   openAddCandidateDialog: PropTypes.bool.isRequired,
   handleOpenAddCandidateDialog: PropTypes.func.isRequired,

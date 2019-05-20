@@ -32,9 +32,9 @@ class CandidateTableContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.electionId !== prevProps.electionId) {
-      const {votechain, fetchCurrentCandidateList, electionId } = this.props
-      fetchCurrentCandidateList(votechain, electionId)
+    if(this.props.election !== prevProps.election) {
+      const {votechain, fetchCurrentCandidateList, election } = this.props
+      fetchCurrentCandidateList(votechain, election.id)
     }
   }
 
@@ -70,7 +70,7 @@ class CandidateTableContainer extends Component {
 
   render() {
     const { openAddCandidateDialog, candidateToBeEdited, candidateToBeDeleted, openEditCandidateDialog, openDeleteCandidateDialog } = this.state
-    const { currentCandidateList } = this.props
+    const { currentCandidateList, election } = this.props
 
     const headers = [
       {id: 'id', label: 'Candidate ID', searchable: true},
@@ -85,6 +85,7 @@ class CandidateTableContainer extends Component {
         <CandidateTable 
           headers={headers}
           candidateList={currentCandidateList}
+          election={election}
 
           openAddCandidateDialog={openAddCandidateDialog}
           handleCloseAddCandidateDialog={this.handleCloseAddCandidateDialog}
@@ -111,7 +112,7 @@ class CandidateTableContainer extends Component {
 }
 
 CandidateTableContainer.propTypes = {
-  electionId: PropTypes.number,
+  election: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
