@@ -68,8 +68,12 @@ class EditPartyDialog extends React.Component {
   }
 
   async initFieldState() {
+    const { partyToBeEdited } = this.props
+
     await this.setState({ 
-      fields: {}
+      fields: {
+        partyName: partyToBeEdited.name
+      }
     })
   }
   
@@ -120,7 +124,7 @@ class EditPartyDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, onClose } = this.props
+    const { classes, openDialog, onClose, partyToBeEdited } = this.props
     const { errors } = this.state
     
     return (
@@ -130,7 +134,7 @@ class EditPartyDialog extends React.Component {
         onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Add Party</Typography>
+          <Typography className={classes.label}>Edit Party</Typography>
         </DialogTitle>
 
         <DialogContent
@@ -155,6 +159,7 @@ class EditPartyDialog extends React.Component {
                 type='text'
                 required
                 label='Party Name'
+                defaultValue={partyToBeEdited.name}
                 fullWidth
                 variant='outlined'
                 autoFocus
