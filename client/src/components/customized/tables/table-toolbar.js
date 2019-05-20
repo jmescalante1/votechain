@@ -54,7 +54,7 @@ class TableToolbar extends React.Component {
                   <Filter
                     options={searchableColumnList}
                     defaultSelectedOption={searchableColumnList[0]}
-                    label='Search by:'
+                    label='Search by'
                     onSelectChange={handleSearchByChange}
                   />
                 </Grid>

@@ -5,6 +5,10 @@ import { withStyles } from '@material-ui/core/styles'
 import ElectionSelector from '../../customized/selectors/election-selector'
 import BallotContainer from './ballot/ballot-container'
 
+import UserBallotDetails from './user-ballot-details'
+
+import Loader from '../../customized/progress-bars/loader'
+
 const styles = theme => ({
   electionSelector: {
     marginTop: theme.spacing.unit * 4,
@@ -14,25 +18,42 @@ const styles = theme => ({
 })
 
 class Vote extends Component {
-  render() {
-    const { classes, electionId, handleElectionSelectChange, electionList } = this.props
+  constructor(props) {
+    super(props);
+    
 
+  }
+
+  render() {
+    const { classes, electionId, handleElectionSelectChange, electionList, hasVoted, userBallotDetails, ballotElection, loading } = this.props
+    console.log(hasVoted)
+    // console.log(electionId)
     return (
       <div>
         <ElectionSelector 
           classes={{
             root: classes.electionSelector
           }}
-
+          label='Ongoing Elections'
           fontSize={18}
           electionId={electionId}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={electionList}
         />
-
-        <BallotContainer 
-          electionId={electionId}
-        />
+        { loading 
+          ? <Loader />
+          : electionId 
+            ? hasVoted 
+              ? <UserBallotDetails
+                  ballot={userBallotDetails}
+                  election={ballotElection}
+                />
+              : <BallotContainer 
+                  electionId={electionId}
+                />
+            : null
+        }
+        
       </div>
     )
   }

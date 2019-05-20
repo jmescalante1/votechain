@@ -1,6 +1,7 @@
-import { getVote } from './read-votechain'
+import { getVote, getElection, getVotesOfVoterInElection } from './read-votechain'
 
 export const FETCH_CURRENT_VOTE_LIST = 'FETCH_CURRENT_VOTE_LIST'
+export const FETCH_VOTES_OF_VOTER_IN_ELECTION = 'FETCH_VOTES_OF_VOTER_IN_ELECTION'
 
 export function fetchCurrentVoteList(votechain, electionKey) {
   return async (dispatch) => {
@@ -18,6 +19,41 @@ export function fetchCurrentVoteList(votechain, electionKey) {
     dispatch({
       type: FETCH_CURRENT_VOTE_LIST,
       payload: {voteList, electionKey}
+    })
+  }
+}
+
+export function fetchVotesOfVoterInElection(votechain, electionKey, voterKey) {
+  return async (dispatch) => {
+    let voteList = await getVotesOfVoterInElection(electionKey, voterKey, votechain)
+
+    let election = await getElection(electionKey, votechain)
+    // format the votelist
+    /*
+      ballot = {
+        electionName: ''
+        positionName: { // dynamic
+          candidateNames: []
+        }
+      }
+    */
+   let ballot = {}
+
+    for(let voteIndex = 0; voteIndex < voteList.length; voteIndex++){
+      let vote = voteList[voteIndex]
+
+      if(!ballot[vote.positionName]) {
+        ballot[vote.positionName] = {
+          candidateNames: [vote.candidateName]
+        }
+      } else {
+        ballot[vote.positionName].candidateNames.push(vote.candidateName)
+      }
+    }
+
+    dispatch({
+      type: FETCH_VOTES_OF_VOTER_IN_ELECTION,
+      payload: { ballot, election }
     })
   }
 }

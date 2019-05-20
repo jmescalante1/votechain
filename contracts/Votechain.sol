@@ -897,6 +897,10 @@ contract Votechain {
         return electionList[electionKey].voteKeyList[index];
     }
 
+    function getVoteKeyOfVoter(address voterKey, uint256 index) public view voterKeyExists(voterKey) returns(uint256) {
+        return voterList[voterKey].voteKeyList[index];
+    }
+
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
         return false;

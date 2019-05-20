@@ -159,7 +159,6 @@ class SubmitBallotDialog extends React.Component {
     const { classes, openDialog, handleClickCloseDialog , election} = this.props
     const { errors, loading } = this.state
     const hasError = errors.length > 0 ? true : false
-    console.log(election)
 
     return (
       <Dialog

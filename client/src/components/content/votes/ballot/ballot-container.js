@@ -43,16 +43,17 @@ class BallotContainer extends Component {
 
   componentDidMount() {
     const {votechain, fetchElection, electionId } = this.props
-    if(electionId)
-      fetchElection(votechain, electionId)
-  }
-
-  componentDidUpdate(prevProps) {
-    if(prevProps.electionId !== this.props.electionId) {
-      const { votechain, electionId, fetchElection } = this.props
+    if(electionId) {
       fetchElection(votechain, electionId)
     }
   }
+
+  // componentDidUpdate(prevProps) {
+  //   if(prevProps.electionId !== this.props.electionId) {
+  //     const { votechain, electionId, fetchElection } = this.props
+  //     fetchElection(votechain, electionId)
+  //   }
+  // }
 
   async initPositionState(positionId) {
     let noOfChecks = 0;
@@ -139,7 +140,7 @@ class BallotContainer extends Component {
   render() {  
     const { election } = this.props
     const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList } = this.state
-    
+
     return (
       <div>
         {!isEmpty(election) ?   

@@ -33,7 +33,7 @@ class ElectionSelector extends React.Component {
   }
 
   render(){
-    const { classes, fontSize, electionId, handleElectionSelectChange, electionList, width } = this.props
+    const { classes, fontSize, electionId, handleElectionSelectChange, electionList, width, label } = this.props
     let calculatedWidth = width ? width : '60%'
 
     const options = electionList.map((election) => {
@@ -72,7 +72,7 @@ class ElectionSelector extends React.Component {
             options={options}
             onChange={handleElectionSelectChange}
             placeholder={<Typography style={{fontSize: fontSize}}>Select</Typography>}
-            label={<Typography style={{fontSize: fontSize}}>Election</Typography>}
+            label={<Typography style={{fontSize: fontSize}}>{label ? label : 'Election'}</Typography>}
             isClearable={false}
           />
         </Grid>

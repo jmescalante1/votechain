@@ -1,8 +1,10 @@
-import { FETCH_CURRENT_VOTE_LIST } from '../actions/vote'
+import { FETCH_CURRENT_VOTE_LIST, FETCH_VOTES_OF_VOTER_IN_ELECTION } from '../actions/vote'
 
 const initialState = {
   currentVoteList: [],
-  currentElectionKey: '' 
+  currentElectionKey: '', 
+  ballotOfAVoter: {},
+  ballotElection: {},
 }
 
 export default function reducer(state = initialState, action) {
@@ -14,10 +16,18 @@ export default function reducer(state = initialState, action) {
         currentElectionKey: action.payload.electionKey,
       }
     }
+
+    case FETCH_VOTES_OF_VOTER_IN_ELECTION: {
+      return {
+        ...state,
+        ballotOfAVoter: action.payload.ballot,
+        ballotElection: action.payload.election
+      }
+    }
     
     default: {
       return {
-        ...state
+        ...state,
       }
     }
   }
