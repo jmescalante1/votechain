@@ -83,7 +83,11 @@ class PartyTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddPartyDialog } = this.props
+    const { classes, handleOpenAddPartyDialog, electionId } = this.props
+
+    if(!electionId){
+      return null
+    }
 
     return (
       <Tooltip title='Add new party'>

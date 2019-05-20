@@ -32,9 +32,9 @@ class PositionTableContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.electionId !== prevProps.electionId) {
-      const {votechain, fetchCurrentPositionList, electionId } = this.props
-      fetchCurrentPositionList(votechain, electionId)
+    if(this.props.election !== prevProps.election) {
+      const {votechain, fetchCurrentPositionList, election } = this.props
+      fetchCurrentPositionList(votechain, election.id)
     }
   }
   
@@ -70,7 +70,7 @@ class PositionTableContainer extends Component {
 
   render() {
     const { openAddPositionDialog, openEditPositionDialog, positionToBeEdited, positionToBeDeleted, openDeletePositionDialog } = this.state
-    const { positionList, electionId } = this.props
+    const { positionList, election } = this.props
 
     const headers = [
       {id: 'id', label: 'Position ID', searchable: true},
@@ -83,7 +83,7 @@ class PositionTableContainer extends Component {
     return (
       <Fragment>
         <PositionTable 
-          electionId={electionId}
+          election={election}
           headers={headers}
           positionList={positionList}
 
@@ -110,7 +110,7 @@ class PositionTableContainer extends Component {
 }
 
 PositionTableContainer.propTypes = {
-  electionId: PropTypes.number,
+  election: PropTypes.object,
 }
 
 const mapStateToProps = state => ({

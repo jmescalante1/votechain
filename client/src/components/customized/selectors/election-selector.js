@@ -22,23 +22,21 @@ class ElectionSelector extends React.Component {
     this.getStatus = this.getStatus.bind(this)
   }
   
-  getStatus(electionId) {
+  getStatus(election) {
     const { electionList } = this.props
 
-    if(electionId) {
-      let index = electionList.findIndex(x => x.id === electionId)
-      if(index !== -1)
-        return electionList[index].status
+    if(election) {
+      return election.status
     }
   }
 
   render(){
-    const { classes, fontSize, electionId, handleElectionSelectChange, electionList, width, label } = this.props
+    const { classes, fontSize, election, handleElectionSelectChange, electionList, width, label } = this.props
     let calculatedWidth = width ? width : '60%'
 
     const options = electionList.map((election) => {
       return {
-        value: election.id,
+        value: election,
         label: (election.id + ' - ' + election.name)
       }
     })
@@ -91,7 +89,7 @@ class ElectionSelector extends React.Component {
 
             <Grid item >
               <StatusSymbol 
-                variant={this.getStatus(electionId)}
+                variant={this.getStatus(election)}
               />
             </Grid>
           </Grid>
@@ -104,7 +102,7 @@ class ElectionSelector extends React.Component {
 ElectionSelector.propTypes = {
   classes: PropTypes.object.isRequired,
 
-  electionId: PropTypes.number,
+  election: PropTypes.object,
   handleElectionSelectChange: PropTypes.func.isRequired,
   electionList: PropTypes.array.isRequired,
   width: PropTypes.string

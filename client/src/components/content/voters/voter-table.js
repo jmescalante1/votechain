@@ -80,7 +80,11 @@ class VoterTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
+    const { classes, electionId, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
+
+    if(!electionId){
+      return null
+    }
 
     return (
       <Fragment>

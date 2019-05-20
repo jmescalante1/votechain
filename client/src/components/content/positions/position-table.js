@@ -85,7 +85,11 @@ class PositionTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddPositionDialog } = this.props
+    const { classes, handleOpenAddPositionDialog, election } = this.props
+
+    if(!election){
+      return null
+    }
 
     return (
       <Tooltip title='Add new position'>
@@ -103,13 +107,13 @@ class PositionTable extends Component {
   }
 
   createTableDialogs(){
-    const { openAddPositionDialog, handleCloseAddPositionDialog, electionId } = this.props
+    const { openAddPositionDialog, handleCloseAddPositionDialog, election } = this.props
 
     return (
       <AddPositionDialog 
         openDialog={openAddPositionDialog}
         onClose={handleCloseAddPositionDialog}
-        electionId={electionId}
+        electionId={election ? election.id : null}
       />
     )
   }
@@ -153,7 +157,7 @@ PositionTable.propTypes = {
   openAddPositionDialog: PropTypes.bool.isRequired,
   handleOpenAddPositionDialog: PropTypes.func.isRequired,
   handleCloseAddPositionDialog: PropTypes.func.isRequired,
-  electionId: PropTypes.number,
+  electionId: PropTypes.object,
 
   handleOpenEditPositionDialog: PropTypes.func.isRequired,
   handleOpenDeletePositionDialog: PropTypes.func.isRequired,

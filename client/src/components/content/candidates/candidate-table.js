@@ -85,7 +85,11 @@ class CandidateTable extends Component {
   }
   
   createTableTools(){
-    const { classes, handleOpenAddCandidateDialog } = this.props
+    const { classes, electionId, handleOpenAddCandidateDialog } = this.props
+
+    if(!electionId){
+      return null
+    }
 
     return (
       <Tooltip title='Add new candidate'>
