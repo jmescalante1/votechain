@@ -48,7 +48,7 @@ class EditAdminDialog extends React.Component {
 
     this.onEntered = this.onEntered.bind(this)
     this.refreshErrorState = this.refreshErrorState.bind(this)
-    this.refreshFieldState = this.refreshFieldState.bind(this)
+    this.initFieldState = this.initFieldState.bind(this)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.validateInputs = this.validateInputs.bind(this)
@@ -58,15 +58,21 @@ class EditAdminDialog extends React.Component {
 
   async onEntered() {
     await this.refreshErrorState()
-    await this.refreshFieldState()
+    await this.initFieldState()
   }
 
   async refreshErrorState() {
     await this.setState({ errors: {} })
   }
 
-  async refreshFieldState() {
-    await this.setState({ fields: {} })
+  async initFieldState() {
+    const { adminToBeEdited } = this.props
+
+    await this.setState({ 
+      fields: {
+        adminName: adminToBeEdited.name
+      } 
+    })
   }
   
   handleFieldChange(field, value) {
@@ -116,7 +122,7 @@ class EditAdminDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, adminToBeEdited } = this.props
     const { errors } = this.state
 
     return (
@@ -137,6 +143,7 @@ class EditAdminDialog extends React.Component {
           </DialogContentText>
 
           <CustomizedTextField
+            defaultValue={adminToBeEdited.name}
             classes={{
               root: classes.textField
             }}
