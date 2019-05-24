@@ -39,7 +39,7 @@ class VoterTable extends Component {
   }
 
   getActionsAllowed(voter) {
-    const { handleOpenEditVoterDialog, handleOpenDeleteVoterDialog } = this.props
+    const { handleOpenEditVoterDialog, handleOpenDeleteVoterDialog, election } = this.props
 
     return (
       <Grid
@@ -48,14 +48,15 @@ class VoterTable extends Component {
         justify='flex-start'
         alignItems='center'   
       >
-        <Grid item>    
+        {/* <Grid item>    
           <EditButton 
             onClick={() => handleOpenEditVoterDialog(voter)}
             placement='bottom-start'
             tooltipTitle='Edit voter details'
             size='small'
+            disabled={!election || election.status !== 'Pending'}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item>
           <DeleteButton 
@@ -63,6 +64,7 @@ class VoterTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this voter'
             size='small'
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
@@ -70,10 +72,15 @@ class VoterTable extends Component {
   }
 
   createTableData(voterList) {
-    let voterListClone = cloneDeep(voterList)
+    let voterListClone = []
 
-    voterListClone.forEach((voter) => {
-      voter.action = this.getActionsAllowed(voter)
+    voterList.forEach((voter) => {
+      let voterClone = {
+        id: voter.id,
+        action: this.getActionsAllowed(voter)
+      }
+
+      voterListClone.push(voterClone)
     })
 
     return voterListClone
@@ -82,7 +89,7 @@ class VoterTable extends Component {
   createTableTools(){
     const { classes, election, handleOpenAddVoterDialog, handleOpenUploadVoterDialog } = this.props
 
-    if(!election){
+    if(!election || election.status !== 'Pending'){
       return null
     }
 

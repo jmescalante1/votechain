@@ -51,7 +51,7 @@ class CandidateTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit candidate details'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
 
@@ -61,7 +61,7 @@ class CandidateTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this candidate'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
@@ -89,7 +89,7 @@ class CandidateTable extends Component {
   createTableTools(){
     const { classes, election, handleOpenAddCandidateDialog } = this.props
 
-    if(!election){
+    if(!election || election.status !== 'Pending'){
       return null
     }
 
