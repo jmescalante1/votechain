@@ -52,7 +52,7 @@ class PartyTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit party details'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
 
@@ -62,7 +62,7 @@ class PartyTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this party'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
@@ -87,7 +87,7 @@ class PartyTable extends Component {
   createTableTools(){
     const { classes, handleOpenAddPartyDialog, election } = this.props
 
-    if(!election){
+    if(!election || election.status !== 'Pending'){
       return null
     }
 

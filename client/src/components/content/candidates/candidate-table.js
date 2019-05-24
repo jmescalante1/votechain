@@ -36,7 +36,7 @@ class CandidateTable extends Component {
   }
 
   getActionsAllowed(candidate) {
-    const { handleOpenEditCandidateDialog, handleOpenDeleteCandidateDialog } = this.props
+    const { handleOpenEditCandidateDialog, handleOpenDeleteCandidateDialog, election } = this.props
 
     return (
       <Grid
@@ -51,6 +51,7 @@ class CandidateTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit candidate details'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
 
@@ -60,6 +61,7 @@ class CandidateTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this candidate'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
       </Grid>

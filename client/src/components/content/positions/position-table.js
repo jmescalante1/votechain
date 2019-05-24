@@ -52,7 +52,7 @@ class PositionTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit position details'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
 
@@ -62,7 +62,7 @@ class PositionTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this position'
             size='small'
-            disabled={election.status !== 'Pending'}
+            disabled={!election || election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
@@ -90,7 +90,7 @@ class PositionTable extends Component {
   createTableTools(){
     const { classes, handleOpenAddPositionDialog, election } = this.props
 
-    if(!election){
+    if(!election || election.status !== 'Pending'){
       return null
     }
 
