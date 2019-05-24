@@ -37,6 +37,7 @@ class PositionTable extends Component {
 
   getActionsAllowed(position) {
     const { handleOpenEditPositionDialog, handleOpenDeletePositionDialog } = this.props
+    const { election } = this.props
 
     return (
       <Grid
@@ -51,6 +52,7 @@ class PositionTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit position details'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
 
@@ -60,6 +62,7 @@ class PositionTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this position'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
@@ -161,7 +164,7 @@ PositionTable.propTypes = {
   openAddPositionDialog: PropTypes.bool.isRequired,
   handleOpenAddPositionDialog: PropTypes.func.isRequired,
   handleCloseAddPositionDialog: PropTypes.func.isRequired,
-  electionId: PropTypes.object,
+  election: PropTypes.object,
 
   handleOpenEditPositionDialog: PropTypes.func.isRequired,
   handleOpenDeletePositionDialog: PropTypes.func.isRequired,

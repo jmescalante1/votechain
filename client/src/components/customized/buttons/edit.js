@@ -18,20 +18,23 @@ const styles = theme => ({
 
 class EditButton extends Component {
   render() {
-    const { classes, tooltipTitle, placement, size, onClick, iconSize } = this.props
+    const { classes, tooltipTitle, placement, size, onClick, iconSize, disabled } = this.props
 
     return (
       <Tooltip
         title={tooltipTitle}
         placement={placement}
       >
-        <IconButton 
-          size={size} 
-          className={classes.editButton}
-          onClick={onClick}
-        >
-          <Edit style={{fontSize: iconSize}}/>
-        </IconButton>
+        <div>
+          <IconButton 
+            size={size} 
+            className={classes.editButton}
+            onClick={onClick}
+            disabled={disabled}
+          >
+            <Edit style={{fontSize: iconSize}}/>
+          </IconButton>
+        </div>
       </Tooltip>
     )
   }
@@ -44,6 +47,7 @@ EditButton.propTypes = {
   tooltipTitle: PropTypes.string,
   placement: PropTypes.oneOf(['bottom-end', 'bottom-start', 'bottom', 'left-end', 'left-start', 'left', 'right-end', 'right-start', 'right', 'top-end', 'top-start', 'top']),
   size: PropTypes.oneOf(['small','medium','large']),
+  disabled: PropTypes.bool,
 };
 
 

@@ -18,20 +18,23 @@ const styles = theme => ({
 
 class DeleteButton extends Component {
   render() {
-    const { classes, tooltipTitle, placement, size, onClick } = this.props
+    const { classes, tooltipTitle, placement, size, onClick, disabled } = this.props
 
     return (
       <Tooltip
         title={tooltipTitle}
         placement={placement}
       >
-        <IconButton 
-          size={size} 
-          className={classes.deleteButton}
-          onClick={onClick}
-        >
+        <div>
+          <IconButton 
+            size={size} 
+            className={classes.deleteButton}
+            onClick={onClick}
+            disabled={disabled}
+          >
           <Delete />
         </IconButton>
+        </div>
       </Tooltip>
     )
   }
@@ -44,6 +47,7 @@ DeleteButton.propTypes = {
   tooltipTitle: PropTypes.string,
   placement: PropTypes.oneOf(['bottom-end', 'bottom-start', 'bottom', 'left-end', 'left-start', 'left', 'right-end', 'right-start', 'right', 'top-end', 'top-start', 'top']),
   size: PropTypes.oneOf(['small','medium','large']),
+  disabled: PropTypes.bool,
 };
 
 
