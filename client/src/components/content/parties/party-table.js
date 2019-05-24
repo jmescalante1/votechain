@@ -37,7 +37,7 @@ class PartyTable extends Component {
   }
 
   getActionsAllowed(party) {
-    const { handleOpenEditPartyDialog, handleOpenDeletePartyDialog } = this.props
+    const { handleOpenEditPartyDialog, handleOpenDeletePartyDialog, election } = this.props
 
     return (
       <Grid
@@ -52,6 +52,7 @@ class PartyTable extends Component {
             placement='bottom-start'
             tooltipTitle='Edit party details'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
 
@@ -61,6 +62,7 @@ class PartyTable extends Component {
             placement='bottom-start'
             tooltipTitle='Remove this party'
             size='small'
+            disabled={election.status !== 'Pending'}
           />
         </Grid>
       </Grid>
