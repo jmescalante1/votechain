@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import ElectionTable from '../elections/election-table'
+
+import ViewElectionDialog from '../../customized/dialogs/view-election'
 import EditElectionDialog from '../../customized/dialogs/edit-election'
 import DeleteElectionDialog from '../../customized/dialogs/delete-election'
 import StartElectionDialog from '../../customized/dialogs/start-election'
@@ -14,6 +16,7 @@ class ElectionTableContainer extends Component {
     super(props)
 
     this.state = {
+      openViewElectionDialog: false,
       openAddElectionDialog: false,
       openEditElectionDialog: false,
       openDeleteElectionDialog: false,
@@ -21,10 +24,11 @@ class ElectionTableContainer extends Component {
       openStartElectionDialog: false,
       openStopElectionDialog: false,
 
-      idOfElectionToBeEdited: null,
+      electionToBeEdited: {},
       idOfElectionToBeDeleted: null,
       electionToStart: {},
       electionToStop: {},
+      electionToView: {},
     }
 
     this.handleOpenAddElectionDialog = this.handleOpenAddElectionDialog.bind(this)
@@ -42,6 +46,9 @@ class ElectionTableContainer extends Component {
     this.handleOpenStopElectionDialog = this.handleOpenStopElectionDialog.bind(this)
     this.handleCloseStopElectionDialog = this.handleCloseStopElectionDialog.bind(this)
 
+    this.handleOpenViewElectionDialog = this.handleOpenViewElectionDialog.bind(this)
+    this.handleCloseViewElectionDialog = this.handleCloseViewElectionDialog.bind(this)
+
   }
 
   handleOpenAddElectionDialog() {
@@ -52,10 +59,10 @@ class ElectionTableContainer extends Component {
     this.setState({ openAddElectionDialog: false })
   }
 
-  handleOpenEditElectionDialog(electionId) {
+  handleOpenEditElectionDialog(electionToBeEdited) {
     this.setState({ 
       openEditElectionDialog: true, 
-      idOfElectionToBeEdited: electionId
+      electionToBeEdited,
     })
   }
 
@@ -96,10 +103,22 @@ class ElectionTableContainer extends Component {
     this.setState({ openStopElectionDialog: false })
   }
 
+  handleOpenViewElectionDialog(election) {
+    this.setState({
+      openViewElectionDialog: true, 
+      electionToView: election
+    })
+  }
+
+  handleCloseViewElectionDialog() {
+    this.setState({ openViewElectionDialog: false })
+  }
+
 
   render() {
-    const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, idOfElectionToBeDeleted, idOfElectionToBeEdited } = this.state
+    const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, idOfElectionToBeDeleted, electionToBeEdited } = this.state
     const { electionToStart, openStartElectionDialog, electionToStop, openStopElectionDialog } = this.state
+    const { electionToView, openViewElectionDialog } = this.state
     const { electionList } = this.props
 
 
@@ -119,6 +138,7 @@ class ElectionTableContainer extends Component {
           openDialog={openAddElectionDialog}
           handleCloseAddElectionDialog={this.handleCloseAddElectionDialog}
 
+          handleOpenViewElectionDialog={this.handleOpenViewElectionDialog}
           handleOpenAddElectionDialog={this.handleOpenAddElectionDialog}
           handleOpenEditElectionDialog={this.handleOpenEditElectionDialog}
           handleOpenDeleteElectionDialog={this.handleOpenDeleteElectionDialog}
@@ -126,10 +146,11 @@ class ElectionTableContainer extends Component {
           handleOpenStopElectionDialog={this.handleOpenStopElectionDialog}
 
        />
+        
         <EditElectionDialog 
           openDialog={openEditElectionDialog}
           handleClickCloseDialog={this.handleCloseEditElectionDialog}
-          idOfElectionToBeEdited={idOfElectionToBeEdited}
+          electionToBeEdited={electionToBeEdited}
         />
         <DeleteElectionDialog 
           openDialog={openDeleteElectionDialog}
@@ -145,6 +166,11 @@ class ElectionTableContainer extends Component {
           openDialog={openStopElectionDialog}
           handleClickCloseDialog={this.handleCloseStopElectionDialog}
           electionToStop={electionToStop}
+        />
+        <ViewElectionDialog 
+          openDialog={openViewElectionDialog}
+          handleClickCloseDialog={this.handleCloseViewElectionDialog}
+          electionToView={electionToView}
         />
       </Fragment>
     )

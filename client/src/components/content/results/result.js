@@ -16,16 +16,16 @@ const styles = theme => ({
 class Result extends Component {
 
   render() {
-    const { classes, theme, electionId, finishedElectionList, handleElectionSelectChange, currentFinishedElection } = this.props
+    const { classes, theme, election, finishedElectionList, handleElectionSelectChange, currentFinishedElection } = this.props
     return (
       <div>
         <ElectionSelector 
           classes={{
             root: classes.electionSelector
           }}
-
+          label='Finished Election'
           fontSize={18}
-          electionId={electionId}
+          election={election}
           handleElectionSelectChange={handleElectionSelectChange}
           electionList={finishedElectionList}
         />
@@ -43,7 +43,7 @@ class Result extends Component {
 }
 
 Result.propTypes = {
-  electionId: PropTypes.number,
+  election: PropTypes.object,
   handleElectionSelectChange: PropTypes.func.isRequired,
   finishedElectionList: PropTypes.arrayOf(PropTypes.object).isRequired,
  

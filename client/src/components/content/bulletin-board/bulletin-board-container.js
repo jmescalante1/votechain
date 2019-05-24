@@ -8,7 +8,7 @@ class BulletinBoardContainer extends Component {
     super()
 
     this.state = {
-      electionId: null,
+      election: null,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -17,9 +17,9 @@ class BulletinBoardContainer extends Component {
 
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ electionId: option.value })
+      this.setState({ election: option.value })
     } else {
-      this.setState({ electionId: null})
+      this.setState({ election: null})
     }
   }
 
@@ -29,14 +29,14 @@ class BulletinBoardContainer extends Component {
 
   render() {
     const { electionList } = this.props
-    const{ electionId } = this.state
+    const{ election } = this.state
 
     let filtered = this.getFinishedAndOngoing(electionList)
     
     return (
       <div>
         <BulletinBoard 
-          electionId={electionId}
+          election={election}
           handleElectionSelectChange={this.handleElectionSelectChange}
           electionList={filtered}
         />

@@ -10,35 +10,44 @@ class VoteContainer extends Component {
     super()
 
     this.state = {
-      electionId: null,
+      election: null,
       hasVoted: false,
-      loading: false,
+      // loading: false,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
     this.checkIfVotedAlready = this.checkIfVotedAlready.bind(this)
     this.getOngoingElections = this.getOngoingElections.bind(this)
+    this.setHasVoted = this.setHasVoted.bind(this)
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if(prevState.electionId !== this.state.electionId) {
-      await this.setState({ loading: true })
+    if(prevState.election !== this.state.election) {
+      // await this.setState({ loading: true })
       await this.checkIfVotedAlready()
-      await this.setState({ loading: false})
+      // await this.setState({ loading: false})
     }
+    // if(prevState.hasVoted !== this.state.hasVoted ){
+    //   if(this.state.hasVoted) {
+    //     const { votechain, account } = this.props
+    //     const { election } = this.state
+
+    //     await fetchVotesOfVoterInElection(votechain, election.id, account)
+    //   }
+    // }
   }
 
   async checkIfVotedAlready(){
     const { account, votechain, fetchVotesOfVoterInElection } = this.props
-    const { electionId } = this.state 
+    const { election } = this.state 
 
     let hasVoted = false
 
-    if(electionId) {
-      hasVoted = await votechain.methods.hasVotedAt(electionId, account).call()
+    if(election) {
+      hasVoted = await votechain.methods.hasVotedAt(election.id, account).call()
       
       if(hasVoted)
-       await fetchVotesOfVoterInElection(votechain, electionId, account)
+       await fetchVotesOfVoterInElection(votechain, election.id, account)
     }
 
     await this.setState({ hasVoted })
@@ -58,25 +67,31 @@ class VoteContainer extends Component {
     return ongoingElections
   }
 
+  async setHasVoted() {
+    await this.setState({ hasVoted: true })
+  }
+
   handleElectionSelectChange(option) {
     if(option) {
-      this.setState({ electionId: option.value })
+      this.setState({ election: option.value })
     } else {
-      this.setState({ electionId: null })
+      this.setState({ election: null })
     }
   }
 
   render() {
-    const { electionId, hasVoted, loading } = this.state 
+    const { election, hasVoted } = this.state 
+    const { loading } = this.state
     const { userBallotDetails, ballotElection } = this.props
   
     return (
       <div>
         <Vote 
-          electionId={electionId}
+          election={election}
           handleElectionSelectChange={this.handleElectionSelectChange}
           electionList={this.getOngoingElections()}
-          loading={loading}
+
+          setHasVoted={this.setHasVoted}
 
           userBallotDetails={userBallotDetails}
           hasVoted={hasVoted}
@@ -91,6 +106,7 @@ const mapStateToProps = state => ({
   electionList: state.election.electionList,
   account: state.account.account,
   votechain: state.contract.votechain,
+
   userBallotDetails: state.vote.ballotOfAVoter,
   ballotElection: state.vote.ballotElection
 })

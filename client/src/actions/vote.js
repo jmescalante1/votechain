@@ -2,6 +2,7 @@ import { getVote, getElection, getVotesOfVoterInElection } from './read-votechai
 
 export const FETCH_CURRENT_VOTE_LIST = 'FETCH_CURRENT_VOTE_LIST'
 export const FETCH_VOTES_OF_VOTER_IN_ELECTION = 'FETCH_VOTES_OF_VOTER_IN_ELECTION'
+export const FETCH_VOTES_OF_VOTER_IN_ELECTION_PENDING = 'FETCH_VOTES_OF_VOTER_IN_ELECTION_PENDING'
 
 export function fetchCurrentVoteList(votechain, electionKey) {
   return async (dispatch) => {
@@ -25,9 +26,14 @@ export function fetchCurrentVoteList(votechain, electionKey) {
 
 export function fetchVotesOfVoterInElection(votechain, electionKey, voterKey) {
   return async (dispatch) => {
+    dispatch({
+      type: FETCH_VOTES_OF_VOTER_IN_ELECTION_PENDING
+    })
+
     let voteList = await getVotesOfVoterInElection(electionKey, voterKey, votechain)
 
     let election = await getElection(electionKey, votechain)
+    
     // format the votelist
     /*
       ballot = {

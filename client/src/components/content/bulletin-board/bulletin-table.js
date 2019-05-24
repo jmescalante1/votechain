@@ -33,9 +33,7 @@ class BulletinTable extends Component {
   }
   
   createTableTools() {
-    const { classes, ballotList, electionList, electionId } = this.props
-
-    let election = electionList.find((election) => election.id === electionId)
+    const { classes, ballotList, election } = this.props
 
     if(!election) {
       return null
@@ -112,7 +110,7 @@ class BulletinTable extends Component {
 BulletinTable.propTypes = {
   handleOpenViewVotesDialog: PropTypes.func.isRequired,
   ballotList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  electionId: PropTypes.number,
+  election: PropTypes.object,
   electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 

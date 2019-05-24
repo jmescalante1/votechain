@@ -21,18 +21,18 @@ class BulletinTableContainer extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    if(prevProps.electionId !== this.props.electionId){
-      const { electionId, fetchBallotList, votechain } = this.props
+    if(prevProps.election !== this.props.election){
+      const { election, fetchBallotList, votechain } = this.props
     
-      fetchBallotList(votechain, electionId)
+      fetchBallotList(votechain, election.id)
     }
   }
 
   componentDidMount(){
-    const { electionId, fetchBallotList, votechain } = this.props
+    const { election, fetchBallotList, votechain } = this.props
     
-    if(electionId){
-      fetchBallotList(votechain, electionId)
+    if(election){
+      fetchBallotList(votechain, election.id)
     }
   }
 
@@ -55,14 +55,14 @@ class BulletinTableContainer extends Component {
   }
 
   render() {
-    const { ballotList, electionList, electionId } = this.props
+    const { ballotList, electionList, election } = this.props
     const { openViewVotesDialog, voterAddressToOpen } = this.state
 
     return (
       <div>
         <BulletinTable 
           electionList={electionList}
-          electionId={electionId}
+          election={election}
           ballotList={ballotList}
           handleOpenViewVotesDialog={this.handleOpenViewVotesDialog}
         />
@@ -88,7 +88,7 @@ const mapDispatchToProps = {
 }
 
 BulletinTableContainer.propTypes = {
-  electionId: PropTypes.number
+  election: PropTypes.object
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BulletinTableContainer)

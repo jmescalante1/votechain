@@ -2,7 +2,8 @@ import { FETCH_ELECTION, CAST_BULK_VOTE_VOTECHAIN, FETCH_BALLOT_LIST } from '../
 
 const initialState = {
   election: {},
-  ballotList: []
+  ballotList: [],
+  loading: false,
 }
 
 export default function reducer(state = initialState, action) {
@@ -16,9 +17,17 @@ export default function reducer(state = initialState, action) {
     
     case CAST_BULK_VOTE_VOTECHAIN: {
       return {
-        ...state
+        ...state,
+        loading: false
       }
     }
+
+    // case CAST_BULK_VOTE_VOTECHAIN_PENDING: {
+    //   return {
+    //     ...state,
+    //     loading: true
+    //   }
+    // }
 
     case FETCH_BALLOT_LIST: {
       return {

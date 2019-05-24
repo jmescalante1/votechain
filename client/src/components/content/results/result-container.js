@@ -10,7 +10,7 @@ class ResultContainer extends React.Component {
     super(props)
     
     this.state = {
-      electionId: null,
+      election: null,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -29,29 +29,29 @@ class ResultContainer extends React.Component {
       fetchFinishedElectionList(votechain)
     }
 
-    if(this.state.electionId !== prevState.electionId){
+    if(this.state.election !== prevState.election){
       const { votechain, fetchFinishedElectionResult } = this.props
-      const { electionId } = this.state
-      fetchFinishedElectionResult(votechain, electionId)
+      const { election } = this.state
+      fetchFinishedElectionResult(votechain, election.id)
     }
   }
 
   handleElectionSelectChange(option) {
     if(option){
-      this.setState({ electionId: option.value })
+      this.setState({ election: option.value })
     } else {
-      this.setState({ electionId: '' })
+      this.setState({ election: '' })
     }
   }
 
   render() {
-    const { electionId } = this.state
+    const { election } = this.state
     const { finishedElectionList, currentFinishedElection } = this.props
 
     return(
       <div>
         <Result
-          electionId={electionId}
+          election={election}
           handleElectionSelectChange={this.handleElectionSelectChange}
           finishedElectionList={finishedElectionList}
           currentFinishedElection={currentFinishedElection}

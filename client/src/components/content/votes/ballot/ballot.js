@@ -48,14 +48,13 @@ class Ballot extends Component {
             </Fragment>
           )
         })}
-        {/* <div className={classes.actions}> */}
-          <SubmitButton 
-            classes={{
-              button: classes.submitButton
-            }} 
-            onClick={handleOpenSubmitDialog}
-          />
-        {/* </div> */}
+
+        <SubmitButton 
+          classes={{
+            button: classes.submitButton
+          }} 
+          onClick={handleOpenSubmitDialog}
+        />
       </Paper>
     )
   }

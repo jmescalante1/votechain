@@ -48,7 +48,7 @@ class EditElectionDialog extends React.Component {
 
     this.onEntered = this.onEntered.bind(this)
     this.refreshErrorState = this.refreshErrorState.bind(this)
-    this.refreshFieldState = this.refreshFieldState.bind(this)
+    this.initFieldState = this.initFieldState.bind(this)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.validateInputs = this.validateInputs.bind(this)
@@ -58,15 +58,21 @@ class EditElectionDialog extends React.Component {
 
   async onEntered() {
     await this.refreshErrorState()
-    await this.refreshFieldState()
+    await this.initFieldState()
   }
 
   async refreshErrorState() {
     await this.setState({ errors: {} })
   }
 
-  async refreshFieldState() {
-    await this.setState({ fields: {} })
+  async initFieldState() {
+    const { electionToBeEdited } = this.props
+
+    await this.setState({ 
+      fields: {
+        electionName: electionToBeEdited.name
+      } 
+    })
   }
   
   handleFieldChange(field, value) {
@@ -99,19 +105,19 @@ class EditElectionDialog extends React.Component {
   }
 
   async onSubmit() {
-    const { editElectionVotechain, account, votechain, handleClickCloseDialog, idOfElectionToBeEdited } = this.props
+    const { editElectionVotechain, account, votechain, handleClickCloseDialog, electionToBeEdited } = this.props
     const { fields } = this.state
     
     let noOfErrors = await this.validateInputs()
     
     if(noOfErrors === 0){
-      editElectionVotechain(account, votechain, {id: idOfElectionToBeEdited, name: fields['electionName']})
+      editElectionVotechain(account, votechain, {id: electionToBeEdited.id, name: fields['electionName']})
       handleClickCloseDialog()
     }
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, electionToBeEdited } = this.props
     const { errors } = this.state
   
     return (
@@ -132,6 +138,7 @@ class EditElectionDialog extends React.Component {
           </DialogContentText>
 
           <CustomizedTextField
+            defaultValue={electionToBeEdited.name}
             classes={{
               root: classes.textField
             }}
@@ -166,7 +173,7 @@ class EditElectionDialog extends React.Component {
 EditElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  idOfElectionToBeEdited: PropTypes.number
+  electionToBeEdited: PropTypes.object
 }
 
 const mapStateToProps = state => ({

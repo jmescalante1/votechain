@@ -3,6 +3,7 @@ import {getElection, getPosition, getCandidate, getVote } from './read-votechain
 export const FETCH_BALLOT_LIST = 'FETCH_BALLOT_LIST'
 export const FETCH_ELECTION = 'FETCH_ELECTION'
 export const CAST_BULK_VOTE_VOTECHAIN = 'CAST_BULK_VOTE_VOTECHAIN'
+// export const CAST_BULK_VOTE_VOTECHAIN_PENDING = 'CAST_BULK_VOTE_VOTECHAIN_PENDING'
 
 export function fetchElection(votechain, electionKey) {
   return async (dispatch) => {
@@ -41,7 +42,7 @@ export function fetchElection(votechain, electionKey) {
 export function castBulkVoteVotechain(account, votechain, candidateKeyList, abstainKeyList){
   return async (dispatch) => {
     await votechain.methods.bulkVote(candidateKeyList, abstainKeyList).send({from: account})
-
+    
     dispatch({
       type: CAST_BULK_VOTE_VOTECHAIN,
     })

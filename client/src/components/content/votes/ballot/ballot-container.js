@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 
 import Ballot from './ballot'
 import SubmitBallotDialog from '../../../customized/dialogs/submit-ballot'
+import Loader from '../../../customized/progress-bars/loader'
 
 import { fetchElection } from '../../../../actions/ballot'
 
@@ -28,7 +29,8 @@ class BallotContainer extends Component {
       openSubmitBallotDialog: false,
       candidateKeyList: [],
       abstainKeyList: [],
-      errors: {}
+      errors: {},
+      loading: false,
     }
     
     this.initPositionState = this.initPositionState.bind(this)
@@ -41,19 +43,28 @@ class BallotContainer extends Component {
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {votechain, fetchElection, electionId } = this.props
+    await this.setState({ loading: true })
+
     if(electionId) {
-      fetchElection(votechain, electionId)
+       await fetchElection(votechain, electionId)
     }
+
+    await this.setState({ loading: false })
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if(prevProps.electionId !== this.props.electionId) {
-  //     const { votechain, electionId, fetchElection } = this.props
-  //     fetchElection(votechain, electionId)
-  //   }
-  // }
+  async componentDidUpdate(prevProps) {
+    if(prevProps.electionId !== this.props.electionId) {
+      await this.setState({ loading: true })
+      
+      const { votechain, electionId, fetchElection } = this.props
+      
+      await fetchElection(votechain, electionId)
+      
+      await this.setState({ loading: false })
+    }
+  }
 
   async initPositionState(positionId) {
     let noOfChecks = 0;
@@ -138,41 +149,50 @@ class BallotContainer extends Component {
   }
 
   render() {  
-    const { election } = this.props
-    const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList } = this.state
+    const { election, setHasVoted, hasVoted } = this.props
+    const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList, loading } = this.state
+
+    if(hasVoted) {
+      return (
+        <div></div>
+      )
+    }
 
     return (
       <div>
-        {!isEmpty(election) ?   
-          <div>
-            <Ballot 
-              margin={{
-                marginTop: 40 
-              }}
-              election={election}
-              positionListState={positionList}
-              handleSelectCandidate={this.handleSelectCandidate}
-              handleSelectAbstain={this.handleSelectAbstain}
+        { loading ? 
+            <Loader />
+          : !isEmpty(election) 
+            ? <div>
+                <Ballot 
+                  election={election}
+                  positionListState={positionList}
+                  handleSelectCandidate={this.handleSelectCandidate}
+                  handleSelectAbstain={this.handleSelectAbstain}
 
-              handleOpenSubmitDialog={this.handleOpenSubmitDialog}
-            />
-            <SubmitBallotDialog 
-              election={election}
+                  handleOpenSubmitDialog={this.handleOpenSubmitDialog}
+                />
+                <SubmitBallotDialog 
+                  election={election}
+                  setHasVoted={setHasVoted}
 
-              openDialog={openSubmitBallotDialog}
-              handleClickCloseDialog={this.handleCloseSubmitDialog}
-              candidateKeyList={candidateKeyList}
-              abstainKeyList={abstainKeyList}
-            />
-          </div> 
-        : ''}
+                  openDialog={openSubmitBallotDialog}
+                  handleClickCloseDialog={this.handleCloseSubmitDialog}
+                  candidateKeyList={candidateKeyList}
+                  abstainKeyList={abstainKeyList}
+                />
+              </div> 
+            : null
+        }
       </div>
     )
   }
 }
 
 BallotContainer.propTypes = {
-  electionId: PropTypes.number
+  electionId: PropTypes.number,
+  setHasVoted: PropTypes.func.isRequired,
+  hasVoted: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => ({

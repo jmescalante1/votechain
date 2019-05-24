@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -36,8 +37,23 @@ const styles = theme => ({
 })
 
 class UserBallotDetails extends Component {
+
+  async componentDidUpdate(prevProps) {
+    if(prevProps.election !== this.props.election) {
+      // await this.setState({ loading: true })
+      
+      // await this.setState({ loading: false })
+    }
+  }
+
   render() {
-    const { classes, ballot, election } = this.props
+    const { classes, ballot, election, display } = this.props
+
+    if(!display) {
+      return (
+        <div></div>
+      )
+    }
 
     return (
       <Paper className={classes.root}>
@@ -101,6 +117,10 @@ class UserBallotDetails extends Component {
       </Paper>
     )
   }
+}
+
+UserBallotDetails.propTypes = {
+  display: PropTypes.bool.isRequired
 }
 
 export default withStyles(styles)(UserBallotDetails)

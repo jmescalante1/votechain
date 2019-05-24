@@ -1,4 +1,4 @@
-import { getElection, getElectionDetails, getRole } from './read-votechain'
+import { getElection, getPosition, getCandidate, getRole } from './read-votechain'
 
 export const ADD_ELECTION_VOTECHAIN = 'ADD_ELECTION_VOTECHAIN'
 export const ADD_ELECTION_VOTECHAIN_ERROR = 'ADD_ELECTION_VOTECHAIN_ERROR'
@@ -171,7 +171,30 @@ export function stopElectionUI(votechain, electionKey) {
 
 export function fetchElectionDetails(votechain, electionKey) {
   return async (dispatch) => {
-    let electionDetails = await getElectionDetails(votechain, electionKey)
+    let electionDetails = await getElection(electionKey, votechain)
+
+    const noOfPositions = await votechain.methods.getNoOfPositionsAt(electionKey).call()
+    let positionList = []
+    
+    for(let positionKeyIndex = 0; positionKeyIndex < noOfPositions; positionKeyIndex++) {
+      let positionKey = await votechain.methods.getPositionKeyAt(electionKey, positionKeyIndex).call()
+      let position = await getPosition(positionKey, votechain)
+
+      const noOfCandidates = await votechain.methods.getNoOfCandidatesAt(positionKey).call()
+      let candidateList = []
+
+      for(let candidateKeyIndex = 0; candidateKeyIndex < noOfCandidates; candidateKeyIndex++){
+        let candidateKey = await votechain.methods.getCandidateKeyAt(positionKey, candidateKeyIndex).call()
+        let candidate = await getCandidate(candidateKey, votechain)
+
+        candidateList.push(candidate)
+      }
+
+      position.candidateList = candidateList
+      positionList.push(position)
+    }
+
+    electionDetails.positionList = positionList
 
     dispatch({
       type: FETCH_ELECTION_DETAILS,

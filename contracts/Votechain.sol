@@ -176,7 +176,7 @@ contract Votechain {
 
         // For testing UI
         addElection('UP Manila Student Council Election');
-        addElection('Codeninja Board Of Directors Election');
+        addElection('UP Diliman Student Council Election');
 
         // for election1
         addPositionAt(1, 'Chairman', 1, false);
@@ -205,7 +205,9 @@ contract Votechain {
         addCandidateAt(3, 'Alley', 0); // Independent
 
         addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        addVoterAt(1, 0x888783dF0a495Cb7211a194452f25b6971417DEE, '2015-08795', 'Guen');
         addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
+        addVoterAt(2, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
     }
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
