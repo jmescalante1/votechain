@@ -85,7 +85,9 @@ class StartElectionDialog extends React.Component {
     if(electionDetails.noOfPositions > 0 && electionDetails.noOfCandidates > 0 && electionDetails.noOfVoters > 1){
       this.setState({ validElection: true })
     } else {
-      this.setState({ validElection: false })
+      // this.setState({ validElection: false })
+      
+      this.setState({ validElection: true })
     }
 
     this.setState({ hasValidated: true })
