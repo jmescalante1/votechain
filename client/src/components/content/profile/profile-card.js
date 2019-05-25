@@ -101,7 +101,7 @@ class ProfileCard extends Component {
               <Typography className={classes.title}>User Profile</Typography>
             </Grid>
 
-            {profile.role !== Roles.publicUser ? 
+            {profile.role !== Roles.publicUser && profile.role !== Roles.voter ? 
               <Grid item>
                 <EditButton 
                   tooltipTitle='Edit account details'

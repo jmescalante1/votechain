@@ -544,22 +544,33 @@ contract Votechain {
         electionKeyExists(electionKey)
         inSetupStage(electionKey)
     {
+        // delete the election key from the list of election keys of all of its voters
+        Election storage election = electionList[electionKey];
+        
         uint256 indexToDelete = electionList[electionKey].keyIndex;
         uint256 keyToMove = electionKeyList[electionKeyList.length.sub(1)];
         electionKeyList[indexToDelete] = keyToMove;
         electionList[keyToMove].keyIndex = indexToDelete;
         electionKeyList.length = electionKeyList.length.sub(1);
 
-        // delete the election key from the list of election keys of all of its voters
-        Election storage election = electionList[electionKey];
         for(uint256 i = 0; i < election.voterKeyList.length; i++){
             address voterKey = election.voterKeyList[i];
+            // deleteVoterAt(electionKey, voterKey);
             Voter storage voter = voterList[voterKey];
             indexToDelete = voter.electionKeyIndexList[electionKey];
             keyToMove = voter.electionKeyList[voter.electionKeyList.length.sub(1)];
             voter.electionKeyList[indexToDelete] = keyToMove;
             voter.electionKeyIndexList[keyToMove] = indexToDelete;
             voter.electionKeyList.length = voter.electionKeyList.length.sub(1);
+
+             // remove the voter from the application if it is not involve in any elections
+            if(voter.electionKeyList.length == 0 ) {
+                indexToDelete = voterList[voterKey].keyIndex;
+                address voterKeyToMove = voterKeyList[voterKeyList.length.sub(1)];
+                voterKeyList[indexToDelete] = voterKeyToMove;
+                voterList[voterKeyToMove].keyIndex = indexToDelete;
+                voterKeyList.length = voterKeyList.length.sub(1);
+            }
         }
 
         // delete all the positions under this election
