@@ -170,7 +170,7 @@ contract Votechain {
 
     event CastVote (uint256 voteKey);
 
-    constructor(address adminKey, string memory name) public {
+    constructor(address adminKey, string memory name) public payable {
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
@@ -209,6 +209,8 @@ contract Votechain {
         addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
         addVoterAt(2, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
     }
+
+    function () external payable {}
 
     function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
         electionList[electionKey].stage = Stage.Started;
@@ -301,16 +303,20 @@ contract Votechain {
         }        
     }
 
-    function addAdmin(address adminKey, string memory name) public onlyAdmin notVoter(adminKey) notOfficial(adminKey) notAdmin(adminKey){
+    function addAdmin(address payable adminKey, string memory name) public payable onlyAdmin notVoter(adminKey) notOfficial(adminKey) notAdmin(adminKey) hasEnoughEther{
         adminList[adminKey].name = name;
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
+
+        adminKey.transfer(50 * (1 ether));
         
         emit AddAdmin(adminKey);
     }
 
-    function addOfficial(address officialKey, string memory name) public onlyAdmin notAdmin(officialKey) notVoter(officialKey) notOfficial(officialKey){
+    function addOfficial(address payable officialKey, string memory name) public onlyAdmin notAdmin(officialKey) notVoter(officialKey) notOfficial(officialKey) hasEnoughEther{
         officialList[officialKey].name = name;
         officialList[officialKey].keyIndex = officialKeyList.push(officialKey).sub(1);
+
+        officialKey.transfer(50 * (1 ether));
 
         emit AddOfficial(officialKey);
     }
@@ -362,7 +368,7 @@ contract Votechain {
         emit AddCandidateAt(positionKey, candidateKey);
     }
 
-    function addVoterAt(uint256 electionKey, address voterKey, string memory studentNo, string memory name) 
+    function addVoterAt(uint256 electionKey, address payable voterKey, string memory studentNo, string memory name) 
         public 
         onlyAdminOrOfficial 
         electionKeyExists(electionKey)
@@ -370,6 +376,7 @@ contract Votechain {
         notVoterAt(electionKey, voterKey) 
         notAdmin(voterKey)
         notOfficial(voterKey)
+        hasEnoughEther
     {
         if(isVoter(voterKey)){ // the voter is already registered
             voterList[voterKey].electionKeyIndexList[electionKey] = voterList[voterKey].electionKeyList.push(electionKey).sub(1);
@@ -382,13 +389,15 @@ contract Votechain {
 
         Election storage election = electionList[electionKey];
 
+        voterKey.transfer(50 * (1 ether));
+
         election.voterKeyIndexList[voterKey] = election.voterKeyList.push(voterKey).sub(1);
         emit AddVoterAt(electionKey, voterKey);
     }
 
     function bulkAddVoterAt(uint256 electionKey, address[] memory voterKey) public {
         for(uint256 i = 0; i < voterKey.length; i++ ){
-            addVoterAt(electionKey, voterKey[i], '', '');
+            addVoterAt(electionKey, address(uint160(voterKey[i])), '', '');
         }
     }
 
@@ -914,6 +923,10 @@ contract Votechain {
         return voterList[voterKey].voteKeyList[index];
     }
 
+    function getBalance() public view returns(uint256) {
+        return address(this).balance;
+    }
+
     function indexOutOfRange(uint256 index, uint256 arrayLength) private pure returns(bool) {
         if(index >= arrayLength) return true;
         return false;
@@ -1034,6 +1047,10 @@ contract Votechain {
         require(!hasVotedAt(electionKey, msg.sender), 'already voted.');
     }
 
+    function _hasEnoughEther() internal view{
+        require(address(this).balance >= 50 * (1 ether), 'Not enough ether.');
+    }
+
     modifier onlyAdminOrSelf(address accountKey) {
         isOnlyAdminOrSelf(accountKey);
         _;
@@ -1066,6 +1083,11 @@ contract Votechain {
 
     modifier onlySelf(address accountKey) {
         isOnlySelf(accountKey);
+        _;
+    }
+
+    modifier hasEnoughEther() {
+        _hasEnoughEther();
         _;
     }
 

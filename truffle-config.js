@@ -14,7 +14,7 @@ module.exports = {
     },
 
     deployment: {
-      host: "192.168.43.188",
+      host: "192.168.43.239",
       port: 8501,
       network_id: "*",
       gas: 20000000
