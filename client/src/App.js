@@ -76,11 +76,6 @@ class App extends React.Component {
     if(web3) {
       const { getVotechainContract } = this.props
       await getVotechainContract(web3) // save the votechain contract to redux store
-
-      console.log('Address: ' + this.props.votechain.address)
-
-      let balance = await this.props.votechain.methods.getBalance().call()
-      console.log('Balance: ' + web3.utils.fromWei(balance.toString(), 'ether'))
     }
   }
 

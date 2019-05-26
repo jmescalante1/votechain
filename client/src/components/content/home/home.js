@@ -90,7 +90,7 @@ class Home extends Component {
               </Grid>
 
               <Grid item>
-                <Typography className={classes.subtitle}>Experience the future of voting</Typography>
+                <Typography className={classes.subtitle}>A robust and end-to-end verifiable electronic voting system.</Typography>
               </Grid>
             </Grid>
           </div>
@@ -104,13 +104,16 @@ class Home extends Component {
             >
               <Grid item>
                 <Typography className={classes.description}>
-                  In VoteChain, security is our top priority. Your votes are practically impossible to be altered and removed by a malicious attacker. You can
-                  always verify that your votes are counted and the election results are correct. We achieved this by utilizing blockchain technology, a modern technology
-                  that guarantees integrity, authenticity, and transparency of any digital   transactions.
+                  An end-to-end verifiable electronic voting system refers to a system which has strong integrity properties and strong tamper resistance and in which
+                  the voters can verify if the ballot has been cast as intended, has been recorded as cast, and has been counted as recorded. 
+                  By incorporating the blockchain technology, Votechain offers strong resistance against 
+                  malicious attacks in attempt to alter or remove the votes. Additionally, system partial failures can be tolerated due to its distributed nature
+                  and consistency properties. 
+                 
                 </Typography>
               </Grid>
 
-              <Grid item className={classes.section}>
+              {/* <Grid item className={classes.section}>
                 <Button
                   variant='contained'
                   color='primary'
@@ -118,7 +121,7 @@ class Home extends Component {
                 >
                   Let's get started!
                 </Button>
-              </Grid>
+              </Grid> */}
             </Grid>
           </div>
         </div>
