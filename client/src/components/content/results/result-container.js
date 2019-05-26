@@ -11,28 +11,39 @@ class ResultContainer extends React.Component {
     
     this.state = {
       election: null,
+      loading: true,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { fetchFinishedElectionList, votechain } = this.props
 
+    await this.setState({ loading: true })
+
     if(votechain)
-      fetchFinishedElectionList(votechain)
+      await fetchFinishedElectionList(votechain)
+
+    await this.setState({ loading: false })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if(this.props.votechain !== prevProps.votechain) {
       const {votechain, fetchFinishedElectionList } = this.props
-      fetchFinishedElectionList(votechain)
+      
+      await this.setState({ loading: true })
+      await fetchFinishedElectionList(votechain)
+      await this.setState({ loading: false })
     }
 
     if(this.state.election !== prevState.election){
       const { votechain, fetchFinishedElectionResult } = this.props
       const { election } = this.state
-      fetchFinishedElectionResult(votechain, election.id)
+      
+      await this.setState({ loading: true })
+      await fetchFinishedElectionResult(votechain, election.id)
+      await this.setState({ loading: false })
     }
   }
 
@@ -45,12 +56,13 @@ class ResultContainer extends React.Component {
   }
 
   render() {
-    const { election } = this.state
+    const { election, loading } = this.state
     const { finishedElectionList, currentFinishedElection } = this.props
 
     return(
       <div>
         <Result
+          loading={loading}
           election={election}
           handleElectionSelectChange={this.handleElectionSelectChange}
           finishedElectionList={finishedElectionList}

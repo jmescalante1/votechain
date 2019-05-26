@@ -6,6 +6,7 @@ import { withStyles, withTheme } from '@material-ui/core/styles'
 import ElectionSelector from '../../customized/selectors/election-selector'
 import ElectionResult from './election-result'
 import Spacer from '../../customized/layout/spacer'
+import Loader from '../../customized/progress-bars/loader'
 
 const styles = theme => ({
   electionSelector: {
@@ -16,7 +17,8 @@ const styles = theme => ({
 class Result extends Component {
 
   render() {
-    const { classes, theme, election, finishedElectionList, handleElectionSelectChange, currentFinishedElection } = this.props
+    const { classes, theme, election, finishedElectionList, handleElectionSelectChange, currentFinishedElection, loading } = this.props
+
     return (
       <div>
         <ElectionSelector 
@@ -32,10 +34,12 @@ class Result extends Component {
       
         <Spacer width='100%' height={theme.spacing.unit * 4}/>
 
-        {!isEmpty(currentFinishedElection) &&
-          <ElectionResult 
-            currentFinishedElection={currentFinishedElection}
-          />
+        { loading
+          ? <Loader />
+          : !isEmpty(currentFinishedElection) &&
+            <ElectionResult 
+              currentFinishedElection={currentFinishedElection}
+            />
         }
       </div>
     )
@@ -67,6 +71,8 @@ Result.propTypes = {
       }))
     }))
   }).isRequired,
+
+  loading: PropTypes.bool.isRequired
 }
 
 export default withTheme()(withStyles(styles)(Result))
