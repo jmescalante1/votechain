@@ -206,12 +206,12 @@ contract Votechain {
 
     function () external payable {}
 
-    function startElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) inSetupStage(electionKey){
+    function startElection(uint256 electionKey) public onlyAdminOrOfficial electionKeyExists(electionKey) inSetupStage(electionKey){
         electionList[electionKey].stage = Stage.Started;
         emit StartElection(electionKey);
     }
 
-    function stopElection(uint256 electionKey) public onlyAdmin electionKeyExists(electionKey) hasStarted(electionKey){
+    function stopElection(uint256 electionKey) public onlyAdminOrOfficial electionKeyExists(electionKey) hasStarted(electionKey){
         electionList[electionKey].stage = Stage.Finished;
         emit StopElection(electionKey);
     }
