@@ -12,7 +12,7 @@ class VoteContainer extends Component {
     this.state = {
       election: null,
       hasVoted: false,
-      // loading: false,
+      loading: true,
     }
 
     this.handleElectionSelectChange = this.handleElectionSelectChange.bind(this)
@@ -23,9 +23,9 @@ class VoteContainer extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if(prevState.election !== this.state.election) {
-      // await this.setState({ loading: true })
+      await this.setState({ loading: true })
       await this.checkIfVotedAlready()
-      // await this.setState({ loading: false})
+      await this.setState({ loading: false})
     }
     // if(prevState.hasVoted !== this.state.hasVoted ){
     //   if(this.state.hasVoted) {
@@ -86,17 +86,18 @@ class VoteContainer extends Component {
   
     return (
       <div>
-        <Vote 
-          election={election}
-          handleElectionSelectChange={this.handleElectionSelectChange}
-          electionList={this.getOngoingElections()}
+          <Vote 
+            election={election}
+            handleElectionSelectChange={this.handleElectionSelectChange}
+            electionList={this.getOngoingElections()}
 
-          setHasVoted={this.setHasVoted}
+            setHasVoted={this.setHasVoted}
 
-          userBallotDetails={userBallotDetails}
-          hasVoted={hasVoted}
-          ballotElection={ballotElection}
-        />
+            userBallotDetails={userBallotDetails}
+            hasVoted={hasVoted}
+            loading={loading}
+            ballotElection={ballotElection}
+          />
       </div>
     )
   }

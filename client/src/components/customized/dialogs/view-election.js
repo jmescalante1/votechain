@@ -32,7 +32,7 @@ const styles = theme => ({
     backgroundColor: '#212121'
   },
   dividerGrey: {
-    backgroundColor: '#9e9e9e'
+    backgroundColor: '#616161'
   },
   contentText: {
     fontSize: 20,
@@ -115,7 +115,7 @@ class AddElectionDialog extends React.Component {
             ? <Loader />
             : <div>
                 <DialogContentText className={classes.contentText}>
-                  The available positions of {electionDetails.name} and their corresponding candidates are shown below.
+                  The list of positions in {electionDetails.name} and their corresponding candidates are shown below.
                 </DialogContentText>
                 
                 <div className={classes.positionListContainer}>
@@ -141,7 +141,7 @@ class AddElectionDialog extends React.Component {
                     justify='flex-start'
                     className={classes.list}
                   >
-                    {electionDetails.positionList.map((position) => {
+                    {electionDetails.positionList.map((position, index) => {
                       return (
                         <Grid 
                           key={position.id}
@@ -149,6 +149,7 @@ class AddElectionDialog extends React.Component {
                           direction='column'
                           alignItems='center'
                           justify='flex-start'
+                          className={classes.section}
                         >
                           <Grid
                             container
@@ -178,6 +179,12 @@ class AddElectionDialog extends React.Component {
                               </Grid>
                             </Grid>
                           </Grid>
+
+                          {index !== electionDetails.positionList.length - 1 && 
+                            <Grid item style={{width:'100%'}}>
+                              <Divider className={classes.dividerGrey}/>
+                            </Grid>
+                          }
                         </Grid>
                       )
                     })}

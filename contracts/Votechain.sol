@@ -175,39 +175,33 @@ contract Votechain {
         adminList[adminKey].keyIndex = adminKeyList.push(adminKey).sub(1);
 
         // For testing UI
-        addElection('UP Manila Student Council Election');
-        addElection('UP Diliman Student Council Election');
+        addElection('UPM USC Election');
 
-        // for election1
-        addPositionAt(1, 'Chairman', 1, false);
-        addPartyAt(1, 'Great Party List'); // id 1
-        addPartyAt(1, 'Normal Party List'); // id 2
+        // for UPM USC Election
+        addPositionAt(1, 'USC Chairperson', 1, true);
+        addPositionAt(1, 'USC Vice Chairperson', 1, true);
+        addPositionAt(1, 'Councilors', 7, true);
 
-        // for election2
-        addPositionAt(2, 'CEO', 1, false);
-        addPositionAt(2, 'CTO', 2, true);
-        addPartyAt(2, 'Great Party List'); // id 3
-        addPartyAt(2, 'Walastik Party List'); // id 4
+        // for UPM USC Election
+        addPartyAt(1, 'Bigkis-UPM');
+        addPartyAt(1, 'ASAP-Katipunan');
 
-        // for election 1 position1
-        addCandidateAt(1, 'Neil', 1); // Great party list
-        addCandidateAt(1, 'Alee', 2); // Normal party list
-        addCandidateAt(1, 'Bea', 0); // Independent
+        // for USC Chaiperson
+        addCandidateAt(1, 'Steve Rogers', 1); // Bigkis-UPM'
+        addCandidateAt(1, 'Tony Stark', 2); // ASAP-Katipunan
 
-        // for election 2 position2
-        addCandidateAt(2, 'Paulo', 3); // Great Party list
-        addCandidateAt(2, 'Ben', 4); // Walastik Party list
-        addCandidateAt(2, 'Guen', 0); // Independent
+        // for USC Vice Chairperson
+        addCandidateAt(2, 'James Rhodes', 1); // Bigkis-UPM'
+        addCandidateAt(2, 'Sam Wilson', 2); // ASAP-Katipunan
 
-        // for election 2 position3
-        addCandidateAt(3, 'JM', 3); // Great Party list
-        addCandidateAt(3, 'Mike', 4); // Walastik Party list
-        addCandidateAt(3, 'Alley', 0); // Independent
-
-        addVoterAt(1, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
-        addVoterAt(1, 0x888783dF0a495Cb7211a194452f25b6971417DEE, '2015-08795', 'Guen');
-        addVoterAt(2, 0xEFf4FfF8a03CaFaa90d0b2b08936Cd0521A0eEE7, '2015-09899', 'Alley');
-        addVoterAt(2, 0x256Fd21e01c3b56a75DecD67EE47E8809f055eA4, '2015-08795', 'JM');
+        // for Councilors
+        addCandidateAt(3, 'Clint Barton', 1); // Bigkis-UPM'
+        addCandidateAt(3, 'Nick Fury', 1); // Bigkis-UPM'
+        addCandidateAt(3, 'Maria Hill', 1); // Bigkis-UPM'
+        addCandidateAt(3, 'Scott Lang', 1); // Bigkis-UPM'
+        addCandidateAt(3, 'Peter Parker', 2); // ASAP-Katipunan
+        addCandidateAt(3, 'Natasha Komarova', 2); // ASAP-Katipunan
+        addCandidateAt(3, 'Wade Wilson', 2); // ASAP-Katipunan
     }
 
     function () external payable {}

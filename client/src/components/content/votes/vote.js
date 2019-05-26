@@ -44,14 +44,14 @@ class Vote extends Component {
         <BallotContainer 
           setHasVoted={setHasVoted}
           electionId={election ? election.id : null}
-          hasVoted={hasVoted}
+          display={!hasVoted && Boolean(election) && !loading}
         />
 
         <UserBallotDetails
           ballot={userBallotDetails}
           election={ballotElection}
-          display={hasVoted}
-        /> 
+          display={hasVoted && Boolean(election) && !loading}
+        />
         
       </div>
     )
@@ -66,7 +66,8 @@ Vote.propTypes = {
   electionList: PropTypes.arrayOf(PropTypes.object).isRequired,
   setHasVoted: PropTypes.func.isRequired,
 
-  hasVoted: PropTypes.bool.isRequired
+  hasVoted: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired
 }
 
 export default withTheme()(withStyles(styles)(Vote))

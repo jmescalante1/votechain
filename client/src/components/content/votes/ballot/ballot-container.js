@@ -149,10 +149,10 @@ class BallotContainer extends Component {
   }
 
   render() {  
-    const { election, setHasVoted, hasVoted } = this.props
+    const { election, setHasVoted, display } = this.props
     const { positionList, openSubmitBallotDialog, candidateKeyList, abstainKeyList, loading } = this.state
 
-    if(hasVoted) {
+    if(!display) {
       return (
         <div></div>
       )
@@ -192,7 +192,7 @@ class BallotContainer extends Component {
 BallotContainer.propTypes = {
   electionId: PropTypes.number,
   setHasVoted: PropTypes.func.isRequired,
-  hasVoted: PropTypes.bool.isRequired
+  display: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => ({

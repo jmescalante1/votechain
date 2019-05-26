@@ -90,7 +90,7 @@ class Home extends Component {
               </Grid>
 
               <Grid item>
-                <Typography className={classes.subtitle}>A robust and end-to-end verifiable electronic voting system.</Typography>
+                <Typography className={classes.subtitle}>A robust and end-to-end verifiable electronic voting system</Typography>
               </Grid>
             </Grid>
           </div>
