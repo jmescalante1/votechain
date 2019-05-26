@@ -21,10 +21,8 @@ class ResultContainer extends React.Component {
     const { fetchFinishedElectionList, votechain } = this.props
 
     await this.setState({ loading: true })
-
     if(votechain)
       await fetchFinishedElectionList(votechain)
-
     await this.setState({ loading: false })
   }
 
