@@ -18,10 +18,6 @@ import CustomizedTextField from '../forms/textfield'
 
 import { editProfile } from '../../../actions/account'
 
-// import { editAdminVotechain } from './admin'
-// import { editOfficialVotechain } from './official'
-// import { editVoterVotechain } from './voter'
-
 const styles = theme => ({
   content: {
     width: 500
