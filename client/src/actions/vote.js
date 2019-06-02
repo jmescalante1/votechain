@@ -34,8 +34,8 @@ export function fetchVotesOfVoterInElection(votechain, electionKey, voterKey) {
 
     let election = await getElection(electionKey, votechain)
     
-    // format the votelist
-    /*
+    /* format the votelist
+      ballot structure:
       ballot = {
         electionName: ''
         positionName: { // dynamic

@@ -3,7 +3,6 @@ import {getElection, getPosition, getCandidate, getVote } from './read-votechain
 export const FETCH_BALLOT_LIST = 'FETCH_BALLOT_LIST'
 export const FETCH_ELECTION = 'FETCH_ELECTION'
 export const CAST_BULK_VOTE_VOTECHAIN = 'CAST_BULK_VOTE_VOTECHAIN'
-// export const CAST_BULK_VOTE_VOTECHAIN_PENDING = 'CAST_BULK_VOTE_VOTECHAIN_PENDING'
 
 export function fetchElection(votechain, electionKey) {
   return async (dispatch) => {
@@ -51,10 +50,6 @@ export function castBulkVoteVotechain(account, votechain, candidateKeyList, abst
 
 export function fetchBallotList(votechain, electionKey){
   return async (dispatch) => {
-    // get election
-    // let election = await getElection(electionKey, votechain)
-
-    // get all votes under the election
     const noOfVotes = await votechain.methods.getNoOfVotesOfElection(electionKey).call()
 
     let ballotList = []
@@ -85,17 +80,17 @@ export function fetchBallotList(votechain, electionKey){
       ballotList[vote.voterId].voteList[vote.positionName].candidateList.push(vote.candidateName)
     }
 
-    // form the ballots from the votes
-    // ballot structure
-    // ballotList :{
-        // voterKeyAddress: { // dynamic
-            // voteList: {
-               // positionName: { // dynamic
-                      // candidateList: []
-                //}
-            //}]
-        //}
-    //}
+    /* form the ballots from the votes
+    ballot structure
+    ballotList :{
+        voterKeyAddress: { // dynamic
+            voteList: {
+               positionName: { // dynamic
+                      candidateList: []
+                }
+            }]
+        }
+    } */
 
 
     dispatch({

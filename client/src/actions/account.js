@@ -19,11 +19,9 @@ export function setAccount(web3, account){
 
 export function getAccountDetails(votechain, accountKey) {
   return async (dispatch) => {
-    // account address, name, student no, electionKeyList, voteKeyList
     let profile = {}
     profile.accountAddress = accountKey
     
-    // get role
     let role = await getRole(votechain, accountKey)
 
     if(role === 'Administrator'){

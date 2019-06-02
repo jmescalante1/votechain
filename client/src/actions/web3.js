@@ -21,23 +21,13 @@ export function getWeb3() {
             } catch (error) {
               reject(error);
             }
-          }
-          else if (window.web3) {  // Legacy dapp browsers...
+          } else if (window.web3) {  // Legacy dapp browsers...
             const web3 = window.web3; // Use Mist/MetaMask's provider.
             console.log("(Legacy dapp browsers) Injected web3 detected.");
             resolve(web3);
           } else {
             reject('No metamask installed')
           }
-          // else {
-          //   const provider = new Web3.providers.HttpProvider(
-          //     "http://127.0.0.1:9545" // Fallback to localhost; use dev console port by default...
-          //   );
-          //   const web3 = new Web3(provider);
-          //   console.log("No web3 instance injected, using Local web3.");
-          //   resolve(web3);
-          // }
-          
         });
       });
 

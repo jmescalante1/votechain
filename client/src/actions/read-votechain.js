@@ -111,7 +111,6 @@ export async function getParty(partyKey, votechain){
 export async function getPartyListOfElection(electionKey, votechain){
   let partyList = []
   
-  // get all parties with election key equal to the parameter
   let noOfParties = await votechain.methods.getNoOfParties().call()
 
   for(let partyIndex = 0; partyIndex < noOfParties; partyIndex++){
@@ -171,7 +170,6 @@ export async function getVote(voteKey, votechain) {
   vote.voterId = response.voterKey
   vote.electionId = Number(response.electionKey)
 
-  // get candidate name
   if(!(await votechain.methods.isAbstain(response.abstainKey).call())){
     let candidate = await votechain.methods.candidateList(response.candidateKey).call()
     vote.candidateName = candidate.name
@@ -179,7 +177,6 @@ export async function getVote(voteKey, votechain) {
     vote.candidateName = 'Abstain'
   }
 
-  // get position name
   let position = await votechain.methods.positionList(response.positionKey).call()
   vote.positionName = position.name
 
@@ -190,7 +187,6 @@ export async function getVotesOfVoterInElection(electionKey, voterKey, votechain
   let noOfVotes = await votechain.methods.getNoOfVotesOfVoter(voterKey).call()
   let voteList = []
 
-  // get all of his votes in the election
   for(let voteIndex = 0; voteIndex < noOfVotes; voteIndex++ ){
     let voteKey = await votechain.methods.getVoteKeyOfVoter(voterKey, voteIndex).call()
 
