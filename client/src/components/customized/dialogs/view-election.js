@@ -37,11 +37,9 @@ const styles = theme => ({
   contentText: {
     fontSize: 20,
     color: '#616161',
-    // backgroundColor: '#9e9e9e'
   },
   label: {
     fontSize: 18,
-    // fontWeight: 'bold'
   },
   value: {
     fontSize: 18,

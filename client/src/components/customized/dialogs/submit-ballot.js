@@ -133,7 +133,6 @@ class SubmitBallotDialog extends React.Component {
     let errors = [] 
     let unselectedPositions = []
 
-    // check if there is a position that has not been casted a vote yet
     election.positionList.forEach((position) => {
       let candidateIds = this.getCandidateIds(position)
 
