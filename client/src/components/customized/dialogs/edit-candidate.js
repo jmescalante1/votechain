@@ -137,7 +137,7 @@ class EditCandidateDialog extends React.Component {
 
   render() {
     const { classes, openDialog, handleClickCloseDialog, currentPartyList, candidateToBeEdited } = this.props
-    const { errors, fields } = this.state
+    const { errors } = this.state
   
     return (
       <Dialog

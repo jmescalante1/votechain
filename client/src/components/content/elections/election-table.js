@@ -6,7 +6,6 @@ import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import { Link } from 'react-router-dom'
 
 import AddCircle from '@material-ui/icons/AddCircle'
 
@@ -20,7 +19,6 @@ import PlayButton from '../../customized/buttons/play'
 import ViewButton from '../../customized/buttons/view'
 
 import StatusSymbol from '../../customized/symbols/status-symbol'
-import electionViewRoute from './election-view/election-view-route'
 
 const styles = theme => ({
   actionIcon:{
@@ -79,7 +77,7 @@ class ElectionTable extends Component {
 
     let remove = 
       <DeleteButton 
-        onClick={() => handleOpenDeleteElectionDialog(election.id)}
+        onClick={() => handleOpenDeleteElectionDialog(election)}
         id={election.id}
         placement='bottom-start'
         tooltipTitle='Remove this election'

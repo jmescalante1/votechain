@@ -47,7 +47,7 @@ const styles = theme => ({
   }
 })
 
-class UploadVoterDialog extends React.Component {
+class ImportVotersDialog extends React.Component {
   constructor(props) {
     super(props)
 
@@ -309,7 +309,7 @@ class UploadVoterDialog extends React.Component {
         onEntered={this.onEntered}
       >
         <DialogTitle disableTypography>
-          <Typography className={classes.label}>Upload Voter's List</Typography>
+          <Typography className={classes.label}>Import Voter's List</Typography>
         </DialogTitle>
         
         <DialogContent >
@@ -358,7 +358,7 @@ class UploadVoterDialog extends React.Component {
   }
 }
 
-UploadVoterDialog.propTypes = {
+ImportVotersDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
   
@@ -375,4 +375,4 @@ const mapDispatchToProps = {
   bulkAddVoterVotechain
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UploadVoterDialog))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ImportVotersDialog))

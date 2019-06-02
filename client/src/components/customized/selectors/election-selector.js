@@ -23,11 +23,8 @@ class ElectionSelector extends React.Component {
   }
   
   getStatus(election) {
-    const { electionList } = this.props
-
-    if(election) {
+    if(election)
       return election.status
-    }
   }
 
   render(){

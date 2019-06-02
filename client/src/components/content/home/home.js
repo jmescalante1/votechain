@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import classNames from 'classnames'
 
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -28,7 +26,6 @@ const styles = theme => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '1000px',
-    // backgroundColor: 'grey'
   },
   title: {
     fontSize: 40,
@@ -41,9 +38,7 @@ const styles = theme => ({
   },
   greetings: {
     fontSize: 30,
-    // backgroundColor: 'black',
     marginTop: theme.spacing.unit * 9,
-    // marginTop: theme.spacing.unit * 5
   },
   description: {
     color: '#424242',
@@ -90,7 +85,7 @@ class Home extends Component {
               </Grid>
 
               <Grid item>
-                <Typography className={classes.subtitle}>A robust and end-to-end verifiable electronic voting system</Typography>
+                <Typography className={classes.subtitle}>A distributed, verifiable electronic voting system</Typography>
               </Grid>
             </Grid>
           </div>
@@ -104,7 +99,7 @@ class Home extends Component {
             >
               <Grid item>
                 <Typography className={classes.description}>
-                  An end-to-end verifiable electronic voting system refers to a system which has strong integrity properties and strong tamper resistance and in which
+                  A verifiable electronic voting system refers to a system which has strong integrity properties and strong tamper resistance and in which
                   the voters can verify if the ballot has been cast as intended, has been recorded as cast, and has been counted as recorded. 
                   By incorporating the blockchain technology, Votechain offers strong resistance against 
                   malicious attacks in attempt to alter or remove the votes. Additionally, system partial failures can be tolerated due to its distributed nature

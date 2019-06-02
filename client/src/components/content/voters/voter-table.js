@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import cloneDeep from 'lodash/cloneDeep'
 
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -11,10 +10,9 @@ import AddCircle from '@material-ui/icons/AddCircle'
 import FolderShared from '@material-ui/icons/FolderShared'
 
 import TableContainer from '../../customized/tables/table-container'
-import EditButton from '../../customized/buttons/edit'
 import DeleteButton from '../../customized/buttons/delete'
 import AddVoterDialog from '../../customized/dialogs/add-voter'
-import UploadVoterDialog from '../../customized/dialogs/upload-voter'
+import ImportVotersDialog from '../../customized/dialogs/import-voter'
 
 const styles = theme => ({
   actionIcon:{
@@ -39,7 +37,7 @@ class VoterTable extends Component {
   }
 
   getActionsAllowed(voter) {
-    const { handleOpenEditVoterDialog, handleOpenDeleteVoterDialog, election } = this.props
+    const { handleOpenDeleteVoterDialog, election } = this.props
 
     return (
       <Grid
@@ -48,16 +46,6 @@ class VoterTable extends Component {
         justify='flex-start'
         alignItems='center'   
       >
-        {/* <Grid item>    
-          <EditButton 
-            onClick={() => handleOpenEditVoterDialog(voter)}
-            placement='bottom-start'
-            tooltipTitle='Edit voter details'
-            size='small'
-            disabled={!election || election.status !== 'Pending'}
-          />
-        </Grid> */}
-
         <Grid item>
           <DeleteButton 
             onClick={() => handleOpenDeleteVoterDialog(voter)}
@@ -95,7 +83,7 @@ class VoterTable extends Component {
 
     return (
       <Fragment>
-        <Tooltip title="Upload voter's list">
+        <Tooltip title="Import voter's list">
           <Fab 
             size='large' 
             variant='extended' 
@@ -103,7 +91,7 @@ class VoterTable extends Component {
             onClick={handleOpenUploadVoterDialog}
           >
             <FolderShared className={classes.actionIcon} />
-            Bulk Upload 
+            Import voters
           </Fab>
         </Tooltip>
         <Tooltip title='Add new voter(s)'>
@@ -132,7 +120,7 @@ class VoterTable extends Component {
 
     return (
       <Fragment>
-        <UploadVoterDialog 
+        <ImportVotersDialog 
           openDialog={openUploadVoterDialog}
           handleClickCloseDialog={handleCloseUploadVoterDialog}
           electionId={election.id}

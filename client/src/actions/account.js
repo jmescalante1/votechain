@@ -37,7 +37,6 @@ export function getAccountDetails(votechain, accountKey) {
       profile.role = 'Official'
 
     } else if (role === 'Voter') {
-      let voter = await votechain.methods.voterList(accountKey).call()
       profile.role = 'Voter'
 
     } else if (role === 'Unregistered') {

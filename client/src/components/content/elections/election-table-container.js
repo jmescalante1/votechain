@@ -25,7 +25,7 @@ class ElectionTableContainer extends Component {
       openStopElectionDialog: false,
 
       electionToBeEdited: {},
-      idOfElectionToBeDeleted: null,
+      electionToBeDeleted: {},
       electionToStart: {},
       electionToStop: {},
       electionToView: {},
@@ -70,10 +70,10 @@ class ElectionTableContainer extends Component {
     this.setState({ openEditElectionDialog: false })
   }
 
-  handleOpenDeleteElectionDialog(electionId) {
+  handleOpenDeleteElectionDialog(electionToBeDeleted) {
     this.setState({
       openDeleteElectionDialog: true,
-      idOfElectionToBeDeleted: electionId
+      electionToBeDeleted
     })
   }
 
@@ -116,7 +116,7 @@ class ElectionTableContainer extends Component {
 
 
   render() {
-    const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, idOfElectionToBeDeleted, electionToBeEdited } = this.state
+    const { openAddElectionDialog, openEditElectionDialog, openDeleteElectionDialog, electionToBeDeleted, electionToBeEdited } = this.state
     const { electionToStart, openStartElectionDialog, electionToStop, openStopElectionDialog } = this.state
     const { electionToView, openViewElectionDialog } = this.state
     const { electionList } = this.props
@@ -155,7 +155,7 @@ class ElectionTableContainer extends Component {
         <DeleteElectionDialog 
           openDialog={openDeleteElectionDialog}
           handleClickCloseDialog={this.handleCloseDeleteElectionDialog}
-          idOfElectionToBeDeleted={idOfElectionToBeDeleted}
+          electionToBeDeleted={electionToBeDeleted}
         />
         <StartElectionDialog 
           openDialog={openStartElectionDialog}

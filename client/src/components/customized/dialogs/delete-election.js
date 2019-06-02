@@ -43,15 +43,15 @@ class DeleteElectionDialog extends React.Component {
   }
 
   deleteElection() {
-    const { deleteElectionVotechain, handleClickCloseDialog, idOfElectionToBeDeleted } = this.props
+    const { deleteElectionVotechain, handleClickCloseDialog, electionToBeDeleted } = this.props
     const { account, votechain } = this.props
   
-    deleteElectionVotechain(account, votechain, idOfElectionToBeDeleted)
+    deleteElectionVotechain(account, votechain, electionToBeDeleted.id)
     handleClickCloseDialog()
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, } = this.props
   
     return (
       <Dialog
@@ -68,6 +68,8 @@ class DeleteElectionDialog extends React.Component {
           <DialogContentText>
             Are you sure you want to delete this election?
           </DialogContentText>
+
+          {}
 
         </DialogContent>
 
@@ -91,7 +93,7 @@ class DeleteElectionDialog extends React.Component {
 DeleteElectionDialog.propTypes = {
   openDialog: PropTypes.bool.isRequired,
   handleClickCloseDialog: PropTypes.func.isRequired,
-  idOfElectionToBeDeleted: PropTypes.number,
+  electionToBeDeleted: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({

@@ -14,7 +14,6 @@ import Grid from '@material-ui/core/Grid'
 import CancelButton from '../buttons/cancel'
 import SubmitButton from '../buttons/submit'
 import CustomizedTextField from '../forms/textfield'
-import FormValidator from '../forms/form-validator'
 
 import { addVoterVotechain } from '../../../actions/voter'
 

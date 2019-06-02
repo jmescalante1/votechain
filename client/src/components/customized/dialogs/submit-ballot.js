@@ -73,7 +73,7 @@ class SubmitBallotDialog extends React.Component {
   }
 
   async submitBallot() {
-    const { castBulkVoteVotechain, handleClickCloseDialog, candidateKeyList, abstainKeyList, setHasVoted } = this.props
+    const { castBulkVoteVotechain, handleClickCloseDialog, candidateKeyList, abstainKeyList } = this.props
     const { account, votechain } = this.props
 
     castBulkVoteVotechain(account, votechain, candidateKeyList, abstainKeyList)
