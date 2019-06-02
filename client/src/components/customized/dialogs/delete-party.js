@@ -60,7 +60,7 @@ class DeletePartyDialog extends React.Component {
     const { classes, openDialog, onClose, partyToBeDeleted } = this.props
     const fieldsToDisplay = [
       {
-        label: 'Party',
+        label: 'Name',
         field: 'name',
       },
     ]
