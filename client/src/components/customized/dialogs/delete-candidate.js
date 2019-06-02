@@ -29,7 +29,10 @@ const styles = theme => ({
     fontSize: 20
   },
   fieldValue: {
-    color: '#616161'
+    color: 'black'
+  },
+  fieldLabel: {
+    fontWeight: 'bold'
   },
   actions: {
     paddingLeft: theme.spacing.unit * 2,
@@ -57,7 +60,7 @@ class DeleteElectionDialog extends React.Component {
     const { classes, openDialog, handleClickCloseDialog, candidate } = this.props
     const fieldsToDisplay = [
       {
-        label: 'Name',
+        label: 'Candidate',
         field: 'name',
       },
       {
