@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
 
 import OfficialTableContainer from './official-table-container'
-
-const styles = theme => ({
-
-})
 
 class Official extends Component {
 
@@ -17,8 +11,4 @@ class Official extends Component {
   }
 }
 
-Official.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(Official)
+export default Official
