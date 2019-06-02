@@ -27,14 +27,6 @@ class VoteContainer extends Component {
       await this.checkIfVotedAlready()
       await this.setState({ loading: false})
     }
-    // if(prevState.hasVoted !== this.state.hasVoted ){
-    //   if(this.state.hasVoted) {
-    //     const { votechain, account } = this.props
-    //     const { election } = this.state
-
-    //     await fetchVotesOfVoterInElection(votechain, election.id, account)
-    //   }
-    // }
   }
 
   async checkIfVotedAlready(){
