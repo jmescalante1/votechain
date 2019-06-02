@@ -20,13 +20,16 @@ const styles = theme => ({
   content: {
     width: 500
   },
-  textField: {
-    marginTop: 20,
+  section: {
+    marginTop: theme.spacing.unit * 2,
   },
   label: {
     color: theme.palette.highlight.main,
     fontWeight: 'bold',
     fontSize: 20
+  },
+  fieldValue: {
+    color: '#616161'
   },
   actions: {
     paddingLeft: theme.spacing.unit * 2,
@@ -51,7 +54,21 @@ class DeleteElectionDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, handleClickCloseDialog } = this.props
+    const { classes, openDialog, handleClickCloseDialog, candidate } = this.props
+    const fieldsToDisplay = [
+      {
+        label: 'Name',
+        field: 'name',
+      },
+      {
+        label: 'Position',
+        field: 'positionName'
+      },
+      {
+        label: 'Party',
+        field: 'partyName'
+      },
+    ]
   
     return (
       <Dialog
@@ -68,6 +85,30 @@ class DeleteElectionDialog extends React.Component {
           <DialogContentText>
             Are you sure you want to delete this candidate?
           </DialogContentText>
+
+          <Grid
+            container
+            direction='column'
+            justify='center'
+            alignItems='flex-start'
+            className={classes.section}
+          >
+            {fieldsToDisplay.map((field) => {
+              return (
+                <Grid item key={field.field} style={{width: '100%'}}> 
+                  <Grid 
+                    container
+                    direction='row'
+                    justify='flex-start'
+                    alignItems='center'
+                  >
+                    <Grid item xs={3}><Typography className={classes.fieldLabel}>{field.label}</Typography></Grid>
+                    <Grid item xs={9}><Typography className={classes.fieldValue}>{candidate[field.field]}</Typography></Grid>
+                  </Grid>
+                </Grid>
+              )  
+            })}
+          </Grid>
 
         </DialogContent>
 
