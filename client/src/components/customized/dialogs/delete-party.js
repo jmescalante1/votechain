@@ -20,13 +20,19 @@ const styles = theme => ({
   content: {
     width: 500
   },
-  textField: {
-    marginTop: 20,
+  section: {
+    marginTop: theme.spacing.unit * 2,
   },
   label: {
     color: theme.palette.highlight.main,
     fontWeight: 'bold',
     fontSize: 20
+  },
+  fieldValue: {
+    color: 'black'
+  },
+  fieldLabel: {
+    fontWeight: 'bold'
   },
   actions: {
     paddingLeft: theme.spacing.unit * 2,
@@ -51,8 +57,14 @@ class DeletePartyDialog extends React.Component {
   }
 
   render() {
-    const { classes, openDialog, onClose } = this.props
-  
+    const { classes, openDialog, onClose, partyToBeDeleted } = this.props
+    const fieldsToDisplay = [
+      {
+        label: 'Party',
+        field: 'name',
+      },
+    ]
+
     return (
       <Dialog
         open={openDialog}
@@ -68,6 +80,30 @@ class DeletePartyDialog extends React.Component {
           <DialogContentText>
             Are you sure you want to delete this party?
           </DialogContentText>
+
+          <Grid
+            container
+            direction='column'
+            justify='center'
+            alignItems='flex-start'
+            className={classes.section}
+          >
+            {fieldsToDisplay.map((field) => {
+              return (
+                <Grid item key={field.field} style={{width: '100%'}}> 
+                  <Grid 
+                    container
+                    direction='row'
+                    justify='flex-start'
+                    alignItems='center'
+                  >
+                    <Grid item xs={3}><Typography className={classes.fieldLabel}>{field.label}</Typography></Grid>
+                    <Grid item xs={9}><Typography className={classes.fieldValue}>{partyToBeDeleted[field.field]}</Typography></Grid>
+                  </Grid>
+                </Grid>
+              )  
+            })}
+          </Grid>
 
         </DialogContent>
 
