@@ -4,7 +4,6 @@ import Select, { components } from 'react-select'
 
 import Grid from '@material-ui/core/Grid'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
-import { withStyles } from '@material-ui/core/styles'
 
 const defaultSelectStyles = {
   control: styles => ({
@@ -22,15 +21,6 @@ const defaultSelectStyles = {
     fontSize: 18
   }),
 }
-
-const styles = theme => ({
-  // placeholder: {
-  //   fontSize: 18
-  // },
-  // label: {
-  //   fontSize: 18
-  // }
-})
 
 const DropdownIndicator = props => {
   return (
@@ -74,8 +64,6 @@ class CustomizedSelect extends Component {
 }
 
 CustomizedSelect.propTypes = {
-  classes: PropTypes.object.isRequired,
-
   label: PropTypes.object.isRequired,
   placeholder: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
@@ -85,4 +73,4 @@ CustomizedSelect.propTypes = {
 }
 
 
-export default withStyles(styles)(CustomizedSelect)
+export default CustomizedSelect
