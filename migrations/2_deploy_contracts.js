@@ -8,11 +8,4 @@ module.exports = function(deployer) {
   deployer.deploy(Votechain, adminAccount, adminName, {from: adminAccount, value: '0x152D02C7E14AF6800000'})
 };
 
-// var SetValue = artifacts.require("SetValue");
-// var Test = artifacts.require("Test");
-// module.exports = function(deployer) {
-//   deployer.deploy(SetValue).then(function () {
-//     return deployer.deploy(Test, SetValue.address);
-//   });
-// };
 
