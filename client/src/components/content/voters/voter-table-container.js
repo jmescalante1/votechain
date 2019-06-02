@@ -87,8 +87,6 @@ class VoterTableContainer extends Component {
 
     const headers = [
       {id: 'id', label: 'Voter ID', searchable: true},
-      // {id: 'name', label: 'Name', searchable: true},
-      // {id: 'studentNo', label: 'Student Number', searchable: true},
       {id: 'actions', label: 'Actions'}
     ]
 
