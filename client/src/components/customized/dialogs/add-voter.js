@@ -102,25 +102,6 @@ class AddVoterDialog extends React.Component {
       noOfErrors++;
     }
 
-    // let voterName = fields['voterName']
-
-    // if(FormValidator.isEmpty(voterName)){
-    //   errors['voterName'] = 'The voter name must not be empty'
-    //   noOfErrors++
-    // } else if (!FormValidator.validLength(voterName, 1, 32)) {
-    //   errors['voterName'] = 'The voter name must contain 1 - 32 characters only'
-    //   noOfErrors++
-    // }
- 
-    // let studentNo = fields['studentNo']
-
-    // if(FormValidator.isEmpty(studentNo)){
-    //   errors['studentNo'] = 'The student no must not be empty'
-    //   noOfErrors++
-    // } else if (!FormValidator.validLength(studentNo, 1, 32)) {
-    //   errors['studentNo'] = 'The student no must contain 1 - 32 characters only'
-    //   noOfErrors++
-    // }   
     this.setState({ errors })
 
     return noOfErrors
@@ -129,13 +110,6 @@ class AddVoterDialog extends React.Component {
   async onSubmit() {
     const { handleClickCloseDialog, addVoterVotechain, votechain, account, electionId } = this.props
     const { fields } = this.state
-
-    // let voter = {
-    //   electionKey: electionId,
-    //   voterKey: fields['voterKey'],
-    //   studentNo: fields['studentNo'],
-    //   name: fields['voterName'],
-    // }
 
     let voter = {
       electionKey: electionId,
@@ -184,34 +158,6 @@ class AddVoterDialog extends React.Component {
             onChange={(event) => this.handleFieldChange('voterKey', event.target.value)}
             error={errors['voterKey']}
           />
-
-          {/* <CustomizedTextField
-            classes={{
-              root: classes.textField,
-            }}
-            required
-            fullWidth
-            type='text'
-            id='voter-name'
-            label='Voter Name'
-            variant='outlined'
-            onChange={(event) => this.handleFieldChange('voterName', event.target.value)}
-            error={errors['voterName']}
-          />
-
-          <CustomizedTextField
-            classes={{
-              root: classes.textField,
-            }}
-            required
-            fullWidth
-            type='text'
-            id='student-no'
-            label="Voter's student number"
-            variant='outlined'
-            onChange={(event) => this.handleFieldChange('studentNo', event.target.value)}
-            error={errors['studentNo']}
-          /> */}
         </DialogContent>
 
         <DialogActions className={classes.actions}>
