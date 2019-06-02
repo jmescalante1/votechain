@@ -60,7 +60,7 @@ class DeleteElectionDialog extends React.Component {
     const { classes, openDialog, handleClickCloseDialog, electionToBeDeleted} = this.props
     const fieldsToDisplay=[
       {
-        label: 'Election',
+        label: 'Name',
         field: 'name'
       }
     ]
