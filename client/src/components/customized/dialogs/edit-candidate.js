@@ -71,7 +71,6 @@ class EditCandidateDialog extends React.Component {
 
   async initFieldState() {
     const { candidateToBeEdited } = this.props
-    console.log(candidateToBeEdited)
 
     await this.setState({ 
       fields: {
