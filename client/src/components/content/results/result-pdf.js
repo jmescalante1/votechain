@@ -69,13 +69,6 @@ const styles = StyleSheet.create({
     marginBottom: '18pt',
     
   },
-
-  // cellContainer: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-start',
-  // }
 });
 
 class ResultPDF extends Component {
