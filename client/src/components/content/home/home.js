@@ -107,16 +107,6 @@ class Home extends Component {
                  
                 </Typography>
               </Grid>
-
-              {/* <Grid item className={classes.section}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  className={classNames(classes.button)}
-                >
-                  Let's get started!
-                </Button>
-              </Grid> */}
             </Grid>
           </div>
         </div>
