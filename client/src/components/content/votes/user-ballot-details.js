@@ -37,15 +37,6 @@ const styles = theme => ({
 })
 
 class UserBallotDetails extends Component {
-
-  async componentDidUpdate(prevProps) {
-    if(prevProps.election !== this.props.election) {
-      // await this.setState({ loading: true })
-      
-      // await this.setState({ loading: false })
-    }
-  }
-
   render() {
     const { classes, ballot, election, display } = this.props
 
